@@ -1,0 +1,4 @@
+redis_url: "redis://:ZUrqu7N0g2W2Sw5p@45.77.32.102:6379/12"
+app:
+  name: VoidexForge
+  environment: development
