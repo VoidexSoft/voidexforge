@@ -1,9 +1,8 @@
 console:
+  password: "Ondi@2025"
   max_message_size_bytes: 409600
 logger:
   level: "DEBUG"
-runtime:
-    # Go plugins don't need a JavaScript entrypoint
 session:
   token_expiry_sec: 7200 # 2 hours
 socket:
