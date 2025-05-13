@@ -1,10 +1,10 @@
 module voidexforge
 
-go 1.23.5
+go 1.24.3
 
 require (
-	github.com/google/uuid v1.5.0
-	github.com/heroiclabs/nakama-common v1.36.0
+	github.com/google/uuid v1.6.0
+	github.com/heroiclabs/nakama-common v1.37.0
 	github.com/stretchr/testify v1.10.0
 	go.uber.org/zap v1.27.0
 	google.golang.org/protobuf v1.36.6

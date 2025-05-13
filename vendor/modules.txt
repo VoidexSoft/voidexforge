@@ -1,11 +1,11 @@
 # github.com/davecgh/go-spew v1.1.1
 ## explicit
 github.com/davecgh/go-spew/spew
-# github.com/google/uuid v1.5.0
+# github.com/google/uuid v1.6.0
 ## explicit
 github.com/google/uuid
-# github.com/heroiclabs/nakama-common v1.36.0
-## explicit; go 1.23.5
+# github.com/heroiclabs/nakama-common v1.37.0
+## explicit; go 1.24.3
 github.com/heroiclabs/nakama-common/api
 github.com/heroiclabs/nakama-common/rtapi
 github.com/heroiclabs/nakama-common/runtime

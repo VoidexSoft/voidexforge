@@ -28,27 +28,25 @@ services:
       - >
         /nakama/nakama migrate up --database.address root@cockroachdb:26257 &&
         exec /nakama/nakama --config /nakama/data/local.yml --database.address root@cockroachdb:26257
-    restart: unless-stopped
+    expose:
+      - "7349"
+      - "7350"
+      - "7351"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:7350/" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     links:
       - "cockroachdb:db"
     depends_on:
       cockroachdb:
         condition: service_healthy
-    volumes:
-      - ./:/nakama/data
-    expose:
-      - "7349"
-      - "7350"
-      - "7351"
     ports:
       - "7349:7349"
       - "7350:7350"
       - "7351:7351"
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:26257/"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+    restart: unless-stopped
 
 volumes:
   data:
