@@ -13,7 +13,7 @@ type PublisherEvent struct {
 	Metadata  map[string]string `json:"metadata,omitempty"`
 	Value     string            `json:"value,omitempty"`
 
-	// The Hiro system that generated this event.
+	// The Pamlogix system that generated this event.
 	System System `json:"-"`
 	// Source ID represents the identifier of the event source, such as an achievement ID.
 	SourceId string `json:"-"`
@@ -22,7 +22,7 @@ type PublisherEvent struct {
 }
 
 // The Publisher describes a service or similar target implementation that wishes to receive and process
-// analytics-style events generated server-side by the various available Hiro systems.
+// analytics-style events generated server-side by the various available Pamlogix systems.
 //
 // Each Publisher may choose to process or ignore each event as it sees fit. It may also choose to buffer
 // events for batch processing at its discretion, but must take care to.
@@ -32,7 +32,7 @@ type PublisherEvent struct {
 // Implementations must handle any errors or retries internally, callers will not repeat calls in case
 // of errors.
 type Publisher interface {
-	// Authenticate is called every time a user authenticates with Hiro. The 'created' flag is true if this
+	// Authenticate is called every time a user authenticates with Pamlogix. The 'created' flag is true if this
 	// is a newly created user account, and each implementation may choose to handle this as it chooses.
 	Authenticate(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID string, created bool)
 

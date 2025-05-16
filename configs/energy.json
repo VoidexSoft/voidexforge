@@ -1,0 +1,36 @@
+{
+  "energies": {
+    "energy_main": {
+      "start_count": 100,
+      "max_count": 100,
+      "max_overfill": 150,
+      "refill_count": 10,
+      "refill_time_sec": 300,
+      "implicit": false,
+      "reward": {
+        "guaranteed": {
+          "currencies": {
+            "coins": {
+              "min": 5,
+              "max": 5
+            }
+          }
+        }
+      },
+      "additional_properties": {
+        "icon": "energy_icon.png"
+      }
+    },
+    "tower_key": {
+      "start_count": 5,
+      "max_count": 5,
+      "max_overfill": 10,
+      "refill_count": 1,
+      "refill_time_sec": 1800,
+      "implicit": false,
+      "additional_properties": {
+        "last_reset_time": null
+      }
+    }
+  }
+}

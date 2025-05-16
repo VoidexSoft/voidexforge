@@ -1,0 +1,49 @@
+{
+    "items": {
+      "sword_basic": {
+        "name": "Basic Sword",
+        "description": "A basic starter sword",
+        "category": "weapon",
+        "item_sets": ["starter_equipment", "weapons"],
+        "max_count": 5,
+        "stackable": true,
+        "consumable": false,
+        "string_properties": {
+          "icon": "sword_basic.png",
+          "rarity": "common"
+        },
+        "numeric_properties": {
+          "power": 10,
+          "durability": 100
+        }
+      },
+      "health_potion": {
+        "name": "Health Potion",
+        "description": "Restores 50 health points",
+        "category": "consumable",
+        "item_sets": ["potions"],
+        "max_count": 99,
+        "stackable": true,
+        "consumable": true,
+        "consume_reward": {
+          "guaranteed": {
+            "energies": {
+              "health": {
+                "min": 50,
+                "max": 50
+              }
+            }
+          }
+        }
+      }
+    },
+    "limits": {
+      "categories": {
+        "weapon": 10,
+        "consumable": 50
+      },
+      "item_sets": {
+        "starter_equipment": 5
+      }
+    }
+  }

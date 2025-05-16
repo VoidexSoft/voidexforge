@@ -1,0 +1,11 @@
+{
+  "rate_app_smtp_addr": "smtp.gmail.com",
+  "rate_app_smtp_username": "email@yourdomain.com",
+  "rate_app_smtp_password": "your-password",
+  "rate_app_smtp_email_from": "game-server@yourgamecompany.com",
+  "rate_app_smtp_email_from_name": "Your Game Company",
+  "rate_app_smtp_email_subject": "Game Feedback",
+  "rate_app_smtp_email_to": "feedback@yourgamecompany.com",
+  "rate_app_smtp_port": 587,
+  "rate_app_template": "<html><body>User feedback: {{message}}</body></html>"
+}

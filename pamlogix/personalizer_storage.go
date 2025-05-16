@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	StoragePersonalizerCollectionDefault = "hiro_datadefinitions"
+	StoragePersonalizerCollectionDefault = "pamlogix_datadefinitions"
 
 	storagePersonalizerKeyBase              = "base"
 	storagePersonalizerKeyAchievements      = "achievements"
@@ -313,7 +313,7 @@ func (p *StoragePersonalizer) GetValue(ctx context.Context, logger runtime.Logge
 		case SystemTypeStreaks:
 			readOp = &runtime.StorageRead{Collection: p.collection, Key: storagePersonalizerKeyStreaks}
 		default:
-			return nil, runtime.NewError("hiro system type unknown", 3)
+			return nil, runtime.NewError("Pamlogix system type unknown", 3)
 		}
 
 		objects, err := nk.StorageRead(ctx, []*runtime.StorageRead{readOp})

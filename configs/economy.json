@@ -1,0 +1,67 @@
+{
+  "initialize_user": {
+    "currencies": {
+      "coins": 100,
+      "gems": 10
+    },
+    "items": {
+      "sword_basic": 1,
+      "health_potion": 5
+    }
+  },
+  "store_items": {
+    "gem_pack_small": {
+      "name": "Small Gem Pack",
+      "description": "10 gems",
+      "category": "currency",
+      "cost": {
+        "currencies": {},
+        "sku": "gem_pack_small_sku"
+      },
+      "reward": {
+        "guaranteed": {
+          "currencies": {
+            "gems": {
+              "min": 10,
+              "max": 10
+            }
+          }
+        }
+      }
+    },
+    "health_potion_pack": {
+      "name": "Health Potion Pack",
+      "description": "5 health potions",
+      "category": "consumable",
+      "cost": {
+        "currencies": {
+          "coins": 100
+        }
+      },
+      "reward": {
+        "guaranteed": {
+          "items": {
+            "health_potion": {
+              "min": 5,
+              "max": 5
+            }
+          }
+        }
+      }
+    }
+  },
+  "placements": {
+    "daily_reward_ad": {
+      "reward": {
+        "guaranteed": {
+          "currencies": {
+            "coins": {
+              "min": 50,
+              "max": 50
+            }
+          }
+        }
+      }
+    }
+  }
+}

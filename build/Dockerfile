@@ -9,8 +9,11 @@ COPY . .
 
 RUN go build --trimpath --mod=vendor --buildmode=plugin -o ./backend.so
 
-FROM heroiclabs/nakama:3.27.0
+FROM 680994843819.dkr.ecr.ap-southeast-2.amazonaws.com/nakama:3.27.0
+#FROM heroiclabs/nakama:3.27.0
+#FROM voidexforge:local
 
 COPY --from=builder /backend/backend.so /nakama/data/modules
+COPY --from=builder /backend/configs /nakama/data/modules/configs
 COPY --from=builder /backend/local.yml /nakama/data/
 COPY --from=builder /backend/configs.yaml /nakama/

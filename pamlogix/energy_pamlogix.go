@@ -3,6 +3,7 @@ package pamlogix
 import (
 	"context"
 	"encoding/json"
+	"math"
 	"time"
 
 	"github.com/heroiclabs/nakama-common/runtime"
@@ -12,6 +13,7 @@ import (
 type NakamaEnergySystem struct {
 	config        *EnergyConfig
 	onSpendReward OnReward[*EnergyConfigEnergy]
+	pamlogix      Pamlogix
 }
 
 // NewNakamaEnergySystem creates a new instance of the energy system with the given configuration.
@@ -19,6 +21,11 @@ func NewNakamaEnergySystem(config *EnergyConfig) *NakamaEnergySystem {
 	return &NakamaEnergySystem{
 		config: config,
 	}
+}
+
+// SetPamlogix sets the Pamlogix instance for this energy system
+func (e *NakamaEnergySystem) SetPamlogix(pl Pamlogix) {
+	e.pamlogix = pl
 }
 
 // GetType returns the system type for the energy system.
@@ -68,6 +75,9 @@ func (e *NakamaEnergySystem) Get(ctx context.Context, logger runtime.Logger, nk 
 
 		// Update current time
 		energies[id].CurrentTimeSec = now
+
+		// Apply any active modifiers to max energy and refill rate
+		e.applyActiveModifiers(energies[id], now)
 
 		// Apply any refills that should have occurred
 		e.applyRefills(energies[id], now)
@@ -366,6 +376,12 @@ func (e *NakamaEnergySystem) applyRefills(energy *Energy, now int64) {
 		return
 	}
 
+	// Check for infinite energy modifier, if active, set current to max
+	if hasInfiniteEnergyModifier(energy) {
+		energy.Current = energy.Max
+		return
+	}
+
 	// If no refill rate, can't refill
 	if energy.RefillSec <= 0 || energy.Refill <= 0 {
 		return
@@ -400,6 +416,13 @@ func (e *NakamaEnergySystem) applyRefills(energy *Energy, now int64) {
 func (e *NakamaEnergySystem) calculateRefillTimes(energy *Energy, now int64) {
 	// If already at max, no refills needed
 	if energy.Current >= energy.Max {
+		energy.NextRefillTimeSec = 0
+		energy.MaxRefillTimeSec = 0
+		return
+	}
+
+	// Check for infinite energy modifier
+	if hasInfiniteEnergyModifier(energy) {
 		energy.NextRefillTimeSec = 0
 		energy.MaxRefillTimeSec = 0
 		return
@@ -442,6 +465,22 @@ func (e *NakamaEnergySystem) calculateRefillTimes(energy *Energy, now int64) {
 	}
 }
 
+// hasInfiniteEnergyModifier checks if the energy has an active infinite energy modifier
+func hasInfiniteEnergyModifier(energy *Energy) bool {
+	if energy.Modifiers == nil {
+		return false
+	}
+
+	now := time.Now().Unix()
+	for _, mod := range energy.Modifiers {
+		if mod.Operator == "infinite_energy" && mod.Value > 0 &&
+			(mod.EndTimeSec == 0 || mod.EndTimeSec > now) {
+			return true
+		}
+	}
+	return false
+}
+
 // processEnergyReward handles reward generation when energy is spent.
 func (e *NakamaEnergySystem) processEnergyReward(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID, energyID string, energyConfig *EnergyConfigEnergy, amount int32) (*Reward, error) {
 	if energyConfig.Reward == nil {
@@ -459,7 +498,28 @@ func (e *NakamaEnergySystem) processEnergyReward(ctx context.Context, logger run
 		ItemInstances:   make(map[string]*RewardInventoryItem),
 	}
 
-	// TODO: Implement reward rolling logic based on EconomyConfigReward
+	// Get the economy system from the Pamlogix instance
+	var economySystem EconomySystem
+
+	if e.pamlogix != nil {
+		economySystem = e.pamlogix.GetEconomySystem()
+	}
+
+	// If we couldn't get the economy system from Pamlogix, create a minimal temporary one
+	if economySystem == nil {
+		logger.Warn("No economy system available through Pamlogix, creating a minimal temporary one")
+		economySystem = NewNakamaEconomySystem(nil)
+	}
+
+	// Roll the reward using the reward configuration
+	rolledReward, err := economySystem.RewardRoll(ctx, logger, nk, userID, energyConfig.Reward)
+	if err != nil {
+		logger.Error("Failed to roll reward for energy spend: %v", err)
+		// Continue with empty reward
+	} else if rolledReward != nil {
+		// Use the rolled reward
+		reward = rolledReward
+	}
 
 	// If a custom reward function is set, let it modify the reward
 	if e.onSpendReward != nil {
@@ -514,6 +574,8 @@ func applyModifier(value int32, operator string, modValue int32) int32 {
 	switch operator {
 	case "add":
 		return value + modValue
+	case "subtract":
+		return value - modValue
 	case "multiply":
 		return value * modValue
 	case "divide":
@@ -523,9 +585,95 @@ func applyModifier(value int32, operator string, modValue int32) int32 {
 		return value
 	case "set":
 		return modValue
+	case "min":
+		if value < modValue {
+			return value
+		}
+		return modValue
+	case "max":
+		if value > modValue {
+			return value
+		}
+		return modValue
+	case "mod":
+		if modValue != 0 {
+			return value % modValue
+		}
+		return value
+	case "pow":
+		// Simple power implementation for small exponents
+		if modValue <= 0 {
+			return 1
+		}
+		result := value
+		for i := int32(1); i < modValue; i++ {
+			result *= value
+		}
+		return result
+	// These operators are handled specially in applyActiveModifiers
+	case "max_energy", "refill_rate", "refill_speed", "infinite_energy":
+		return value // Just pass through in the general case
 	default:
 		return value
 	}
 }
 
-//wrappers
+// applyActiveModifiers updates energy parameters based on active modifiers
+func (e *NakamaEnergySystem) applyActiveModifiers(energy *Energy, now int64) {
+	if energy.Modifiers == nil || len(energy.Modifiers) == 0 {
+		return
+	}
+
+	// Get the original config values to use as base
+	energyConfig, exists := e.config.Energies[energy.Id]
+	if !exists {
+		return
+	}
+
+	// Reset to base values first
+	baseMax := energyConfig.MaxCount
+	baseRefill := energyConfig.RefillCount
+	baseRefillSec := energyConfig.RefillTimeSec
+
+	// Keep track of active modifiers, and remove expired ones
+	activeModifiers := make([]*EnergyModifier, 0, len(energy.Modifiers))
+
+	for _, mod := range energy.Modifiers {
+		// Skip expired modifiers
+		if mod.EndTimeSec > 0 && mod.EndTimeSec < now {
+			continue
+		}
+
+		// Add to active modifiers list
+		activeModifiers = append(activeModifiers, mod)
+
+		// Apply modifier based on operator
+		switch mod.Operator {
+		case "max_energy":
+			// Modifier for maximum energy capacity
+			baseMax = applyModifier(baseMax, "add", mod.Value) // Add to max energy
+		case "refill_rate":
+			// Modifier for refill rate
+			baseRefill = applyModifier(baseRefill, "multiply", mod.Value) // Multiply refill amount
+		case "refill_speed":
+			// Modifier for refill speed (lower is faster)
+			if mod.Value > 0 {
+				baseRefillSec = int64(applyModifier(int32(baseRefillSec), "divide", mod.Value))
+			}
+		case "infinite_energy":
+			// Special case for infinite energy
+			if mod.Value > 0 {
+				baseMax = math.MaxInt32
+				energy.Current = baseMax
+			}
+		}
+	}
+
+	// Update energy with modified values
+	energy.Max = baseMax
+	energy.Refill = baseRefill
+	energy.RefillSec = baseRefillSec
+
+	// Replace modifiers list with only active ones
+	energy.Modifiers = activeModifiers
+}

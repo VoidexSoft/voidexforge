@@ -15388,7 +15388,7 @@ const file_pamlogix_pamlogix_proto_rawDesc = "" +
 	"\x18TUTORIAL_STATE_COMPLETED\x10\x04\x12\x1c\n" +
 	"\x18TUTORIAL_STATE_ABANDONED\x10\x05:;\n" +
 	"\x05input\x12!.google.protobuf.EnumValueOptions\x18\xe8\a \x01(\tR\x05input\x88\x01\x01:=\n" +
-	"\x06output\x12!.google.protobuf.EnumValueOptions\x18\xe9\a \x01(\tR\x06output\x88\x01\x01B\x1cZ\x1agithub.com/heroiclabs/hirob\x06proto3"
+	"\x06output\x12!.google.protobuf.EnumValueOptions\x18\xe9\a \x01(\tR\x06output\x88\x01\x01B\x16Z\x14voidexforge/pamlogixb\x06proto3"
 
 var (
 	file_pamlogix_pamlogix_proto_rawDescOnce sync.Once
