@@ -15,6 +15,7 @@ type AchievementsConfigAchievement struct {
 	AutoClaim            bool                                         `json:"auto_claim,omitempty"`
 	AutoClaimTotal       bool                                         `json:"auto_claim_total,omitempty"`
 	AutoReset            bool                                         `json:"auto_reset,omitempty"`
+	IsRepeatable         bool                                         `json:"is_repeatable,omitempty"`
 	Category             string                                       `json:"category,omitempty"`
 	Count                int64                                        `json:"count,omitempty"`
 	Description          string                                       `json:"description,omitempty"`

@@ -9,6 +9,11 @@ import (
 	"github.com/heroiclabs/nakama-common/runtime"
 )
 
+const (
+	energyStorageCollection = "energy"
+	userEnergyStorageKey    = "user_energies"
+)
+
 // NakamaEnergySystem implements the EnergySystem interface using Nakama as the backend.
 type NakamaEnergySystem struct {
 	config        *EnergyConfig
@@ -295,14 +300,11 @@ func (e *NakamaEnergySystem) SetOnSpendReward(fn OnReward[*EnergyConfigEnergy]) 
 
 // getUserEnergies fetches the stored energy data for a user from Nakama storage.
 func (e *NakamaEnergySystem) getUserEnergies(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID string) (map[string]*Energy, error) {
-	collection := "energy"
-	key := "user_energies"
-
 	// Read from storage
 	objects, err := nk.StorageRead(ctx, []*runtime.StorageRead{
 		{
-			Collection: collection,
-			Key:        key,
+			Collection: energyStorageCollection,
+			Key:        userEnergyStorageKey,
 			UserID:     userID,
 		},
 	})
@@ -335,9 +337,6 @@ func (e *NakamaEnergySystem) getUserEnergies(ctx context.Context, logger runtime
 
 // saveUserEnergies stores the updated energy data for a user in Nakama storage.
 func (e *NakamaEnergySystem) saveUserEnergies(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID string, energies map[string]*Energy) error {
-	collection := "energy"
-	key := "user_energies"
-
 	// Marshal the energy data
 	energyList := &EnergyList{
 		Energies: energies,
@@ -352,8 +351,8 @@ func (e *NakamaEnergySystem) saveUserEnergies(ctx context.Context, logger runtim
 	// Write to storage
 	_, err = nk.StorageWrite(ctx, []*runtime.StorageWrite{
 		{
-			Collection:      collection,
-			Key:             key,
+			Collection:      energyStorageCollection,
+			Key:             userEnergyStorageKey,
 			UserID:          userID,
 			Value:           string(data),
 			PermissionRead:  runtime.STORAGE_PERMISSION_OWNER_READ,

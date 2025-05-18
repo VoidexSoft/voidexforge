@@ -9,6 +9,10 @@ import (
 	"github.com/heroiclabs/nakama-common/runtime"
 )
 
+const (
+	inventoryStorageCollection = "inventory"
+)
+
 // NakamaInventorySystem implements the InventorySystem interface using Nakama as the backend.
 type NakamaInventorySystem struct {
 	config          *InventoryConfig
@@ -187,7 +191,7 @@ func (i *NakamaInventorySystem) ConsumeItems(ctx context.Context, logger runtime
 
 			// Add delete operation - use regular write with empty value
 			storageOps = append(storageOps, &runtime.StorageWrite{
-				Collection:      "inventory",
+				Collection:      inventoryStorageCollection,
 				Key:             itemID,
 				UserID:          userID,
 				Version:         "*",
@@ -204,7 +208,7 @@ func (i *NakamaInventorySystem) ConsumeItems(ctx context.Context, logger runtime
 			}
 
 			storageOps = append(storageOps, &runtime.StorageWrite{
-				Collection:      "inventory",
+				Collection:      inventoryStorageCollection,
 				Key:             itemID,
 				UserID:          userID,
 				Value:           string(itemData),
@@ -278,7 +282,7 @@ func (i *NakamaInventorySystem) ConsumeItems(ctx context.Context, logger runtime
 
 			// Add delete operation - use regular write with empty value
 			storageOps = append(storageOps, &runtime.StorageWrite{
-				Collection:      "inventory",
+				Collection:      inventoryStorageCollection,
 				Key:             itemID,
 				UserID:          userID,
 				Version:         "*",
@@ -295,7 +299,7 @@ func (i *NakamaInventorySystem) ConsumeItems(ctx context.Context, logger runtime
 			}
 
 			storageOps = append(storageOps, &runtime.StorageWrite{
-				Collection:      "inventory",
+				Collection:      inventoryStorageCollection,
 				Key:             itemID,
 				UserID:          userID,
 				Value:           string(itemData),
@@ -496,7 +500,7 @@ func (i *NakamaInventorySystem) GrantItems(ctx context.Context, logger runtime.L
 			}
 
 			storageOps = append(storageOps, &runtime.StorageWrite{
-				Collection:      "inventory",
+				Collection:      inventoryStorageCollection,
 				Key:             itemID,
 				UserID:          userID,
 				Value:           string(itemData),
@@ -538,7 +542,7 @@ func (i *NakamaInventorySystem) GrantItems(ctx context.Context, logger runtime.L
 			}
 
 			storageOps = append(storageOps, &runtime.StorageWrite{
-				Collection:      "inventory",
+				Collection:      inventoryStorageCollection,
 				Key:             itemID,
 				UserID:          userID,
 				Value:           string(itemData),
@@ -628,7 +632,7 @@ func (i *NakamaInventorySystem) UpdateItems(ctx context.Context, logger runtime.
 		}
 
 		storageOps = append(storageOps, &runtime.StorageWrite{
-			Collection:      "inventory",
+			Collection:      inventoryStorageCollection,
 			Key:             itemID,
 			UserID:          userID,
 			Value:           string(itemData),
@@ -672,9 +676,9 @@ func (i *NakamaInventorySystem) getUserInventory(ctx context.Context, logger run
 	// Retrieve all inventory objects from storage
 	objects, err := nk.StorageRead(ctx, []*runtime.StorageRead{
 		{
-			Collection: "inventory",
+			Collection: inventoryStorageCollection,
 			UserID:     userID,
-			Key:        "",
+			Key:        "", // Read all keys in the collection for this user
 		},
 	})
 	if err != nil {

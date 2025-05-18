@@ -15,6 +15,13 @@ import (
 	"github.com/heroiclabs/nakama-common/runtime"
 )
 
+const (
+	userModifiersStorageCollection   = "user_modifiers"
+	donationsStorageCollection       = "donations"
+	transactionsStorageCollection    = "transactions"
+	placementStatusStorageCollection = "placement_status"
+)
+
 // NakamaEconomySystem implements the EconomySystem interface using Nakama as the backend.
 type NakamaEconomySystem struct {
 	config                      *EconomyConfig
@@ -913,8 +920,8 @@ func (e *NakamaEconomySystem) updateEnergies(ctx context.Context, nk runtime.Nak
 	// Get current energy values
 	energyStorageObj, err := nk.StorageRead(ctx, []*runtime.StorageRead{
 		{
-			Collection: "energies",
-			Key:        "user_energies",
+			Collection: energyStorageCollection, // Assumes this is accessible from energy_pamlogix.go
+			Key:        userEnergyStorageKey,    // Assumes this is accessible
 			UserID:     userID,
 		},
 	})
@@ -944,8 +951,8 @@ func (e *NakamaEconomySystem) updateEnergies(ctx context.Context, nk runtime.Nak
 
 	_, err = nk.StorageWrite(ctx, []*runtime.StorageWrite{
 		{
-			Collection:      "energies",
-			Key:             "user_energies",
+			Collection:      energyStorageCollection, // Assumes this is accessible
+			Key:             userEnergyStorageKey,    // Assumes this is accessible
 			UserID:          userID,
 			Value:           string(energyData),
 			Version:         energyStorageObj[0].Version,
@@ -962,8 +969,8 @@ func (e *NakamaEconomySystem) applyEnergyModifiers(ctx context.Context, nk runti
 	// Get current modifiers
 	modifiersObj, err := nk.StorageRead(ctx, []*runtime.StorageRead{
 		{
-			Collection: "modifiers",
-			Key:        "energy_modifiers",
+			Collection: userModifiersStorageCollection,
+			Key:        userID + "_energy_modifiers",
 			UserID:     userID,
 		},
 	})
@@ -1012,8 +1019,8 @@ func (e *NakamaEconomySystem) applyEnergyModifiers(ctx context.Context, nk runti
 
 	_, err = nk.StorageWrite(ctx, []*runtime.StorageWrite{
 		{
-			Collection:      "modifiers",
-			Key:             "energy_modifiers",
+			Collection:      userModifiersStorageCollection,
+			Key:             userID + "_energy_modifiers",
 			UserID:          userID,
 			Value:           string(modifiersData),
 			Version:         version,
@@ -1030,8 +1037,8 @@ func (e *NakamaEconomySystem) applyRewardModifiers(ctx context.Context, nk runti
 	// Get current modifiers
 	modifiersObj, err := nk.StorageRead(ctx, []*runtime.StorageRead{
 		{
-			Collection: "modifiers",
-			Key:        "reward_modifiers",
+			Collection: userModifiersStorageCollection,
+			Key:        userID + "_reward_modifiers",
 			UserID:     userID,
 		},
 	})
@@ -1081,8 +1088,8 @@ func (e *NakamaEconomySystem) applyRewardModifiers(ctx context.Context, nk runti
 
 	_, err = nk.StorageWrite(ctx, []*runtime.StorageWrite{
 		{
-			Collection:      "modifiers",
-			Key:             "reward_modifiers",
+			Collection:      userModifiersStorageCollection,
+			Key:             userID + "_reward_modifiers",
 			UserID:          userID,
 			Value:           string(modifiersData),
 			Version:         version,
@@ -1181,9 +1188,9 @@ func (e *NakamaEconomySystem) DonationClaim(ctx context.Context, logger runtime.
 
 		// Add donation to storage update batch
 		donationsToUpdate = append(donationsToUpdate, &runtime.StorageWrite{
-			Collection:      "donations",
+			Collection:      donationsStorageCollection,
 			Key:             key,
-			UserID:          userID,
+			UserID:          "", // System object
 			Value:           string(donationData),
 			Version:         "", // Use empty string for new donation
 			PermissionRead:  1,  // Only owner can read
@@ -1298,9 +1305,9 @@ func (e *NakamaEconomySystem) DonationGive(ctx context.Context, logger runtime.L
 	donationData, _ := json.Marshal(newDonation)
 	_, err = nk.StorageWrite(ctx, []*runtime.StorageWrite{
 		{
-			Collection:      "donations",
+			Collection:      donationsStorageCollection,
 			Key:             key,
-			UserID:          userID,
+			UserID:          "", // System object
 			Value:           string(donationData),
 			Version:         "",
 			PermissionRead:  1,
@@ -1387,9 +1394,9 @@ func (e *NakamaEconomySystem) DonationRequest(ctx context.Context, logger runtim
 	donationData, _ := json.Marshal(donation)
 	_, err = nk.StorageWrite(ctx, []*runtime.StorageWrite{
 		{
-			Collection:      "donations",
+			Collection:      donationsStorageCollection,
 			Key:             key,
-			UserID:          userID,
+			UserID:          "", // System object
 			Value:           string(donationData),
 			Version:         "",
 			PermissionRead:  1,
@@ -2029,8 +2036,8 @@ func (e *NakamaEconomySystem) PlacementStatus(ctx context.Context, logger runtim
 	// Get placement storage from user data or create new one
 	object, err := nk.StorageRead(ctx, []*runtime.StorageRead{
 		{
-			Collection: "economy_placements",
-			Key:        placementID,
+			Collection: placementStatusStorageCollection,
+			Key:        userID + "_" + placementID,
 			UserID:     userID,
 		},
 	})
@@ -2110,8 +2117,8 @@ func (e *NakamaEconomySystem) PlacementStart(ctx context.Context, logger runtime
 
 	_, err = nk.StorageWrite(ctx, []*runtime.StorageWrite{
 		{
-			Collection:      "economy_placements",
-			Key:             placementID,
+			Collection:      placementStatusStorageCollection,
+			Key:             userID + "_" + placementID,
 			UserID:          userID,
 			Value:           string(placementData),
 			PermissionRead:  1, // Owner read
@@ -2148,8 +2155,8 @@ func (e *NakamaEconomySystem) PlacementSuccess(ctx context.Context, logger runti
 	// Get placement status
 	object, err := nk.StorageRead(ctx, []*runtime.StorageRead{
 		{
-			Collection: "economy_placements",
-			Key:        placementID,
+			Collection: placementStatusStorageCollection,
+			Key:        userID + "_" + placementID,
 			UserID:     userID,
 		},
 	})
@@ -2212,8 +2219,8 @@ func (e *NakamaEconomySystem) PlacementSuccess(ctx context.Context, logger runti
 
 	_, err = nk.StorageWrite(ctx, []*runtime.StorageWrite{
 		{
-			Collection:      "economy_placements",
-			Key:             placementID,
+			Collection:      placementStatusStorageCollection,
+			Key:             userID + "_" + placementID,
 			UserID:          userID,
 			Value:           string(updatedData),
 			PermissionRead:  1,
@@ -2246,8 +2253,8 @@ func (e *NakamaEconomySystem) PlacementFail(ctx context.Context, logger runtime.
 	// Get placement status
 	object, err := nk.StorageRead(ctx, []*runtime.StorageRead{
 		{
-			Collection: "economy_placements",
-			Key:        placementID,
+			Collection: placementStatusStorageCollection,
+			Key:        userID + "_" + placementID,
 			UserID:     userID,
 		},
 	})
@@ -2275,8 +2282,8 @@ func (e *NakamaEconomySystem) PlacementFail(ctx context.Context, logger runtime.
 
 	_, err = nk.StorageWrite(ctx, []*runtime.StorageWrite{
 		{
-			Collection:      "economy_placements",
-			Key:             placementID,
+			Collection:      placementStatusStorageCollection,
+			Key:             userID + "_" + placementID,
 			UserID:          userID,
 			Value:           string(updatedData),
 			PermissionRead:  1,
