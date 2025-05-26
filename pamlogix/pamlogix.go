@@ -179,7 +179,7 @@ func (p *pamlogixImpl) initSystem(ctx context.Context, logger runtime.Logger, nk
 			logger.Error("Failed to parse Auctions system config: %v", err)
 			return err
 		}
-		// Create auctions system instance
+		system = NewNakamaAuctionsSystem(auctionsConfig)
 
 	case SystemTypeStreaks:
 		streaksConfig := &StreaksConfig{}
@@ -419,6 +419,36 @@ func (p *pamlogixImpl) registerSystemRpcs(initializer runtime.Initializer, syste
 			return err
 		}
 		if err := initializer.RegisterRpc(RpcId_RPC_ID_UNLOCKABLES_QUEUE_SET.String(), rpcUnlockablesQueueSet(p)); err != nil {
+			return err
+		}
+
+	case SystemTypeAuctions:
+		// Register Auctions system RPCs
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_AUCTIONS_GET_TEMPLATES.String(), rpcAuctionsGetTemplates(p)); err != nil {
+			return err
+		}
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_AUCTIONS_LIST.String(), rpcAuctionsList(p)); err != nil {
+			return err
+		}
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_AUCTIONS_BID.String(), rpcAuctionsBid(p)); err != nil {
+			return err
+		}
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_AUCTIONS_CLAIM_BID.String(), rpcAuctionsClaimBid(p)); err != nil {
+			return err
+		}
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_AUCTIONS_CLAIM_CREATED.String(), rpcAuctionsClaimCreated(p)); err != nil {
+			return err
+		}
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_AUCTIONS_CANCEL.String(), rpcAuctionsCancel(p)); err != nil {
+			return err
+		}
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_AUCTIONS_CREATE.String(), rpcAuctionsCreate(p)); err != nil {
+			return err
+		}
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_AUCTIONS_LIST_BIDS.String(), rpcAuctionsListBids(p)); err != nil {
+			return err
+		}
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_AUCTIONS_LIST_CREATED.String(), rpcAuctionsListCreated(p)); err != nil {
 			return err
 		}
 
