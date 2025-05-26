@@ -139,7 +139,7 @@ func (p *pamlogixImpl) initSystem(ctx context.Context, logger runtime.Logger, nk
 			logger.Error("Failed to parse Tutorials system config: %v", err)
 			return err
 		}
-		// Create tutorials system instance
+		system = NewNakamaTutorialsSystem(tutorialsConfig)
 
 	case SystemTypeUnlockables:
 		unlockablesConfig := &UnlockablesConfig{}
@@ -224,6 +224,24 @@ func (p *pamlogixImpl) initSystem(ctx context.Context, logger runtime.Logger, nk
 		if achievementSystem, ok := system.(*NakamaAchievementsSystem); ok {
 			achievementSystem.SetPamlogix(p)
 			logger.Info("Set Pamlogix reference in achievement system for cross-system communication")
+		}
+
+		// For tutorials system, set the Pamlogix reference to enable cross-system communication
+		if tutorialsSystem, ok := system.(*NakamaTutorialsSystem); ok {
+			tutorialsSystem.SetPamlogix(p)
+			logger.Info("Set Pamlogix reference in tutorials system for cross-system communication")
+		}
+
+		// For unlockables system, set the Pamlogix reference to enable cross-system communication
+		if unlockablesSystem, ok := system.(*UnlockablesPamlogix); ok {
+			unlockablesSystem.SetPamlogix(p)
+			logger.Info("Set Pamlogix reference in unlockables system for cross-system communication")
+		}
+
+		// For streaks system, set the Pamlogix reference to enable cross-system communication
+		if streaksSystem, ok := system.(*NakamaStreaksSystem); ok {
+			streaksSystem.SetPamlogix(p)
+			logger.Info("Set Pamlogix reference in streaks system for cross-system communication")
 		}
 	}
 
@@ -350,6 +368,72 @@ func (p *pamlogixImpl) registerSystemRpcs(initializer runtime.Initializer, syste
 			return err
 		}
 		if err := initializer.RegisterRpc(RpcId_RPC_ID_STATS_UPDATE.String(), rpcStatsUpdate(p)); err != nil {
+			return err
+		}
+
+	case SystemTypeTutorials:
+		// Register Tutorials system RPCs
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_TUTORIALS_GET.String(), rpcTutorialsGet(p)); err != nil {
+			return err
+		}
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_TUTORIALS_ACCEPT.String(), rpcTutorialsAccept(p)); err != nil {
+			return err
+		}
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_TUTORIALS_DECLINE.String(), rpcTutorialsDecline(p)); err != nil {
+			return err
+		}
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_TUTORIALS_ABANDON.String(), rpcTutorialsAbandon(p)); err != nil {
+			return err
+		}
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_TUTORIALS_UPDATE.String(), rpcTutorialsUpdate(p)); err != nil {
+			return err
+		}
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_TUTORIALS_RESET.String(), rpcTutorialsReset(p)); err != nil {
+			return err
+		}
+
+	case SystemTypeUnlockables:
+		// Register Unlockables system RPCs
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_UNLOCKABLES_CREATE.String(), rpcUnlockablesCreate(p)); err != nil {
+			return err
+		}
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_UNLOCKABLES_GET.String(), rpcUnlockablesGet(p)); err != nil {
+			return err
+		}
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_UNLOCKABLES_UNLOCK_START.String(), rpcUnlockablesUnlockStart(p)); err != nil {
+			return err
+		}
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_UNLOCKABLES_PURCHASE_UNLOCK.String(), rpcUnlockablesPurchaseUnlock(p)); err != nil {
+			return err
+		}
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_UNLOCKABLES_PURCHASE_SLOT.String(), rpcUnlockablesPurchaseSlot(p)); err != nil {
+			return err
+		}
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_UNLOCKABLES_CLAIM.String(), rpcUnlockablesClaim(p)); err != nil {
+			return err
+		}
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_UNLOCKABLES_QUEUE_ADD.String(), rpcUnlockablesQueueAdd(p)); err != nil {
+			return err
+		}
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_UNLOCKABLES_QUEUE_REMOVE.String(), rpcUnlockablesQueueRemove(p)); err != nil {
+			return err
+		}
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_UNLOCKABLES_QUEUE_SET.String(), rpcUnlockablesQueueSet(p)); err != nil {
+			return err
+		}
+
+	case SystemTypeStreaks:
+		// Register Streaks system RPCs
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_STREAKS_LIST.String(), rpcStreaksList(p)); err != nil {
+			return err
+		}
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_STREAKS_UPDATE.String(), rpcStreaksUpdate(p)); err != nil {
+			return err
+		}
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_STREAKS_CLAIM.String(), rpcStreaksClaim(p)); err != nil {
+			return err
+		}
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_STREAKS_RESET.String(), rpcStreaksReset(p)); err != nil {
 			return err
 		}
 

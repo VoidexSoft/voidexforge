@@ -1,0 +1,140 @@
+{
+  "active_slots": 2,
+  "max_active_slots": 5,
+  "slots": 8,
+  "max_queued_unlocks": 3,
+  "slot_cost": {
+    "currencies": {
+      "gems": 100
+    }
+  },
+  "unlockables": {
+    "bronze_chest": {
+      "probability": 50,
+      "category": "chest",
+      "name": "Bronze Chest",
+      "description": "A basic chest containing common rewards",
+      "wait_time_sec": 900,
+      "start_cost": {
+        "currencies": {
+          "coins": 100
+        }
+      },
+      "cost": {
+        "currencies": {
+          "gems": 10
+        }
+      },
+      "reward": {
+        "guaranteed": {
+          "currencies": {
+            "coins": {
+              "min": 100,
+              "max": 200,
+              "multiple": 10
+            }
+          }
+        }
+      }
+    },
+    "silver_chest": {
+      "probability": 30,
+      "category": "chest",
+      "name": "Silver Chest",
+      "description": "A better chest with improved rewards",
+      "wait_time_sec": 3600,
+      "start_cost": {
+        "currencies": {
+          "coins": 500
+        }
+      },
+      "cost": {
+        "currencies": {
+          "gems": 25
+        }
+      },
+      "reward": {
+        "guaranteed": {
+          "currencies": {
+            "coins": {
+              "min": 500,
+              "max": 1000,
+              "multiple": 50
+            },
+            "gems": {
+              "min": 5,
+              "max": 10,
+              "multiple": 1
+            }
+          }
+        }
+      }
+    },
+    "gold_chest": {
+      "probability": 15,
+      "category": "chest",
+      "name": "Gold Chest",
+      "description": "A rare chest with valuable rewards",
+      "wait_time_sec": 14400,
+      "start_cost": {
+        "currencies": {
+          "coins": 2000
+        }
+      },
+      "cost": {
+        "currencies": {
+          "gems": 50
+        }
+      },
+      "reward": {
+        "guaranteed": {
+          "currencies": {
+            "coins": {
+              "min": 2000,
+              "max": 5000,
+              "multiple": 100
+            },
+            "gems": {
+              "min": 20,
+              "max": 50,
+              "multiple": 5
+            }
+          }
+        }
+      }
+    },
+    "legendary_chest": {
+      "probability": 5,
+      "category": "chest",
+      "name": "Legendary Chest",
+      "description": "An extremely rare chest with legendary rewards",
+      "wait_time_sec": 86400,
+      "start_cost": {
+        "currencies": {
+          "coins": 10000
+        }
+      },
+      "cost": {
+        "currencies": {
+          "gems": 200
+        }
+      },
+      "reward": {
+        "guaranteed": {
+          "currencies": {
+            "coins": {
+              "min": 10000,
+              "max": 25000,
+              "multiple": 500
+            },
+            "gems": {
+              "min": 100,
+              "max": 300,
+              "multiple": 25
+            }
+          }
+        }
+      }
+    }
+  }
+} 
