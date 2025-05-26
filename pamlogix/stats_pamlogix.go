@@ -20,7 +20,7 @@ type NakamaStatsSystem struct {
 }
 
 // NewNakamaStatsSystem creates a new instance of the stats system with the given configuration.
-func NewNakamaStatsSystem(config *StatsConfig) *NakamaStatsSystem {
+func NewStatsSystem(config *StatsConfig) *NakamaStatsSystem {
 	return &NakamaStatsSystem{
 		config: config,
 	}

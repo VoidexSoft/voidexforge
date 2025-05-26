@@ -29,6 +29,7 @@ type NakamaEconomySystem struct {
 	onPlacementReward           OnReward[*EconomyPlacementInfo]
 	onDonationClaimReward       OnReward[*EconomyConfigDonation]
 	onDonationContributorReward OnReward[*EconomyConfigDonation]
+	pamlogix                    interface{}
 }
 
 func NewNakamaEconomySystem(config *EconomyConfig) *NakamaEconomySystem {
@@ -2229,6 +2230,27 @@ func (e *NakamaEconomySystem) PlacementSuccess(ctx context.Context, logger runti
 	})
 	if err != nil {
 		logger.Warn("Failed to update placement status: %v", err)
+	}
+
+	// Emit PublisherEvent for unlockable rewarded video if instance_id is present in metadata
+	if pamlogixInst, ok := e.pamlogix.(interface {
+		SendPublisherEvents(context.Context, runtime.Logger, runtime.NakamaModule, string, []*PublisherEvent)
+	}); ok {
+		if placementData.Metadata != nil {
+			// Add placement_id to metadata for clarity
+			meta := make(map[string]string)
+			for k, v := range placementData.Metadata {
+				meta[k] = v
+			}
+			meta["placement_id"] = placementID
+			event := &PublisherEvent{
+				Name:      "placement_success",
+				Id:        rewardID,
+				Timestamp: time.Now().Unix(),
+				Metadata:  meta,
+			}
+			pamlogixInst.SendPublisherEvents(ctx, logger, nk, userID, []*PublisherEvent{event})
+		}
 	}
 
 	return reward, placementData.Metadata, nil

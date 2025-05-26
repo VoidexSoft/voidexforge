@@ -37,6 +37,11 @@ func Init(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, i
 		}
 	}
 
+	// Register UnlockableRewardedVideoPublisher if Unlockables system is present
+	if unlockables, ok := pl.systems[SystemTypeUnlockables].(UnlockablesSystem); ok {
+		pl.AddPublisher(&UnlockableRewardedVideoPublisher{Unlockables: unlockables})
+	}
+
 	return pl, nil
 }
 
@@ -102,10 +107,7 @@ func (p *pamlogixImpl) initSystem(ctx context.Context, logger runtime.Logger, nk
 			logger.Error("Failed to parse Achievements system config: %v", err)
 			return err
 		}
-		// Create achievements system instance
-		// Would implement with NewNakamaAchievementsSystem(achievementsConfig)
-		// For now, using a placeholder
-		logger.Warn("Achievements system not fully implemented yet")
+		system = NewNakamaAchievementsSystem(achievementsConfig)
 
 	case SystemTypeLeaderboards:
 		leaderboardConfig := &LeaderboardConfig{}
@@ -121,7 +123,7 @@ func (p *pamlogixImpl) initSystem(ctx context.Context, logger runtime.Logger, nk
 			logger.Error("Failed to parse Stats system config: %v", err)
 			return err
 		}
-		system = NewNakamaStatsSystem(statsConfig)
+		system = NewStatsSystem(statsConfig)
 
 	case SystemTypeTeams:
 		teamsConfig := &TeamsConfig{}
@@ -145,7 +147,7 @@ func (p *pamlogixImpl) initSystem(ctx context.Context, logger runtime.Logger, nk
 			logger.Error("Failed to parse Unlockables system config: %v", err)
 			return err
 		}
-		// Create unlockables system instance
+		system = NewUnlockablesSystem(unlockablesConfig)
 
 	case SystemTypeEventLeaderboards:
 		eventLeaderboardsConfig := &EventLeaderboardsConfig{}
@@ -185,7 +187,7 @@ func (p *pamlogixImpl) initSystem(ctx context.Context, logger runtime.Logger, nk
 			logger.Error("Failed to parse Streaks system config: %v", err)
 			return err
 		}
-		// Create streaks system instance
+		system = NewNakamaStreaksSystem(streaksConfig)
 
 	default:
 		logger.Error("Unknown system type: %v", config.GetType())
@@ -216,6 +218,12 @@ func (p *pamlogixImpl) initSystem(ctx context.Context, logger runtime.Logger, nk
 		if energySystem, ok := system.(*NakamaEnergySystem); ok {
 			energySystem.SetPamlogix(p)
 			logger.Info("Set Pamlogix reference in energy system for cross-system communication")
+		}
+
+		// For achievement system, set the Pamlogix reference to enable cross-system communication
+		if achievementSystem, ok := system.(*NakamaAchievementsSystem); ok {
+			achievementSystem.SetPamlogix(p)
+			logger.Info("Set Pamlogix reference in achievement system for cross-system communication")
 		}
 	}
 

@@ -67,7 +67,7 @@ func TestNakamaStatsSystem_List_AndUpdate(t *testing.T) {
 	config := &StatsConfig{
 		Whitelist: []string{"strength", "dexterity"},
 	}
-	statsSystem := NewNakamaStatsSystem(config)
+	statsSystem := NewStatsSystem(config)
 
 	userID := "test-user-id"
 
@@ -212,7 +212,7 @@ func TestRpcStatsGetAndUpdate(t *testing.T) {
 	}
 
 	statsConfig := &StatsConfig{}
-	statsSystem := NewNakamaStatsSystem(statsConfig)
+	statsSystem := NewStatsSystem(statsConfig)
 	p.systems[SystemTypeStats] = statsSystem
 
 	rpcGet := rpcStatsGet(p)
