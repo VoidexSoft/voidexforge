@@ -243,6 +243,12 @@ func (p *pamlogixImpl) initSystem(ctx context.Context, logger runtime.Logger, nk
 			streaksSystem.SetPamlogix(p)
 			logger.Info("Set Pamlogix reference in streaks system for cross-system communication")
 		}
+
+		// For auctions system, set the Pamlogix reference to enable cross-system communication
+		if auctionsSystem, ok := system.(*AuctionsPamlogix); ok {
+			auctionsSystem.SetPamlogix(p)
+			logger.Info("Set Pamlogix reference in auctions system for cross-system communication")
+		}
 	}
 
 	// 4. Register RPCs if requested
@@ -451,6 +457,32 @@ func (p *pamlogixImpl) registerSystemRpcs(initializer runtime.Initializer, syste
 		if err := initializer.RegisterRpc(RpcId_RPC_ID_AUCTIONS_LIST_CREATED.String(), rpcAuctionsListCreated(p)); err != nil {
 			return err
 		}
+
+		//TODO: Check the stream system for real-time auction updates
+		//// Register the socket RPC for following auctions (real-time updates)
+		//// Note: Nakama doesn't have RegisterSocketRpc. Real-time auction updates are handled
+		//// through the stream system in the Follow method and sendBidNotification function.
+		//// The rpcAuctionsFollow function can still be called as a regular RPC.
+		//if err := initializer.RegisterRpc(RpcSocketId_RPC_SOCKET_ID_AUCTIONS_FOLLOW.String(), rpcAuctionsFollow(p)); err != nil {
+		//	return err
+		//}
+		//
+		//// Optionally register a real-time message handler for auction-related messages
+		//// This allows intercepting and processing real-time auction messages if needed
+		//if err := initializer.RegisterBeforeRt("rpc", func(ctx context.Context, rtLogger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, in *rtapi.Envelope) (*rtapi.Envelope, error) {
+		//	// Check if this is an auction-related RPC call over websocket
+		//	if rpc := in.GetRpc(); rpc != nil {
+		//		if rpc.Id == RpcSocketId_RPC_SOCKET_ID_AUCTIONS_FOLLOW.String() {
+		//			// This RPC is being called over websocket - allow it to proceed
+		//			// The real-time updates will be handled by the stream system
+		//			rtLogger.Debug("Auction follow RPC called over websocket for real-time updates")
+		//		}
+		//	}
+		//	return in, nil
+		//}); err != nil {
+		//	// Failed to register real-time message handler for auctions - this is optional
+		//	// Don't return error as this is optional
+		//}
 
 	case SystemTypeStreaks:
 		// Register Streaks system RPCs

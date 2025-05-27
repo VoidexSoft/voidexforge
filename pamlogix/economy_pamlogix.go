@@ -730,123 +730,76 @@ func (e *NakamaEconomySystem) RewardGrant(ctx context.Context, logger runtime.Lo
 
 	// Process inventory items
 	if len(reward.Items) > 0 {
-		// Get current inventory to check for item updates vs new items
-		inventory, err := e.getInventory(ctx, nk, userID)
-		if err != nil {
-			logger.Error("Failed to retrieve inventory: %v", err)
-			return nil, nil, nil, runtime.NewError("Failed to retrieve inventory", 13) // INTERNAL
-		}
-
-		// Prepare item operations
-		itemsToAdd := make([]*runtime.StorageWrite, 0)
-
-		for itemID, count := range reward.Items {
-			if count <= 0 {
-				continue
-			}
-
-			// Create string key for the item in the storage engine
-			itemKey := fmt.Sprintf("inventory:%s", itemID)
-
-			// Check if item already exists
-			existingItem, exists := inventory.Items[itemID]
-
-			var itemInstance *RewardInventoryItem
-			// If we have instance data for this item
-			if reward.ItemInstances != nil && reward.ItemInstances[itemID] != nil {
-				itemInstance = reward.ItemInstances[itemID]
-			}
-
-			if exists {
-				// Update existing item
-				newCount := existingItem.Count + count
-				existingItem.Count = newCount
-
-				// Update properties if they exist in the reward
-				if itemInstance != nil {
-					// Merge string properties
-					for propKey, propValue := range itemInstance.StringProperties {
-						if existingItem.StringProperties == nil {
-							existingItem.StringProperties = make(map[string]string)
-						}
-						existingItem.StringProperties[propKey] = propValue
-					}
-
-					// Merge numeric properties
-					for propKey, propValue := range itemInstance.NumericProperties {
-						if existingItem.NumericProperties == nil {
-							existingItem.NumericProperties = make(map[string]float64)
-						}
-						existingItem.NumericProperties[propKey] = propValue
-					}
-				}
-
-				// Prepare item for storage update
-				itemData, err := json.Marshal(existingItem)
+		// Use the inventory system to grant items with proper limit checking
+		if e.pamlogix != nil {
+			inventorySystem := e.pamlogix.(interface{ GetInventorySystem() InventorySystem }).GetInventorySystem()
+			if inventorySystem != nil {
+				// Grant items through the inventory system which handles limits properly
+				_, grantedNewItems, grantedUpdatedItems, notGrantedItems, err := inventorySystem.GrantItems(ctx, logger, nk, userID, reward.Items, ignoreLimits)
 				if err != nil {
-					logger.Error("Failed to marshal item data: %v", err)
-					continue
+					logger.Error("Failed to grant items through inventory system: %v", err)
+					return nil, nil, nil, runtime.NewError("Failed to grant items", 13) // INTERNAL
 				}
 
-				// Add to storage operations
-				itemsToAdd = append(itemsToAdd, &runtime.StorageWrite{
-					Collection:      "inventory",
-					Key:             itemKey,
-					UserID:          userID,
-					Value:           string(itemData),
-					Version:         "", // No Version field in InventoryItem, use empty string
-					PermissionRead:  1,  // Only owner can read
-					PermissionWrite: 1,  // Only owner can write
-				})
+				// Merge results
+				for itemID, item := range grantedNewItems {
+					newItems[itemID] = item
+				}
+				for itemID, item := range grantedUpdatedItems {
+					updatedItems[itemID] = item
+				}
+				for itemID, count := range notGrantedItems {
+					notGrantedItemIDs[itemID] = count
+				}
 
-				updatedItems[itemID] = existingItem
+				// Handle item instances with properties if they exist
+				if reward.ItemInstances != nil {
+					// For items that were granted, we need to update their properties if specified
+					instanceUpdates := make(map[string]*InventoryUpdateItemProperties)
+
+					for itemID, itemInstance := range reward.ItemInstances {
+						// Only update if the item was actually granted
+						var grantedItem *InventoryItem
+						if newItem, exists := grantedNewItems[itemID]; exists {
+							grantedItem = newItem
+						} else if updatedItem, exists := grantedUpdatedItems[itemID]; exists {
+							grantedItem = updatedItem
+						}
+
+						if grantedItem != nil && grantedItem.InstanceId != "" {
+							// Prepare property updates
+							if len(itemInstance.StringProperties) > 0 || len(itemInstance.NumericProperties) > 0 {
+								instanceUpdates[grantedItem.InstanceId] = &InventoryUpdateItemProperties{
+									StringProperties:  itemInstance.StringProperties,
+									NumericProperties: itemInstance.NumericProperties,
+								}
+							}
+						}
+					}
+
+					// Apply property updates if any
+					if len(instanceUpdates) > 0 {
+						_, err = inventorySystem.UpdateItems(ctx, logger, nk, userID, instanceUpdates)
+						if err != nil {
+							logger.Error("Failed to update item properties: %v", err)
+							// Continue execution, don't fail the entire operation
+						}
+					}
+				}
 			} else {
-				// Create new item
-				newItem := &InventoryItem{
-					Id:    itemID,
-					Count: count,
-				}
-
-				// Set instance properties if available
-				if itemInstance != nil {
-					newItem.StringProperties = itemInstance.StringProperties
-					newItem.NumericProperties = itemInstance.NumericProperties
-					if itemInstance.InstanceId != "" {
-						newItem.InstanceId = itemInstance.InstanceId
-					} else {
-						// Generate a new instance ID if none was provided
-						newItem.InstanceId = uuid.New().String()
-					}
-				}
-
-				// Prepare item for storage
-				itemData, err := json.Marshal(newItem)
+				logger.Warn("Inventory system not available, falling back to direct storage")
+				// Fallback to the original direct storage method
+				err = e.grantItemsDirectly(ctx, logger, nk, userID, reward, newItems, updatedItems, ignoreLimits)
 				if err != nil {
-					logger.Error("Failed to marshal new item data: %v", err)
-					continue
+					return nil, nil, nil, err
 				}
-
-				// Add to storage operations
-				itemsToAdd = append(itemsToAdd, &runtime.StorageWrite{
-					Collection:      "inventory",
-					Key:             itemKey,
-					UserID:          userID,
-					Value:           string(itemData),
-					Version:         "", // New item, so version is empty
-					PermissionRead:  1,  // Only owner can read
-					PermissionWrite: 1,  // Only owner can write
-				})
-
-				newItems[itemID] = newItem
 			}
-		}
-
-		// Execute storage operations if we have any
-		if len(itemsToAdd) > 0 {
-			_, err = nk.StorageWrite(ctx, itemsToAdd)
+		} else {
+			logger.Warn("Pamlogix instance not available, falling back to direct storage")
+			// Fallback to the original direct storage method
+			err = e.grantItemsDirectly(ctx, logger, nk, userID, reward, newItems, updatedItems, ignoreLimits)
 			if err != nil {
-				logger.Error("Failed to write inventory updates: %v", err)
-				return nil, nil, nil, runtime.NewError("Failed to update inventory", 13) // INTERNAL
+				return nil, nil, nil, err
 			}
 		}
 	}
@@ -921,8 +874,8 @@ func (e *NakamaEconomySystem) updateEnergies(ctx context.Context, nk runtime.Nak
 	// Get current energy values
 	energyStorageObj, err := nk.StorageRead(ctx, []*runtime.StorageRead{
 		{
-			Collection: energyStorageCollection, // Assumes this is accessible from energy_pamlogix.go
-			Key:        userEnergyStorageKey,    // Assumes this is accessible
+			Collection: energyStorageCollection,
+			Key:        userEnergyStorageKey,
 			UserID:     userID,
 		},
 	})
@@ -952,8 +905,8 @@ func (e *NakamaEconomySystem) updateEnergies(ctx context.Context, nk runtime.Nak
 
 	_, err = nk.StorageWrite(ctx, []*runtime.StorageWrite{
 		{
-			Collection:      energyStorageCollection, // Assumes this is accessible
-			Key:             userEnergyStorageKey,    // Assumes this is accessible
+			Collection:      "energy",
+			Key:             "user_energies",
 			UserID:          userID,
 			Value:           string(energyData),
 			Version:         energyStorageObj[0].Version,
@@ -2333,4 +2286,129 @@ func (e *NakamaEconomySystem) SetOnPlacementReward(fn OnReward[*EconomyPlacement
 
 func (e *NakamaEconomySystem) SetOnStoreItemReward(fn OnReward[*EconomyConfigStoreItem]) {
 	e.onStoreItemReward = fn
+}
+
+// grantItemsDirectly is a fallback method for granting items when the inventory system is not available
+func (e *NakamaEconomySystem) grantItemsDirectly(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID string, reward *Reward, newItems map[string]*InventoryItem, updatedItems map[string]*InventoryItem, ignoreLimits bool) error {
+	// Get current inventory to check for item updates vs new items
+	inventory, err := e.getInventory(ctx, nk, userID)
+	if err != nil {
+		logger.Error("Failed to retrieve inventory: %v", err)
+		return runtime.NewError("Failed to retrieve inventory", 13) // INTERNAL
+	}
+
+	// Prepare item operations
+	itemsToAdd := make([]*runtime.StorageWrite, 0)
+
+	for itemID, count := range reward.Items {
+		if count <= 0 {
+			continue
+		}
+
+		// Create string key for the item in the storage engine
+		itemKey := fmt.Sprintf("inventory:%s", itemID)
+
+		// Check if item already exists
+		existingItem, exists := inventory.Items[itemID]
+
+		var itemInstance *RewardInventoryItem
+		// If we have instance data for this item
+		if reward.ItemInstances != nil && reward.ItemInstances[itemID] != nil {
+			itemInstance = reward.ItemInstances[itemID]
+		}
+
+		if exists {
+			// Update existing item
+			newCount := existingItem.Count + count
+			existingItem.Count = newCount
+
+			// Update properties if they exist in the reward
+			if itemInstance != nil {
+				// Merge string properties
+				for propKey, propValue := range itemInstance.StringProperties {
+					if existingItem.StringProperties == nil {
+						existingItem.StringProperties = make(map[string]string)
+					}
+					existingItem.StringProperties[propKey] = propValue
+				}
+
+				// Merge numeric properties
+				for propKey, propValue := range itemInstance.NumericProperties {
+					if existingItem.NumericProperties == nil {
+						existingItem.NumericProperties = make(map[string]float64)
+					}
+					existingItem.NumericProperties[propKey] = propValue
+				}
+			}
+
+			// Prepare item for storage update
+			itemData, err := json.Marshal(existingItem)
+			if err != nil {
+				logger.Error("Failed to marshal item data: %v", err)
+				continue
+			}
+
+			// Add to storage operations
+			itemsToAdd = append(itemsToAdd, &runtime.StorageWrite{
+				Collection:      "inventory",
+				Key:             itemKey,
+				UserID:          userID,
+				Value:           string(itemData),
+				Version:         "", // No Version field in InventoryItem, use empty string
+				PermissionRead:  1,  // Only owner can read
+				PermissionWrite: 1,  // Only owner can write
+			})
+
+			updatedItems[itemID] = existingItem
+		} else {
+			// Create new item
+			newItem := &InventoryItem{
+				Id:    itemID,
+				Count: count,
+			}
+
+			// Set instance properties if available
+			if itemInstance != nil {
+				newItem.StringProperties = itemInstance.StringProperties
+				newItem.NumericProperties = itemInstance.NumericProperties
+				if itemInstance.InstanceId != "" {
+					newItem.InstanceId = itemInstance.InstanceId
+				} else {
+					// Generate a new instance ID if none was provided
+					newItem.InstanceId = uuid.New().String()
+				}
+			}
+
+			// Prepare item for storage
+			itemData, err := json.Marshal(newItem)
+			if err != nil {
+				logger.Error("Failed to marshal new item data: %v", err)
+				continue
+			}
+
+			// Add to storage operations
+			itemsToAdd = append(itemsToAdd, &runtime.StorageWrite{
+				Collection:      "inventory",
+				Key:             itemKey,
+				UserID:          userID,
+				Value:           string(itemData),
+				Version:         "", // New item, so version is empty
+				PermissionRead:  1,  // Only owner can read
+				PermissionWrite: 1,  // Only owner can write
+			})
+
+			newItems[itemID] = newItem
+		}
+	}
+
+	// Execute storage operations if we have any
+	if len(itemsToAdd) > 0 {
+		_, err = nk.StorageWrite(ctx, itemsToAdd)
+		if err != nil {
+			logger.Error("Failed to write inventory updates: %v", err)
+			return runtime.NewError("Failed to update inventory", 13) // INTERNAL
+		}
+	}
+
+	return nil
 }

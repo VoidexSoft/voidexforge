@@ -14,14 +14,17 @@ import (
 )
 
 const (
-	AuctionCollectionKey = "auctions"
-	AuctionIndexKey      = "auction_index"
-	AuctionBidsKey       = "auction_bids"
+	AuctionCollectionKey  = "auctions"
+	AuctionIndexKey       = "auction_index"
+	AuctionBidsKey        = "auction_bids"
+	AuctionUserCreatedKey = "auction_user_created"
+	AuctionUserBidsKey    = "auction_user_bids"
 )
 
 // AuctionsPamlogix implements the AuctionsSystem interface
 type AuctionsPamlogix struct {
-	config *AuctionsConfig
+	config   *AuctionsConfig
+	pamlogix Pamlogix
 
 	onClaimBid           OnAuctionReward[*AuctionReward]
 	onClaimCreated       OnAuctionReward[*AuctionBidAmount]
@@ -44,6 +47,11 @@ func (a *AuctionsPamlogix) GetType() SystemType {
 // GetConfig returns the system configuration
 func (a *AuctionsPamlogix) GetConfig() any {
 	return a.config
+}
+
+// SetPamlogix sets the Pamlogix instance for this auctions system
+func (a *AuctionsPamlogix) SetPamlogix(pl Pamlogix) {
+	a.pamlogix = pl
 }
 
 // GetTemplates lists all available auction configurations that can be used to create auction listings
@@ -248,12 +256,13 @@ func (a *AuctionsPamlogix) Bid(ctx context.Context, logger runtime.Logger, nk ru
 		return nil, err
 	}
 
-	// Check if user has sufficient funds
-	// This would typically integrate with the economy system
-	// For now, we'll assume the check passes
+	// Check if user has sufficient funds using the economy system
+	if err := a.checkUserFunds(ctx, logger, nk, userID, bid); err != nil {
+		return nil, err
+	}
 
 	// Process the bid
-	if err := a.processBid(ctx, logger, nk, &auction, userID, bid, currentTime); err != nil {
+	if err := a.processBid(ctx, logger, nk, &auction, userID, bid, currentTime, nil); err != nil {
 		return nil, err
 	}
 
@@ -262,6 +271,15 @@ func (a *AuctionsPamlogix) Bid(ctx context.Context, logger runtime.Logger, nk ru
 		logger.Error("Failed to save auction after bid: %v", err)
 		return nil, ErrInternal
 	}
+
+	// Add to user's bid auctions index
+	if err := a.addToUserBidsIndex(ctx, nk, userID, auctionID); err != nil {
+		logger.Error("Failed to add auction to user bids index: %v", err)
+		// Don't return error as the bid was placed successfully
+	}
+
+	// Automatically follow the auction for the bidder to receive future updates
+	a.followAuctionForUser(ctx, logger, nk, userID, sessionID, auctionID)
 
 	// Send real-time notification to followers
 	a.sendBidNotification(ctx, logger, nk, &auction, sessionID)
@@ -472,8 +490,17 @@ func (a *AuctionsPamlogix) Cancel(ctx context.Context, logger runtime.Logger, nk
 
 	// Return bid to current bidder if any
 	if auction.Bid != nil {
-		// This would integrate with economy system to return funds
-		// For now, we'll just mark it as cancelled
+		if err := a.returnBidToUser(ctx, logger, nk, auction.Bid.UserId, auction.Bid.Bid); err != nil {
+			logger.Error("Failed to return bid to user %s when cancelling auction: %v", auction.Bid.UserId, err)
+			// Continue with cancellation despite error, but log it
+		} else {
+			logger.Info("Returned bid to user %s when cancelling auction %s", auction.Bid.UserId, auction.Id)
+		}
+
+		// Remove the auction from the bidder's bids index since the auction is cancelled
+		if err := a.removeFromUserBidsIndex(ctx, nk, auction.Bid.UserId, auction.Id); err != nil {
+			logger.Error("Failed to remove auction from bidder's index when cancelling: %v", err)
+		}
 	}
 
 	// Return items to creator
@@ -496,6 +523,11 @@ func (a *AuctionsPamlogix) Cancel(ctx context.Context, logger runtime.Logger, nk
 	// Remove from active auctions index
 	if err := a.removeFromIndex(ctx, nk, auctionID); err != nil {
 		logger.Error("Failed to remove auction from index: %v", err)
+	}
+
+	// Remove from user's created auctions index
+	if err := a.removeFromUserCreatedIndex(ctx, nk, userID, auctionID); err != nil {
+		logger.Error("Failed to remove auction from user created index: %v", err)
 	}
 
 	return &AuctionCancel{
@@ -554,6 +586,7 @@ func (a *AuctionsPamlogix) Create(ctx context.Context, logger runtime.Logger, nk
 		ExtensionThresholdSec: condition.ExtensionThresholdSec,
 		ExtensionSec:          condition.ExtensionSec,
 		ExtensionMaxSec:       condition.ExtensionMaxSec,
+		ExtensionRemainingSec: condition.ExtensionMaxSec, // Initialize with max extension time
 		CreateTimeSec:         currentTime,
 		StartTimeSec:          startTimeSec,
 		EndTimeSec:            endTimeSec,
@@ -569,7 +602,16 @@ func (a *AuctionsPamlogix) Create(ctx context.Context, logger runtime.Logger, nk
 	// Set bid start amount
 	if condition.BidStart != nil {
 		auction.BidNext = &AuctionBidAmount{
-			Currencies: condition.BidStart.Currencies,
+			Currencies: make(map[string]int64),
+		}
+		// Copy the bid start currencies
+		for currency, amount := range condition.BidStart.Currencies {
+			auction.BidNext.Currencies[currency] = amount
+		}
+	} else {
+		// Default minimum bid if no start amount specified
+		auction.BidNext = &AuctionBidAmount{
+			Currencies: make(map[string]int64),
 		}
 	}
 
@@ -580,7 +622,11 @@ func (a *AuctionsPamlogix) Create(ctx context.Context, logger runtime.Logger, nk
 		}
 		if condition.Fee.Fixed != nil {
 			auction.Fee.Fixed = &AuctionBidAmount{
-				Currencies: condition.Fee.Fixed.Currencies,
+				Currencies: make(map[string]int64),
+			}
+			// Copy the fixed fee currencies
+			for currency, amount := range condition.Fee.Fixed.Currencies {
+				auction.Fee.Fixed.Currencies[currency] = amount
 			}
 		}
 	}
@@ -600,26 +646,208 @@ func (a *AuctionsPamlogix) Create(ctx context.Context, logger runtime.Logger, nk
 		return nil, ErrInternal
 	}
 
+	// Add to user's created auctions index
+	if err := a.addToUserCreatedIndex(ctx, nk, userID, auctionID); err != nil {
+		logger.Error("Failed to add auction to user created index: %v", err)
+		// Don't return error as the auction was created successfully
+	}
+
 	return auction, nil
 }
 
 // ListBids returns auctions the user has successfully bid on
 func (a *AuctionsPamlogix) ListBids(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID string, limit int, cursor string) (*AuctionList, error) {
-	// This would typically query a user-specific index of bids
-	// For now, we'll return an empty list
+	// Parse cursor for pagination
+	var offset int
+	if cursor != "" {
+		var err error
+		offset, err = strconv.Atoi(cursor)
+		if err != nil {
+			return nil, ErrBadInput
+		}
+	}
+
+	// Read user's bid auctions index
+	userBidsKey := fmt.Sprintf("%s_%s", AuctionUserBidsKey, userID)
+	objects, err := nk.StorageRead(ctx, []*runtime.StorageRead{
+		{
+			Collection: AuctionCollectionKey,
+			Key:        userBidsKey,
+			UserID:     "",
+		},
+	})
+	if err != nil {
+		logger.Error("Failed to read user bid auctions index: %v", err)
+		return nil, ErrInternal
+	}
+
+	var auctionIDs []string
+	if len(objects) > 0 {
+		var index map[string]bool
+		if err := json.Unmarshal([]byte(objects[0].Value), &index); err != nil {
+			logger.Error("Failed to unmarshal user bid auctions index: %v", err)
+			return nil, ErrInternal
+		}
+
+		for auctionID := range index {
+			auctionIDs = append(auctionIDs, auctionID)
+		}
+	}
+
+	// Apply pagination
+	if offset >= len(auctionIDs) {
+		return &AuctionList{
+			Auctions: []*Auction{},
+			Cursor:   "",
+		}, nil
+	}
+
+	end := offset + limit
+	if end > len(auctionIDs) {
+		end = len(auctionIDs)
+	}
+
+	paginatedIDs := auctionIDs[offset:end]
+
+	// Read auction data
+	var auctions []*Auction
+	if len(paginatedIDs) > 0 {
+		reads := make([]*runtime.StorageRead, len(paginatedIDs))
+		for i, auctionID := range paginatedIDs {
+			reads[i] = &runtime.StorageRead{
+				Collection: AuctionCollectionKey,
+				Key:        auctionID,
+				UserID:     "",
+			}
+		}
+
+		objects, err := nk.StorageRead(ctx, reads)
+		if err != nil {
+			logger.Error("Failed to read user bid auctions: %v", err)
+			return nil, ErrInternal
+		}
+
+		currentTime := time.Now().Unix()
+		for _, obj := range objects {
+			var auction Auction
+			if err := json.Unmarshal([]byte(obj.Value), &auction); err != nil {
+				logger.Error("Failed to unmarshal auction %s: %v", obj.Key, err)
+				continue
+			}
+
+			// Update auction state based on current time
+			a.updateAuctionState(&auction, currentTime, userID)
+			auctions = append(auctions, &auction)
+		}
+	}
+
+	// Determine next cursor
+	var nextCursor string
+	if end < len(auctionIDs) {
+		nextCursor = strconv.Itoa(end)
+	}
+
 	return &AuctionList{
-		Auctions: []*Auction{},
-		Cursor:   "",
+		Auctions: auctions,
+		Cursor:   nextCursor,
 	}, nil
 }
 
 // ListCreated returns auctions the user has created
 func (a *AuctionsPamlogix) ListCreated(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID string, limit int, cursor string) (*AuctionList, error) {
-	// This would typically query a user-specific index of created auctions
-	// For now, we'll return an empty list
+	// Parse cursor for pagination
+	var offset int
+	if cursor != "" {
+		var err error
+		offset, err = strconv.Atoi(cursor)
+		if err != nil {
+			return nil, ErrBadInput
+		}
+	}
+
+	// Read user's created auctions index
+	userCreatedKey := fmt.Sprintf("%s_%s", AuctionUserCreatedKey, userID)
+	objects, err := nk.StorageRead(ctx, []*runtime.StorageRead{
+		{
+			Collection: AuctionCollectionKey,
+			Key:        userCreatedKey,
+			UserID:     "",
+		},
+	})
+	if err != nil {
+		logger.Error("Failed to read user created auctions index: %v", err)
+		return nil, ErrInternal
+	}
+
+	var auctionIDs []string
+	if len(objects) > 0 {
+		var index map[string]bool
+		if err := json.Unmarshal([]byte(objects[0].Value), &index); err != nil {
+			logger.Error("Failed to unmarshal user created auctions index: %v", err)
+			return nil, ErrInternal
+		}
+
+		for auctionID := range index {
+			auctionIDs = append(auctionIDs, auctionID)
+		}
+	}
+
+	// Apply pagination
+	if offset >= len(auctionIDs) {
+		return &AuctionList{
+			Auctions: []*Auction{},
+			Cursor:   "",
+		}, nil
+	}
+
+	end := offset + limit
+	if end > len(auctionIDs) {
+		end = len(auctionIDs)
+	}
+
+	paginatedIDs := auctionIDs[offset:end]
+
+	// Read auction data
+	var auctions []*Auction
+	if len(paginatedIDs) > 0 {
+		reads := make([]*runtime.StorageRead, len(paginatedIDs))
+		for i, auctionID := range paginatedIDs {
+			reads[i] = &runtime.StorageRead{
+				Collection: AuctionCollectionKey,
+				Key:        auctionID,
+				UserID:     "",
+			}
+		}
+
+		objects, err := nk.StorageRead(ctx, reads)
+		if err != nil {
+			logger.Error("Failed to read user created auctions: %v", err)
+			return nil, ErrInternal
+		}
+
+		currentTime := time.Now().Unix()
+		for _, obj := range objects {
+			var auction Auction
+			if err := json.Unmarshal([]byte(obj.Value), &auction); err != nil {
+				logger.Error("Failed to unmarshal auction %s: %v", obj.Key, err)
+				continue
+			}
+
+			// Update auction state based on current time
+			a.updateAuctionState(&auction, currentTime, userID)
+			auctions = append(auctions, &auction)
+		}
+	}
+
+	// Determine next cursor
+	var nextCursor string
+	if end < len(auctionIDs) {
+		nextCursor = strconv.Itoa(end)
+	}
+
 	return &AuctionList{
-		Auctions: []*Auction{},
-		Cursor:   "",
+		Auctions: auctions,
+		Cursor:   nextCursor,
 	}, nil
 }
 
@@ -643,6 +871,9 @@ func (a *AuctionsPamlogix) Follow(ctx context.Context, logger runtime.Logger, nk
 
 	var auctions []*Auction
 	currentTime := time.Now().Unix()
+	streamMode := uint8(1)
+	subcontext := "auction_bid_updates"
+	label := "auction_notifications"
 
 	for _, obj := range objects {
 		var auction Auction
@@ -653,9 +884,16 @@ func (a *AuctionsPamlogix) Follow(ctx context.Context, logger runtime.Logger, nk
 
 		a.updateAuctionState(&auction, currentTime, userID)
 		auctions = append(auctions, &auction)
-	}
 
-	// TODO: Implement actual following mechanism with real-time updates
+		// Join the user to the auction's notification stream
+		subject := auction.Id
+		joined, err := nk.StreamUserJoin(streamMode, subject, subcontext, label, userID, sessionID, false, true, "")
+		if err != nil {
+			logger.Error("Failed to join user %s to auction %s stream: %v", userID, auction.Id, err)
+		} else if joined {
+			logger.Info("User %s joined auction %s notification stream", userID, auction.Id)
+		}
+	}
 
 	return &AuctionList{
 		Auctions: auctions,
@@ -684,6 +922,189 @@ func (a *AuctionsPamlogix) SetOnCancel(fn OnAuctionReward[*AuctionReward]) {
 }
 
 // Helper methods
+
+// checkUserFunds verifies that a user has sufficient currency to place a bid
+func (a *AuctionsPamlogix) checkUserFunds(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID string, bid *AuctionBidAmount) error {
+	if a.pamlogix == nil {
+		logger.Warn("Cannot check user funds: no Pamlogix instance available")
+		return ErrInternal
+	}
+
+	economySystem := a.pamlogix.GetEconomySystem()
+	if economySystem == nil {
+		logger.Warn("Cannot check user funds: no EconomySystem available")
+		return ErrInternal
+	}
+
+	// Get user's account to check wallet
+	account, err := nk.AccountGetId(ctx, userID)
+	if err != nil {
+		logger.Error("Failed to get user account: %v", err)
+		return ErrInternal
+	}
+
+	// Get wallet from account
+	wallet, err := economySystem.UnmarshalWallet(account)
+	if err != nil {
+		logger.Error("Failed to unmarshal wallet: %v", err)
+		return ErrInternal
+	}
+
+	// Check if user has enough of each required currency
+	for currencyID, amount := range bid.Currencies {
+		if wallet[currencyID] < amount {
+			logger.Debug("User %s does not have enough of currency %s (has %d, needs %d)", userID, currencyID, wallet[currencyID], amount)
+			return ErrCurrencyInsufficient
+		}
+	}
+
+	return nil
+}
+
+// returnBidToUser returns currency to a user when they are outbid
+func (a *AuctionsPamlogix) returnBidToUser(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID string, bid *AuctionBidAmount) error {
+	if a.pamlogix == nil {
+		logger.Warn("Cannot return bid: no Pamlogix instance available")
+		return ErrInternal
+	}
+
+	economySystem := a.pamlogix.GetEconomySystem()
+	if economySystem == nil {
+		logger.Warn("Cannot return bid: no EconomySystem available")
+		return ErrInternal
+	}
+
+	// Grant the bid amount back to the user
+	metadata := map[string]interface{}{
+		"source": "auction_bid_return",
+		"reason": "outbid",
+	}
+
+	_, _, _, err := economySystem.Grant(ctx, logger, nk, userID, bid.Currencies, nil, nil, metadata)
+	if err != nil {
+		logger.Error("Failed to return bid currencies to user %s: %v", userID, err)
+		return err
+	}
+
+	logger.Info("Returned bid to user %s: %v", userID, bid.Currencies)
+	return nil
+}
+
+// deductBidFromUser deducts currency from a user when they place a bid
+func (a *AuctionsPamlogix) deductBidFromUser(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID string, bid *AuctionBidAmount) error {
+	if a.pamlogix == nil {
+		logger.Warn("Cannot deduct bid: no Pamlogix instance available")
+		return ErrInternal
+	}
+
+	economySystem := a.pamlogix.GetEconomySystem()
+	if economySystem == nil {
+		logger.Warn("Cannot deduct bid: no EconomySystem available")
+		return ErrInternal
+	}
+
+	// Convert to negative values for deduction
+	deductCurrencies := make(map[string]int64)
+	for currencyID, amount := range bid.Currencies {
+		deductCurrencies[currencyID] = -amount
+	}
+
+	// Deduct the bid amount from the user
+	metadata := map[string]interface{}{
+		"source": "auction_bid",
+		"reason": "bid_placed",
+	}
+
+	_, _, _, err := economySystem.Grant(ctx, logger, nk, userID, deductCurrencies, nil, nil, metadata)
+	if err != nil {
+		logger.Error("Failed to deduct bid currencies from user %s: %v", userID, err)
+		return err
+	}
+
+	logger.Info("Deducted bid from user %s: %v", userID, bid.Currencies)
+	return nil
+}
+
+func (a *AuctionsPamlogix) chargeListingCost(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID string, listingCost *AuctionsConfigAuctionConditionCost) error {
+	if a.pamlogix == nil {
+		logger.Warn("Cannot charge listing cost: no Pamlogix instance available")
+		return ErrInternal
+	}
+
+	// Charge currencies if any
+	if len(listingCost.Currencies) > 0 {
+		economySystem := a.pamlogix.GetEconomySystem()
+		if economySystem == nil {
+			logger.Warn("Cannot charge listing cost currencies: no EconomySystem available")
+			return ErrInternal
+		}
+
+		// Convert to negative values for deduction
+		deductCurrencies := make(map[string]int64)
+		for currencyID, amount := range listingCost.Currencies {
+			deductCurrencies[currencyID] = -amount
+		}
+
+		// Charge the currency listing cost
+		metadata := map[string]interface{}{
+			"source": "auction_listing",
+			"reason": "listing_cost_currencies",
+		}
+
+		_, _, _, err := economySystem.Grant(ctx, logger, nk, userID, deductCurrencies, nil, nil, metadata)
+		if err != nil {
+			logger.Error("Failed to charge listing cost currencies from user %s: %v", userID, err)
+			return err
+		}
+	}
+
+	// Charge energies if any
+	if len(listingCost.Energies) > 0 {
+		energySystem := a.pamlogix.GetEnergySystem()
+		if energySystem == nil {
+			logger.Warn("Cannot charge listing cost energies: no EnergySystem available")
+			return ErrInternal
+		}
+
+		// Convert to int32 and negative values for deduction
+		deductEnergies := make(map[string]int32)
+		for energyID, amount := range listingCost.Energies {
+			deductEnergies[energyID] = -int32(amount)
+		}
+
+		// Charge the energy listing cost
+		_, _, err := energySystem.Spend(ctx, logger, nk, userID, deductEnergies)
+		if err != nil {
+			logger.Error("Failed to charge listing cost energies from user %s: %v", userID, err)
+			return err
+		}
+	}
+
+	// Charge items if any
+	if len(listingCost.Items) > 0 {
+		inventorySystem := a.pamlogix.GetInventorySystem()
+		if inventorySystem == nil {
+			logger.Warn("Cannot charge listing cost items: no InventorySystem available")
+			return ErrInternal
+		}
+
+		// Convert to negative values for deduction
+		deductItems := make(map[string]int64)
+		for itemID, amount := range listingCost.Items {
+			deductItems[itemID] = -amount
+		}
+
+		// Charge the item listing cost
+		_, _, _, _, err := inventorySystem.GrantItems(ctx, logger, nk, userID, deductItems, false)
+		if err != nil {
+			logger.Error("Failed to charge listing cost items from user %s: %v", userID, err)
+			return err
+		}
+	}
+
+	logger.Info("Charged listing cost from user %s: currencies=%v, energies=%v, items=%v", userID, listingCost.Currencies, listingCost.Energies, listingCost.Items)
+	return nil
+}
 
 func (a *AuctionsPamlogix) updateAuctionState(auction *Auction, currentTime int64, userID string) {
 	auction.CurrentTimeSec = currentTime
@@ -731,15 +1152,34 @@ func (a *AuctionsPamlogix) validateBid(auction *Auction, userID string, bid *Auc
 		}
 	}
 
+	// Validate bid currencies are not negative
+	for _, amount := range bid.Currencies {
+		if amount <= 0 {
+			return ErrAuctionBidInvalid
+		}
+	}
+
 	return nil
 }
 
-func (a *AuctionsPamlogix) processBid(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, auction *Auction, userID string, bid *AuctionBidAmount, currentTime int64) error {
+func (a *AuctionsPamlogix) processBid(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, auction *Auction, userID string, bid *AuctionBidAmount, currentTime int64, bidIncrement *AuctionsConfigAuctionConditionBidIncrement) error {
 	// Return previous bid to previous bidder if any
 	if auction.Bid != nil {
-		// This would integrate with economy system
-		// For now, we'll just log it
-		logger.Info("Returning bid to previous bidder: %s", auction.Bid.UserId)
+		if err := a.returnBidToUser(ctx, logger, nk, auction.Bid.UserId, auction.Bid.Bid); err != nil {
+			logger.Error("Failed to return bid to previous bidder %s: %v", auction.Bid.UserId, err)
+			// Continue despite error as the new bid should still be processed
+		}
+
+		// Remove the auction from the previous bidder's bids index since they're no longer the highest bidder
+		if err := a.removeFromUserBidsIndex(ctx, nk, auction.Bid.UserId, auction.Id); err != nil {
+			logger.Error("Failed to remove auction from previous bidder's index: %v", err)
+		}
+	}
+
+	// Deduct the bid amount from the new bidder
+	if err := a.deductBidFromUser(ctx, logger, nk, userID, bid); err != nil {
+		logger.Error("Failed to deduct bid from user %s: %v", userID, err)
+		return err
 	}
 
 	// Set new bid
@@ -772,7 +1212,7 @@ func (a *AuctionsPamlogix) processBid(ctx context.Context, logger runtime.Logger
 	}
 
 	// Calculate next bid amount
-	auction.BidNext = a.calculateNextBid(bid)
+	auction.BidNext = a.calculateNextBid(bid, bidIncrement)
 
 	// Check for extension
 	if auction.ExtensionThresholdSec > 0 && auction.ExtensionSec > 0 {
@@ -801,18 +1241,43 @@ func (a *AuctionsPamlogix) processBid(ctx context.Context, logger runtime.Logger
 	return nil
 }
 
-func (a *AuctionsPamlogix) calculateNextBid(currentBid *AuctionBidAmount) *AuctionBidAmount {
+func (a *AuctionsPamlogix) calculateNextBid(currentBid *AuctionBidAmount, bidIncrement *AuctionsConfigAuctionConditionBidIncrement) *AuctionBidAmount {
 	nextBid := &AuctionBidAmount{
 		Currencies: make(map[string]int64),
 	}
 
-	// Simple increment - add 10% or minimum 1
 	for currency, amount := range currentBid.Currencies {
-		increment := amount / 10
-		if increment < 1 {
-			increment = 1
+		minIncrement := int64(0)
+
+		// Calculate percentage-based increment if specified
+		if bidIncrement != nil && bidIncrement.Percentage > 0 {
+			percentageIncrement := int64(float64(amount) * bidIncrement.Percentage)
+			minIncrement = percentageIncrement
 		}
-		nextBid.Currencies[currency] = amount + increment
+
+		// Calculate fixed increment if specified
+		if bidIncrement != nil && bidIncrement.Fixed != nil {
+			if fixedAmount, exists := bidIncrement.Fixed.Currencies[currency]; exists {
+				// If both percentage and fixed are specified, use the maximum to satisfy both conditions
+				if minIncrement > 0 {
+					if fixedAmount > minIncrement {
+						minIncrement = fixedAmount
+					}
+				} else {
+					minIncrement = fixedAmount
+				}
+			}
+		}
+
+		// Default increment if no configuration provided
+		if minIncrement == 0 {
+			minIncrement = amount / 10
+			if minIncrement < 1 {
+				minIncrement = 1
+			}
+		}
+
+		nextBid.Currencies[currency] = amount + minIncrement
 	}
 
 	return nextBid
@@ -849,11 +1314,59 @@ func (a *AuctionsPamlogix) calculateFee(bidAmount *AuctionBidAmount, feeConfig *
 }
 
 func (a *AuctionsPamlogix) validateItems(items []*InventoryItem, config *AuctionsConfigAuction) error {
-	// This would validate items against the allowed items/item sets
-	// For now, we'll just check that items exist
 	if len(items) == 0 {
 		return ErrAuctionItemsInvalid
 	}
+
+	// If no restrictions are configured, allow any items
+	if len(config.Items) == 0 && len(config.ItemSets) == 0 {
+		return nil
+	}
+
+	// Check each item against allowed items and item sets
+	for _, item := range items {
+		if item == nil || item.Id == "" {
+			return ErrAuctionItemsInvalid
+		}
+
+		itemAllowed := false
+
+		// Check against allowed individual items
+		for _, allowedItem := range config.Items {
+			if item.Id == allowedItem {
+				itemAllowed = true
+				break
+			}
+		}
+
+		// If not found in individual items, check against item sets
+		if !itemAllowed {
+			// Get inventory system to check item sets
+			if a.pamlogix != nil {
+				inventorySystem := a.pamlogix.GetInventorySystem()
+				if inventorySystem != nil {
+					// Get the inventory config to access the pre-computed item sets
+					inventoryConfig, ok := inventorySystem.GetConfig().(*InventoryConfig)
+					if ok && inventoryConfig != nil && inventoryConfig.ItemSets != nil {
+						// Check if item belongs to any allowed item set
+						for _, allowedSetID := range config.ItemSets {
+							if itemsInSet, exists := inventoryConfig.ItemSets[allowedSetID]; exists {
+								if itemsInSet[item.Id] {
+									itemAllowed = true
+									break
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		if !itemAllowed {
+			return ErrAuctionItemsInvalid
+		}
+	}
+
 	return nil
 }
 
@@ -959,8 +1472,263 @@ func (a *AuctionsPamlogix) generateVersion() string {
 	return fmt.Sprintf("%x", md5.Sum([]byte(fmt.Sprintf("%d", time.Now().UnixNano()))))
 }
 
+func (a *AuctionsPamlogix) addToUserCreatedIndex(ctx context.Context, nk runtime.NakamaModule, userID, auctionID string) error {
+	// Read current user's created auctions index
+	userCreatedKey := fmt.Sprintf("%s_%s", AuctionUserCreatedKey, userID)
+	objects, err := nk.StorageRead(ctx, []*runtime.StorageRead{
+		{
+			Collection: AuctionCollectionKey,
+			Key:        userCreatedKey,
+			UserID:     "",
+		},
+	})
+
+	var index map[string]bool
+	if len(objects) > 0 {
+		if err := json.Unmarshal([]byte(objects[0].Value), &index); err != nil {
+			return err
+		}
+	} else {
+		index = make(map[string]bool)
+	}
+
+	// Add auction to user's index
+	index[auctionID] = true
+
+	// Save updated index
+	data, err := json.Marshal(index)
+	if err != nil {
+		return err
+	}
+
+	_, err = nk.StorageWrite(ctx, []*runtime.StorageWrite{
+		{
+			Collection: AuctionCollectionKey,
+			Key:        userCreatedKey,
+			UserID:     "",
+			Value:      string(data),
+		},
+	})
+
+	return err
+}
+
+func (a *AuctionsPamlogix) removeFromUserCreatedIndex(ctx context.Context, nk runtime.NakamaModule, userID, auctionID string) error {
+	// Read current user's created auctions index
+	userCreatedKey := fmt.Sprintf("%s_%s", AuctionUserCreatedKey, userID)
+	objects, err := nk.StorageRead(ctx, []*runtime.StorageRead{
+		{
+			Collection: AuctionCollectionKey,
+			Key:        userCreatedKey,
+			UserID:     "",
+		},
+	})
+
+	if len(objects) == 0 {
+		return nil // Index doesn't exist
+	}
+
+	var index map[string]bool
+	if err := json.Unmarshal([]byte(objects[0].Value), &index); err != nil {
+		return err
+	}
+
+	// Remove auction from user's index
+	delete(index, auctionID)
+
+	// Save updated index
+	data, err := json.Marshal(index)
+	if err != nil {
+		return err
+	}
+
+	_, err = nk.StorageWrite(ctx, []*runtime.StorageWrite{
+		{
+			Collection: AuctionCollectionKey,
+			Key:        userCreatedKey,
+			UserID:     "",
+			Value:      string(data),
+		},
+	})
+
+	return err
+}
+
+func (a *AuctionsPamlogix) addToUserBidsIndex(ctx context.Context, nk runtime.NakamaModule, userID, auctionID string) error {
+	// Read current user's bid auctions index
+	userBidsKey := fmt.Sprintf("%s_%s", AuctionUserBidsKey, userID)
+	objects, err := nk.StorageRead(ctx, []*runtime.StorageRead{
+		{
+			Collection: AuctionCollectionKey,
+			Key:        userBidsKey,
+			UserID:     "",
+		},
+	})
+
+	var index map[string]bool
+	if len(objects) > 0 {
+		if err := json.Unmarshal([]byte(objects[0].Value), &index); err != nil {
+			return err
+		}
+	} else {
+		index = make(map[string]bool)
+	}
+
+	// Add auction to user's bids index
+	index[auctionID] = true
+
+	// Save updated index
+	data, err := json.Marshal(index)
+	if err != nil {
+		return err
+	}
+
+	_, err = nk.StorageWrite(ctx, []*runtime.StorageWrite{
+		{
+			Collection: AuctionCollectionKey,
+			Key:        userBidsKey,
+			UserID:     "",
+			Value:      string(data),
+		},
+	})
+
+	return err
+}
+
+func (a *AuctionsPamlogix) removeFromUserBidsIndex(ctx context.Context, nk runtime.NakamaModule, userID, auctionID string) error {
+	// Read current user's bid auctions index
+	userBidsKey := fmt.Sprintf("%s_%s", AuctionUserBidsKey, userID)
+	objects, err := nk.StorageRead(ctx, []*runtime.StorageRead{
+		{
+			Collection: AuctionCollectionKey,
+			Key:        userBidsKey,
+			UserID:     "",
+		},
+	})
+
+	if len(objects) == 0 {
+		return nil // Index doesn't exist
+	}
+
+	var index map[string]bool
+	if err := json.Unmarshal([]byte(objects[0].Value), &index); err != nil {
+		return err
+	}
+
+	// Remove auction from user's bids index
+	delete(index, auctionID)
+
+	// Save updated index
+	data, err := json.Marshal(index)
+	if err != nil {
+		return err
+	}
+
+	_, err = nk.StorageWrite(ctx, []*runtime.StorageWrite{
+		{
+			Collection: AuctionCollectionKey,
+			Key:        userBidsKey,
+			UserID:     "",
+			Value:      string(data),
+		},
+	})
+
+	return err
+}
+
 func (a *AuctionsPamlogix) sendBidNotification(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, auction *Auction, sessionID string) {
-	// This would send real-time notifications to auction followers
-	// Implementation would depend on the specific real-time messaging system
-	logger.Info("Sending bid notification for auction %s", auction.Id)
+	// Create the bid notification payload
+	bidNotification := &AuctionNotificationBid{
+		Id:                    auction.Id,
+		Version:               auction.Version,
+		Bid:                   auction.Bid,
+		BidNext:               auction.BidNext,
+		ExtensionAddedSec:     auction.ExtensionAddedSec,
+		ExtensionRemainingSec: auction.ExtensionRemainingSec,
+		UpdateTimeSec:         auction.UpdateTimeSec,
+		EndTimeSec:            auction.EndTimeSec,
+		CurrentTimeSec:        auction.CurrentTimeSec,
+	}
+
+	// Marshal the notification to JSON for stream data
+	notificationData, err := json.Marshal(bidNotification)
+	if err != nil {
+		logger.Error("Failed to marshal bid notification for auction %s: %v", auction.Id, err)
+		return
+	}
+
+	// Send real-time notification via stream to auction followers
+	// Stream mode 1 is typically used for custom application streams
+	// Subject is the auction ID, subcontext can be "bid_updates"
+	streamMode := uint8(1)
+	subject := auction.Id
+	subcontext := "auction_bid_updates"
+	label := "auction_notifications"
+
+	// Get list of users following this auction stream
+	presences, err := nk.StreamUserList(streamMode, subject, subcontext, label, true, true)
+	if err != nil {
+		logger.Error("Failed to get auction followers for auction %s: %v", auction.Id, err)
+		return
+	}
+
+	if len(presences) > 0 {
+		// Send the notification to all followers via stream
+		err = nk.StreamSend(streamMode, subject, subcontext, label, string(notificationData), presences, true)
+		if err != nil {
+			logger.Error("Failed to send stream notification for auction %s: %v", auction.Id, err)
+		} else {
+			logger.Info("Sent bid notification for auction %s to %d followers", auction.Id, len(presences))
+		}
+	}
+
+	// Also send persistent notifications to interested users
+	// Send to auction creator (unless they are the bidder)
+	if auction.UserId != auction.Bid.UserId {
+		content := map[string]interface{}{
+			"auction_id": auction.Id,
+			"bid_amount": auction.Bid.Bid.Currencies,
+			"bidder_id":  auction.Bid.UserId,
+			"type":       "auction_bid",
+		}
+
+		err = nk.NotificationSend(ctx, auction.UserId, "New bid on your auction", content, 1001, "", true)
+		if err != nil {
+			logger.Error("Failed to send notification to auction creator %s: %v", auction.UserId, err)
+		}
+	}
+
+	// Send notification to previous high bidder (if any and different from current bidder)
+	if len(auction.BidHistory) > 1 {
+		previousBid := auction.BidHistory[1] // Second item is the previous bid
+		if previousBid.UserId != auction.Bid.UserId {
+			content := map[string]interface{}{
+				"auction_id": auction.Id,
+				"bid_amount": auction.Bid.Bid.Currencies,
+				"type":       "auction_outbid",
+			}
+
+			err = nk.NotificationSend(ctx, previousBid.UserId, "You have been outbid", content, 1002, "", true)
+			if err != nil {
+				logger.Error("Failed to send outbid notification to user %s: %v", previousBid.UserId, err)
+			}
+		}
+	}
+
+	logger.Info("Completed bid notification processing for auction %s", auction.Id)
+}
+
+// followAuctionForUser adds a user to an auction's notification stream
+func (a *AuctionsPamlogix) followAuctionForUser(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID, sessionID, auctionID string) {
+	streamMode := uint8(1)
+	subject := auctionID
+	subcontext := "auction_bid_updates"
+	label := "auction_notifications"
+
+	joined, err := nk.StreamUserJoin(streamMode, subject, subcontext, label, userID, sessionID, false, true, "")
+	if err != nil {
+		logger.Error("Failed to join user %s to auction %s stream: %v", userID, auctionID, err)
+	} else if joined {
+		logger.Info("User %s automatically joined auction %s notification stream", userID, auctionID)
+	}
 }
