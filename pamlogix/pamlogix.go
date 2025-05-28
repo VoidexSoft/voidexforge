@@ -155,7 +155,7 @@ func (p *pamlogixImpl) initSystem(ctx context.Context, logger runtime.Logger, nk
 			logger.Error("Failed to parse EventLeaderboards system config: %v", err)
 			return err
 		}
-		// Create event leaderboards system instance
+		system = NewNakamaEventLeaderboardsSystem(eventLeaderboardsConfig)
 
 	case SystemTypeProgression:
 		progressionConfig := &ProgressionConfig{}
@@ -254,6 +254,12 @@ func (p *pamlogixImpl) initSystem(ctx context.Context, logger runtime.Logger, nk
 		if progressionSystem, ok := system.(*NakamaProgressionSystem); ok {
 			progressionSystem.SetPamlogix(p)
 			logger.Info("Set Pamlogix reference in progression system for cross-system communication")
+		}
+
+		// For event leaderboards system, set the Pamlogix reference to enable cross-system communication
+		if eventLeaderboardsSystem, ok := system.(*NakamaEventLeaderboardsSystem); ok {
+			eventLeaderboardsSystem.SetPamlogix(p)
+			logger.Info("Set Pamlogix reference in event leaderboards system for cross-system communication")
 		}
 	}
 

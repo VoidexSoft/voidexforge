@@ -29,6 +29,17 @@ type EventLeaderboardsConfigLeaderboard struct {
 	EndTimeSec           int64                                                      `json:"end_time_sec,omitempty"`
 	Duration             int64                                                      `json:"duration,omitempty"`
 
+	// Reroll functionality
+	MaxRerolls int                  `json:"max_rerolls,omitempty"`
+	RerollCost *EconomyConfigReward `json:"reroll_cost,omitempty"`
+
+	// Target score racing
+	TargetScore int64 `json:"target_score,omitempty"`
+	WinnerCount int   `json:"winner_count,omitempty"`
+
+	// Participation cost
+	ParticipationCost *EconomyConfigReward `json:"participation_cost,omitempty"`
+
 	BackingId           string `json:"-"`
 	CalculatedBackingId string `json:"-"`
 }
@@ -65,6 +76,9 @@ type EventLeaderboardsSystem interface {
 
 	// ClaimEventLeaderboard claims the user's reward for the given event leaderboard.
 	ClaimEventLeaderboard(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID, eventLeaderboardID string) (eventLeaderboard *EventLeaderboard, err error)
+
+	// ProcessEventEnd handles end-of-event logic including tier changes based on change zones.
+	ProcessEventEnd(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, eventLeaderboardID string) (err error)
 
 	// SetOnEventLeaderboardsReward sets a custom reward function which will run after an event leaderboard's reward is rolled.
 	SetOnEventLeaderboardsReward(fn OnReward[*EventLeaderboardsConfigLeaderboard])
