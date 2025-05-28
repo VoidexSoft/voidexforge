@@ -1,7 +1,7 @@
 ---
 description: 
 globs: 
-alwaysApply: true
+alwaysApply: false
 ---
 ## Instructions for Using Graphiti's MCP Tools for Agent Memory
 

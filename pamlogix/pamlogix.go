@@ -163,7 +163,7 @@ func (p *pamlogixImpl) initSystem(ctx context.Context, logger runtime.Logger, nk
 			logger.Error("Failed to parse Progression system config: %v", err)
 			return err
 		}
-		// Create progression system instance
+		system = NewNakamaProgressionSystem(progressionConfig)
 
 	case SystemTypeIncentives:
 		incentivesConfig := &IncentivesConfig{}
@@ -248,6 +248,12 @@ func (p *pamlogixImpl) initSystem(ctx context.Context, logger runtime.Logger, nk
 		if auctionsSystem, ok := system.(*AuctionsPamlogix); ok {
 			auctionsSystem.SetPamlogix(p)
 			logger.Info("Set Pamlogix reference in auctions system for cross-system communication")
+		}
+
+		// For progression system, set the Pamlogix reference to enable cross-system communication
+		if progressionSystem, ok := system.(*NakamaProgressionSystem); ok {
+			progressionSystem.SetPamlogix(p)
+			logger.Info("Set Pamlogix reference in progression system for cross-system communication")
 		}
 	}
 
@@ -496,6 +502,21 @@ func (p *pamlogixImpl) registerSystemRpcs(initializer runtime.Initializer, syste
 			return err
 		}
 		if err := initializer.RegisterRpc(RpcId_RPC_ID_STREAKS_RESET.String(), rpcStreaksReset(p)); err != nil {
+			return err
+		}
+
+	case SystemTypeProgression:
+		// Register Progression system RPCs
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_PROGRESSIONS_GET.String(), rpcProgressionsGet(p)); err != nil {
+			return err
+		}
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_PROGRESSIONS_PURCHASE.String(), rpcProgressionsPurchase(p)); err != nil {
+			return err
+		}
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_PROGRESSIONS_UPDATE.String(), rpcProgressionsUpdate(p)); err != nil {
+			return err
+		}
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_PROGRESSIONS_RESET.String(), rpcProgressionsReset(p)); err != nil {
 			return err
 		}
 

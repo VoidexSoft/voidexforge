@@ -1,0 +1,232 @@
+{
+  "progressions": {
+    "battle_pass_tier_1": {
+      "name": "Battle Pass Tier 1",
+      "description": "Complete daily challenges to unlock",
+      "category": "battle_pass",
+      "additional_properties": {
+        "tier": "1",
+        "season": "winter_2024",
+        "pass_type": "free",
+        "xp_required": "100"
+      },
+      "preconditions": {
+        "direct": {
+          "counts": {
+            "battle_pass_xp": 100
+          }
+        }
+      },
+      "rewards": {
+        "guaranteed": {
+          "currencies": {
+            "coins": {"min": 500, "max": 500}
+          },
+          "items": {
+            "common_chest": {"min": 1, "max": 1}
+          }
+        }
+      }
+    },
+    "battle_pass_tier_2": {
+      "name": "Battle Pass Tier 2", 
+      "description": "Reach 250 Battle Pass XP",
+      "category": "battle_pass",
+      "additional_properties": {
+        "tier": "2",
+        "season": "winter_2024",
+        "pass_type": "free",
+        "xp_required": "250"
+      },
+      "preconditions": {
+        "direct": {
+          "counts": {
+            "battle_pass_xp": 250
+          },
+          "progressions": ["battle_pass_tier_1"]
+        }
+      },
+      "rewards": {
+        "guaranteed": {
+          "currencies": {
+            "coins": {"min": 750, "max": 750}
+          },
+          "items": {
+            "rare_weapon": {"min": 1, "max": 1}
+          }
+        }
+      }
+    },
+    "battle_pass_tier_3_premium": {
+      "name": "Battle Pass Tier 3 (Premium)",
+      "description": "Premium tier - requires Battle Pass purchase",
+      "category": "battle_pass",
+      "additional_properties": {
+        "tier": "3",
+        "season": "winter_2024", 
+        "pass_type": "premium",
+        "xp_required": "500"
+      },
+      "preconditions": {
+        "direct": {
+          "counts": {
+            "battle_pass_xp": 500
+          },
+          "progressions": ["battle_pass_tier_2"],
+          "items_min": {
+            "battle_pass_premium": 1
+          }
+        }
+      },
+      "rewards": {
+        "guaranteed": {
+          "currencies": {
+            "coins": {"min": 1500, "max": 1500},
+            "gems": {"min": 50, "max": 50}
+          },
+          "items": {
+            "epic_armor": {"min": 1, "max": 1},
+            "premium_chest": {"min": 2, "max": 2}
+          }
+        }
+      }
+    },
+    "battle_pass_tier_5_exclusive": {
+      "name": "Battle Pass Tier 5 (Exclusive)",
+      "description": "Exclusive tier with special requirements",
+      "category": "battle_pass",
+      "additional_properties": {
+        "tier": "5",
+        "season": "winter_2024",
+        "pass_type": "premium",
+        "xp_required": "1000"
+      },
+      "preconditions": {
+        "direct": {
+          "counts": {
+            "battle_pass_xp": 1000
+          },
+          "items_min": {
+            "battle_pass_premium": 1
+          }
+        },
+        "operator": 1,
+        "nested": {
+          "direct": {
+            "achievements": ["season_champion"]
+          },
+          "operator": 2,
+          "nested": {
+            "direct": {
+              "stats_min": {
+                "player_level": 50
+              }
+            }
+          }
+        }
+      },
+      "rewards": {
+        "guaranteed": {
+          "currencies": {
+            "coins": {"min": 5000, "max": 5000},
+            "gems": {"min": 200, "max": 200}
+          },
+          "items": {
+            "legendary_skin": {"min": 1, "max": 1},
+            "exclusive_emote": {"min": 1, "max": 1},
+            "title_winter_champion": {"min": 1, "max": 1}
+          }
+        }
+      }
+    },
+    "battle_pass_weekly_challenge": {
+      "name": "Weekly Challenge Boost",
+      "description": "Complete weekly challenges for bonus XP",
+      "category": "battle_pass",
+      "additional_properties": {
+        "challenge_type": "weekly",
+        "season": "winter_2024",
+        "xp_bonus": "500"
+      },
+      "preconditions": {
+        "direct": {
+          "counts": {
+            "weekly_challenges_completed": 3
+          }
+        }
+      },
+      "reset_schedule": "0 0 * * 1",
+      "rewards": {
+        "guaranteed": {
+          "currencies": {
+            "battle_pass_xp": {"min": 500, "max": 500}
+          }
+        }
+      }
+    },
+    "battle_pass_daily_login": {
+      "name": "Daily Login Bonus",
+      "description": "Login daily for Battle Pass XP",
+      "category": "battle_pass",
+      "additional_properties": {
+        "challenge_type": "daily",
+        "season": "winter_2024",
+        "xp_bonus": "50"
+      },
+      "preconditions": {
+        "direct": {
+          "counts": {
+            "daily_logins": 1
+          }
+        }
+      },
+      "reset_schedule": "0 0 * * *",
+      "rewards": {
+        "guaranteed": {
+          "currencies": {
+            "battle_pass_xp": {"min": 50, "max": 50}
+          }
+        }
+      }
+    },
+    "battle_pass_season_finale": {
+      "name": "Season Finale Reward",
+      "description": "Complete the entire battle pass",
+      "category": "battle_pass",
+      "additional_properties": {
+        "tier": "finale",
+        "season": "winter_2024",
+        "pass_type": "premium"
+      },
+      "preconditions": {
+        "direct": {
+          "counts": {
+            "battle_pass_xp": 5000
+          },
+          "progressions": [
+            "battle_pass_tier_1",
+            "battle_pass_tier_2", 
+            "battle_pass_tier_3_premium",
+            "battle_pass_tier_5_exclusive"
+          ],
+          "items_min": {
+            "battle_pass_premium": 1
+          }
+        }
+      },
+      "rewards": {
+        "guaranteed": {
+          "currencies": {
+            "coins": {"min": 10000, "max": 10000},
+            "gems": {"min": 500, "max": 500}
+          },
+          "items": {
+            "mythic_weapon": {"min": 1, "max": 1},
+            "season_trophy": {"min": 1, "max": 1},
+            "next_season_preview": {"min": 1, "max": 1}
+          }
+        }
+      }
+    }
+  }
+} 

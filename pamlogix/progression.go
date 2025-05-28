@@ -27,6 +27,7 @@ type ProgressionConfigProgression struct {
 	AdditionalProperties map[string]string              `json:"additional_properties,omitempty"`
 	Preconditions        *ProgressionPreconditionsBlock `json:"preconditions,omitempty"`
 	ResetSchedule        string                         `json:"reset_schedule,omitempty"`
+	Rewards              *EconomyConfigReward           `json:"rewards,omitempty"`
 }
 
 // A ProgressionSystem is a gameplay system which represents a sequence of progression steps.
@@ -44,4 +45,7 @@ type ProgressionSystem interface {
 
 	// Reset one or more progressions to clear their progress. Only applies to progression counts and unlock costs.
 	Reset(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID string, progressionIDs []string) (progressions map[string]*Progression, err error)
+
+	// Complete marks a progression as completed and grants any associated rewards.
+	Complete(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID, progressionID string) (progressions map[string]*Progression, reward *Reward, err error)
 }
