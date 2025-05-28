@@ -70,6 +70,9 @@ type EventLeaderboardUserEventState struct {
 	// Target score tracking
 	HasReachedTarget bool  `json:"has_reached_target,omitempty"`
 	WinTimeSec       int64 `json:"win_time_sec,omitempty"`
+
+	// Participation tracking
+	TotalParticipation int32 `json:"total_participation,omitempty"`
 }
 
 // EventLeaderboardCohortState represents the state of a cohort
@@ -200,7 +203,7 @@ func (e *NakamaEventLeaderboardsSystem) RollEventLeaderboard(ctx context.Context
 
 	// Handle reroll cost
 	if isReroll && config.RerollCost != nil {
-		// Check if user can afford the reroll cost
+		// Check affordability
 		canAfford, err := e.checkUserCanAffordReward(ctx, logger, nk, userID, config.RerollCost)
 		if err != nil {
 			logger.Error("Failed to check reroll cost affordability: %v", err)
@@ -210,7 +213,7 @@ func (e *NakamaEventLeaderboardsSystem) RollEventLeaderboard(ctx context.Context
 			return nil, ErrBadInput
 		}
 
-		// Deduct the reroll cost
+		// Deduct cost
 		err = e.deductRewardCost(ctx, logger, nk, userID, config.RerollCost)
 		if err != nil {
 			logger.Error("Failed to deduct reroll cost: %v", err)
@@ -220,7 +223,7 @@ func (e *NakamaEventLeaderboardsSystem) RollEventLeaderboard(ctx context.Context
 
 	// Handle participation cost for first time joining
 	if !isReroll && config.ParticipationCost != nil {
-		// Check if user can afford the participation cost
+		// Check affordability
 		canAfford, err := e.checkUserCanAffordReward(ctx, logger, nk, userID, config.ParticipationCost)
 		if err != nil {
 			logger.Error("Failed to check participation cost affordability: %v", err)
@@ -230,7 +233,7 @@ func (e *NakamaEventLeaderboardsSystem) RollEventLeaderboard(ctx context.Context
 			return nil, ErrBadInput
 		}
 
-		// Deduct the participation cost
+		// Deduct cost
 		err = e.deductRewardCost(ctx, logger, nk, userID, config.ParticipationCost)
 		if err != nil {
 			logger.Error("Failed to deduct participation cost: %v", err)
@@ -272,6 +275,9 @@ func (e *NakamaEventLeaderboardsSystem) RollEventLeaderboard(ctx context.Context
 	if isReroll {
 		userEventState.RerollCount++
 		userEventState.LastRerollTime = now
+	} else {
+		// First time joining this event, increment participation
+		userEventState.TotalParticipation++
 	}
 
 	// Save user state
@@ -881,19 +887,130 @@ func (e *NakamaEventLeaderboardsSystem) findOrCreateCohort(ctx context.Context, 
 
 	// Default cohort selection logic
 	// Try to find an existing cohort with available space
-	cohortID := e.findAvailableCohort(ctx, logger, nk, eventLeaderboardID, tier, config.CohortSize)
+	cohortID := e.findAvailableCohort(ctx, logger, nk, eventLeaderboardID, tier, config.CohortSize, userID)
 	if cohortID != "" {
-		return cohortID, nil
+		// Add user to the existing cohort
+		err := e.addUserToCohort(ctx, logger, nk, cohortID, userID)
+		if err != nil {
+			logger.Error("Failed to add user to existing cohort %s: %v", cohortID, err)
+			// Fall back to creating a new cohort
+		} else {
+			return cohortID, nil
+		}
 	}
 
 	// Create a new cohort
 	return e.createCohort(ctx, logger, nk, eventLeaderboardID, config, tier, []string{userID}, matchmakerProperties)
 }
 
-func (e *NakamaEventLeaderboardsSystem) findAvailableCohort(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, eventLeaderboardID string, tier int32, maxSize int) string {
-	// This is a simplified implementation
-	// In a real implementation, you would search for existing cohorts with available space
-	// For now, we'll always create new cohorts
+// addUserToCohort adds a user to an existing cohort
+func (e *NakamaEventLeaderboardsSystem) addUserToCohort(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, cohortID, userID string) error {
+	// Get current cohort state
+	cohortState, err := e.getCohortState(ctx, logger, nk, cohortID)
+	if err != nil {
+		return err
+	}
+
+	// Check if user is already in the cohort
+	for _, existingUserID := range cohortState.UserIDs {
+		if existingUserID == userID {
+			// User is already in this cohort
+			return nil
+		}
+	}
+
+	// Check if cohort has space
+	if len(cohortState.UserIDs) >= cohortState.MaxSize {
+		return fmt.Errorf("cohort %s is full", cohortID)
+	}
+
+	// Add user to cohort
+	cohortState.UserIDs = append(cohortState.UserIDs, userID)
+
+	// Save updated cohort state
+	data, err := json.Marshal(cohortState)
+	if err != nil {
+		return err
+	}
+
+	_, err = nk.StorageWrite(ctx, []*runtime.StorageWrite{
+		{
+			Collection: eventLeaderboardsStorageCollection,
+			Key:        eventLeaderboardCohortPrefix + cohortID,
+			Value:      string(data),
+		},
+	})
+	if err != nil {
+		return err
+	}
+
+	logger.Debug("Added user %s to cohort %s (new size: %d)", userID, cohortID, len(cohortState.UserIDs))
+	return nil
+}
+
+func (e *NakamaEventLeaderboardsSystem) findAvailableCohort(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, eventLeaderboardID string, tier int32, maxSize int, userID string) string {
+	// List all cohort storage objects
+	objects, _, err := nk.StorageList(ctx, "", "", eventLeaderboardsStorageCollection, 100, "")
+	if err != nil {
+		logger.Error("Failed to list storage objects for cohort search: %v", err)
+		return ""
+	}
+
+	// Search through existing cohorts
+	for _, obj := range objects {
+		// Only check cohort objects
+		if !strings.HasPrefix(obj.Key, eventLeaderboardCohortPrefix) {
+			continue
+		}
+
+		// Parse cohort state
+		var cohortState EventLeaderboardCohortState
+		if err := json.Unmarshal([]byte(obj.Value), &cohortState); err != nil {
+			logger.Error("Failed to unmarshal cohort state: %v", err)
+			continue
+		}
+
+		// Check if this cohort matches our criteria
+		if cohortState.EventLeaderboardID != eventLeaderboardID {
+			continue // Different event
+		}
+
+		if cohortState.Tier != tier {
+			continue // Different tier
+		}
+
+		// Check if user is already in this cohort
+		userAlreadyInCohort := false
+		for _, existingUserID := range cohortState.UserIDs {
+			if existingUserID == userID {
+				userAlreadyInCohort = true
+				break
+			}
+		}
+		if userAlreadyInCohort {
+			continue // User is already in this cohort
+		}
+
+		// Check if cohort has available space
+		currentSize := len(cohortState.UserIDs)
+		if currentSize >= maxSize || currentSize >= cohortState.MaxSize {
+			continue // Cohort is full
+		}
+
+		// Check if cohort is still active (not ended)
+		now := time.Now().Unix()
+		if cohortState.EndTimeSec > 0 && now >= cohortState.EndTimeSec {
+			continue // Cohort has ended
+		}
+
+		// Found an available cohort
+		logger.Debug("Found available cohort %s for event %s, tier %d (current size: %d, max size: %d)",
+			cohortState.ID, eventLeaderboardID, tier, currentSize, maxSize)
+		return cohortState.ID
+	}
+
+	// No available cohort found
+	logger.Debug("No available cohort found for event %s, tier %d", eventLeaderboardID, tier)
 	return ""
 }
 
@@ -1352,3 +1469,5 @@ func (e *NakamaEventLeaderboardsSystem) getCohortState(ctx context.Context, logg
 
 	return &cohortState, nil
 }
+
+// Enhanced economy integration features

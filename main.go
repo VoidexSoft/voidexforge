@@ -3,10 +3,11 @@ package main
 import (
 	"context"
 	"database/sql"
-	"github.com/heroiclabs/nakama-common/runtime"
 	"time"
 	"voidexforge/pamalyze"
 	"voidexforge/pamlogix"
+
+	"github.com/heroiclabs/nakama-common/runtime"
 )
 
 // noinspection GoUnusedExportedFunction
@@ -33,7 +34,8 @@ func InitModule(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runti
 	_, err := pamlogix.Init(ctx, logger, nk, initializer,
 		pamlogix.WithEconomySystem("configs/economy.json", true),
 		pamlogix.WithEnergySystem("configs/energy.json", true),
-		pamlogix.WithInventorySystem("configs/inventory.json", true))
+		pamlogix.WithInventorySystem("configs/inventory.json", true),
+		pamlogix.WithTeamsSystem("configs/teams.json", true))
 	if err != nil {
 		return err
 	}

@@ -1,0 +1,11 @@
+{
+  "max_team_size": 100,
+  "enable_discovery": true,
+  "allow_public_teams": true,
+  "require_approval": false,
+  "chat_enabled": true,
+  "default_metadata": {
+    "allow_invites": true,
+    "max_chat_history": 1000
+  }
+} 

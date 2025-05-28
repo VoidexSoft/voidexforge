@@ -131,7 +131,17 @@ func (p *pamlogixImpl) initSystem(ctx context.Context, logger runtime.Logger, nk
 			logger.Error("Failed to parse Teams system config: %v", err)
 			return err
 		}
-		// Create teams system instance
+		teamsSystem := NewNakamaTeamsSystem(teamsConfig)
+
+		// Set custom validation function if provided
+		if extra := config.GetExtra(); extra != nil {
+			if validateCreateTeamFns, ok := extra.([]ValidateCreateTeamFn); ok && len(validateCreateTeamFns) > 0 {
+				teamsSystem.SetValidateCreateTeam(validateCreateTeamFns[0])
+				logger.Info("Set custom validateCreateTeam function for teams system")
+			}
+		}
+
+		system = teamsSystem
 
 	case SystemTypeTutorials:
 		tutorialsConfig := &TutorialsConfig{}
@@ -171,7 +181,7 @@ func (p *pamlogixImpl) initSystem(ctx context.Context, logger runtime.Logger, nk
 			logger.Error("Failed to parse Incentives system config: %v", err)
 			return err
 		}
-		// Create incentives system instance
+		system = NewNakamaIncentivesSystem(incentivesConfig)
 
 	case SystemTypeAuctions:
 		auctionsConfig := &AuctionsConfig{}
@@ -248,6 +258,12 @@ func (p *pamlogixImpl) initSystem(ctx context.Context, logger runtime.Logger, nk
 		if auctionsSystem, ok := system.(*AuctionsPamlogix); ok {
 			auctionsSystem.SetPamlogix(p)
 			logger.Info("Set Pamlogix reference in auctions system for cross-system communication")
+		}
+
+		// For teams system, set the Pamlogix reference to enable cross-system communication
+		if teamsSystem, ok := system.(*NakamaTeamsSystem); ok {
+			teamsSystem.SetPamlogix(p)
+			logger.Info("Set Pamlogix reference in teams system for cross-system communication")
 		}
 
 		// For progression system, set the Pamlogix reference to enable cross-system communication
@@ -470,14 +486,9 @@ func (p *pamlogixImpl) registerSystemRpcs(initializer runtime.Initializer, syste
 			return err
 		}
 
-		//TODO: Check the stream system for real-time auction updates
-		//// Register the socket RPC for following auctions (real-time updates)
-		//// Note: Nakama doesn't have RegisterSocketRpc. Real-time auction updates are handled
-		//// through the stream system in the Follow method and sendBidNotification function.
-		//// The rpcAuctionsFollow function can still be called as a regular RPC.
-		//if err := initializer.RegisterRpc(RpcSocketId_RPC_SOCKET_ID_AUCTIONS_FOLLOW.String(), rpcAuctionsFollow(p)); err != nil {
-		//	return err
-		//}
+		if err := initializer.RegisterRpc(RpcSocketId_RPC_SOCKET_ID_AUCTIONS_FOLLOW.String(), rpcAuctionsFollow(p)); err != nil {
+			return err
+		}
 		//
 		//// Optionally register a real-time message handler for auction-related messages
 		//// This allows intercepting and processing real-time auction messages if needed
@@ -523,6 +534,21 @@ func (p *pamlogixImpl) registerSystemRpcs(initializer runtime.Initializer, syste
 			return err
 		}
 		if err := initializer.RegisterRpc(RpcId_RPC_ID_PROGRESSIONS_RESET.String(), rpcProgressionsReset(p)); err != nil {
+			return err
+		}
+
+	case SystemTypeTeams:
+		// Register Teams system RPCs
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_TEAMS_CREATE.String(), rpcTeamsCreate(p)); err != nil {
+			return err
+		}
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_TEAMS_LIST.String(), rpcTeamsList(p)); err != nil {
+			return err
+		}
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_TEAMS_SEARCH.String(), rpcTeamsSearch(p)); err != nil {
+			return err
+		}
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_TEAMS_WRITE_CHAT_MESSAGE.String(), rpcTeamsWriteChatMessage(p)); err != nil {
 			return err
 		}
 
