@@ -1,0 +1,123 @@
+{
+  "tutorials": {
+    "basic_movement": {
+      "name": "Basic Movement",
+      "description": "Learn how to move your character",
+      "category": "basics",
+      "order": 1,
+      "required": true,
+      "steps": [
+        {
+          "id": "move_left",
+          "description": "Move your character to the left",
+          "action": "move",
+          "target": "left"
+        },
+        {
+          "id": "move_right",
+          "description": "Move your character to the right",
+          "action": "move",
+          "target": "right"
+        },
+        {
+          "id": "jump",
+          "description": "Make your character jump",
+          "action": "jump",
+          "target": null
+        }
+      ],
+      "reward": {
+        "guaranteed": {
+          "currencies": {
+            "coins": {
+              "min": 50,
+              "max": 50
+            }
+          }
+        }
+      }
+    },
+    "combat_basics": {
+      "name": "Combat Basics",
+      "description": "Learn the fundamentals of combat",
+      "category": "combat",
+      "order": 2,
+      "required": true,
+      "prerequisites": ["basic_movement"],
+      "steps": [
+        {
+          "id": "attack_enemy",
+          "description": "Attack the training dummy",
+          "action": "attack",
+          "target": "training_dummy"
+        },
+        {
+          "id": "use_special_ability",
+          "description": "Use your special ability",
+          "action": "special_ability",
+          "target": null
+        },
+        {
+          "id": "defeat_enemy",
+          "description": "Defeat the training dummy",
+          "action": "defeat",
+          "target": "training_dummy"
+        }
+      ],
+      "reward": {
+        "guaranteed": {
+          "currencies": {
+            "coins": {
+              "min": 100,
+              "max": 100
+            }
+          },
+          "items": {
+            "sword_basic": {
+              "min": 1,
+              "max": 1
+            }
+          }
+        }
+      }
+    },
+    "inventory_management": {
+      "name": "Inventory Management",
+      "description": "Learn how to manage your inventory",
+      "category": "systems",
+      "order": 3,
+      "required": false,
+      "prerequisites": ["combat_basics"],
+      "steps": [
+        {
+          "id": "open_inventory",
+          "description": "Open your inventory",
+          "action": "open_menu",
+          "target": "inventory"
+        },
+        {
+          "id": "equip_item",
+          "description": "Equip the basic sword",
+          "action": "equip",
+          "target": "sword_basic"
+        },
+        {
+          "id": "use_consumable",
+          "description": "Use a health potion",
+          "action": "use_item",
+          "target": "health_potion"
+        }
+      ],
+      "reward": {
+        "guaranteed": {
+          "currencies": {
+            "gems": {
+              "min": 5,
+              "max": 5
+            }
+          }
+        }
+      }
+    }
+  }
+} 

@@ -1,0 +1,105 @@
+{
+  "streaks": {
+    "daily_login": {
+      "name": "Daily Login Streak",
+      "description": "Consecutive days of logging in",
+      "type": "daily",
+      "reset_hour": 0,
+      "max_streak": 30,
+      "milestones": {
+        "3": {
+          "reward": {
+            "guaranteed": {
+              "currencies": {
+                "coins": {
+                  "min": 100,
+                  "max": 100
+                }
+              }
+            }
+          }
+        },
+        "7": {
+          "reward": {
+            "guaranteed": {
+              "currencies": {
+                "gems": {
+                  "min": 5,
+                  "max": 5
+                }
+              }
+            }
+          }
+        },
+        "14": {
+          "reward": {
+            "guaranteed": {
+              "currencies": {
+                "gems": {
+                  "min": 15,
+                  "max": 15
+                }
+              }
+            }
+          }
+        },
+        "30": {
+          "reward": {
+            "guaranteed": {
+              "currencies": {
+                "gems": {
+                  "min": 50,
+                  "max": 50
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "combat_wins": {
+      "name": "Combat Win Streak",
+      "description": "Consecutive combat victories",
+      "type": "action",
+      "max_streak": 100,
+      "milestones": {
+        "5": {
+          "reward": {
+            "guaranteed": {
+              "currencies": {
+                "coins": {
+                  "min": 200,
+                  "max": 200
+                }
+              }
+            }
+          }
+        },
+        "10": {
+          "reward": {
+            "guaranteed": {
+              "currencies": {
+                "gems": {
+                  "min": 10,
+                  "max": 10
+                }
+              }
+            }
+          }
+        },
+        "25": {
+          "reward": {
+            "guaranteed": {
+              "currencies": {
+                "gems": {
+                  "min": 25,
+                  "max": 25
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+} 

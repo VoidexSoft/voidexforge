@@ -224,3 +224,4 @@ js/
 
 # Custom
 documents/
+.cursor/

@@ -1,0 +1,67 @@
+{
+  "incentives": {
+    "daily_login": {
+      "type": 1,
+      "name": "Daily Login Bonus",
+      "description": "Get rewards for logging in daily",
+      "max_claims": 1,
+      "max_concurrent": 1,
+      "expiry_duration_sec": 86400,
+      "recipient_reward": {
+        "guaranteed": {
+          "currencies": {
+            "coins": {
+              "min": 50,
+              "max": 50
+            }
+          }
+        }
+      }
+    },
+    "friend_invite": {
+      "type": 1,
+      "name": "Friend Invitation",
+      "description": "Invite friends and get rewards",
+      "max_claims": 10,
+      "max_concurrent": 5,
+      "expiry_duration_sec": 604800,
+      "recipient_reward": {
+        "guaranteed": {
+          "currencies": {
+            "coins": {
+              "min": 100,
+              "max": 100
+            }
+          }
+        }
+      },
+      "sender_reward": {
+        "guaranteed": {
+          "currencies": {
+            "gems": {
+              "min": 10,
+              "max": 10
+            }
+          }
+        }
+      }
+    },
+    "first_purchase": {
+      "type": 1,
+      "name": "First Purchase Bonus",
+      "description": "Extra rewards for your first purchase",
+      "max_claims": 1,
+      "max_concurrent": 1,
+      "recipient_reward": {
+        "guaranteed": {
+          "currencies": {
+            "gems": {
+              "min": 50,
+              "max": 50
+            }
+          }
+        }
+      }
+    }
+  }
+} 

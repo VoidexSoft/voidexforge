@@ -1,0 +1,60 @@
+{
+  "events": {
+    "weekly_combat": {
+      "name": "Weekly Combat Challenge",
+      "description": "Compete for the highest combat score this week",
+      "duration_sec": 604800,
+      "max_participants": 1000,
+      "rewards": {
+        "1": {
+          "guaranteed": {
+            "currencies": {
+              "gems": {
+                "min": 100,
+                "max": 100
+              }
+            }
+          }
+        },
+        "2": {
+          "guaranteed": {
+            "currencies": {
+              "gems": {
+                "min": 75,
+                "max": 75
+              }
+            }
+          }
+        },
+        "3": {
+          "guaranteed": {
+            "currencies": {
+              "gems": {
+                "min": 50,
+                "max": 50
+              }
+            }
+          }
+        }
+      }
+    },
+    "monthly_collection": {
+      "name": "Monthly Collection Event",
+      "description": "Collect the most items this month",
+      "duration_sec": 2592000,
+      "max_participants": 5000,
+      "rewards": {
+        "1": {
+          "guaranteed": {
+            "currencies": {
+              "gems": {
+                "min": 500,
+                "max": 500
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+} 

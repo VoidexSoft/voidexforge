@@ -1,0 +1,28 @@
+{
+  "auction_duration_sec": 86400,
+  "max_auctions_per_user": 5,
+  "auction_fee_percentage": 5,
+  "min_bid_increment": 10,
+  "categories": {
+    "weapons": {
+      "name": "Weapons",
+      "description": "Swords, bows, and other combat items"
+    },
+    "armor": {
+      "name": "Armor",
+      "description": "Protective gear and equipment"
+    },
+    "consumables": {
+      "name": "Consumables",
+      "description": "Potions, food, and temporary items"
+    },
+    "materials": {
+      "name": "Materials",
+      "description": "Crafting materials and resources"
+    }
+  },
+  "featured_auctions": {
+    "max_featured": 10,
+    "featured_duration_sec": 3600
+  }
+} 

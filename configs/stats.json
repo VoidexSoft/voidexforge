@@ -1,0 +1,58 @@
+{
+  "stats": {
+    "enemies_defeated": {
+      "name": "Enemies Defeated",
+      "description": "Total number of enemies defeated",
+      "type": "counter",
+      "default_value": 0
+    },
+    "coins_collected": {
+      "name": "Coins Collected",
+      "description": "Total coins collected throughout the game",
+      "type": "counter",
+      "default_value": 0
+    },
+    "levels_completed": {
+      "name": "Levels Completed",
+      "description": "Number of levels successfully completed",
+      "type": "counter",
+      "default_value": 0
+    },
+    "highest_score": {
+      "name": "Highest Score",
+      "description": "The highest score achieved in a single game",
+      "type": "max",
+      "default_value": 0
+    },
+    "total_playtime": {
+      "name": "Total Playtime",
+      "description": "Total time spent playing (in seconds)",
+      "type": "counter",
+      "default_value": 0
+    },
+    "items_crafted": {
+      "name": "Items Crafted",
+      "description": "Total number of items crafted",
+      "type": "counter",
+      "default_value": 0
+    },
+    "quests_completed": {
+      "name": "Quests Completed",
+      "description": "Number of quests completed",
+      "type": "counter",
+      "default_value": 0
+    },
+    "pvp_wins": {
+      "name": "PvP Wins",
+      "description": "Number of player vs player victories",
+      "type": "counter",
+      "default_value": 0
+    },
+    "pvp_losses": {
+      "name": "PvP Losses",
+      "description": "Number of player vs player defeats",
+      "type": "counter",
+      "default_value": 0
+    }
+  }
+} 

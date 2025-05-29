@@ -1,0 +1,71 @@
+{
+  "progression_trees": {
+    "combat": {
+      "name": "Combat Mastery",
+      "description": "Improve your combat abilities",
+      "nodes": {
+        "basic_attack": {
+          "name": "Basic Attack",
+          "description": "Increase basic attack damage",
+          "max_level": 10,
+          "cost_per_level": {
+            "currencies": {
+              "coins": 100
+            }
+          },
+          "prerequisites": []
+        },
+        "critical_strike": {
+          "name": "Critical Strike",
+          "description": "Chance to deal critical damage",
+          "max_level": 5,
+          "cost_per_level": {
+            "currencies": {
+              "coins": 200
+            }
+          },
+          "prerequisites": ["basic_attack"]
+        },
+        "weapon_mastery": {
+          "name": "Weapon Mastery",
+          "description": "Increased weapon effectiveness",
+          "max_level": 8,
+          "cost_per_level": {
+            "currencies": {
+              "gems": 5
+            }
+          },
+          "prerequisites": ["basic_attack", "critical_strike"]
+        }
+      }
+    },
+    "magic": {
+      "name": "Arcane Arts",
+      "description": "Master the magical arts",
+      "nodes": {
+        "mana_pool": {
+          "name": "Mana Pool",
+          "description": "Increase maximum mana",
+          "max_level": 15,
+          "cost_per_level": {
+            "currencies": {
+              "coins": 150
+            }
+          },
+          "prerequisites": []
+        },
+        "spell_power": {
+          "name": "Spell Power",
+          "description": "Increase spell damage",
+          "max_level": 10,
+          "cost_per_level": {
+            "currencies": {
+              "gems": 3
+            }
+          },
+          "prerequisites": ["mana_pool"]
+        }
+      }
+    }
+  }
+} 

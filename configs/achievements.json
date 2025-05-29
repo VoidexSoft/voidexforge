@@ -1,0 +1,52 @@
+{
+  "achievements": {
+    "first_login": {
+      "name": "Welcome!",
+      "description": "Log in for the first time",
+      "category": "general",
+      "count": 1,
+      "reward": {
+        "guaranteed": {
+          "currencies": {
+            "coins": {
+              "min": 100,
+              "max": 100
+            }
+          }
+        }
+      }
+    },
+    "kill_10_enemies": {
+      "name": "Warrior",
+      "description": "Defeat 10 enemies",
+      "category": "combat",
+      "count": 10,
+      "reward": {
+        "guaranteed": {
+          "currencies": {
+            "coins": {
+              "min": 250,
+              "max": 250
+            }
+          }
+        }
+      }
+    },
+    "collect_100_coins": {
+      "name": "Collector",
+      "description": "Collect 100 coins",
+      "category": "economy",
+      "count": 100,
+      "reward": {
+        "guaranteed": {
+          "currencies": {
+            "gems": {
+              "min": 5,
+              "max": 5
+            }
+          }
+        }
+      }
+    }
+  }
+} 

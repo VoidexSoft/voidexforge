@@ -1,0 +1,62 @@
+{
+  "leaderboards": {
+    "global_score": {
+      "name": "Global High Score",
+      "description": "Compete for the highest score globally",
+      "sort_order": "desc",
+      "reset_schedule": "0 0 * * 0",
+      "max_entries": 1000,
+      "rewards": {
+        "1": {
+          "guaranteed": {
+            "currencies": {
+              "gems": {
+                "min": 50,
+                "max": 50
+              }
+            }
+          }
+        },
+        "2": {
+          "guaranteed": {
+            "currencies": {
+              "gems": {
+                "min": 30,
+                "max": 30
+              }
+            }
+          }
+        },
+        "3": {
+          "guaranteed": {
+            "currencies": {
+              "gems": {
+                "min": 20,
+                "max": 20
+              }
+            }
+          }
+        }
+      }
+    },
+    "weekly_kills": {
+      "name": "Weekly Kills",
+      "description": "Most enemies defeated this week",
+      "sort_order": "desc",
+      "reset_schedule": "0 0 * * 1",
+      "max_entries": 500,
+      "rewards": {
+        "1": {
+          "guaranteed": {
+            "currencies": {
+              "coins": {
+                "min": 1000,
+                "max": 1000
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+} 

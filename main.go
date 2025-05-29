@@ -32,10 +32,21 @@ func InitModule(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runti
 	}
 
 	_, err := pamlogix.Init(ctx, logger, nk, initializer,
+		pamlogix.WithBaseSystem("configs/base.json", true),
+		pamlogix.WithAchievementsSystem("configs/achievements.json", true),
+		pamlogix.WithAuctionsSystem("configs/auctions.json", true),
 		pamlogix.WithEconomySystem("configs/economy.json", true),
 		pamlogix.WithEnergySystem("configs/energy.json", true),
+		pamlogix.WithEventLeaderboardsSystem("configs/event_leaderboards.json", true),
+		pamlogix.WithIncentivesSystem("configs/incentives.json", true),
 		pamlogix.WithInventorySystem("configs/inventory.json", true),
-		pamlogix.WithTeamsSystem("configs/teams.json", true))
+		pamlogix.WithLeaderboardsSystem("configs/leaderboards.json", true),
+		pamlogix.WithProgressionSystem("configs/progression.json", true),
+		pamlogix.WithStatsSystem("configs/stats.json", true),
+		pamlogix.WithStreaksSystem("configs/streaks.json", true),
+		pamlogix.WithTeamsSystem("configs/teams.json", true),
+		pamlogix.WithTutorialsSystem("configs/tutorials.json", true),
+		pamlogix.WithUnlockablesSystem("configs/unlockables.json", true))
 	if err != nil {
 		return err
 	}
