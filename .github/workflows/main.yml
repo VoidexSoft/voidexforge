@@ -10,7 +10,7 @@ on:
 
 env:
   AWS_REGION: ap-southeast-2
-  ECR_REPOSITORY: voidexforge
+  ECR_REPOSITORY: ondigames/voidexforge
 
 jobs:
   voidexforge_build_publish:
