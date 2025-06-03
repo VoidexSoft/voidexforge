@@ -204,6 +204,9 @@ func TestRollEventLeaderboard_FirstTime(t *testing.T) {
 	// Mock storage read for user state (empty initially)
 	nk.On("StorageRead", ctx, mock.Anything).Return([]*api.StorageObject{}, nil)
 
+	// Mock storage list for finding available cohorts (empty initially)
+	nk.On("StorageList", ctx, "", "", eventLeaderboardsStorageCollection, 100, "").Return([]*api.StorageObject{}, "", nil)
+
 	// Mock account get for affordability check
 	account := &api.Account{
 		Wallet: `{"coins": 200, "gems": 100}`,
@@ -260,6 +263,9 @@ func TestRollEventLeaderboard_Reroll(t *testing.T) {
 	nk.On("StorageRead", ctx, mock.Anything).Return([]*api.StorageObject{
 		{Value: string(stateData)},
 	}, nil)
+
+	// Mock storage list for finding available cohorts (empty initially)
+	nk.On("StorageList", ctx, "", "", eventLeaderboardsStorageCollection, 100, "").Return([]*api.StorageObject{}, "", nil)
 
 	// Mock account get for affordability check
 	account := &api.Account{

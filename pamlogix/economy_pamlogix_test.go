@@ -2,6 +2,7 @@ package pamlogix
 
 import (
 	"context"
+	"fmt"
 	"strings"
 	"testing"
 	"time"
@@ -118,7 +119,7 @@ func TestDonationRequest_NewDonation(t *testing.T) {
 	ctx := context.Background()
 
 	// No existing donations
-	nk.On("StorageList", ctx, "donations", userID, "", 100, "").Return([]*api.StorageObject{}, "", nil)
+	nk.On("StorageRead", ctx, mock.Anything).Return([]*api.StorageObject{}, nil)
 	nk.On("StorageWrite", ctx, mock.Anything).Return([]*api.StorageObjectAck{}, nil)
 
 	donation, success, err := economy.DonationRequest(ctx, logger, nk, userID, donationID)
@@ -151,11 +152,12 @@ func TestDonationRequest_ExistingDonation(t *testing.T) {
 	nk := NewMockNakama(t)
 	ctx := context.Background()
 
+	futureTime := time.Now().Unix() + 3600 // 1 hour in the future
 	donationObj := &api.StorageObject{
 		Key:   "donation:" + donationID,
-		Value: `{"user_id":"user1","id":"don1","description":"desc"}`,
+		Value: fmt.Sprintf(`{"user_id":"user1","id":"don1","description":"desc","expire_time_sec":%d}`, futureTime),
 	}
-	nk.On("StorageList", ctx, "donations", userID, "", 100, "").Return([]*api.StorageObject{donationObj}, "", nil)
+	nk.On("StorageRead", ctx, mock.Anything).Return([]*api.StorageObject{donationObj}, nil)
 
 	donation, success, err := economy.DonationRequest(ctx, logger, nk, userID, donationID)
 	require.NoError(t, err)
@@ -374,7 +376,7 @@ func TestPurchaseItem_Success_GooglePlay(t *testing.T) {
 		map[string]int64{"gems": 50}, map[string]int64{}, nil)
 	nk.On("AccountGetId", ctx, userID).Return(&api.Account{Wallet: `{"gems":50}`}, nil)
 	nk.On("StorageList", ctx, "", userID, "inventory", 100, "").Return([]*api.StorageObject{}, "", nil).Maybe()
-	nk.On("StorageList", ctx, "purchase_transactions", userID, "", 100, "").Return([]*api.StorageObject{}, "", nil).Maybe()
+	nk.On("StorageList", ctx, "", userID, "purchase_transactions", 100, "").Return([]*api.StorageObject{}, "", nil).Maybe()
 
 	// Execute the method
 	wallet, inventory, reward, isSandbox, err := economy.PurchaseItem(ctx, logger, nil, nk, userID, itemID, EconomyStoreType_ECONOMY_STORE_TYPE_GOOGLE_PLAY, receipt)
@@ -680,7 +682,7 @@ func TestPurchaseRestore_Success(t *testing.T) {
 	receipts := []string{"receipt1", "receipt2"}
 
 	// Mock existing transactions (empty to simulate no previous transactions)
-	nk.On("StorageList", ctx, "purchase_transactions", userID, "", mock.Anything, "").Return([]*api.StorageObject{}, "", nil)
+	nk.On("StorageList", ctx, "", userID, "purchase_transactions", mock.Anything, "").Return([]*api.StorageObject{}, "", nil)
 
 	// Mock validation responses
 	validatedPurchase1 := &api.ValidatedPurchase{
@@ -735,7 +737,7 @@ func TestPurchaseRestore_ExistingTransactions(t *testing.T) {
 		Value:      `{"id":"transaction1","user_id":"user1","receipt":"receipt1","transaction_id":"trans1"}`,
 	}
 
-	nk.On("StorageList", ctx, "purchase_transactions", userID, "", mock.Anything, "").Return([]*api.StorageObject{existingTransaction}, "", nil)
+	nk.On("StorageList", ctx, "", userID, "purchase_transactions", mock.Anything, "").Return([]*api.StorageObject{existingTransaction}, "", nil)
 
 	// Mock validation responses
 	validatedPurchase1 := &api.ValidatedPurchase{
@@ -783,7 +785,7 @@ func TestPurchaseRestore_ValidationError(t *testing.T) {
 	receipts := []string{"receipt1", "receipt2"}
 
 	// Mock existing transactions (empty)
-	nk.On("StorageList", ctx, "purchase_transactions", userID, "", mock.Anything, "").Return([]*api.StorageObject{}, "", nil)
+	nk.On("StorageList", ctx, "", userID, "purchase_transactions", mock.Anything, "").Return([]*api.StorageObject{}, "", nil)
 
 	// Setup validation expectations with error for first receipt
 	nk.On("PurchaseValidateApple", ctx, userID, "receipt1", true, []string(nil)).Return(&api.ValidatePurchaseResponse{}, assert.AnError)

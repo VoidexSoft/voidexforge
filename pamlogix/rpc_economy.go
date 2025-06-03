@@ -97,7 +97,7 @@ func rpcEconomyDonationGive(p *pamlogixImpl) func(ctx context.Context, logger ru
 		}
 
 		// Call the economy system to give a donation
-		updatedWallet, updatedInventory, rewardModifiers, contributorReward, timestamp, err := p.GetEconomySystem().DonationGive(ctx, logger, nk, request.UserId, request.DonationId, fromUserID)
+		donation, updatedWallet, updatedInventory, rewardModifiers, contributorReward, timestamp, err := p.GetEconomySystem().DonationGive(ctx, logger, nk, request.UserId, request.DonationId, fromUserID)
 		if err != nil {
 			logger.Error("Error giving donation: %v", err)
 			return "", err
@@ -117,12 +117,14 @@ func rpcEconomyDonationGive(p *pamlogixImpl) func(ctx context.Context, logger ru
 
 		// Prepare the response
 		response := struct {
+			Donation        *EconomyDonation                 `json:"donation"`
 			Wallet          map[string]int64                 `json:"wallet"`
 			Inventory       map[string]*InventoryItem        `json:"inventory"`
 			RewardModifiers map[string]*ActiveRewardModifier `json:"reward_modifiers"`
 			Reward          *Reward                          `json:"reward"`
 			Timestamp       int64                            `json:"timestamp"`
 		}{
+			Donation:        donation,
 			Wallet:          updatedWallet,
 			Inventory:       inventoryMap,
 			RewardModifiers: rewardModifiersMap,
@@ -313,7 +315,7 @@ func rpcEconomyGrant(p *pamlogixImpl) func(ctx context.Context, logger runtime.L
 		}
 		if err := json.Unmarshal([]byte(payload), &request); err != nil {
 			logger.Error("Failed to unmarshal EconomyGrantRequest: %v", err)
-			return "", ErrPayloadDecode
+			return "", runtime.NewError("Failed to unmarshal EconomyGrantRequest: "+err.Error(), 13)
 		}
 
 		// Extract user ID from session if not provided in the request

@@ -2,7 +2,8 @@
   "initialize_user": {
     "currencies": {
       "coins": 100,
-      "gems": 10
+      "gems": 10,
+      "energy": 50
     },
     "items": {
       "sword_basic": 1,
@@ -61,6 +62,44 @@
             }
           }
         }
+      }
+    }
+  },
+  "donations": {
+    "energy_refill_donation": {
+      "name": "Energy Refill Request",
+      "description": "Request energy from friends to continue playing",
+      "cost": {
+        "currencies": {},
+        "items": {}
+      },
+      "count": 1,
+      "duration_sec": 86400,
+      "max_count": 5,
+      "user_contribution_max_count": 1,
+      "recipient_reward": {
+        "guaranteed": {
+          "currencies": {
+            "energy": {
+              "min": 10,
+              "max": 10
+            }
+          }
+        }
+      },
+      "contributor_reward": {
+        "guaranteed": {
+          "currencies": {
+            "coins": {
+              "min": 5,
+              "max": 5
+            }
+          }
+        }
+      },
+      "additional_properties": {
+        "category": "energy",
+        "icon": "energy_icon"
       }
     }
   }

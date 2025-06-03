@@ -565,7 +565,7 @@ func (i *NakamaIncentivesSystem) findIncentiveByCode(ctx context.Context, logger
 
 	// For now, we'll search through storage objects
 	// This is not efficient for large numbers of users, but works for demonstration
-	objects, _, err := nk.StorageList(ctx, incentivesStorageCollection, "", userIncentivesStorageKey, 1000, "")
+	objects, _, err := nk.StorageList(ctx, "", "", incentivesStorageCollection, 1000, "")
 	if err != nil {
 		return nil, "", err
 	}

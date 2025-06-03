@@ -874,8 +874,8 @@ func (e *NakamaEconomySystem) updateEnergies(ctx context.Context, nk runtime.Nak
 	// Get current energy values
 	energyStorageObj, err := nk.StorageRead(ctx, []*runtime.StorageRead{
 		{
-			Collection: energyStorageCollection,
-			Key:        userEnergyStorageKey,
+			Collection: "energy",
+			Key:        "user_energies",
 			UserID:     userID,
 		},
 	})
@@ -1144,7 +1144,7 @@ func (e *NakamaEconomySystem) DonationClaim(ctx context.Context, logger runtime.
 		donationsToUpdate = append(donationsToUpdate, &runtime.StorageWrite{
 			Collection:      donationsStorageCollection,
 			Key:             key,
-			UserID:          "", // System object
+			UserID:          userID, // Store as user-specific object
 			Value:           string(donationData),
 			Version:         "", // Use empty string for new donation
 			PermissionRead:  1,  // Only owner can read
@@ -1169,8 +1169,8 @@ func (e *NakamaEconomySystem) DonationClaim(ctx context.Context, logger runtime.
 
 // Helper function to retrieve a user's donations
 func (e *NakamaEconomySystem) getUserDonations(ctx context.Context, nk runtime.NakamaModule, userID string) (map[string]*EconomyDonation, error) {
-	// Query the storage for all donations
-	storageObjects, _, err := nk.StorageList(ctx, "donations", userID, "", 100, "")
+	// Query the storage for user-specific donations
+	storageObjects, _, err := nk.StorageList(ctx, "", userID, donationsStorageCollection, 100, "")
 	if err != nil {
 		return nil, err
 	}
@@ -1227,76 +1227,260 @@ func (e *NakamaEconomySystem) DonationGet(ctx context.Context, logger runtime.Lo
 	return donationsList, nil
 }
 
-func (e *NakamaEconomySystem) DonationGive(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID, donationID, fromUserID string) (updatedWallet map[string]int64, updatedInventory *Inventory, rewardModifiers []*ActiveRewardModifier, contributorReward *Reward, timestamp int64, err error) {
-	if userID == "" || donationID == "" || fromUserID == "" {
-		err = runtime.NewError("missing required parameters", 3)
-		return
+func (e *NakamaEconomySystem) DonationGive(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID, donationID, fromUserID string) (donation *EconomyDonation, updatedWallet map[string]int64, updatedInventory *Inventory, rewardModifiers []*ActiveRewardModifier, contributorReward *Reward, timestamp int64, err error) {
+	// Validate inputs
+	if userID == "" {
+		return nil, nil, nil, nil, nil, 0, runtime.NewError("contributor user ID is empty", 3) // INVALID_ARGUMENT
+	}
+	if fromUserID == "" {
+		return nil, nil, nil, nil, nil, 0, runtime.NewError("recipient user ID is empty", 3) // INVALID_ARGUMENT
+	}
+	if donationID == "" {
+		return nil, nil, nil, nil, nil, 0, runtime.NewError("donation ID is empty", 3) // INVALID_ARGUMENT
 	}
 
-	// Get recipient's donations
-	recipientDonations, err := e.getUserDonations(ctx, nk, userID)
-	if err != nil {
-		logger.Error("Failed to get recipient donations: %v", err)
-		return
+	// Prevent self-donation
+	if userID == fromUserID {
+		return nil, nil, nil, nil, nil, 0, runtime.NewError("cannot contribute to own donation", 3) // INVALID_ARGUMENT
 	}
 
-	// Check if donation already exists
-	if _, exists := recipientDonations[donationID]; exists {
-		err = runtime.NewError("donation already exists for user", 6)
-		return
+	// Get donation configuration
+	if e.config == nil || e.config.Donations == nil {
+		return nil, nil, nil, nil, nil, 0, runtime.NewError("donation config not found", 3) // INVALID_ARGUMENT
 	}
 
-	// Create new donation entry
-	now := time.Now().Unix()
-	newDonation := &EconomyDonation{
-		UserId:         userID,
-		Id:             donationID,
-		CurrentTimeSec: 0, // Not claimed yet
+	donationConfig, exists := e.config.Donations[donationID]
+	if !exists {
+		return nil, nil, nil, nil, nil, 0, runtime.NewError(fmt.Sprintf("donation config not found for ID: %s", donationID), 3) // INVALID_ARGUMENT
 	}
 
-	// Store the new donation
+	// Get the recipient's donation request
 	key := fmt.Sprintf("donation:%s", donationID)
-	donationData, _ := json.Marshal(newDonation)
+	objects, err := nk.StorageRead(ctx, []*runtime.StorageRead{
+		{
+			Collection: donationsStorageCollection,
+			Key:        key,
+			UserID:     userID,
+		},
+	})
+
+	if err != nil || len(objects) == 0 {
+		return nil, nil, nil, nil, nil, 0, runtime.NewError("donation request not found", 5) // NOT_FOUND
+	}
+
+	// Parse donation data
+	var donationData EconomyDonation
+	if err := json.Unmarshal([]byte(objects[0].Value), &donationData); err != nil {
+		return nil, nil, nil, nil, nil, 0, runtime.NewError("failed to parse donation data", 13) // INTERNAL
+	}
+
+	// Check if donation is expired
+	now := time.Now().Unix()
+	if donationData.ExpireTimeSec > 0 && donationData.ExpireTimeSec <= now {
+		return nil, nil, nil, nil, nil, 0, runtime.NewError("donation request has expired", 9) // FAILED_PRECONDITION
+	}
+
+	// Check if donation is already fulfilled
+	if donationData.Count >= donationData.MaxCount {
+		return nil, nil, nil, nil, nil, 0, runtime.NewError("donation request already fulfilled", 9) // FAILED_PRECONDITION
+	}
+
+	// Check contributor's contribution limit
+	contributorCount := int64(0)
+	for _, contributor := range donationData.Contributors {
+		if contributor.UserId == userID {
+			contributorCount += contributor.Count
+		}
+	}
+
+	if donationData.UserContributionMaxCount > 0 && contributorCount >= donationData.UserContributionMaxCount {
+		return nil, nil, nil, nil, nil, 0, runtime.NewError("contribution limit reached for this donation", 9) // FAILED_PRECONDITION
+	}
+
+	// Calculate how many contributions can be made
+	remainingDonationSlots := donationData.MaxCount - donationData.Count
+	remainingContributorSlots := donationData.UserContributionMaxCount - contributorCount
+	if donationData.UserContributionMaxCount == 0 {
+		remainingContributorSlots = remainingDonationSlots
+	}
+	contributionAmount := int64(1)
+	if remainingContributorSlots < contributionAmount {
+		contributionAmount = remainingContributorSlots
+	}
+	if remainingDonationSlots < contributionAmount {
+		contributionAmount = remainingDonationSlots
+	}
+
+	if contributionAmount <= 0 {
+		return nil, nil, nil, nil, nil, 0, runtime.NewError("cannot contribute to this donation", 9) // FAILED_PRECONDITION
+	}
+
+	// Deduct cost from contributor if configured
+	if donationConfig.Cost != nil {
+		// Deduct currencies
+		if len(donationConfig.Cost.Currencies) > 0 {
+			costCurrencies := make(map[string]int64)
+			for currencyID, amount := range donationConfig.Cost.Currencies {
+				costCurrencies[currencyID] = -amount * contributionAmount
+			}
+
+			_, _, err = nk.WalletUpdate(ctx, userID, costCurrencies, map[string]interface{}{
+				"donation_give": donationID,
+				"recipient":     userID,
+				"reason":        "donation_contribution",
+			}, false)
+			if err != nil {
+				logger.Error("Failed to deduct currency cost for donation: %v", err)
+				return nil, nil, nil, nil, nil, 0, runtime.NewError("insufficient funds for donation", 9) // FAILED_PRECONDITION
+			}
+		}
+
+		// Deduct items
+		if len(donationConfig.Cost.Items) > 0 {
+			if e.pamlogix == nil {
+				return nil, nil, nil, nil, nil, 0, runtime.NewError("inventory system not available", 13) // INTERNAL
+			}
+
+			inventorySystem := e.pamlogix.(interface{ GetInventorySystem() InventorySystem }).GetInventorySystem()
+			if inventorySystem == nil {
+				return nil, nil, nil, nil, nil, 0, runtime.NewError("inventory system not available", 13) // INTERNAL
+			}
+
+			// Create negative amounts for deduction
+			deductItems := make(map[string]int64)
+			for itemID, amount := range donationConfig.Cost.Items {
+				deductItems[itemID] = -amount * contributionAmount
+			}
+
+			_, _, _, notGrantedItems, err := inventorySystem.GrantItems(ctx, logger, nk, userID, deductItems, false)
+			if err != nil || len(notGrantedItems) > 0 {
+				// Rollback currency if item deduction failed
+				if len(donationConfig.Cost.Currencies) > 0 {
+					rollbackCurrencies := make(map[string]int64)
+					for currencyID, amount := range donationConfig.Cost.Currencies {
+						rollbackCurrencies[currencyID] = amount * contributionAmount
+					}
+					_, _, _ = nk.WalletUpdate(ctx, userID, rollbackCurrencies, map[string]interface{}{
+						"reason": "rollback_donation_cost",
+					}, false)
+				}
+				logger.Error("Failed to deduct item cost for donation: err=%v, not_granted=%v", err, notGrantedItems)
+				return nil, nil, nil, nil, nil, 0, runtime.NewError("insufficient items for donation", 9) // FAILED_PRECONDITION
+			}
+		}
+	}
+
+	// Update donation progress
+	donationData.Count += contributionAmount
+
+	// Add or update contributor record
+	contributorFound := false
+	for i, contributor := range donationData.Contributors {
+		if contributor.UserId == userID {
+			donationData.Contributors[i].Count += contributionAmount
+			contributorFound = true
+			break
+		}
+	}
+	if !contributorFound {
+		donationData.Contributors = append(donationData.Contributors, &EconomyDonationContributor{
+			UserId: userID,
+			Count:  contributionAmount,
+		})
+	}
+
+	// Check if donation is now fulfilled
+	donationFulfilled := donationData.Count >= donationData.MaxCount
+
+	// Prepare contributor reward if donation is fulfilled
+	if donationFulfilled && donationConfig.ContributorReward != nil {
+		// Roll the contributor reward
+		contributorReward, err = e.RewardRoll(ctx, logger, nk, fromUserID, donationConfig.ContributorReward)
+		if err != nil {
+			logger.Error("Failed to roll contributor reward: %v", err)
+			// Continue anyway, we'll still update the donation
+		} else if contributorReward != nil {
+			// Apply custom reward function if configured
+			if e.onDonationContributorReward != nil {
+				contributorReward, err = e.onDonationContributorReward(ctx, logger, nk, fromUserID, donationID, donationConfig, donationConfig.ContributorReward, contributorReward)
+				if err != nil {
+					logger.Error("Error in donation contributor reward callback: %v", err)
+				}
+			}
+
+			// Grant the contributor reward
+			_, _, _, err = e.RewardGrant(ctx, logger, nk, fromUserID, contributorReward, map[string]interface{}{
+				"donation_id": donationID,
+				"recipient":   userID,
+				"reason":      "donation_contribution_reward",
+			}, false)
+			if err != nil {
+				logger.Error("Failed to grant contributor reward: %v", err)
+				// Continue anyway
+			}
+		}
+	}
+
+	// Save updated donation
+	donationBytes, err := json.Marshal(&donationData)
+	if err != nil {
+		logger.Error("Failed to marshal donation data: %v", err)
+		return nil, nil, nil, nil, nil, 0, runtime.NewError("failed to update donation", 13) // INTERNAL
+	}
+
 	_, err = nk.StorageWrite(ctx, []*runtime.StorageWrite{
 		{
 			Collection:      donationsStorageCollection,
 			Key:             key,
-			UserID:          "", // System object
-			Value:           string(donationData),
-			Version:         "",
+			UserID:          userID,
+			Value:           string(donationBytes),
+			Version:         objects[0].Version,
 			PermissionRead:  1,
 			PermissionWrite: 1,
 		},
 	})
 	if err != nil {
-		logger.Error("Failed to write donation: %v", err)
-		return
+		logger.Error("Failed to update donation: %v", err)
+		return nil, nil, nil, nil, nil, 0, runtime.NewError("failed to update donation", 13) // INTERNAL
 	}
 
-	// Grant contributor reward if configured
-	if e.config != nil && e.config.Donations != nil {
-		donationConfig, ok := e.config.Donations[donationID]
-		if ok && donationConfig.ContributorReward != nil {
-			contributorReward, err = e.RewardRoll(ctx, logger, nk, fromUserID, donationConfig.ContributorReward)
-			if err == nil && contributorReward != nil {
-				// Apply custom reward function if configured
-				if e.onDonationContributorReward != nil {
-					contributorReward, err = e.onDonationContributorReward(ctx, logger, nk, fromUserID, donationID, donationConfig, donationConfig.ContributorReward, contributorReward)
-					if err != nil {
-						logger.Error("Error in donation contributor reward callback: %v", err)
-					}
-				}
+	//TODO: test performance for updated wallet, inventory, reward modifiers
 
-				_, _, _, _ = e.RewardGrant(ctx, logger, nk, fromUserID, contributorReward, map[string]interface{}{
-					"donation_id": donationID,
-					"to_user_id":  userID,
-				}, false)
-			}
-		}
+	// Get updated wallet
+	account, err := nk.AccountGetId(ctx, fromUserID)
+	if err != nil {
+		logger.Error("Failed to get account: %v", err)
+	} else {
+		updatedWallet, _ = e.UnmarshalWallet(account)
 	}
 
-	timestamp = now
-	return
+	// Get updated inventory
+	inventory, err := e.getInventory(ctx, nk, fromUserID)
+	if err != nil {
+		logger.Error("Failed to get inventory: %v", err)
+	} else {
+		updatedInventory = inventory
+	}
+
+	// Get active reward modifiers
+	rewardModifiers = make([]*ActiveRewardModifier, 0)
+	modifiersObj, _ := nk.StorageRead(ctx, []*runtime.StorageRead{
+		{
+			Collection: userModifiersStorageCollection,
+			Key:        userID + "_reward_modifiers",
+			UserID:     userID,
+		},
+	})
+	if len(modifiersObj) > 0 {
+		_ = json.Unmarshal([]byte(modifiersObj[0].Value), &rewardModifiers)
+	}
+
+	timestamp = time.Now().Unix()
+
+	logger.Info("User %s contributed %d to donation %s for user %s (fulfilled=%v)",
+		userID, contributionAmount, donationID, fromUserID, donationFulfilled)
+
+	return &donationData, updatedWallet, updatedInventory, rewardModifiers, contributorReward, timestamp, nil
 }
 
 func (e *NakamaEconomySystem) DonationRequest(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID, donationID string) (donation *EconomyDonation, success bool, err error) {
@@ -1305,25 +1489,34 @@ func (e *NakamaEconomySystem) DonationRequest(ctx context.Context, logger runtim
 		return
 	}
 
-	// Check if donation already exists for this user
-	donations, err := e.getUserDonations(ctx, nk, userID)
+	// Execute the donation request within a transactional scope
+	return e.executeDonationRequestTransaction(ctx, logger, nk, userID, donationID)
+}
+
+// executeDonationRequestTransaction implements atomic donation request processing
+func (e *NakamaEconomySystem) executeDonationRequestTransaction(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID, donationID string) (donation *EconomyDonation, success bool, err error) {
+	// Step 1: Pre-validation phase (read-only operations)
+	donationConfig, err := e.validateDonationRequest(ctx, logger, nk, userID, donationID)
 	if err != nil {
-		logger.Error("Failed to get user donations: %v", err)
-		return nil, false, runtime.NewError("Failed to get user donations", 13)
-	}
-	if existing, exists := donations[donationID]; exists {
-		return existing, false, nil
+		return nil, false, err
 	}
 
-	// Get donation config
-	if e.config == nil || e.config.Donations == nil {
-		return nil, false, runtime.NewError("donation config not found", 3)
-	}
-	donationConfig, ok := e.config.Donations[donationID]
-	if !ok {
-		return nil, false, runtime.NewError("donation config not found", 3)
+	// Step 2: Check for existing active donations (optimized)
+	existingDonation, err := e.checkExistingDonation(ctx, nk, userID, donationID)
+	if err != nil {
+		logger.Warn("Failed to check existing donation (likely first time): %v", err)
+		// Continue for first-time users
+	} else if existingDonation != nil {
+		// Return existing active donation
+		logger.Info("User %s already has an active donation request for %s", userID, donationID)
+		return existingDonation, false, nil
 	}
 
+	// Step 3: Transaction execution with compensation tracking
+	var compensationActions []func() error
+	var currencyDeducted, itemsDeducted bool
+
+	// Create the donation object first (for consistent state)
 	now := time.Now().Unix()
 	donation = &EconomyDonation{
 		UserId:                      userID,
@@ -1335,34 +1528,189 @@ func (e *NakamaEconomySystem) DonationRequest(ctx context.Context, logger runtim
 		ExpireTimeSec:               now + donationConfig.DurationSec,
 		MaxCount:                    donationConfig.MaxCount,
 		Name:                        donationConfig.Name,
-		RecipientAvailableRewards:   nil, // Can be set if needed
+		RecipientAvailableRewards:   nil, // Will be set when claimed
 		UserContributionMaxCount:    donationConfig.UserContributionMaxCount,
-		Contributors:                nil,
-		ContributorAvailableRewards: nil, // Can be set if needed
-		RecipientRewards:            nil,
+		Contributors:                make([]*EconomyDonationContributor, 0),
+		ContributorAvailableRewards: nil, // Will be set when someone contributes
+		RecipientRewards:            make([]*Reward, 0),
 		AdditionalProperties:        donationConfig.AdditionalProperties,
 	}
 
-	// Store the new donation
+	// Defer cleanup function to handle compensation on failure
+	defer func() {
+		if err != nil && len(compensationActions) > 0 {
+			logger.Warn("Transaction failed, executing compensation actions")
+			for i := len(compensationActions) - 1; i >= 0; i-- {
+				if compensateErr := compensationActions[i](); compensateErr != nil {
+					logger.Error("Compensation action failed: %v", compensateErr)
+				}
+			}
+		}
+	}()
+
+	// Step 4: Execute cost deductions with compensation tracking
+	if donationConfig.Cost != nil {
+		// Deduct currencies first
+		if len(donationConfig.Cost.Currencies) > 0 {
+			costCurrencies := make(map[string]int64)
+			rollbackCurrencies := make(map[string]int64)
+
+			for currencyID, amount := range donationConfig.Cost.Currencies {
+				costCurrencies[currencyID] = -amount
+				rollbackCurrencies[currencyID] = amount
+			}
+
+			_, _, err = nk.WalletUpdate(ctx, userID, costCurrencies, map[string]interface{}{
+				"donation_request": donationID,
+				"reason":           "donation_cost",
+			}, false)
+			if err != nil {
+				logger.Error("Failed to deduct currency cost: %v", err)
+				return nil, false, runtime.NewError("Insufficient funds for donation request", 9)
+			}
+
+			currencyDeducted = true
+			// Add compensation action for currency rollback
+			compensationActions = append(compensationActions, func() error {
+				_, _, rollbackErr := nk.WalletUpdate(ctx, userID, rollbackCurrencies, map[string]interface{}{
+					"donation_request": donationID,
+					"reason":           "rollback_donation_cost",
+				}, false)
+				return rollbackErr
+			})
+		}
+
+		// Deduct items second
+		if len(donationConfig.Cost.Items) > 0 {
+			err = e.deductItemCosts(ctx, logger, nk, userID, donationID, donationConfig.Cost.Items, &compensationActions)
+			if err != nil {
+				logger.Error("Failed to deduct item costs: %v", err)
+				return nil, false, err
+			}
+			itemsDeducted = true
+		}
+	}
+
+	// Step 5: Store the donation (final atomic operation)
+	err = e.storeDonation(ctx, logger, nk, userID, donationID, donation)
+	if err != nil {
+		logger.Error("Failed to store donation: %v", err)
+		return nil, false, runtime.NewError("Failed to create donation request", 13)
+	}
+
+	// Step 6: Success - clear compensation actions since transaction completed
+	compensationActions = nil
+
+	logger.Info("Successfully created donation request for user %s, donation %s (currency_deducted=%v, items_deducted=%v)",
+		userID, donationID, currencyDeducted, itemsDeducted)
+	return donation, true, nil
+}
+
+// validateDonationRequest performs all read-only validations
+func (e *NakamaEconomySystem) validateDonationRequest(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID, donationID string) (*EconomyConfigDonation, error) {
+	// Check config exists
+	if e.config == nil || e.config.Donations == nil {
+		return nil, runtime.NewError("donation config not found", 3)
+	}
+
+	donationConfig, ok := e.config.Donations[donationID]
+	if !ok {
+		return nil, runtime.NewError(fmt.Sprintf("donation config not found for ID: %s", donationID), 3)
+	}
+
+	// Validate inventory system availability if items are required
+	if donationConfig.Cost != nil && len(donationConfig.Cost.Items) > 0 {
+		if e.pamlogix == nil {
+			return nil, runtime.NewError("Item cost deduction not available: pamlogix instance missing", 13)
+		}
+
+		inventorySystem := e.pamlogix.(interface{ GetInventorySystem() InventorySystem }).GetInventorySystem()
+		if inventorySystem == nil {
+			return nil, runtime.NewError("Item cost deduction not available: inventory system missing", 13)
+		}
+	}
+
+	return donationConfig, nil
+}
+
+// checkExistingDonation checks for existing active donation (optimized single read)
+func (e *NakamaEconomySystem) checkExistingDonation(ctx context.Context, nk runtime.NakamaModule, userID, donationID string) (*EconomyDonation, error) {
 	key := fmt.Sprintf("donation:%s", donationID)
-	donationData, _ := json.Marshal(donation)
+	objects, err := nk.StorageRead(ctx, []*runtime.StorageRead{
+		{
+			Collection: donationsStorageCollection,
+			Key:        key,
+			UserID:     userID,
+		},
+	})
+
+	if err != nil || len(objects) == 0 {
+		return nil, err // No existing donation
+	}
+
+	var donation EconomyDonation
+	if err := json.Unmarshal([]byte(objects[0].Value), &donation); err != nil {
+		return nil, err
+	}
+
+	// Check if existing donation is still active (not expired)
+	now := time.Now().Unix()
+	if donation.ExpireTimeSec > now {
+		return &donation, nil // Active donation exists
+	}
+
+	return nil, nil // Expired donation, can create new one
+}
+
+// deductItemCosts handles item cost deduction with compensation tracking
+func (e *NakamaEconomySystem) deductItemCosts(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID, donationID string, costItems map[string]int64, compensationActions *[]func() error) error {
+	inventorySystem := e.pamlogix.(interface{ GetInventorySystem() InventorySystem }).GetInventorySystem()
+
+	// Create negative amounts for deduction and positive for rollback
+	deductItems := make(map[string]int64)
+	rollbackItems := make(map[string]int64)
+
+	for itemID, amount := range costItems {
+		deductItems[itemID] = -amount
+		rollbackItems[itemID] = amount
+	}
+
+	_, _, _, notGrantedItems, err := inventorySystem.GrantItems(ctx, logger, nk, userID, deductItems, false)
+	if err != nil || len(notGrantedItems) > 0 {
+		logger.Error("Failed to deduct item cost (insufficient items): err=%v, not_granted=%v", err, notGrantedItems)
+		return runtime.NewError("Insufficient items for donation request", 9)
+	}
+
+	// Add compensation action for item rollback
+	*compensationActions = append(*compensationActions, func() error {
+		_, _, _, _, rollbackErr := inventorySystem.GrantItems(ctx, logger, nk, userID, rollbackItems, true) // Use ignoreLimits for rollback
+		return rollbackErr
+	})
+
+	return nil
+}
+
+// storeDonation performs the final storage operation
+func (e *NakamaEconomySystem) storeDonation(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID, donationID string, donation *EconomyDonation) error {
+	key := fmt.Sprintf("donation:%s", donationID)
+	donationData, err := json.Marshal(donation)
+	if err != nil {
+		return fmt.Errorf("failed to marshal donation data: %w", err)
+	}
+
 	_, err = nk.StorageWrite(ctx, []*runtime.StorageWrite{
 		{
 			Collection:      donationsStorageCollection,
 			Key:             key,
-			UserID:          "", // System object
+			UserID:          userID,
 			Value:           string(donationData),
 			Version:         "",
 			PermissionRead:  1,
 			PermissionWrite: 1,
 		},
 	})
-	if err != nil {
-		logger.Error("Failed to write donation: %v", err)
-		return nil, false, runtime.NewError("Failed to write donation", 13)
-	}
 
-	return donation, true, nil
+	return err
 }
 
 func (e *NakamaEconomySystem) List(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID string) (storeItems map[string]*EconomyConfigStoreItem, placements map[string]*EconomyConfigPlacement, rewardModifiers []*ActiveRewardModifier, timestamp int64, err error) {
@@ -1947,7 +2295,7 @@ func (e *NakamaEconomySystem) getUserTransactions(ctx context.Context, nk runtim
 	transactions := make(map[string]bool)
 
 	// List all purchase transactions for this user
-	objects, _, err := nk.StorageList(ctx, "purchase_transactions", userID, "", 100, "")
+	objects, _, err := nk.StorageList(ctx, "", userID, "purchase_transactions", 100, "")
 	if err != nil {
 		return transactions, err
 	}
