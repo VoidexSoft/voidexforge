@@ -18,10 +18,7 @@ func rpcEconomyDonationClaim(p *pamlogixImpl) func(ctx context.Context, logger r
 
 		// Parse the input request
 		var request struct {
-			Donations []*struct {
-				Id         string `json:"id"` // Use id field instead of donation_id
-				FromUserId string `json:"from_user_id,omitempty"`
-			} `json:"donations"`
+			DonationClaims map[string]*EconomyDonationClaimRequestDetails `json:"donation_claims"`
 		}
 		if err := json.Unmarshal([]byte(payload), &request); err != nil {
 			logger.Error("Failed to unmarshal EconomyDonationClaimRequest: %v", err)
@@ -35,35 +32,15 @@ func rpcEconomyDonationClaim(p *pamlogixImpl) func(ctx context.Context, logger r
 			return "", ErrNoSessionUser
 		}
 
-		// Convert array to map for the system call
-		claimDetailsMap := make(map[string]*EconomyDonationClaimRequestDetails)
-		for _, detail := range request.Donations {
-			claimDetail := &EconomyDonationClaimRequestDetails{}
-			// Set the fields according to the protobuf definition
-			// (assuming the struct has appropriate fields based on the protobuf)
-
-			// Use the Id (from the request) as the key in the map
-			claimDetailsMap[detail.Id] = claimDetail
-		}
-
 		// Call the economy system to claim donations
-		donationsList, err := p.GetEconomySystem().DonationClaim(ctx, logger, nk, userID, claimDetailsMap)
+		donationsList, err := p.GetEconomySystem().DonationClaim(ctx, logger, nk, userID, request.DonationClaims)
 		if err != nil {
-			logger.Error("Error claiming donation: %v", err)
+			logger.Error("Error claiming donations: %v", err)
 			return "", err
 		}
 
-		// Prepare the response
-		response := struct {
-			Donations []*EconomyDonation `json:"donations"`
-			Timestamp int64              `json:"timestamp"`
-		}{
-			Donations: donationsList.Donations,
-			Timestamp: time.Now().Unix(),
-		}
-
 		// Encode the response
-		responseData, err := json.Marshal(response)
+		responseData, err := json.Marshal(donationsList)
 		if err != nil {
 			logger.Error("Failed to marshal response: %v", err)
 			return "", ErrPayloadEncode

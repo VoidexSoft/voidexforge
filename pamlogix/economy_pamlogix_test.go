@@ -2,6 +2,7 @@ package pamlogix
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"strings"
 	"testing"
@@ -843,4 +844,206 @@ func TestPurchaseRestore_EmptyUserID(t *testing.T) {
 	// Should return an error for empty user ID
 	assert.Error(t, err)
 	assert.Contains(t, err.Error(), "user ID is empty")
+}
+
+func TestDonationClaim_SelectiveDonorClaiming(t *testing.T) {
+	donationID := "don1"
+	userID := "recipient"
+	donor1ID := "donor1"
+	donor2ID := "donor2"
+
+	config := &EconomyConfig{
+		Donations: map[string]*EconomyConfigDonation{
+			donationID: {
+				Description:              "Test donation",
+				DurationSec:              1000,
+				MaxCount:                 10,
+				Name:                     "Test Donation",
+				UserContributionMaxCount: 5,
+				RecipientReward: &EconomyConfigReward{
+					Guaranteed: &EconomyConfigRewardContents{
+						Currencies: map[string]*EconomyConfigRewardCurrency{
+							"gold": {
+								EconomyConfigRewardRangeInt64: EconomyConfigRewardRangeInt64{
+									Min: 100,
+									Max: 100,
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+
+	economy := NewNakamaEconomySystem(config)
+	logger := &mockLogger{}
+	nk := NewMockNakama(t)
+	ctx := context.Background()
+
+	// Create a donation with multiple contributors
+	donation := &EconomyDonation{
+		UserId:                   userID,
+		Id:                       donationID,
+		CurrentTimeSec:           0, // Not claimed yet
+		ClaimCount:               0,
+		Count:                    6, // Total contributed
+		MaxCount:                 10,
+		UserContributionMaxCount: 5,
+		Contributors: []*EconomyDonationContributor{
+			{
+				UserId:     donor1ID,
+				Count:      4,
+				ClaimCount: 0,
+			},
+			{
+				UserId:     donor2ID,
+				Count:      2,
+				ClaimCount: 0,
+			},
+		},
+	}
+
+	// Mock storage read to return the donation
+	donationData, _ := json.Marshal(donation)
+	nk.On("StorageList", ctx, "", userID, "donations", 100, "").Return([]*api.StorageObject{
+		{
+			Key:   "donation:" + donationID,
+			Value: string(donationData),
+		},
+	}, "", nil)
+
+	// Mock storage write for updated donation
+	nk.On("StorageWrite", ctx, mock.Anything).Return([]*api.StorageObjectAck{}, nil)
+
+	// Mock wallet update for reward
+	nk.On("WalletUpdate", ctx, userID, mock.Anything, mock.Anything, false).Return(
+		map[string]int64{}, []map[string]int64{}, nil)
+
+	// Test 1: Claim from specific donor only
+	claimDetails := map[string]*EconomyDonationClaimRequestDetails{
+		donationID: {
+			Donors: map[string]int64{
+				donor1ID: 2, // Claim 2 out of 4 from donor1
+			},
+		},
+	}
+
+	donationsList, err := economy.DonationClaim(ctx, logger, nk, userID, claimDetails)
+	require.NoError(t, err)
+	require.NotNil(t, donationsList)
+	require.Len(t, donationsList.Donations, 1)
+
+	claimedDonation := donationsList.Donations[0]
+	assert.Equal(t, int64(2), claimedDonation.ClaimCount) // Should have claimed 2
+	assert.True(t, claimedDonation.CurrentTimeSec > 0)    // Should be marked as claimed
+
+	// Check contributor claim counts
+	var donor1Contributor, donor2Contributor *EconomyDonationContributor
+	for _, c := range claimedDonation.Contributors {
+		if c.UserId == donor1ID {
+			donor1Contributor = c
+		} else if c.UserId == donor2ID {
+			donor2Contributor = c
+		}
+	}
+
+	require.NotNil(t, donor1Contributor)
+	require.NotNil(t, donor2Contributor)
+	assert.Equal(t, int64(2), donor1Contributor.ClaimCount) // Should have 2 claimed from donor1
+	assert.Equal(t, int64(0), donor2Contributor.ClaimCount) // Should have 0 claimed from donor2
+
+	nk.AssertExpectations(t)
+}
+
+func TestDonationClaim_ClaimAllAvailable(t *testing.T) {
+	donationID := "don1"
+	userID := "recipient"
+	donor1ID := "donor1"
+	donor2ID := "donor2"
+
+	config := &EconomyConfig{
+		Donations: map[string]*EconomyConfigDonation{
+			donationID: {
+				Description:              "Test donation",
+				DurationSec:              1000,
+				MaxCount:                 10,
+				Name:                     "Test Donation",
+				UserContributionMaxCount: 5,
+			},
+		},
+	}
+
+	economy := NewNakamaEconomySystem(config)
+	logger := &mockLogger{}
+	nk := NewMockNakama(t)
+	ctx := context.Background()
+
+	// Create a donation with multiple contributors
+	donation := &EconomyDonation{
+		UserId:                   userID,
+		Id:                       donationID,
+		CurrentTimeSec:           0, // Not claimed yet
+		ClaimCount:               0,
+		Count:                    6, // Total contributed
+		MaxCount:                 10,
+		UserContributionMaxCount: 5,
+		Contributors: []*EconomyDonationContributor{
+			{
+				UserId:     donor1ID,
+				Count:      4,
+				ClaimCount: 1, // 1 already claimed
+			},
+			{
+				UserId:     donor2ID,
+				Count:      2,
+				ClaimCount: 0, // None claimed yet
+			},
+		},
+	}
+
+	// Mock storage read to return the donation
+	donationData, _ := json.Marshal(donation)
+	nk.On("StorageList", ctx, "", userID, "donations", 100, "").Return([]*api.StorageObject{
+		{
+			Key:   "donation:" + donationID,
+			Value: string(donationData),
+		},
+	}, "", nil)
+
+	// Mock storage write for updated donation
+	nk.On("StorageWrite", ctx, mock.Anything).Return([]*api.StorageObjectAck{}, nil)
+
+	// Test: Claim all available (empty donors map)
+	claimDetails := map[string]*EconomyDonationClaimRequestDetails{
+		donationID: {
+			Donors: map[string]int64{}, // Empty means claim all available
+		},
+	}
+
+	donationsList, err := economy.DonationClaim(ctx, logger, nk, userID, claimDetails)
+	require.NoError(t, err)
+	require.NotNil(t, donationsList)
+	require.Len(t, donationsList.Donations, 1)
+
+	claimedDonation := donationsList.Donations[0]
+	assert.Equal(t, int64(5), claimedDonation.ClaimCount) // Should have claimed 5 total (3 from donor1 + 2 from donor2)
+	assert.True(t, claimedDonation.CurrentTimeSec > 0)    // Should be marked as claimed
+
+	// Check contributor claim counts
+	var donor1Contributor, donor2Contributor *EconomyDonationContributor
+	for _, c := range claimedDonation.Contributors {
+		if c.UserId == donor1ID {
+			donor1Contributor = c
+		} else if c.UserId == donor2ID {
+			donor2Contributor = c
+		}
+	}
+
+	require.NotNil(t, donor1Contributor)
+	require.NotNil(t, donor2Contributor)
+	assert.Equal(t, int64(4), donor1Contributor.ClaimCount) // Should have all 4 claimed from donor1
+	assert.Equal(t, int64(2), donor2Contributor.ClaimCount) // Should have all 2 claimed from donor2
+
+	nk.AssertExpectations(t)
 }

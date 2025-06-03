@@ -1056,112 +1056,190 @@ func (e *NakamaEconomySystem) applyRewardModifiers(ctx context.Context, nk runti
 }
 
 func (e *NakamaEconomySystem) DonationClaim(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID string, donationClaims map[string]*EconomyDonationClaimRequestDetails) (donationsList *EconomyDonationsList, err error) {
+	// Validate inputs
 	if userID == "" {
 		return nil, runtime.NewError("user ID is empty", 3) // INVALID_ARGUMENT
 	}
 
 	if len(donationClaims) == 0 {
-		return nil, runtime.NewError("donation claims are empty", 3) // INVALID_ARGUMENT
+		return nil, runtime.NewError("donation claims is empty", 3) // INVALID_ARGUMENT
 	}
 
-	// Initialize the response
-	donationsList = &EconomyDonationsList{
-		Donations: make([]*EconomyDonation, 0, len(donationClaims)),
-	}
-
-	// Get existing donations for the user
-	existingDonations, err := e.getUserDonations(ctx, nk, userID)
+	// Get all user donations
+	userDonations, err := e.getUserDonations(ctx, nk, userID)
 	if err != nil {
 		logger.Error("Failed to get user donations: %v", err)
 		return nil, runtime.NewError("Failed to get user donations", 13) // INTERNAL
 	}
 
-	// Track donations to update in storage
-	donationsToUpdate := make([]*runtime.StorageWrite, 0)
-
 	// Process each donation claim
-	for donationID, claimDetails := range donationClaims {
-		if donationID == "" || claimDetails == nil {
-			continue
-		}
+	updatedDonations := make([]*EconomyDonation, 0)
+	now := time.Now().Unix()
 
-		// Find the donation in existing donations
-		donation, exists := existingDonations[donationID]
+	for donationID, claimDetails := range donationClaims {
+		// Get the donation
+		donation, exists := userDonations[donationID]
 		if !exists {
 			logger.Warn("Donation %s not found for user %s", donationID, userID)
 			continue
 		}
 
-		// Verify donation is claimable
-		if donation.CurrentTimeSec > 0 {
-			logger.Warn("Donation %s already claimed by user %s", donationID, userID)
+		// Check if donation is expired
+		if donation.ExpireTimeSec > 0 && donation.ExpireTimeSec <= now {
+			logger.Warn("Donation %s is expired for user %s", donationID, userID)
 			continue
 		}
 
-		// Mark donation as claimed
-		now := time.Now().Unix()
+		// Check if there's anything to claim
+		totalAvailable := donation.Count - donation.ClaimCount
+		if totalAvailable <= 0 {
+			logger.Warn("No available donations to claim for %s", donationID)
+			continue
+		}
+
+		// Calculate total amount to claim
+		var totalClaimAmount int64 = 0
+		donorsToClaimFrom := make(map[string]int64)
+
+		if len(claimDetails.Donors) == 0 {
+			// Claim all available from all contributors
+			for _, contributor := range donation.Contributors {
+				availableFromContributor := contributor.Count - contributor.ClaimCount
+				if availableFromContributor > 0 {
+					donorsToClaimFrom[contributor.UserId] = availableFromContributor
+					totalClaimAmount += availableFromContributor
+				}
+			}
+		} else {
+			// Claim specific amounts from specific donors
+			for donorID, requestedAmount := range claimDetails.Donors {
+				// Find the contributor
+				var contributor *EconomyDonationContributor
+				for _, c := range donation.Contributors {
+					if c.UserId == donorID {
+						contributor = c
+						break
+					}
+				}
+
+				if contributor == nil {
+					logger.Warn("Contributor %s not found for donation %s", donorID, donationID)
+					continue
+				}
+
+				// Calculate available amount from this contributor
+				availableFromContributor := contributor.Count - contributor.ClaimCount
+
+				var claimAmount int64
+				if requestedAmount <= 0 {
+					// If requestedAmount is 0 or negative, claim all available from this donor
+					claimAmount = availableFromContributor
+				} else {
+					// Use the specific requested amount, but cap it to available
+					claimAmount = requestedAmount
+					if claimAmount > availableFromContributor {
+						claimAmount = availableFromContributor
+					}
+				}
+
+				if claimAmount > 0 {
+					donorsToClaimFrom[donorID] = claimAmount
+					totalClaimAmount += claimAmount
+				}
+			}
+		}
+
+		// Skip if nothing to claim
+		if totalClaimAmount <= 0 {
+			logger.Warn("No valid claims to process for donation %s", donationID)
+			continue
+		}
+
+		// Update donation claim counts
+		donation.ClaimCount += totalClaimAmount
 		donation.CurrentTimeSec = now
 
-		// Process reward if configured and available
-		var reward *Reward
+		// Update contributor claim counts
+		for donorID, claimAmount := range donorsToClaimFrom {
+			for _, contributor := range donation.Contributors {
+				if contributor.UserId == donorID {
+					contributor.ClaimCount += claimAmount
+					break
+				}
+			}
+		}
+
+		// Get donation config for rewards
 		if e.config != nil && e.config.Donations != nil {
-			// Find donation config
 			donationConfig, configExists := e.config.Donations[donationID]
 			if configExists && donationConfig.RecipientReward != nil {
-				// Roll the reward
-				reward, err = e.RewardRoll(ctx, logger, nk, userID, donationConfig.RecipientReward)
-				if err != nil {
-					logger.Error("Failed to roll reward for donation %s: %v", donationID, err)
-				} else if reward != nil {
+				// Roll recipient reward for the claimed amount
+				for i := int64(0); i < totalClaimAmount; i++ {
+					reward, rollErr := e.RewardRoll(ctx, logger, nk, userID, donationConfig.RecipientReward)
+					if rollErr != nil {
+						logger.Error("Failed to roll recipient reward for donation %s: %v", donationID, rollErr)
+						continue
+					}
+
 					// Apply custom reward function if configured
 					if e.onDonationClaimReward != nil {
-						reward, err = e.onDonationClaimReward(ctx, logger, nk, userID, donationID, donationConfig, donationConfig.RecipientReward, reward)
-						if err != nil {
-							logger.Error("Error in donation claim reward callback: %v", err)
+						reward, rollErr = e.onDonationClaimReward(ctx, logger, nk, userID, donationID, donationConfig, donationConfig.RecipientReward, reward)
+						if rollErr != nil {
+							logger.Error("Error in donation claim reward callback: %v", rollErr)
 						}
 					}
 
-					// Grant the reward to user
-					_, _, _, err = e.RewardGrant(ctx, logger, nk, userID, reward, map[string]interface{}{
-						"donation_id": donationID,
-					}, false)
-					if err != nil {
-						logger.Error("Failed to grant reward for donation %s: %v", donationID, err)
+					// Grant the reward
+					if reward != nil {
+						_, _, _, grantErr := e.RewardGrant(ctx, logger, nk, userID, reward, map[string]interface{}{
+							"donation_id":  donationID,
+							"claim_amount": totalClaimAmount,
+							"claimed_from": donorsToClaimFrom,
+							"reason":       "donation_claim_reward",
+						}, false)
+						if grantErr != nil {
+							logger.Error("Failed to grant recipient reward for donation %s: %v", donationID, grantErr)
+						} else {
+							// Store the reward in the donation
+							donation.RecipientRewards = append(donation.RecipientRewards, reward)
+						}
 					}
 				}
 			}
 		}
 
-		// Prepare donation for storage update
+		// Store updated donation
 		key := fmt.Sprintf("donation:%s", donationID)
-		donationData, err := json.Marshal(donation)
-		if err != nil {
-			logger.Error("Failed to marshal donation data: %v", err)
+		donationData, marshalErr := json.Marshal(donation)
+		if marshalErr != nil {
+			logger.Error("Failed to marshal donation data for %s: %v", donationID, marshalErr)
 			continue
 		}
 
-		// Add donation to storage update batch
-		donationsToUpdate = append(donationsToUpdate, &runtime.StorageWrite{
-			Collection:      donationsStorageCollection,
-			Key:             key,
-			UserID:          userID, // Store as user-specific object
-			Value:           string(donationData),
-			Version:         "", // Use empty string for new donation
-			PermissionRead:  1,  // Only owner can read
-			PermissionWrite: 1,  // Only owner can write
+		_, writeErr := nk.StorageWrite(ctx, []*runtime.StorageWrite{
+			{
+				Collection:      donationsStorageCollection,
+				Key:             key,
+				UserID:          userID,
+				Value:           string(donationData),
+				Version:         "", // Update existing
+				PermissionRead:  1,
+				PermissionWrite: 1,
+			},
 		})
+		if writeErr != nil {
+			logger.Error("Failed to update donation %s: %v", donationID, writeErr)
+			continue
+		}
 
-		// Add to response list
-		donationsList.Donations = append(donationsList.Donations, donation)
+		updatedDonations = append(updatedDonations, donation)
+		logger.Info("Successfully claimed %d from donation %s for user %s (from donors: %v)",
+			totalClaimAmount, donationID, userID, donorsToClaimFrom)
 	}
 
-	// Execute storage updates if we have any
-	if len(donationsToUpdate) > 0 {
-		_, err = nk.StorageWrite(ctx, donationsToUpdate)
-		if err != nil {
-			logger.Error("Failed to update donations: %v", err)
-			return nil, runtime.NewError("Failed to update donations", 13) // INTERNAL
-		}
+	// Return updated donations list
+	donationsList = &EconomyDonationsList{
+		Donations: updatedDonations,
 	}
 
 	return donationsList, nil
@@ -1376,7 +1454,7 @@ func (e *NakamaEconomySystem) DonationGive(ctx context.Context, logger runtime.L
 	// Add or update contributor record
 	contributorFound := false
 	for i, contributor := range donationData.Contributors {
-		if contributor.UserId == userID {
+		if contributor.UserId == fromUserID {
 			donationData.Contributors[i].Count += contributionAmount
 			contributorFound = true
 			break
@@ -1384,7 +1462,7 @@ func (e *NakamaEconomySystem) DonationGive(ctx context.Context, logger runtime.L
 	}
 	if !contributorFound {
 		donationData.Contributors = append(donationData.Contributors, &EconomyDonationContributor{
-			UserId: userID,
+			UserId: fromUserID,
 			Count:  contributionAmount,
 		})
 	}
