@@ -17,7 +17,7 @@
       "category": "currency",
       "cost": {
         "currencies": {},
-        "sku": "gem_pack_small_sku"
+        "sku": "com.ondi.gem_pack_small"
       },
       "reward": {
         "guaranteed": {
@@ -45,6 +45,299 @@
             "health_potion": {
               "min": 5,
               "max": 5
+            }
+          }
+        }
+      }
+    },
+    "gem_pack_medium": {
+      "name": "Medium Gem Pack",
+      "description": "50 gems",
+      "category": "currency",
+      "cost": {
+        "currencies": {},
+        "sku": "com.ondi.gem_pack_medium"
+      },
+      "reward": {
+        "guaranteed": {
+          "currencies": {
+            "gems": {
+              "min": 50,
+              "max": 50
+            }
+          }
+        }
+      }
+    },
+    "gem_pack_large": {
+      "name": "Large Gem Pack",
+      "description": "150 gems + bonus",
+      "category": "currency",
+      "cost": {
+        "currencies": {},
+        "sku": "com.ondi.gem_pack_large"
+      },
+      "reward": {
+        "guaranteed": {
+          "currencies": {
+            "gems": {
+              "min": 150,
+              "max": 150
+            }
+          }
+        }
+      }
+    },
+    "sword_iron": {
+      "name": "Iron Sword",
+      "description": "A sturdy iron sword for combat",
+      "category": "weapon",
+      "cost": {
+        "currencies": {
+          "gems": 25
+        }
+      },
+      "reward": {
+        "guaranteed": {
+          "items": {
+            "sword_iron": {
+              "min": 1,
+              "max": 1
+            }
+          }
+        }
+      }
+    },
+    "sword_steel": {
+      "name": "Steel Sword",
+      "description": "A powerful steel blade",
+      "category": "weapon",
+      "cost": {
+        "currencies": {
+          "gems": 50
+        }
+      },
+      "reward": {
+        "guaranteed": {
+          "items": {
+            "sword_steel": {
+              "min": 1,
+              "max": 1
+            }
+          }
+        }
+      }
+    },
+    "armor_leather": {
+      "name": "Leather Armor",
+      "description": "Basic protection for adventurers",
+      "category": "armor",
+      "cost": {
+        "currencies": {
+          "coins": 250
+        }
+      },
+      "reward": {
+        "guaranteed": {
+          "items": {
+            "armor_leather": {
+              "min": 1,
+              "max": 1
+            }
+          }
+        }
+      }
+    },
+    "armor_chainmail": {
+      "name": "Chainmail Armor",
+      "description": "Strong metal protection",
+      "category": "armor",
+      "cost": {
+        "currencies": {
+          "gems": 40
+        }
+      },
+      "reward": {
+        "guaranteed": {
+          "items": {
+            "armor_chainmail": {
+              "min": 1,
+              "max": 1
+            }
+          }
+        }
+      }
+    },
+    "energy_refill": {
+      "name": "Energy Refill",
+      "description": "Instantly refill all energy",
+      "category": "consumable",
+      "cost": {
+        "currencies": {
+          "gems": 10
+        }
+      },
+      "reward": {
+        "guaranteed": {
+          "currencies": {
+            "energy": {
+              "min": 50,
+              "max": 50
+            }
+          }
+        }
+      }
+    },
+    "starter_pack": {
+      "name": "Starter Pack",
+      "description": "Perfect for new adventurers",
+      "category": "bundle",
+      "cost": {
+        "currencies": {
+          "gems": 75
+        }
+      },
+      "reward": {
+        "guaranteed": {
+          "items": {
+            "sword_iron": {
+              "min": 1,
+              "max": 1
+            },
+            "armor_leather": {
+              "min": 1,
+              "max": 1
+            },
+            "health_potion": {
+              "min": 10,
+              "max": 10
+            }
+          }
+        }
+      }
+    },
+    "treasure_chest_bronze": {
+      "name": "Bronze Treasure Chest",
+      "description": "Contains random rewards",
+      "category": "lootbox",
+      "cost": {
+        "currencies": {
+          "coins": 150
+        }
+      },
+      "reward": {
+        "guaranteed": {
+          "currencies": {
+            "coins": {
+              "min": 50,
+              "max": 100
+            }
+          }
+        },
+        "random": [
+          {
+            "weight": 50,
+            "items": {
+              "health_potion": {
+                "min": 1,
+                "max": 3
+              }
+            }
+          },
+          {
+            "weight": 30,
+            "currencies": {
+              "gems": {
+                "min": 5,
+                "max": 10
+              }
+            }
+          },
+          {
+            "weight": 20,
+            "items": {
+              "sword_basic": {
+                "min": 1,
+                "max": 1
+              }
+            }
+          }
+        ]
+      }
+    },
+    "treasure_chest_silver": {
+      "name": "Silver Treasure Chest",
+      "description": "Better rewards than bronze",
+      "category": "lootbox",
+      "cost": {
+        "currencies": {
+          "gems": 20
+        }
+      },
+      "reward": {
+        "guaranteed": {
+          "currencies": {
+            "coins": {
+              "min": 100,
+              "max": 200
+            }
+          }
+        },
+        "random": [
+          {
+            "weight": 40,
+            "items": {
+              "health_potion": {
+                "min": 3,
+                "max": 7
+              }
+            }
+          },
+          {
+            "weight": 35,
+            "currencies": {
+              "gems": {
+                "min": 10,
+                "max": 20
+              }
+            }
+          },
+          {
+            "weight": 15,
+            "items": {
+              "sword_iron": {
+                "min": 1,
+                "max": 1
+              }
+            }
+          },
+          {
+            "weight": 10,
+            "items": {
+              "armor_leather": {
+                "min": 1,
+                "max": 1
+              }
+            }
+          }
+        ]
+      }
+    },
+    "coin_pack_small": {
+      "name": "Small Coin Pack",
+      "description": "500 coins",
+      "category": "currency",
+      "cost": {
+        "currencies": {
+          "gems": 15
+        }
+      },
+      "reward": {
+        "guaranteed": {
+          "currencies": {
+            "coins": {
+              "min": 500,
+              "max": 500
             }
           }
         }

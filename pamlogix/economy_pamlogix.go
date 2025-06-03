@@ -1968,6 +1968,7 @@ func (e *NakamaEconomySystem) PurchaseIntent(ctx context.Context, logger runtime
 	return nil
 }
 
+//TODO: test later when we have a real store
 /*
 PurchaseItem validates a purchase and gives the user the appropriate rewards.
 
@@ -2188,6 +2189,7 @@ func (e *NakamaEconomySystem) PurchaseItem(ctx context.Context, logger runtime.L
 	return updatedWallet, updatedInventory, reward, isSandboxPurchase, nil
 }
 
+//TODO: test later when we have a real store
 /*
 PurchaseRestore processes a restore attempt for the given user, based on a set of restore receipts.
 
