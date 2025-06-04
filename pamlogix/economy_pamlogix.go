@@ -6,7 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"math"
-	"math/rand"
+	"math/rand/v2"
 	"strings"
 	"time"
 
@@ -649,9 +649,13 @@ func (e *NakamaEconomySystem) processRewardContents(reward *Reward, contents *Ec
 
 // Helper methods for random number generation
 func (e *NakamaEconomySystem) randomInt64(min, max int64) int64 {
-	// For simplicity, using just the Nakama module's random function
-	// In a real implementation, you would access the module via the struct
-	return min + rand.Int63n(max-min+1)
+	if min >= max {
+		return min
+	}
+
+	// Use math/rand/v2 with ChaCha8 generator (Go 1.22+)
+	// This provides cryptographically secure randomness for the economy system
+	return min + rand.Int64N(max-min+1)
 }
 
 func (e *NakamaEconomySystem) rollRangeInt64(min, max, multiple int64) int64 {
@@ -694,7 +698,7 @@ func (e *NakamaEconomySystem) rollRangeFloat64(min, max, multiple float64) float
 		multiple = 1.0
 	}
 
-	// Generate a random value between min and max
+	// Generate a random value between min and max using math/rand/v2
 	value := min + rand.Float64()*(max-min)
 
 	// Adjust to be a multiple if needed
@@ -1816,16 +1820,19 @@ func (e *NakamaEconomySystem) List(ctx context.Context, logger runtime.Logger, n
 	return
 }
 
+// Grant will add currencies, and reward modifiers to a user's economy by ID.
 func (e *NakamaEconomySystem) Grant(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID string, currencies map[string]int64, items map[string]int64, modifiers []*RewardModifier, walletMetadata map[string]interface{}) (updatedWallet map[string]int64, rewardModifiers []*ActiveRewardModifier, timestamp int64, err error) {
 	if userID == "" {
 		err = runtime.NewError("user ID is empty", 3)
 		return
 	}
 
+	timestamp = time.Now().Unix()
 	reward := &Reward{
 		Currencies:      currencies,
 		Items:           items,
 		RewardModifiers: modifiers,
+		GrantTimeSec:    timestamp,
 	}
 
 	_, _, _, err = e.RewardGrant(ctx, logger, nk, userID, reward, walletMetadata, false)
@@ -1858,7 +1865,6 @@ func (e *NakamaEconomySystem) Grant(ctx context.Context, logger runtime.Logger, 
 		_ = json.Unmarshal([]byte(modifiersObj[0].Value), &rewardModifiers)
 	}
 
-	timestamp = time.Now().Unix()
 	return
 }
 

@@ -10,11 +10,72 @@
         "consumable": false,
         "string_properties": {
           "icon": "sword_basic.png",
-          "rarity": "common"
+          "rarity": "common",
+          "slot": "main_hand"
         },
         "numeric_properties": {
           "power": 10,
-          "durability": 100
+          "durability": 100,
+          "level_requirement": 1
+        }
+      },
+      "sword_iron": {
+        "name": "Iron Sword",
+        "description": "A sturdy iron sword with improved damage",
+        "category": "weapon",
+        "item_sets": ["weapons", "iron_equipment"],
+        "max_count": 3,
+        "stackable": false,
+        "consumable": false,
+        "string_properties": {
+          "icon": "sword_iron.png",
+          "rarity": "uncommon",
+          "slot": "main_hand",
+          "material": "iron"
+        },
+        "numeric_properties": {
+          "power": 25,
+          "durability": 200,
+          "level_requirement": 5,
+          "critical_chance": 0.05
+        }
+      },
+      "shield_wooden": {
+        "name": "Wooden Shield",
+        "description": "A basic wooden shield for defense",
+        "category": "armor",
+        "item_sets": ["starter_equipment", "shields"],
+        "max_count": 2,
+        "stackable": false,
+        "consumable": false,
+        "string_properties": {
+          "icon": "shield_wooden.png",
+          "rarity": "common",
+          "slot": "off_hand"
+        },
+        "numeric_properties": {
+          "defense": 5,
+          "durability": 80,
+          "level_requirement": 1
+        }
+      },
+      "helmet_leather": {
+        "name": "Leather Helmet",
+        "description": "Basic head protection made from leather",
+        "category": "armor",
+        "item_sets": ["leather_armor", "armor"],
+        "max_count": 1,
+        "stackable": false,
+        "consumable": false,
+        "string_properties": {
+          "icon": "helmet_leather.png",
+          "rarity": "common",
+          "slot": "head"
+        },
+        "numeric_properties": {
+          "defense": 3,
+          "durability": 60,
+          "level_requirement": 1
         }
       },
       "health_potion": {
@@ -25,6 +86,14 @@
         "max_count": 99,
         "stackable": true,
         "consumable": true,
+        "string_properties": {
+          "icon": "potion_health.png",
+          "rarity": "common",
+          "effect_type": "healing"
+        },
+        "numeric_properties": {
+          "healing_amount": 50
+        },
         "consume_reward": {
           "guaranteed": {
             "energies": {
@@ -35,15 +104,236 @@
             }
           }
         }
+      },
+      "mana_potion": {
+        "name": "Mana Potion",
+        "description": "Restores 30 mana points",
+        "category": "consumable",
+        "item_sets": ["potions"],
+        "max_count": 99,
+        "stackable": true,
+        "consumable": true,
+        "string_properties": {
+          "icon": "potion_mana.png",
+          "rarity": "common",
+          "effect_type": "mana_restore"
+        },
+        "numeric_properties": {
+          "mana_amount": 30
+        },
+        "consume_reward": {
+          "guaranteed": {
+            "energies": {
+              "mana": {
+                "min": 30,
+                "max": 30
+              }
+            }
+          }
+        }
+      },
+      "stamina_potion": {
+        "name": "Stamina Potion",
+        "description": "Restores 40 stamina points",
+        "category": "consumable",
+        "item_sets": ["potions"],
+        "max_count": 50,
+        "stackable": true,
+        "consumable": true,
+        "string_properties": {
+          "icon": "potion_stamina.png",
+          "rarity": "common",
+          "effect_type": "stamina_restore"
+        },
+        "numeric_properties": {
+          "stamina_amount": 40
+        },
+        "consume_reward": {
+          "guaranteed": {
+            "energies": {
+              "stamina": {
+                "min": 40,
+                "max": 40
+              }
+            }
+          }
+        }
+      },
+      "gold_coin": {
+        "name": "Gold Coin",
+        "description": "Standard currency used throughout the realm",
+        "category": "currency",
+        "item_sets": ["currencies"],
+        "max_count": 999999,
+        "stackable": true,
+        "consumable": true,
+        "keep_zero": true,
+        "string_properties": {
+          "icon": "coin_gold.png",
+          "rarity": "common",
+          "currency_type": "gold"
+        },
+        "numeric_properties": {
+          "value": 1
+        },
+        "consume_reward": {
+          "guaranteed": {
+            "currencies": {
+              "gold": {
+                "min": 1,
+                "max": 1
+              }
+            }
+          }
+        }
+      },
+      "gem_ruby": {
+        "name": "Ruby Gem",
+        "description": "A precious ruby that can be sold for gold",
+        "category": "valuable",
+        "item_sets": ["gems", "valuables"],
+        "max_count": 20,
+        "stackable": true,
+        "consumable": true,
+        "string_properties": {
+          "icon": "gem_ruby.png",
+          "rarity": "rare",
+          "gem_type": "ruby"
+        },
+        "numeric_properties": {
+          "value": 100
+        },
+        "consume_reward": {
+          "guaranteed": {
+            "currencies": {
+              "gold": {
+                "min": 90,
+                "max": 110
+              }
+            }
+          }
+        }
+      },
+      "experience_tome": {
+        "name": "Experience Tome",
+        "description": "A magical tome that grants experience when used",
+        "category": "consumable",
+        "item_sets": ["magical_items", "tomes"],
+        "max_count": 10,
+        "stackable": true,
+        "consumable": true,
+        "string_properties": {
+          "icon": "tome_experience.png",
+          "rarity": "uncommon",
+          "magic_type": "experience"
+        },
+        "numeric_properties": {
+          "experience_amount": 500
+        },
+        "consume_reward": {
+          "guaranteed": {
+            "energies": {
+              "experience": {
+                "min": 500,
+                "max": 500
+              }
+            }
+          }
+        }
+      },
+      "lockpick": {
+        "name": "Lockpick",
+        "description": "A tool used to open locked containers",
+        "category": "tool",
+        "item_sets": ["tools", "thief_equipment"],
+        "max_count": 25,
+        "stackable": true,
+        "consumable": true,
+        "string_properties": {
+          "icon": "lockpick.png",
+          "rarity": "common",
+          "tool_type": "lockpick"
+        },
+        "numeric_properties": {
+          "durability": 1,
+          "success_rate": 0.7
+        }
+      },
+      "mystery_box": {
+        "name": "Mystery Box",
+        "description": "A mysterious box that contains random rewards",
+        "category": "lootbox",
+        "item_sets": ["lootboxes", "special_items"],
+        "max_count": 5,
+        "stackable": true,
+        "consumable": true,
+        "string_properties": {
+          "icon": "box_mystery.png",
+          "rarity": "epic",
+          "box_type": "mystery"
+        },
+        "numeric_properties": {
+          "tier": 1
+        },
+        "consume_reward": {
+          "guaranteed": {
+            "currencies": {
+              "gold": {
+                "min": 50,
+                "max": 200
+              }
+            },
+            "items": {
+              "health_potion": {
+                "min": 1,
+                "max": 3
+              }
+            }
+          }
+        }
+      },
+      "ancient_scroll": {
+        "name": "Ancient Scroll",
+        "description": "A rare scroll containing ancient knowledge",
+        "category": "special",
+        "item_sets": ["artifacts", "magical_items"],
+        "max_count": 1,
+        "stackable": false,
+        "consumable": false,
+        "disabled": false,
+        "string_properties": {
+          "icon": "scroll_ancient.png",
+          "rarity": "legendary",
+          "artifact_type": "knowledge"
+        },
+        "numeric_properties": {
+          "power": 100,
+          "age": 1000,
+          "magic_level": 5
+        }
       }
     },
     "limits": {
       "categories": {
         "weapon": 10,
-        "consumable": 50
+        "armor": 15,
+        "consumable": 100,
+        "currency": 999999,
+        "valuable": 50,
+        "tool": 30,
+        "lootbox": 10,
+        "special": 5
       },
       "item_sets": {
-        "starter_equipment": 5
+        "starter_equipment": 10,
+        "weapons": 8,
+        "armor": 12,
+        "potions": 75,
+        "gems": 25,
+        "magical_items": 15,
+        "tools": 20,
+        "lootboxes": 8,
+        "artifacts": 3
       }
     }
   }

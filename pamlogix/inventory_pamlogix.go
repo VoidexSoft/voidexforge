@@ -162,9 +162,18 @@ func (i *NakamaInventorySystem) ConsumeItems(ctx context.Context, logger runtime
 			return nil, nil, nil, ErrBadInput
 		}
 
-		// Check if item exists in user's inventory
-		inventoryItem, exists := userInventory.Items[itemID]
-		if !exists {
+		// Find item in user's inventory by item ID
+		var inventoryKey string
+		var inventoryItem *InventoryItem
+		for key, item := range userInventory.Items {
+			if item.Id == itemID {
+				inventoryKey = key
+				inventoryItem = item
+				break
+			}
+		}
+
+		if inventoryItem == nil {
 			logger.Warn("Attempted to consume item user doesn't have: %s", itemID)
 			return nil, nil, nil, ErrBadInput
 		}
@@ -187,14 +196,19 @@ func (i *NakamaInventorySystem) ConsumeItems(ctx context.Context, logger runtime
 
 		// Remove item if count reaches 0 and keep_zero is false
 		if inventoryItem.Count <= 0 && !configItem.KeepZero {
-			delete(userInventory.Items, itemID)
+			delete(userInventory.Items, inventoryKey)
+
+			// Determine storage key for deletion
+			storageKey := inventoryKey
+			if inventoryItem.InstanceId != "" {
+				storageKey = inventoryItem.InstanceId
+			}
 
 			// Add delete operation - use regular write with empty value
 			storageOps = append(storageOps, &runtime.StorageWrite{
 				Collection:      inventoryStorageCollection,
-				Key:             itemID,
+				Key:             storageKey,
 				UserID:          userID,
-				Version:         "*",
 				PermissionRead:  1,
 				PermissionWrite: 1,
 				Value:           "", // Empty value for deletion
@@ -207,12 +221,17 @@ func (i *NakamaInventorySystem) ConsumeItems(ctx context.Context, logger runtime
 				return nil, nil, nil, ErrInternal
 			}
 
+			// Determine storage key for update
+			storageKey := inventoryKey
+			if inventoryItem.InstanceId != "" {
+				storageKey = inventoryItem.InstanceId
+			}
+
 			storageOps = append(storageOps, &runtime.StorageWrite{
 				Collection:      inventoryStorageCollection,
-				Key:             itemID,
+				Key:             storageKey,
 				UserID:          userID,
 				Value:           string(itemData),
-				Version:         "*",
 				PermissionRead:  1,
 				PermissionWrite: 1,
 			})
@@ -280,12 +299,14 @@ func (i *NakamaInventorySystem) ConsumeItems(ctx context.Context, logger runtime
 		if foundItem.Count <= 0 && !configItem.KeepZero {
 			delete(userInventory.Items, itemID)
 
+			// For instance-based operations, use the instance ID as storage key
+			storageKey := instanceID
+
 			// Add delete operation - use regular write with empty value
 			storageOps = append(storageOps, &runtime.StorageWrite{
 				Collection:      inventoryStorageCollection,
-				Key:             itemID,
+				Key:             storageKey,
 				UserID:          userID,
-				Version:         "*",
 				PermissionRead:  1,
 				PermissionWrite: 1,
 				Value:           "", // Empty value for deletion
@@ -298,12 +319,14 @@ func (i *NakamaInventorySystem) ConsumeItems(ctx context.Context, logger runtime
 				return nil, nil, nil, ErrInternal
 			}
 
+			// For instance-based operations, use the instance ID as storage key
+			storageKey := instanceID
+
 			storageOps = append(storageOps, &runtime.StorageWrite{
 				Collection:      inventoryStorageCollection,
-				Key:             itemID,
+				Key:             storageKey,
 				UserID:          userID,
 				Value:           string(itemData),
-				Version:         "*",
 				PermissionRead:  1,
 				PermissionWrite: 1,
 			})
@@ -455,16 +478,29 @@ func (i *NakamaInventorySystem) GrantItems(ctx context.Context, logger runtime.L
 			continue
 		}
 
+		// For stackable items, try to find existing item to stack
+		var existingKey string
+		var existingItem *InventoryItem
+		if configItem.Stackable {
+			// Look for existing item with same itemID
+			for key, item := range userInventory.Items {
+				if item.Id == itemID {
+					existingKey = key
+					existingItem = item
+					break
+				}
+			}
+		}
+
 		// Check item-specific limit
-		existingItem, exists := userInventory.Items[itemID]
-		if exists && configItem.MaxCount > 0 && existingItem.Count+count > configItem.MaxCount && !ignoreLimits {
+		if existingItem != nil && configItem.MaxCount > 0 && existingItem.Count+count > configItem.MaxCount && !ignoreLimits {
 			logger.Info("Item limit reached: %s (have: %d, max: %d)", itemID, existingItem.Count, configItem.MaxCount)
 			notGrantedItemIDs[itemID] = count
 			continue
 		}
 
-		if exists {
-			// Update existing item
+		if existingItem != nil {
+			// Update existing stackable item
 			existingItem.Count += count
 			existingItem.UpdateTimeSec = now
 			existingItem.MaxCount = configItem.MaxCount
@@ -490,7 +526,7 @@ func (i *NakamaInventorySystem) GrantItems(ctx context.Context, logger runtime.L
 				}
 			}
 
-			updatedItems[itemID] = existingItem
+			updatedItems[existingKey] = existingItem
 
 			// Prepare storage update
 			itemData, err := json.Marshal(existingItem)
@@ -499,12 +535,17 @@ func (i *NakamaInventorySystem) GrantItems(ctx context.Context, logger runtime.L
 				return nil, nil, nil, nil, ErrInternal
 			}
 
+			// Determine storage key: use instance ID if it exists, otherwise fall back to itemID
+			storageKey := existingKey
+			if existingItem.InstanceId != "" {
+				storageKey = existingItem.InstanceId
+			}
+
 			storageOps = append(storageOps, &runtime.StorageWrite{
 				Collection:      inventoryStorageCollection,
-				Key:             itemID,
+				Key:             storageKey,
 				UserID:          userID,
 				Value:           string(itemData),
-				Version:         "*",
 				PermissionRead:  1,
 				PermissionWrite: 1,
 			})
@@ -526,13 +567,24 @@ func (i *NakamaInventorySystem) GrantItems(ctx context.Context, logger runtime.L
 				NumericProperties: configItem.NumericProperties,
 			}
 
-			// Generate instance ID for non-stackable items
-			if !configItem.Stackable || count == 1 {
+			// Generate instance ID for non-stackable items or when explicitly needed
+			if !configItem.Stackable {
 				newItem.InstanceId = uuid.New().String()
 			}
 
-			userInventory.Items[itemID] = newItem
-			newItems[itemID] = newItem
+			// Determine the key for inventory and storage
+			var inventoryKey, storageKey string
+			if newItem.InstanceId != "" {
+				inventoryKey = newItem.InstanceId
+				storageKey = newItem.InstanceId
+			} else {
+				// For stackable items without instance ID, use itemID
+				inventoryKey = itemID
+				storageKey = itemID
+			}
+
+			userInventory.Items[inventoryKey] = newItem
+			newItems[inventoryKey] = newItem
 
 			// Prepare storage update
 			itemData, err := json.Marshal(newItem)
@@ -543,10 +595,9 @@ func (i *NakamaInventorySystem) GrantItems(ctx context.Context, logger runtime.L
 
 			storageOps = append(storageOps, &runtime.StorageWrite{
 				Collection:      inventoryStorageCollection,
-				Key:             itemID,
+				Key:             storageKey,
 				UserID:          userID,
 				Value:           string(itemData),
-				Version:         "*",
 				PermissionRead:  1,
 				PermissionWrite: 1,
 			})
@@ -555,11 +606,13 @@ func (i *NakamaInventorySystem) GrantItems(ctx context.Context, logger runtime.L
 
 	// Write changes to storage if there are any
 	if len(storageOps) > 0 {
+		logger.Info("Writing %d inventory operations to storage for user %s", len(storageOps), userID)
 		_, err = nk.StorageWrite(ctx, storageOps)
 		if err != nil {
 			logger.Error("Failed to update inventory storage: %v", err)
 			return nil, nil, nil, nil, ErrInternal
 		}
+		logger.Debug("Successfully completed %d inventory storage operations", len(storageOps))
 	}
 
 	return userInventory, newItems, updatedItems, notGrantedItemIDs, nil
@@ -631,12 +684,17 @@ func (i *NakamaInventorySystem) UpdateItems(ctx context.Context, logger runtime.
 			return nil, ErrInternal
 		}
 
+		// Determine storage key: use instance ID if it exists, otherwise use the original key
+		storageKey := instanceID
+		if foundItem.InstanceId != "" {
+			storageKey = foundItem.InstanceId
+		}
+
 		storageOps = append(storageOps, &runtime.StorageWrite{
 			Collection:      inventoryStorageCollection,
-			Key:             itemID,
+			Key:             storageKey,
 			UserID:          userID,
 			Value:           string(itemData),
-			Version:         "*",
 			PermissionRead:  1,
 			PermissionWrite: 1,
 		})
@@ -674,13 +732,7 @@ func (i *NakamaInventorySystem) getUserInventory(ctx context.Context, logger run
 	}
 
 	// Retrieve all inventory objects from storage
-	objects, err := nk.StorageRead(ctx, []*runtime.StorageRead{
-		{
-			Collection: inventoryStorageCollection,
-			UserID:     userID,
-			Key:        "", // Read all keys in the collection for this user
-		},
-	})
+	objects, _, err := nk.StorageList(ctx, "", userID, inventoryStorageCollection, 100, "")
 	if err != nil {
 		logger.Error("Failed to read inventory from storage: %v", err)
 		return inventory, err
@@ -695,8 +747,16 @@ func (i *NakamaInventorySystem) getUserInventory(ctx context.Context, logger run
 			continue
 		}
 
+		// Determine the item ID from the stored item data
+		itemID := item.Id
+		if itemID == "" {
+			// Fallback to storage key for backward compatibility
+			itemID = obj.Key
+			item.Id = itemID
+		}
+
 		// Only include non-disabled items
-		configItem, exists := i.config.Items[obj.Key]
+		configItem, exists := i.config.Items[itemID]
 		if exists && !configItem.Disabled {
 			// Update from config if needed
 			item.Name = configItem.Name
@@ -707,8 +767,14 @@ func (i *NakamaInventorySystem) getUserInventory(ctx context.Context, logger run
 			item.Stackable = configItem.Stackable
 			item.Consumable = configItem.Consumable
 
-			// Add to inventory
-			inventory.Items[obj.Key] = &item
+			// Use instance ID as key if available, otherwise use storage key
+			key := obj.Key
+			if item.InstanceId != "" {
+				key = item.InstanceId
+			}
+
+			// Add to inventory using appropriate key
+			inventory.Items[key] = &item
 		}
 	}
 

@@ -319,21 +319,38 @@ func rpcEconomyGrant(p *pamlogixImpl) func(ctx context.Context, logger runtime.L
 			return "", err
 		}
 
-		// Convert ActiveRewardModifier slice to map for the response
-		rewardModifiersMap := make(map[string]*ActiveRewardModifier)
-		for i, modifier := range rewardModifiers {
-			rewardModifiersMap[modifier.Id] = rewardModifiers[i]
+		// Fetch the updated inventory if we have an inventory system and granted items
+		var updatedInventory *Inventory
+		if p.GetInventorySystem() != nil && len(itemsInt64) > 0 {
+			inventory, err := p.GetInventorySystem().ListInventoryItems(ctx, logger, nk, userID, "")
+			if err != nil {
+				logger.Warn("Failed to fetch updated inventory after grant: %v", err)
+			} else {
+				updatedInventory = inventory
+			}
 		}
 
-		// Prepare the response
+		// Create the reward object that was granted
+		grantedReward := &Reward{
+			Currencies:      request.Currencies,
+			Items:           itemsInt64,
+			RewardModifiers: request.Modifiers,
+			GrantTimeSec:    timestamp,
+		}
+
+		// Prepare the response matching EconomyUpdateAck proto structure
 		response := struct {
-			Wallet          map[string]int64                 `json:"wallet"`
-			RewardModifiers map[string]*ActiveRewardModifier `json:"reward_modifiers,omitempty"`
-			Timestamp       int64                            `json:"timestamp"`
+			Wallet                map[string]int64        `json:"wallet,omitempty"`
+			Inventory             *Inventory              `json:"inventory,omitempty"`
+			Reward                *Reward                 `json:"reward,omitempty"`
+			ActiveRewardModifiers []*ActiveRewardModifier `json:"active_reward_modifiers,omitempty"`
+			CurrentTimeSec        int64                   `json:"current_time_sec,omitempty"`
 		}{
-			Wallet:          updatedWallet,
-			RewardModifiers: rewardModifiersMap,
-			Timestamp:       timestamp,
+			Wallet:                updatedWallet,
+			Inventory:             updatedInventory,
+			Reward:                grantedReward,
+			ActiveRewardModifiers: rewardModifiers,
+			CurrentTimeSec:        timestamp,
 		}
 
 		// Encode the response

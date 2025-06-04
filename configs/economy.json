@@ -356,6 +356,312 @@
           }
         }
       }
+    },
+    "rewarded_ad_welcome_bonus": {
+      "reward": {
+        "guaranteed": {
+          "currencies": {
+            "coins": {
+              "min": 200,
+              "max": 200
+            },
+            "gems": {
+              "min": 5,
+              "max": 5
+            }
+          },
+          "items": {
+            "health_potion": {
+              "min": 3,
+              "max": 3
+            }
+          }
+        }
+      }
+    },
+    "rewarded_ad_level_up": {
+      "reward": {
+        "guaranteed": {
+          "currencies": {
+            "coins": {
+              "min": 100,
+              "max": 300
+            },
+            "energy": {
+              "min": 20,
+              "max": 50
+            }
+          }
+        },
+        "random": [
+          {
+            "weight": 60,
+            "currencies": {
+              "gems": {
+                "min": 2,
+                "max": 8
+              }
+            }
+          },
+          {
+            "weight": 30,
+            "items": {
+              "health_potion": {
+                "min": 2,
+                "max": 5
+              }
+            }
+          },
+          {
+            "weight": 10,
+            "items": {
+              "sword_iron": {
+                "min": 1,
+                "max": 1
+              }
+            }
+          }
+        ]
+      }
+    },
+    "rewarded_ad_quest_bonus": {
+      "reward": {
+        "guaranteed": {
+          "currencies": {
+            "coins": {
+              "min": 75,
+              "max": 150
+            }
+          }
+        },
+        "random": [
+          {
+            "weight": 50,
+            "currencies": {
+              "gems": {
+                "min": 3,
+                "max": 10
+              }
+            }
+          },
+          {
+            "weight": 35,
+            "items": {
+              "health_potion": {
+                "min": 1,
+                "max": 4
+              }
+            }
+          },
+          {
+            "weight": 15,
+            "currencies": {
+              "energy": {
+                "min": 10,
+                "max": 25
+              }
+            }
+          }
+        ]
+      }
+    },
+    "rewarded_ad_achievement": {
+      "reward": {
+        "guaranteed": {
+          "currencies": {
+            "gems": {
+              "min": 15,
+              "max": 25
+            }
+          }
+        },
+        "random": [
+          {
+            "weight": 40,
+            "items": {
+              "sword_steel": {
+                "min": 1,
+                "max": 1
+              }
+            }
+          },
+          {
+            "weight": 35,
+            "items": {
+              "armor_chainmail": {
+                "min": 1,
+                "max": 1
+              }
+            }
+          },
+          {
+            "weight": 25,
+            "currencies": {
+              "coins": {
+                "min": 300,
+                "max": 500
+              }
+            }
+          }
+        ]
+      }
+    },
+    "rewarded_ad_login_streak": {
+      "reward": {
+        "guaranteed": {
+          "currencies": {
+            "coins": {
+              "min": 25,
+              "max": 100
+            }
+          }
+        },
+        "random": [
+          {
+            "weight": 70,
+            "currencies": {
+              "energy": {
+                "min": 5,
+                "max": 20
+              }
+            }
+          },
+          {
+            "weight": 20,
+            "currencies": {
+              "gems": {
+                "min": 1,
+                "max": 5
+              }
+            }
+          },
+          {
+            "weight": 10,
+            "items": {
+              "health_potion": {
+                "min": 1,
+                "max": 3
+              }
+            }
+          }
+        ]
+      }
+    },
+    "rewarded_ad_purchase_bonus": {
+      "reward": {
+        "guaranteed": {
+          "currencies": {
+            "gems": {
+              "min": 50,
+              "max": 50
+            },
+            "coins": {
+              "min": 1000,
+              "max": 1000
+            }
+          },
+          "items": {
+            "sword_steel": {
+              "min": 1,
+              "max": 1
+            },
+            "armor_leather": {
+              "min": 1,
+              "max": 1
+            },
+            "health_potion": {
+              "min": 10,
+              "max": 10
+            }
+          }
+        }
+      }
+    },
+    "rewarded_ad_weekend_special": {
+      "reward": {
+        "guaranteed": {
+          "currencies": {
+            "coins": {
+              "min": 150,
+              "max": 300
+            }
+          }
+        },
+        "random": [
+          {
+            "weight": 45,
+            "currencies": {
+              "gems": {
+                "min": 10,
+                "max": 20
+              }
+            }
+          },
+          {
+            "weight": 30,
+            "items": {
+              "treasure_chest_bronze": {
+                "min": 1,
+                "max": 2
+              }
+            }
+          },
+          {
+            "weight": 25,
+            "currencies": {
+              "energy": {
+                "min": 30,
+                "max": 50
+              }
+            }
+          }
+        ]
+      }
+    },
+    "rewarded_ad_comeback": {
+      "reward": {
+        "guaranteed": {
+          "currencies": {
+            "energy": {
+              "min": 50,
+              "max": 50
+            },
+            "coins": {
+              "min": 250,
+              "max": 500
+            }
+          }
+        },
+        "random": [
+          {
+            "weight": 50,
+            "currencies": {
+              "gems": {
+                "min": 15,
+                "max": 30
+              }
+            }
+          },
+          {
+            "weight": 30,
+            "items": {
+              "health_potion": {
+                "min": 5,
+                "max": 10
+              }
+            }
+          },
+          {
+            "weight": 20,
+            "items": {
+              "armor_leather": {
+                "min": 1,
+                "max": 1
+              }
+            }
+          }
+        ]
+      }
     }
   },
   "donations": {

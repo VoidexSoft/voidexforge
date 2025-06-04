@@ -183,16 +183,8 @@ func rpcInventoryGrant(p *pamlogixImpl) func(ctx context.Context, logger runtime
 			return "", ErrNoSessionUser
 		}
 
-		// Convert request items to the expected format
-		itemIDs := make(map[string]int64)
-		if request.Items != nil {
-			for itemID, count := range request.Items {
-				itemIDs[itemID] = count
-			}
-		}
-
 		// Grant the items (ignoreLimits defaults to false for user-initiated requests)
-		updatedInventory, _, _, _, err := inventorySystem.GrantItems(ctx, logger, nk, userID, itemIDs, false)
+		updatedInventory, _, _, _, err := inventorySystem.GrantItems(ctx, logger, nk, userID, request.Items, false)
 		if err != nil {
 			logger.Error("Error granting inventory items: %v", err)
 			return "", err

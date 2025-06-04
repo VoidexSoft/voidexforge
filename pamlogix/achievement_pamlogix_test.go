@@ -145,8 +145,8 @@ func (m *mockEconomySystem) DonationGet(ctx context.Context, logger runtime.Logg
 	return nil, nil
 }
 
-func (m *mockEconomySystem) DonationGive(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID, donationID, fromUserID string) (map[string]int64, *Inventory, []*ActiveRewardModifier, *Reward, int64, error) {
-	return nil, nil, nil, nil, 0, nil
+func (m *mockEconomySystem) DonationGive(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID, donationID, fromUserID string) (*EconomyDonation, map[string]int64, *Inventory, []*ActiveRewardModifier, *Reward, int64, error) {
+	return nil, nil, nil, nil, nil, 0, nil
 }
 
 func (m *mockEconomySystem) DonationRequest(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID, donationID string) (*EconomyDonation, bool, error) {
