@@ -290,8 +290,8 @@ func (i *NakamaInventorySystem) ConsumeItems(ctx context.Context, logger runtime
 					Key:             storageKey,
 					UserID:          userID,
 					Value:           string(itemData),
-					PermissionRead:  1,
-					PermissionWrite: 1,
+					PermissionRead:  runtime.STORAGE_PERMISSION_OWNER_READ,
+					PermissionWrite: runtime.STORAGE_PERMISSION_OWNER_WRITE,
 				})
 			}
 		}
@@ -370,8 +370,8 @@ func (i *NakamaInventorySystem) ConsumeItems(ctx context.Context, logger runtime
 				Key:             instanceID,
 				UserID:          userID,
 				Value:           string(itemData),
-				PermissionRead:  1,
-				PermissionWrite: 1,
+				PermissionRead:  runtime.STORAGE_PERMISSION_OWNER_READ,
+				PermissionWrite: runtime.STORAGE_PERMISSION_OWNER_WRITE,
 			})
 		}
 
@@ -571,8 +571,8 @@ func (i *NakamaInventorySystem) GrantItems(ctx context.Context, logger runtime.L
 				Key:             storageKey,
 				UserID:          userID,
 				Value:           string(itemData),
-				PermissionRead:  1,
-				PermissionWrite: 1,
+				PermissionRead:  runtime.STORAGE_PERMISSION_OWNER_READ,
+				PermissionWrite: runtime.STORAGE_PERMISSION_OWNER_WRITE,
 			})
 		} else {
 			// Create new item(s)
@@ -615,8 +615,8 @@ func (i *NakamaInventorySystem) GrantItems(ctx context.Context, logger runtime.L
 						Key:             storageKey,
 						UserID:          userID,
 						Value:           string(itemData),
-						PermissionRead:  1,
-						PermissionWrite: 1,
+						PermissionRead:  runtime.STORAGE_PERMISSION_OWNER_READ,
+						PermissionWrite: runtime.STORAGE_PERMISSION_OWNER_WRITE,
 					})
 				}
 			} else {
@@ -657,8 +657,8 @@ func (i *NakamaInventorySystem) GrantItems(ctx context.Context, logger runtime.L
 					Key:             storageKey,
 					UserID:          userID,
 					Value:           string(itemData),
-					PermissionRead:  1,
-					PermissionWrite: 1,
+					PermissionRead:  runtime.STORAGE_PERMISSION_OWNER_READ,
+					PermissionWrite: runtime.STORAGE_PERMISSION_OWNER_WRITE,
 				})
 			}
 		}
@@ -805,8 +805,8 @@ func (i *NakamaInventorySystem) UpdateItems(ctx context.Context, logger runtime.
 				Key:             storageKey,
 				UserID:          userID,
 				Value:           string(itemData),
-				PermissionRead:  1,
-				PermissionWrite: 1,
+				PermissionRead:  runtime.STORAGE_PERMISSION_OWNER_READ,
+				PermissionWrite: runtime.STORAGE_PERMISSION_OWNER_WRITE,
 			})
 			updateCount++
 		} else {

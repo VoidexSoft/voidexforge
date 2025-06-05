@@ -360,7 +360,7 @@ func (p *StoragePersonalizer) newStorageWrite(config any, storageKey string) (*r
 		Collection:      p.collection,
 		Key:             storageKey,
 		Value:           string(json),
-		PermissionRead:  0,
-		PermissionWrite: 0,
+		PermissionRead:  runtime.STORAGE_PERMISSION_NO_READ,
+		PermissionWrite: runtime.STORAGE_PERMISSION_NO_WRITE,
 	}, nil
 }

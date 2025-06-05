@@ -914,8 +914,8 @@ func (e *NakamaEconomySystem) updateEnergies(ctx context.Context, nk runtime.Nak
 			UserID:          userID,
 			Value:           string(energyData),
 			Version:         energyStorageObj[0].Version,
-			PermissionRead:  1,
-			PermissionWrite: 1,
+			PermissionRead:  runtime.STORAGE_PERMISSION_OWNER_READ,
+			PermissionWrite: runtime.STORAGE_PERMISSION_OWNER_WRITE,
 		},
 	})
 
@@ -982,8 +982,8 @@ func (e *NakamaEconomySystem) applyEnergyModifiers(ctx context.Context, nk runti
 			UserID:          userID,
 			Value:           string(modifiersData),
 			Version:         version,
-			PermissionRead:  1,
-			PermissionWrite: 1,
+			PermissionRead:  runtime.STORAGE_PERMISSION_OWNER_READ,
+			PermissionWrite: runtime.STORAGE_PERMISSION_OWNER_WRITE,
 		},
 	})
 
@@ -1051,8 +1051,8 @@ func (e *NakamaEconomySystem) applyRewardModifiers(ctx context.Context, nk runti
 			UserID:          userID,
 			Value:           string(modifiersData),
 			Version:         version,
-			PermissionRead:  1,
-			PermissionWrite: 1,
+			PermissionRead:  runtime.STORAGE_PERMISSION_OWNER_READ,
+			PermissionWrite: runtime.STORAGE_PERMISSION_OWNER_WRITE,
 		},
 	})
 
@@ -1227,8 +1227,8 @@ func (e *NakamaEconomySystem) DonationClaim(ctx context.Context, logger runtime.
 				UserID:          userID,
 				Value:           string(donationData),
 				Version:         "", // Update existing
-				PermissionRead:  1,
-				PermissionWrite: 1,
+				PermissionRead:  runtime.STORAGE_PERMISSION_OWNER_READ,
+				PermissionWrite: runtime.STORAGE_PERMISSION_OWNER_WRITE,
 			},
 		})
 		if writeErr != nil {
@@ -1517,8 +1517,8 @@ func (e *NakamaEconomySystem) DonationGive(ctx context.Context, logger runtime.L
 			UserID:          userID,
 			Value:           string(donationBytes),
 			Version:         objects[0].Version,
-			PermissionRead:  1,
-			PermissionWrite: 1,
+			PermissionRead:  runtime.STORAGE_PERMISSION_OWNER_READ,
+			PermissionWrite: runtime.STORAGE_PERMISSION_OWNER_WRITE,
 		},
 	})
 	if err != nil {
@@ -1787,8 +1787,8 @@ func (e *NakamaEconomySystem) storeDonation(ctx context.Context, logger runtime.
 			UserID:          userID,
 			Value:           string(donationData),
 			Version:         "",
-			PermissionRead:  1,
-			PermissionWrite: 1,
+			PermissionRead:  runtime.STORAGE_PERMISSION_OWNER_READ,
+			PermissionWrite: runtime.STORAGE_PERMISSION_OWNER_WRITE,
 		},
 	})
 
@@ -1960,8 +1960,8 @@ func (e *NakamaEconomySystem) PurchaseIntent(ctx context.Context, logger runtime
 			UserID:          userID,
 			Value:           string(intentData),
 			Version:         "",
-			PermissionRead:  1, // Only owner can read
-			PermissionWrite: 0, // Only server can write
+			PermissionRead:  runtime.STORAGE_PERMISSION_OWNER_READ, // Only owner can read
+			PermissionWrite: runtime.STORAGE_PERMISSION_NO_WRITE,   // Only server can write
 		},
 	})
 
@@ -2099,8 +2099,8 @@ func (e *NakamaEconomySystem) PurchaseItem(ctx context.Context, logger runtime.L
 					UserID:          userID,
 					Value:           string(intentData),
 					Version:         intentObjs[0].Version,
-					PermissionRead:  1, // Only owner can read
-					PermissionWrite: 0, // Only server can write
+					PermissionRead:  runtime.STORAGE_PERMISSION_OWNER_READ, // Only owner can read
+					PermissionWrite: runtime.STORAGE_PERMISSION_NO_WRITE,   // Only server can write
 				},
 			})
 			if err != nil {
@@ -2132,8 +2132,8 @@ func (e *NakamaEconomySystem) PurchaseItem(ctx context.Context, logger runtime.L
 			UserID:          userID,
 			Value:           string(transactionData),
 			Version:         "",
-			PermissionRead:  1,
-			PermissionWrite: 0,
+			PermissionRead:  runtime.STORAGE_PERMISSION_OWNER_READ,
+			PermissionWrite: runtime.STORAGE_PERMISSION_NO_WRITE,
 		},
 	})
 	if err != nil {
@@ -2331,8 +2331,8 @@ func (e *NakamaEconomySystem) PurchaseRestore(ctx context.Context, logger runtim
 				UserID:          userID,
 				Value:           string(restoreData),
 				Version:         "",
-				PermissionRead:  1,
-				PermissionWrite: 0,
+				PermissionRead:  runtime.STORAGE_PERMISSION_OWNER_READ,
+				PermissionWrite: runtime.STORAGE_PERMISSION_NO_WRITE,
 			},
 		})
 		if err != nil {
@@ -2509,8 +2509,8 @@ func (e *NakamaEconomySystem) PlacementStart(ctx context.Context, logger runtime
 			Key:             userID + "_" + placementID,
 			UserID:          userID,
 			Value:           string(placementData),
-			PermissionRead:  1, // Owner read
-			PermissionWrite: 1, // Owner write
+			PermissionRead:  runtime.STORAGE_PERMISSION_OWNER_READ,  // Owner read
+			PermissionWrite: runtime.STORAGE_PERMISSION_OWNER_WRITE, // Owner write
 		},
 	})
 	if err != nil {
@@ -2611,8 +2611,8 @@ func (e *NakamaEconomySystem) PlacementSuccess(ctx context.Context, logger runti
 			Key:             userID + "_" + placementID,
 			UserID:          userID,
 			Value:           string(updatedData),
-			PermissionRead:  1,
-			PermissionWrite: 1,
+			PermissionRead:  runtime.STORAGE_PERMISSION_OWNER_READ,
+			PermissionWrite: runtime.STORAGE_PERMISSION_OWNER_WRITE,
 		},
 	})
 	if err != nil {
@@ -2695,8 +2695,8 @@ func (e *NakamaEconomySystem) PlacementFail(ctx context.Context, logger runtime.
 			Key:             userID + "_" + placementID,
 			UserID:          userID,
 			Value:           string(updatedData),
-			PermissionRead:  1,
-			PermissionWrite: 1,
+			PermissionRead:  runtime.STORAGE_PERMISSION_OWNER_READ,
+			PermissionWrite: runtime.STORAGE_PERMISSION_OWNER_WRITE,
 		},
 	})
 	if err != nil {
@@ -2788,9 +2788,9 @@ func (e *NakamaEconomySystem) grantItemsDirectly(ctx context.Context, logger run
 				Key:             itemKey,
 				UserID:          userID,
 				Value:           string(itemData),
-				Version:         "", // No Version field in InventoryItem, use empty string
-				PermissionRead:  1,  // Only owner can read
-				PermissionWrite: 1,  // Only owner can write
+				Version:         "",                                     // No Version field in InventoryItem, use empty string
+				PermissionRead:  runtime.STORAGE_PERMISSION_OWNER_READ,  // Only owner can read
+				PermissionWrite: runtime.STORAGE_PERMISSION_OWNER_WRITE, // Only owner can write
 			})
 
 			updatedItems[itemID] = existingItem
@@ -2826,9 +2826,9 @@ func (e *NakamaEconomySystem) grantItemsDirectly(ctx context.Context, logger run
 				Key:             itemKey,
 				UserID:          userID,
 				Value:           string(itemData),
-				Version:         "", // New item, so version is empty
-				PermissionRead:  1,  // Only owner can read
-				PermissionWrite: 1,  // Only owner can write
+				Version:         "",                                     // New item, so version is empty
+				PermissionRead:  runtime.STORAGE_PERMISSION_OWNER_READ,  // Only owner can read
+				PermissionWrite: runtime.STORAGE_PERMISSION_OWNER_WRITE, // Only owner can write
 			})
 
 			newItems[itemID] = newItem
