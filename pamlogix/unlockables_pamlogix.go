@@ -63,6 +63,47 @@ func (u *UnlockablesPamlogix) GetConfig() any {
 	return u.config
 }
 
+// validateUserID validates that userID is not empty
+func (u *UnlockablesPamlogix) validateUserID(userID string) error {
+	if userID == "" {
+		return runtime.NewError("user ID cannot be empty", 3) // INVALID_ARGUMENT
+	}
+	return nil
+}
+
+// validateInstanceID validates that instanceID is not empty and appears to be a valid UUID
+func (u *UnlockablesPamlogix) validateInstanceID(instanceID string) error {
+	if instanceID == "" {
+		return runtime.NewError("instance ID cannot be empty", 3) // INVALID_ARGUMENT
+	}
+	// Basic UUID format validation (36 characters with hyphens in right places)
+	if len(instanceID) != 36 || instanceID[8] != '-' || instanceID[13] != '-' || instanceID[18] != '-' || instanceID[23] != '-' {
+		return runtime.NewError("instance ID must be a valid UUID format", 3) // INVALID_ARGUMENT
+	}
+	return nil
+}
+
+// validateInstanceIDs validates a slice of instance IDs
+func (u *UnlockablesPamlogix) validateInstanceIDs(instanceIDs []string) error {
+	if len(instanceIDs) == 0 {
+		return runtime.NewError("instance IDs list cannot be empty", 3) // INVALID_ARGUMENT
+	}
+	for _, instanceID := range instanceIDs {
+		if err := u.validateInstanceID(instanceID); err != nil {
+			return runtime.NewError("invalid instance ID in list: "+err.Error(), 3) // INVALID_ARGUMENT
+		}
+	}
+	return nil
+}
+
+// validatePositiveSeconds validates that seconds is positive
+func (u *UnlockablesPamlogix) validatePositiveSeconds(seconds int64) error {
+	if seconds <= 0 {
+		return runtime.NewError("seconds must be positive", 3) // INVALID_ARGUMENT
+	}
+	return nil
+}
+
 // getUserUnlockables fetches the stored unlockables data for a user from Nakama storage.
 func (u *UnlockablesPamlogix) getUserUnlockables(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID string) (*UnlockablesList, error) {
 	// Read from storage
@@ -81,10 +122,20 @@ func (u *UnlockablesPamlogix) getUserUnlockables(ctx context.Context, logger run
 
 	// If no data found, return new empty unlockables list
 	if len(objects) == 0 || objects[0].Value == "" {
+		// Convert config slot cost to runtime slot cost
+		var slotCost *UnlockableSlotCost
+		if u.config.SlotCost != nil {
+			slotCost = &UnlockableSlotCost{
+				Items:      u.config.SlotCost.Items,
+				Currencies: u.config.SlotCost.Currencies,
+			}
+		}
+
 		return &UnlockablesList{
 			Slots:            int32(u.config.Slots),
 			ActiveSlots:      int32(u.config.ActiveSlots),
 			MaxActiveSlots:   int32(u.config.MaxActiveSlots),
+			SlotCost:         slotCost,
 			Unlockables:      make([]*Unlockable, 0),
 			QueuedUnlocks:    make([]string, 0),
 			MaxQueuedUnlocks: int32(u.config.MaxQueuedUnlocks),
@@ -104,6 +155,14 @@ func (u *UnlockablesPamlogix) getUserUnlockables(ctx context.Context, logger run
 	}
 	if unlockables.QueuedUnlocks == nil {
 		unlockables.QueuedUnlocks = make([]string, 0)
+	}
+
+	// Ensure slot cost is populated from config (for backward compatibility)
+	if unlockables.SlotCost == nil && u.config.SlotCost != nil {
+		unlockables.SlotCost = &UnlockableSlotCost{
+			Items:      u.config.SlotCost.Items,
+			Currencies: u.config.SlotCost.Currencies,
+		}
 	}
 
 	return unlockables, nil
@@ -254,7 +313,8 @@ func (u *UnlockablesPamlogix) processQueue(unlockables *UnlockablesList) bool {
 	}
 
 	// Move items from queue to active slots
-	for i := 0; i < len(unlockables.QueuedUnlocks) && activeCount < int(unlockables.ActiveSlots); i++ {
+	// Process queue from front until we run out of slots or items
+	for len(unlockables.QueuedUnlocks) > 0 && activeCount < int(unlockables.ActiveSlots) {
 		instanceID := unlockables.QueuedUnlocks[0]
 		_, unlockable := u.findUnlockableByID(unlockables.Unlockables, instanceID)
 
@@ -444,6 +504,11 @@ func (u *UnlockablesPamlogix) deductResources(ctx context.Context, logger runtim
 
 // Create will place a new unlockable into a slot either randomly, by ID, or optionally using a custom configuration.
 func (u *UnlockablesPamlogix) Create(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID, unlockableID string, unlockableConfig *UnlockablesConfigUnlockable) (unlockables *UnlockablesList, err error) {
+	// Validate input parameters
+	if err := u.validateUserID(userID); err != nil {
+		return nil, err
+	}
+
 	logger.Info("Creating unlockable for user: %s, unlockableID: %s", userID, unlockableID)
 
 	// Check if the configuration is valid
@@ -508,6 +573,11 @@ func (u *UnlockablesPamlogix) Create(ctx context.Context, logger runtime.Logger,
 
 // Get returns all unlockables active for a user by ID.
 func (u *UnlockablesPamlogix) Get(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID string) (unlockables *UnlockablesList, err error) {
+	// Validate input parameters
+	if err := u.validateUserID(userID); err != nil {
+		return nil, err
+	}
+
 	logger.Info("Getting unlockables for user: %s", userID)
 
 	// Retrieve user's unlockables from storage
@@ -536,6 +606,17 @@ func (u *UnlockablesPamlogix) Get(ctx context.Context, logger runtime.Logger, nk
 
 // UnlockAdvance will add the given amount of time towards the completion of an unlockable that has been started.
 func (u *UnlockablesPamlogix) UnlockAdvance(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID, instanceID string, seconds int64) (unlockables *UnlockablesList, err error) {
+	// Validate input parameters
+	if err := u.validateUserID(userID); err != nil {
+		return nil, err
+	}
+	if err := u.validateInstanceID(instanceID); err != nil {
+		return nil, err
+	}
+	if err := u.validatePositiveSeconds(seconds); err != nil {
+		return nil, err
+	}
+
 	logger.Info("Advancing unlock for user: %s, instanceID: %s, seconds: %d", userID, instanceID, seconds)
 
 	// Retrieve user's unlockables
@@ -596,6 +677,14 @@ func (u *UnlockablesPamlogix) UnlockAdvance(ctx context.Context, logger runtime.
 
 // UnlockStart will begin an unlock of an unlockable by instance ID for a user.
 func (u *UnlockablesPamlogix) UnlockStart(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID, instanceID string) (unlockables *UnlockablesList, err error) {
+	// Validate input parameters
+	if err := u.validateUserID(userID); err != nil {
+		return nil, err
+	}
+	if err := u.validateInstanceID(instanceID); err != nil {
+		return nil, err
+	}
+
 	logger.Info("Starting unlock for user: %s, instanceID: %s", userID, instanceID)
 
 	// Retrieve user's unlockables
@@ -664,6 +753,14 @@ func (u *UnlockablesPamlogix) UnlockStart(ctx context.Context, logger runtime.Lo
 
 // PurchaseUnlock will immediately unlock an unlockable with the specified instance ID for a user.
 func (u *UnlockablesPamlogix) PurchaseUnlock(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID, instanceID string) (unlockables *UnlockablesList, err error) {
+	// Validate input parameters
+	if err := u.validateUserID(userID); err != nil {
+		return nil, err
+	}
+	if err := u.validateInstanceID(instanceID); err != nil {
+		return nil, err
+	}
+
 	logger.Info("Purchasing unlock for user: %s, instanceID: %s", userID, instanceID)
 
 	// Retrieve user's unlockables
@@ -776,6 +873,11 @@ func (u *UnlockablesPamlogix) PurchaseUnlock(ctx context.Context, logger runtime
 
 // PurchaseSlot will create a new slot for a user by ID.
 func (u *UnlockablesPamlogix) PurchaseSlot(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID string) (unlockables *UnlockablesList, err error) {
+	// Validate input parameters
+	if err := u.validateUserID(userID); err != nil {
+		return nil, err
+	}
+
 	logger.Info("Purchasing slot for user: %s", userID)
 
 	// Retrieve user's unlockables
@@ -829,6 +931,14 @@ func (u *UnlockablesPamlogix) PurchaseSlot(ctx context.Context, logger runtime.L
 
 // Claim an unlockable which has been unlocked by instance ID for the user.
 func (u *UnlockablesPamlogix) Claim(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID, instanceID string) (reward *UnlockablesReward, err error) {
+	// Validate input parameters
+	if err := u.validateUserID(userID); err != nil {
+		return nil, err
+	}
+	if err := u.validateInstanceID(instanceID); err != nil {
+		return nil, err
+	}
+
 	logger.Info("Claiming unlockable for user: %s, instanceID: %s", userID, instanceID)
 
 	// Initialize reward
@@ -937,6 +1047,14 @@ func (u *UnlockablesPamlogix) Claim(ctx context.Context, logger runtime.Logger, 
 
 // QueueAdd adds one or more unlockable instance IDs to the queue to be unlocked as soon as an active slot is available.
 func (u *UnlockablesPamlogix) QueueAdd(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID string, instanceIDs []string) (unlockables *UnlockablesList, err error) {
+	// Validate input parameters
+	if err := u.validateUserID(userID); err != nil {
+		return nil, err
+	}
+	if err := u.validateInstanceIDs(instanceIDs); err != nil {
+		return nil, err
+	}
+
 	logger.Info("Adding to queue for user: %s, instanceIDs: %v", userID, instanceIDs)
 
 	// Retrieve user's unlockables
@@ -999,6 +1117,17 @@ func (u *UnlockablesPamlogix) QueueAdd(ctx context.Context, logger runtime.Logge
 
 // QueueRemove removes one or more unlockable instance IDs from the unlock queue, unless they have started unlocking already.
 func (u *UnlockablesPamlogix) QueueRemove(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID string, instanceIDs []string) (unlockables *UnlockablesList, err error) {
+	// Validate input parameters
+	if err := u.validateUserID(userID); err != nil {
+		return nil, err
+	}
+	// Note: instanceIDs can be empty for QueueRemove, but if provided, they must be valid
+	if len(instanceIDs) > 0 {
+		if err := u.validateInstanceIDs(instanceIDs); err != nil {
+			return nil, err
+		}
+	}
+
 	logger.Info("Removing from queue for user: %s, instanceIDs: %v", userID, instanceIDs)
 
 	// Retrieve user's unlockables
@@ -1041,6 +1170,17 @@ func (u *UnlockablesPamlogix) QueueRemove(ctx context.Context, logger runtime.Lo
 
 // QueueSet replaces the entirety of the queue with the specified instance IDs, or wipes the queue if no instance IDs are given.
 func (u *UnlockablesPamlogix) QueueSet(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID string, instanceIDs []string) (unlockables *UnlockablesList, err error) {
+	// Validate input parameters
+	if err := u.validateUserID(userID); err != nil {
+		return nil, err
+	}
+	// Note: instanceIDs can be empty for QueueSet (to clear the queue), but if provided, they must be valid
+	if len(instanceIDs) > 0 {
+		if err := u.validateInstanceIDs(instanceIDs); err != nil {
+			return nil, err
+		}
+	}
+
 	logger.Info("Setting queue for user: %s, instanceIDs: %v", userID, instanceIDs)
 
 	// Retrieve user's unlockables

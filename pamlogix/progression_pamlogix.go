@@ -86,7 +86,7 @@ func (p *NakamaProgressionSystem) Get(ctx context.Context, logger runtime.Logger
 		}
 
 		// Check preconditions and determine unlock status
-		progression.UnmetPreconditions = p.checkPreconditions(ctx, logger, nk, userID, progressionConfig.Preconditions, progressions)
+		progression.UnmetPreconditions = p.checkPreconditions(ctx, logger, nk, userID, progressionConfig.Preconditions, progressions, userProgressions)
 
 		// Progression is unlocked if all preconditions are met
 		progression.Unlocked = progression.UnmetPreconditions == nil
@@ -99,10 +99,25 @@ func (p *NakamaProgressionSystem) Get(ctx context.Context, logger runtime.Logger
 					deltas[progressionID] = delta
 				}
 			} else {
-				// New progression
-				deltas[progressionID] = &ProgressionDelta{
-					Id:    progressionID,
-					State: ProgressionDeltaState_PROGRESSION_DELTA_STATE_UNLOCKED,
+				// New progression - check actual unlock status
+				deltaState := ProgressionDeltaState_PROGRESSION_DELTA_STATE_UNCHANGED
+				if progression.Unlocked {
+					deltaState = ProgressionDeltaState_PROGRESSION_DELTA_STATE_UNLOCKED
+				}
+
+				// Only create delta if there's a meaningful change to report
+				if deltaState != ProgressionDeltaState_PROGRESSION_DELTA_STATE_UNCHANGED || len(progression.Counts) > 0 {
+					delta := &ProgressionDelta{
+						Id:    progressionID,
+						State: deltaState,
+					}
+					if len(progression.Counts) > 0 {
+						delta.Counts = make(map[string]int64)
+						for countID, count := range progression.Counts {
+							delta.Counts[countID] = count // New counts show full values
+						}
+					}
+					deltas[progressionID] = delta
 				}
 			}
 		}
@@ -449,7 +464,7 @@ func (p *NakamaProgressionSystem) saveUserProgressions(ctx context.Context, logg
 }
 
 // checkPreconditions evaluates progression preconditions and returns unmet ones
-func (p *NakamaProgressionSystem) checkPreconditions(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID string, preconditions *ProgressionPreconditionsBlock, currentProgressions map[string]*Progression) *ProgressionPreconditionsBlock {
+func (p *NakamaProgressionSystem) checkPreconditions(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID string, preconditions *ProgressionPreconditionsBlock, currentProgressions map[string]*Progression, userProgressions map[string]*SyncProgressionUpdate) *ProgressionPreconditionsBlock {
 	if preconditions == nil {
 		return nil
 	}
@@ -458,7 +473,7 @@ func (p *NakamaProgressionSystem) checkPreconditions(ctx context.Context, logger
 	directMet := true
 	var unmetDirect *ProgressionPreconditions
 	if preconditions.Direct != nil {
-		unmetDirect = p.checkDirectPreconditions(ctx, logger, nk, userID, preconditions.Direct, currentProgressions)
+		unmetDirect = p.checkDirectPreconditions(ctx, logger, nk, userID, preconditions.Direct, currentProgressions, userProgressions)
 		directMet = unmetDirect == nil
 	}
 
@@ -466,7 +481,7 @@ func (p *NakamaProgressionSystem) checkPreconditions(ctx context.Context, logger
 	nestedMet := true
 	var unmetNested *ProgressionPreconditionsBlock
 	if preconditions.Nested != nil {
-		unmetNested = p.checkPreconditions(ctx, logger, nk, userID, preconditions.Nested, currentProgressions)
+		unmetNested = p.checkPreconditions(ctx, logger, nk, userID, preconditions.Nested, currentProgressions, userProgressions)
 		nestedMet = unmetNested == nil
 	}
 
@@ -521,12 +536,12 @@ func (p *NakamaProgressionSystem) checkPreconditions(ctx context.Context, logger
 	case ProgressionPreconditionsOperator_PROGRESSION_PRECONDITIONS_OPERATOR_XOR:
 		// For XOR, include appropriate unmet conditions
 		if directMet && nestedMet {
-			// Both are met, but XOR requires exactly one - this is an edge case
-			// Include both to indicate the conflict
-			unmetPreconditions.Direct = unmetDirect
-			unmetPreconditions.Nested = unmetNested
+			// Both are met, but XOR requires exactly one - this violates XOR
+			// Create dummy unmet conditions to indicate both cannot be true
+			unmetPreconditions.Direct = &ProgressionPreconditions{}
+			unmetPreconditions.Nested = &ProgressionPreconditionsBlock{}
 		} else if !directMet && !nestedMet {
-			// Neither is met, include both
+			// Neither is met, include both actual unmet conditions
 			unmetPreconditions.Direct = unmetDirect
 			unmetPreconditions.Nested = unmetNested
 		}
@@ -546,7 +561,7 @@ func (p *NakamaProgressionSystem) checkPreconditions(ctx context.Context, logger
 }
 
 // checkDirectPreconditions evaluates direct preconditions
-func (p *NakamaProgressionSystem) checkDirectPreconditions(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID string, preconditions *ProgressionPreconditions, currentProgressions map[string]*Progression) *ProgressionPreconditions {
+func (p *NakamaProgressionSystem) checkDirectPreconditions(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID string, preconditions *ProgressionPreconditions, currentProgressions map[string]*Progression, userProgressions map[string]*SyncProgressionUpdate) *ProgressionPreconditions {
 	unmet := &ProgressionPreconditions{}
 	hasUnmet := false
 
@@ -566,28 +581,15 @@ func (p *NakamaProgressionSystem) checkDirectPreconditions(ctx context.Context, 
 	// Check count requirements
 	if len(preconditions.Counts) > 0 {
 		for countID, requiredAmount := range preconditions.Counts {
-			// Find the progression that contains this count requirement
-			// This is typically checked against the current progression being evaluated
-			// We need to get the current progression's counts from storage
-			userProgressions, err := p.getUserProgressions(ctx, logger, nk, userID)
-			if err != nil {
-				logger.Error("Failed to get user progressions for count check: %v", err)
-				// Treat as unmet if we can't check
-				if unmet.Counts == nil {
-					unmet.Counts = make(map[string]int64)
-				}
-				unmet.Counts[countID] = requiredAmount
-				hasUnmet = true
-				continue
-			}
-
 			// Check if any progression has sufficient count for this requirement
 			countMet := false
-			for _, userProgression := range userProgressions {
-				if userProgression.Counts != nil {
-					if currentCount, exists := userProgression.Counts[countID]; exists && currentCount >= requiredAmount {
-						countMet = true
-						break
+			if userProgressions != nil {
+				for _, userProgression := range userProgressions {
+					if userProgression.Counts != nil {
+						if currentCount, exists := userProgression.Counts[countID]; exists && currentCount >= requiredAmount {
+							countMet = true
+							break
+						}
 					}
 				}
 			}
@@ -621,8 +623,8 @@ func (p *NakamaProgressionSystem) checkDirectPreconditions(ctx context.Context, 
 		}
 	}
 
-	// Check currency requirements
-	if len(preconditions.CurrencyMin) > 0 {
+	// Check currency requirements (both min and max in single call)
+	if len(preconditions.CurrencyMin) > 0 || len(preconditions.CurrencyMax) > 0 {
 		economySystem := p.pamlogix.GetEconomySystem()
 		if economySystem != nil {
 			// Get user's account to access wallet
@@ -635,6 +637,13 @@ func (p *NakamaProgressionSystem) checkDirectPreconditions(ctx context.Context, 
 						unmet.CurrencyMin = make(map[string]int64)
 					}
 					unmet.CurrencyMin[currencyID] = minAmount
+					hasUnmet = true
+				}
+				for currencyID, maxAmount := range preconditions.CurrencyMax {
+					if unmet.CurrencyMax == nil {
+						unmet.CurrencyMax = make(map[string]int64)
+					}
+					unmet.CurrencyMax[currencyID] = maxAmount
 					hasUnmet = true
 				}
 			} else {
@@ -650,7 +659,15 @@ func (p *NakamaProgressionSystem) checkDirectPreconditions(ctx context.Context, 
 						unmet.CurrencyMin[currencyID] = minAmount
 						hasUnmet = true
 					}
+					for currencyID, maxAmount := range preconditions.CurrencyMax {
+						if unmet.CurrencyMax == nil {
+							unmet.CurrencyMax = make(map[string]int64)
+						}
+						unmet.CurrencyMax[currencyID] = maxAmount
+						hasUnmet = true
+					}
 				} else {
+					// Check minimum currency requirements
 					for currencyID, minAmount := range preconditions.CurrencyMin {
 						currentAmount := int64(0)
 						if wallet != nil {
@@ -667,109 +684,8 @@ func (p *NakamaProgressionSystem) checkDirectPreconditions(ctx context.Context, 
 							hasUnmet = true
 						}
 					}
-				}
-			}
-		} else {
-			// Economy system not available, treat all currency requirements as unmet
-			for currencyID, minAmount := range preconditions.CurrencyMin {
-				if unmet.CurrencyMin == nil {
-					unmet.CurrencyMin = make(map[string]int64)
-				}
-				unmet.CurrencyMin[currencyID] = minAmount
-				hasUnmet = true
-			}
-		}
-	}
 
-	// Check item requirements
-	if len(preconditions.ItemsMin) > 0 {
-		inventorySystem := p.pamlogix.GetInventorySystem()
-		if inventorySystem != nil {
-			inventory, err := inventorySystem.ListInventoryItems(ctx, logger, nk, userID, "")
-			if err == nil && inventory != nil {
-				for itemID, minAmount := range preconditions.ItemsMin {
-					if item, exists := inventory.Items[itemID]; !exists || item.Count < minAmount {
-						if unmet.ItemsMin == nil {
-							unmet.ItemsMin = make(map[string]int64)
-						}
-						unmet.ItemsMin[itemID] = minAmount
-						hasUnmet = true
-					}
-				}
-			}
-		}
-	}
-
-	// Check stats requirements
-	if len(preconditions.StatsMin) > 0 {
-		statsSystem := p.pamlogix.GetStatsSystem()
-		if statsSystem != nil {
-			stats, err := statsSystem.List(ctx, logger, nk, userID, []string{userID})
-			if err == nil && stats != nil {
-				userStats := stats[userID]
-				if userStats != nil {
-					for statID, minValue := range preconditions.StatsMin {
-						if stat, exists := userStats.Private[statID]; !exists || stat.Value < minValue {
-							if unmet.StatsMin == nil {
-								unmet.StatsMin = make(map[string]int64)
-							}
-							unmet.StatsMin[statID] = minValue
-							hasUnmet = true
-						}
-					}
-				}
-			}
-		}
-	}
-
-	// Check energy requirements
-	if len(preconditions.EnergyMin) > 0 {
-		energySystem := p.pamlogix.GetEnergySystem()
-		if energySystem != nil {
-			energies, err := energySystem.Get(ctx, logger, nk, userID)
-			if err == nil {
-				for energyID, minAmount := range preconditions.EnergyMin {
-					if energy, exists := energies[energyID]; !exists || energy.Current < int32(minAmount) {
-						if unmet.EnergyMin == nil {
-							unmet.EnergyMin = make(map[string]int64)
-						}
-						unmet.EnergyMin[energyID] = minAmount
-						hasUnmet = true
-					}
-				}
-			}
-		}
-	}
-
-	// Check maximum energy requirements
-	if len(preconditions.EnergyMax) > 0 {
-		energySystem := p.pamlogix.GetEnergySystem()
-		if energySystem != nil {
-			energies, err := energySystem.Get(ctx, logger, nk, userID)
-			if err == nil {
-				for energyID, maxAmount := range preconditions.EnergyMax {
-					if energy, exists := energies[energyID]; exists && energy.Current > int32(maxAmount) {
-						if unmet.EnergyMax == nil {
-							unmet.EnergyMax = make(map[string]int64)
-						}
-						unmet.EnergyMax[energyID] = maxAmount
-						hasUnmet = true
-					}
-				}
-			}
-		}
-	}
-
-	// Check maximum currency requirements
-	if len(preconditions.CurrencyMax) > 0 {
-		economySystem := p.pamlogix.GetEconomySystem()
-		if economySystem != nil {
-			// Get user's account to access wallet
-			account, err := nk.AccountGetId(ctx, userID)
-			if err == nil {
-				// Unmarshal wallet from account
-				wallet, err := economySystem.UnmarshalWallet(account)
-				if err == nil {
+					// Check maximum currency requirements
 					for currencyID, maxAmount := range preconditions.CurrencyMax {
 						currentAmount := int64(0)
 						if wallet != nil {
@@ -788,15 +704,43 @@ func (p *NakamaProgressionSystem) checkDirectPreconditions(ctx context.Context, 
 					}
 				}
 			}
+		} else {
+			// Economy system not available, treat all currency requirements as unmet
+			for currencyID, minAmount := range preconditions.CurrencyMin {
+				if unmet.CurrencyMin == nil {
+					unmet.CurrencyMin = make(map[string]int64)
+				}
+				unmet.CurrencyMin[currencyID] = minAmount
+				hasUnmet = true
+			}
+			for currencyID, maxAmount := range preconditions.CurrencyMax {
+				if unmet.CurrencyMax == nil {
+					unmet.CurrencyMax = make(map[string]int64)
+				}
+				unmet.CurrencyMax[currencyID] = maxAmount
+				hasUnmet = true
+			}
 		}
 	}
 
-	// Check maximum item requirements
-	if len(preconditions.ItemsMax) > 0 {
+	// Check item requirements (both min and max in single call)
+	if len(preconditions.ItemsMin) > 0 || len(preconditions.ItemsMax) > 0 {
 		inventorySystem := p.pamlogix.GetInventorySystem()
 		if inventorySystem != nil {
 			inventory, err := inventorySystem.ListInventoryItems(ctx, logger, nk, userID, "")
 			if err == nil && inventory != nil {
+				// Check minimum item requirements
+				for itemID, minAmount := range preconditions.ItemsMin {
+					if item, exists := inventory.Items[itemID]; !exists || item.Count < minAmount {
+						if unmet.ItemsMin == nil {
+							unmet.ItemsMin = make(map[string]int64)
+						}
+						unmet.ItemsMin[itemID] = minAmount
+						hasUnmet = true
+					}
+				}
+
+				// Check maximum item requirements
 				for itemID, maxAmount := range preconditions.ItemsMax {
 					if item, exists := inventory.Items[itemID]; exists && item.Count > maxAmount {
 						if unmet.ItemsMax == nil {
@@ -810,14 +754,26 @@ func (p *NakamaProgressionSystem) checkDirectPreconditions(ctx context.Context, 
 		}
 	}
 
-	// Check maximum stats requirements
-	if len(preconditions.StatsMax) > 0 {
+	// Check stats requirements (both min and max in single call)
+	if len(preconditions.StatsMin) > 0 || len(preconditions.StatsMax) > 0 {
 		statsSystem := p.pamlogix.GetStatsSystem()
 		if statsSystem != nil {
 			stats, err := statsSystem.List(ctx, logger, nk, userID, []string{userID})
 			if err == nil && stats != nil {
 				userStats := stats[userID]
 				if userStats != nil {
+					// Check minimum stats requirements
+					for statID, minValue := range preconditions.StatsMin {
+						if stat, exists := userStats.Private[statID]; !exists || stat.Value < minValue {
+							if unmet.StatsMin == nil {
+								unmet.StatsMin = make(map[string]int64)
+							}
+							unmet.StatsMin[statID] = minValue
+							hasUnmet = true
+						}
+					}
+
+					// Check maximum stats requirements
 					for statID, maxValue := range preconditions.StatsMax {
 						if stat, exists := userStats.Private[statID]; exists && stat.Value > maxValue {
 							if unmet.StatsMax == nil {
@@ -826,6 +782,37 @@ func (p *NakamaProgressionSystem) checkDirectPreconditions(ctx context.Context, 
 							unmet.StatsMax[statID] = maxValue
 							hasUnmet = true
 						}
+					}
+				}
+			}
+		}
+	}
+
+	// Check energy requirements (both min and max in single call)
+	if len(preconditions.EnergyMin) > 0 || len(preconditions.EnergyMax) > 0 {
+		energySystem := p.pamlogix.GetEnergySystem()
+		if energySystem != nil {
+			energies, err := energySystem.Get(ctx, logger, nk, userID)
+			if err == nil {
+				// Check minimum energy requirements
+				for energyID, minAmount := range preconditions.EnergyMin {
+					if energy, exists := energies[energyID]; !exists || energy.Current < int32(minAmount) {
+						if unmet.EnergyMin == nil {
+							unmet.EnergyMin = make(map[string]int64)
+						}
+						unmet.EnergyMin[energyID] = minAmount
+						hasUnmet = true
+					}
+				}
+
+				// Check maximum energy requirements
+				for energyID, maxAmount := range preconditions.EnergyMax {
+					if energy, exists := energies[energyID]; exists && energy.Current > int32(maxAmount) {
+						if unmet.EnergyMax == nil {
+							unmet.EnergyMax = make(map[string]int64)
+						}
+						unmet.EnergyMax[energyID] = maxAmount
+						hasUnmet = true
 					}
 				}
 			}
@@ -846,6 +833,13 @@ func (p *NakamaProgressionSystem) canPurchase(ctx context.Context, logger runtim
 		return true
 	}
 
+	// Get user progressions for count checks
+	userProgressions, err := p.getUserProgressions(ctx, logger, nk, userID)
+	if err != nil {
+		logger.Error("Failed to get user progressions for purchase check: %v", err)
+		return false
+	}
+
 	// Create a temporary preconditions block without cost
 	tempPreconditions := &ProgressionPreconditions{
 		Counts:       progressionConfig.Preconditions.Direct.Counts,
@@ -862,7 +856,7 @@ func (p *NakamaProgressionSystem) canPurchase(ctx context.Context, logger runtim
 		// Cost is intentionally omitted
 	}
 
-	unmet := p.checkDirectPreconditions(ctx, logger, nk, userID, tempPreconditions, nil)
+	unmet := p.checkDirectPreconditions(ctx, logger, nk, userID, tempPreconditions, nil, userProgressions)
 	return unmet == nil
 }
 
@@ -873,8 +867,15 @@ func (p *NakamaProgressionSystem) canUpdate(ctx context.Context, logger runtime.
 		return true
 	}
 
+	// Get user progressions for precondition checks
+	userProgressions, err := p.getUserProgressions(ctx, logger, nk, userID)
+	if err != nil {
+		logger.Error("Failed to get user progressions for update check: %v", err)
+		return false
+	}
+
 	// Otherwise, check if all preconditions are met
-	unmet := p.checkPreconditions(ctx, logger, nk, userID, progressionConfig.Preconditions, nil)
+	unmet := p.checkPreconditions(ctx, logger, nk, userID, progressionConfig.Preconditions, nil, userProgressions)
 	return unmet == nil
 }
 

@@ -11,13 +11,31 @@ import (
 
 const (
 	inventoryStorageCollection = "inventory"
+	// Configuration constants for pagination and memory management
+	defaultInventoryPageSize = 100
+	maxInventoryPageSize     = 1000 // Hard limit to prevent excessive memory usage
 )
+
+// InventoryLoadOptions provides configuration for how inventory data should be loaded
+type InventoryLoadOptions struct {
+	// PageSize determines how many items to load per page (default: 100, max: 1000)
+	PageSize int
+	// MaxItems limits the total number of items to load (0 = no limit)
+	MaxItems int
+	// LoadAllPages determines if all pages should be loaded (for complete inventory)
+	LoadAllPages bool
+	// SpecificItems is a list of item IDs or instance IDs to load specifically
+	SpecificItems []string
+	// Category filters items by category
+	Category string
+}
 
 // NakamaInventorySystem implements the InventorySystem interface using Nakama as the backend.
 type NakamaInventorySystem struct {
 	config          *InventoryConfig
 	onConsumeReward OnReward[*InventoryConfigItem]
 	configSource    ConfigSource[*InventoryConfigItem]
+	pamlogix        Pamlogix
 }
 
 // NewNakamaInventorySystem creates a new instance of the inventory system with the given configuration.
@@ -48,6 +66,11 @@ func (i *NakamaInventorySystem) GetType() SystemType {
 // GetConfig returns the configuration for the inventory system.
 func (i *NakamaInventorySystem) GetConfig() any {
 	return i.config
+}
+
+// SetPamlogix sets the Pamlogix instance for this inventory system
+func (i *NakamaInventorySystem) SetPamlogix(pl Pamlogix) {
+	i.pamlogix = pl
 }
 
 // List will return the items defined as well as the computed item sets for the user by ID.
@@ -110,23 +133,17 @@ func (i *NakamaInventorySystem) ListInventoryItems(ctx context.Context, logger r
 		return &Inventory{Items: make(map[string]*InventoryItem)}, nil
 	}
 
-	// Get user's inventory from storage
-	userInventory, err := i.getUserInventory(ctx, logger, nk, userID)
+	// Use efficient loading with category filter
+	loadOptions := &InventoryLoadOptions{
+		PageSize:     defaultInventoryPageSize,
+		LoadAllPages: true, // For list operations, we typically want all items
+		Category:     category,
+	}
+
+	userInventory, err := i.getUserInventoryWithOptions(ctx, logger, nk, userID, loadOptions)
 	if err != nil {
 		logger.Error("Failed to get user inventory: %v", err)
 		return nil, ErrInternal
-	}
-
-	// Filter by category if specified
-	if category != "" {
-		filteredInventory := &Inventory{Items: make(map[string]*InventoryItem)}
-		for id, item := range userInventory.Items {
-			configItem, exists := i.config.Items[id]
-			if exists && configItem.Category == category && !configItem.Disabled {
-				filteredInventory.Items[id] = item
-			}
-		}
-		return filteredInventory, nil
 	}
 
 	return userInventory, nil
@@ -143,15 +160,36 @@ func (i *NakamaInventorySystem) ConsumeItems(ctx context.Context, logger runtime
 	rewards = make(map[string][]*Reward)
 	instanceRewards = make(map[string][]*Reward)
 
-	// Get user's current inventory
-	userInventory, err := i.getUserInventory(ctx, logger, nk, userID)
+	// For item ID-based consumption, we need to load all inventory items to find all instances
+	var loadOptions *InventoryLoadOptions
+	if len(itemIDs) > 0 {
+		// Load all items to find all instances with matching item IDs
+		loadOptions = &InventoryLoadOptions{
+			PageSize:     defaultInventoryPageSize,
+			LoadAllPages: true, // Need all items to find all instances with matching item IDs
+		}
+	} else {
+		// Only instance-based consumption, load specific items
+		specificItems := make([]string, 0, len(instanceIDs))
+		for instanceID := range instanceIDs {
+			specificItems = append(specificItems, instanceID)
+		}
+		loadOptions = &InventoryLoadOptions{
+			PageSize:      defaultInventoryPageSize,
+			SpecificItems: specificItems,
+			LoadAllPages:  false, // Only load what we need for consumption
+		}
+	}
+
+	userInventory, err := i.getUserInventoryWithOptions(ctx, logger, nk, userID, loadOptions)
 	if err != nil {
 		logger.Error("Failed to get user inventory: %v", err)
 		return nil, nil, nil, ErrInternal
 	}
 
 	// Prepare storage operations
-	var storageOps []*runtime.StorageWrite
+	var storageWrites []*runtime.StorageWrite
+	var storageDeletes []*runtime.StorageDelete
 
 	// Process item ID-based consumption
 	for itemID, count := range itemIDs {
@@ -162,120 +200,133 @@ func (i *NakamaInventorySystem) ConsumeItems(ctx context.Context, logger runtime
 			return nil, nil, nil, ErrBadInput
 		}
 
-		// Find item in user's inventory by item ID
-		var inventoryKey string
-		var inventoryItem *InventoryItem
-		for key, item := range userInventory.Items {
-			if item.Id == itemID {
-				inventoryKey = key
-				inventoryItem = item
-				break
-			}
-		}
-
-		if inventoryItem == nil {
-			logger.Warn("Attempted to consume item user doesn't have: %s", itemID)
-			return nil, nil, nil, ErrBadInput
-		}
-
 		// Check if item is consumable
 		if !configItem.Consumable {
 			logger.Warn("Attempted to consume non-consumable item: %s", itemID)
 			return nil, nil, nil, ErrBadInput
 		}
 
-		// Check if user has enough items
-		if inventoryItem.Count < count && !overConsume {
-			logger.Warn("Insufficient items to consume: %s (have: %d, need: %d)", itemID, inventoryItem.Count, count)
+		// Find all items in user's inventory with this item ID
+		var matchingItems []*struct {
+			key  string
+			item *InventoryItem
+		}
+		totalAvailable := int64(0)
+
+		for key, item := range userInventory.Items {
+			if item.Id == itemID {
+				matchingItems = append(matchingItems, &struct {
+					key  string
+					item *InventoryItem
+				}{key: key, item: item})
+				totalAvailable += item.Count
+			}
+		}
+
+		if len(matchingItems) == 0 {
+			logger.Warn("Attempted to consume item user doesn't have: %s", itemID)
 			return nil, nil, nil, ErrBadInput
 		}
 
-		// Consume the items
-		inventoryItem.Count -= count
-		inventoryItem.UpdateTimeSec = time.Now().Unix()
-
-		// Remove item if count reaches 0 and keep_zero is false
-		if inventoryItem.Count <= 0 && !configItem.KeepZero {
-			delete(userInventory.Items, inventoryKey)
-
-			// Determine storage key for deletion
-			storageKey := inventoryKey
-			if inventoryItem.InstanceId != "" {
-				storageKey = inventoryItem.InstanceId
-			}
-
-			// Add delete operation - use regular write with empty value
-			storageOps = append(storageOps, &runtime.StorageWrite{
-				Collection:      inventoryStorageCollection,
-				Key:             storageKey,
-				UserID:          userID,
-				PermissionRead:  1,
-				PermissionWrite: 1,
-				Value:           "", // Empty value for deletion
-			})
-		} else {
-			// Update item in storage
-			itemData, err := json.Marshal(inventoryItem)
-			if err != nil {
-				logger.Error("Failed to marshal inventory item: %v", err)
-				return nil, nil, nil, ErrInternal
-			}
-
-			// Determine storage key for update
-			storageKey := inventoryKey
-			if inventoryItem.InstanceId != "" {
-				storageKey = inventoryItem.InstanceId
-			}
-
-			storageOps = append(storageOps, &runtime.StorageWrite{
-				Collection:      inventoryStorageCollection,
-				Key:             storageKey,
-				UserID:          userID,
-				Value:           string(itemData),
-				PermissionRead:  1,
-				PermissionWrite: 1,
-			})
+		// Check if user has enough items across all instances
+		if totalAvailable < count && !overConsume {
+			logger.Warn("Insufficient items to consume: %s (have: %d, need: %d)", itemID, totalAvailable, count)
+			return nil, nil, nil, ErrBadInput
 		}
 
-		// Process reward if applicable
-		if configItem.ConsumeReward != nil {
-			r, err := i.processItemReward(ctx, logger, nk, userID, itemID, configItem)
-			if err != nil {
-				logger.Error("Failed to process item reward: %v", err)
-				// Continue, don't fail the entire operation
-			} else if r != nil {
-				if rewards[itemID] == nil {
-					rewards[itemID] = []*Reward{r}
-				} else {
-					rewards[itemID] = append(rewards[itemID], r)
-				}
+		// Consume items across all instances until the required count is met
+		remainingToConsume := count
+		for _, matchingItem := range matchingItems {
+			if remainingToConsume <= 0 {
+				break
 			}
+
+			inventoryKey := matchingItem.key
+			inventoryItem := matchingItem.item
+
+			// Calculate how much to consume from this instance
+			consumeFromThis := remainingToConsume
+			if consumeFromThis > inventoryItem.Count {
+				consumeFromThis = inventoryItem.Count
+			}
+
+			// Consume the items from this instance
+			inventoryItem.Count -= consumeFromThis
+			inventoryItem.UpdateTimeSec = time.Now().Unix()
+			remainingToConsume -= consumeFromThis
+
+			// Remove item if count reaches 0 and keep_zero is false
+			if inventoryItem.Count <= 0 && !configItem.KeepZero {
+				delete(userInventory.Items, inventoryKey)
+
+				// Determine storage key for deletion - use instance ID if available, otherwise item ID
+				storageKey := itemID
+				if inventoryItem.InstanceId != "" {
+					storageKey = inventoryItem.InstanceId
+				}
+
+				// Add delete operation - use proper StorageDelete
+				storageDeletes = append(storageDeletes, &runtime.StorageDelete{
+					Collection: inventoryStorageCollection,
+					Key:        storageKey,
+					UserID:     userID,
+				})
+			} else {
+				// Update item in storage
+				itemData, err := json.Marshal(inventoryItem)
+				if err != nil {
+					logger.Error("Failed to marshal inventory item: %v", err)
+					return nil, nil, nil, ErrInternal
+				}
+
+				// Determine storage key for update - use instance ID if available, otherwise item ID
+				storageKey := itemID
+				if inventoryItem.InstanceId != "" {
+					storageKey = inventoryItem.InstanceId
+				}
+
+				storageWrites = append(storageWrites, &runtime.StorageWrite{
+					Collection:      inventoryStorageCollection,
+					Key:             storageKey,
+					UserID:          userID,
+					Value:           string(itemData),
+					PermissionRead:  1,
+					PermissionWrite: 1,
+				})
+			}
+		}
+
+		//i.processAndStoreRewards(ctx, logger, nk, userID, itemID, itemID, configItem, count, rewards)
+		reward, err := i.processItemReward(ctx, logger, nk, userID, itemID, configItem)
+		if err != nil {
+			logger.Error("Failed to process item reward: %v", err)
+			return nil, nil, nil, ErrInternal
+		}
+
+		//append the reward to the rewards map
+		if reward != nil {
+			if _, exists := rewards[itemID]; !exists {
+				rewards[itemID] = make([]*Reward, 0)
+			}
+			rewards[itemID] = append(rewards[itemID], reward)
 		}
 	}
 
 	// Process instance ID-based consumption
 	for instanceID, count := range instanceIDs {
-		var foundItem *InventoryItem
-		var itemID string
+		// The inventory's key is the instance ID, so we can directly access it
+		foundItem := userInventory.Items[instanceID]
+		inventoryKey := instanceID
 
-		// Find the item with this instance ID
-		for id, item := range userInventory.Items {
-			if item.InstanceId == instanceID {
-				foundItem = item
-				itemID = id
-				break
-			}
-		}
-
-		if foundItem == nil || itemID == "" {
+		if foundItem == nil {
 			logger.Warn("Attempted to consume non-existent instance: %s", instanceID)
 			return nil, nil, nil, ErrBadInput
 		}
 
 		// Check if item exists in configuration
-		configItem, exists := i.config.Items[itemID]
+		configItem, exists := i.config.Items[foundItem.Id]
 		if !exists {
-			logger.Warn("Attempted to consume item with invalid configuration: %s", itemID)
+			logger.Warn("Attempted to consume item with unknown config: %s", foundItem.Id)
 			return nil, nil, nil, ErrBadInput
 		}
 
@@ -287,7 +338,7 @@ func (i *NakamaInventorySystem) ConsumeItems(ctx context.Context, logger runtime
 
 		// Check if user has enough items
 		if foundItem.Count < count && !overConsume {
-			logger.Warn("Insufficient items to consume: %s (have: %d, need: %d)", instanceID, foundItem.Count, count)
+			logger.Warn("Insufficient items to consume for instance: %s (have: %d, need: %d)", instanceID, foundItem.Count, count)
 			return nil, nil, nil, ErrBadInput
 		}
 
@@ -297,19 +348,13 @@ func (i *NakamaInventorySystem) ConsumeItems(ctx context.Context, logger runtime
 
 		// Remove item if count reaches 0 and keep_zero is false
 		if foundItem.Count <= 0 && !configItem.KeepZero {
-			delete(userInventory.Items, itemID)
+			delete(userInventory.Items, inventoryKey)
 
-			// For instance-based operations, use the instance ID as storage key
-			storageKey := instanceID
-
-			// Add delete operation - use regular write with empty value
-			storageOps = append(storageOps, &runtime.StorageWrite{
-				Collection:      inventoryStorageCollection,
-				Key:             storageKey,
-				UserID:          userID,
-				PermissionRead:  1,
-				PermissionWrite: 1,
-				Value:           "", // Empty value for deletion
+			// For instance-based operations, the storage key is always the instance ID
+			storageDeletes = append(storageDeletes, &runtime.StorageDelete{
+				Collection: inventoryStorageCollection,
+				Key:        instanceID,
+				UserID:     userID,
 			})
 		} else {
 			// Update item in storage
@@ -319,12 +364,10 @@ func (i *NakamaInventorySystem) ConsumeItems(ctx context.Context, logger runtime
 				return nil, nil, nil, ErrInternal
 			}
 
-			// For instance-based operations, use the instance ID as storage key
-			storageKey := instanceID
-
-			storageOps = append(storageOps, &runtime.StorageWrite{
+			// For instance-based operations, the storage key is always the instance ID
+			storageWrites = append(storageWrites, &runtime.StorageWrite{
 				Collection:      inventoryStorageCollection,
-				Key:             storageKey,
+				Key:             instanceID,
 				UserID:          userID,
 				Value:           string(itemData),
 				PermissionRead:  1,
@@ -332,27 +375,35 @@ func (i *NakamaInventorySystem) ConsumeItems(ctx context.Context, logger runtime
 			})
 		}
 
-		// Process reward if applicable
-		if configItem.ConsumeReward != nil {
-			r, err := i.processItemReward(ctx, logger, nk, userID, itemID, configItem)
-			if err != nil {
-				logger.Error("Failed to process item reward: %v", err)
-				// Continue, don't fail the entire operation
-			} else if r != nil {
-				if instanceRewards[instanceID] == nil {
-					instanceRewards[instanceID] = []*Reward{r}
-				} else {
-					instanceRewards[instanceID] = append(instanceRewards[instanceID], r)
-				}
+		//i.processAndStoreRewards(ctx, logger, nk, userID, foundItem.Id, instanceID, configItem, count, instanceRewards)
+
+		reward, err := i.processItemReward(ctx, logger, nk, userID, foundItem.Id, configItem)
+		if err != nil {
+			logger.Error("Failed to process item reward for instance: %v", err)
+			return nil, nil, nil, ErrInternal
+		}
+		if reward != nil {
+			if _, exists := instanceRewards[instanceID]; !exists {
+				instanceRewards[instanceID] = make([]*Reward, 0)
 			}
+			instanceRewards[instanceID] = append(instanceRewards[instanceID], reward)
 		}
 	}
 
 	// Write changes to storage if there are any
-	if len(storageOps) > 0 {
-		_, err = nk.StorageWrite(ctx, storageOps)
+	if len(storageWrites) > 0 {
+		_, err = nk.StorageWrite(ctx, storageWrites)
 		if err != nil {
-			logger.Error("Failed to update inventory storage: %v", err)
+			logger.Error("Failed to write inventory updates: %v", err)
+			return nil, nil, nil, ErrInternal
+		}
+	}
+
+	// Delete items from storage if there are any
+	if len(storageDeletes) > 0 {
+		err = nk.StorageDelete(ctx, storageDeletes)
+		if err != nil {
+			logger.Error("Failed to delete inventory items: %v", err)
 			return nil, nil, nil, ErrInternal
 		}
 	}
@@ -364,7 +415,7 @@ func (i *NakamaInventorySystem) ConsumeItems(ctx context.Context, logger runtime
 func (i *NakamaInventorySystem) GrantItems(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID string, itemIDs map[string]int64, ignoreLimits bool) (updatedInventory *Inventory, newItems map[string]*InventoryItem, updatedItems map[string]*InventoryItem, notGrantedItemIDs map[string]int64, err error) {
 	if i.config == nil || len(i.config.Items) == 0 {
 		// No items are configured
-		return &Inventory{Items: make(map[string]*InventoryItem)}, nil, nil, nil, nil
+		return &Inventory{Items: make(map[string]*InventoryItem)}, make(map[string]*InventoryItem), make(map[string]*InventoryItem), make(map[string]int64), nil
 	}
 
 	// Initialize return values
@@ -372,99 +423,23 @@ func (i *NakamaInventorySystem) GrantItems(ctx context.Context, logger runtime.L
 	updatedItems = make(map[string]*InventoryItem)
 	notGrantedItemIDs = make(map[string]int64)
 
-	// Get user's current inventory
-	userInventory, err := i.getUserInventory(ctx, logger, nk, userID)
+	loadOptions := &InventoryLoadOptions{
+		PageSize:     defaultInventoryPageSize,
+		LoadAllPages: true,
+	}
+
+	userInventory, err := i.getUserInventoryWithOptions(ctx, logger, nk, userID, loadOptions)
 	if err != nil {
 		logger.Error("Failed to get user inventory: %v", err)
 		return nil, nil, nil, nil, ErrInternal
 	}
 
-	// Check if we need to validate limits
-	if !ignoreLimits && i.config.Limits != nil {
-		// Check category limits
-		categoryCount := make(map[string]int64)
-		for _, item := range userInventory.Items {
-			configItem, exists := i.config.Items[item.Id]
-			if exists && configItem.Category != "" {
-				categoryCount[configItem.Category] += item.Count
-			}
-		}
-
-		// Check item set limits
-		itemSetCount := make(map[string]int64)
-		for id, item := range userInventory.Items {
-			configItem, exists := i.config.Items[id]
-			if exists {
-				for _, setID := range configItem.ItemSets {
-					itemSetCount[setID] += item.Count
-				}
-			}
-		}
-
-		// Pre-calculate what would be added to each category and item set
-		categoryAdds := make(map[string]int64)
-		itemSetAdds := make(map[string]int64)
-
-		for itemID, count := range itemIDs {
-			configItem, exists := i.config.Items[itemID]
-			if !exists {
-				notGrantedItemIDs[itemID] = count
-				continue
-			}
-
-			if configItem.Category != "" {
-				categoryAdds[configItem.Category] += count
-			}
-
-			for _, setID := range configItem.ItemSets {
-				itemSetAdds[setID] += count
-			}
-		}
-
-		// Check if adding would exceed category limits
-		for category, limit := range i.config.Limits.Categories {
-			if add, exists := categoryAdds[category]; exists {
-				if categoryCount[category]+add > limit {
-					// Reject all items of this category
-					for itemID, count := range itemIDs {
-						configItem, exists := i.config.Items[itemID]
-						if exists && configItem.Category == category {
-							notGrantedItemIDs[itemID] = count
-							delete(itemIDs, itemID)
-						}
-					}
-				}
-			}
-		}
-
-		// Check if adding would exceed item set limits
-		for setID, limit := range i.config.Limits.ItemSets {
-			if add, exists := itemSetAdds[setID]; exists {
-				if itemSetCount[setID]+add > limit {
-					// Reject all items in this set
-					for itemID, count := range itemIDs {
-						configItem, exists := i.config.Items[itemID]
-						if exists {
-							for _, itemSetID := range configItem.ItemSets {
-								if itemSetID == setID {
-									notGrantedItemIDs[itemID] = count
-									delete(itemIDs, itemID)
-									break
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-
-	// Prepare storage operations
+	// Process each item to grant
 	var storageOps []*runtime.StorageWrite
-
-	// Process remaining items
 	now := time.Now().Unix()
+
 	for itemID, count := range itemIDs {
+		// Check if item exists in configuration
 		configItem, exists := i.config.Items[itemID]
 		if !exists {
 			logger.Warn("Attempted to grant non-existent item: %s", itemID)
@@ -472,31 +447,81 @@ func (i *NakamaInventorySystem) GrantItems(ctx context.Context, logger runtime.L
 			continue
 		}
 
-		if configItem.Disabled {
-			logger.Warn("Attempted to grant disabled item: %s", itemID)
-			notGrantedItemIDs[itemID] = count
-			continue
-		}
+		// Check limits if not ignoring them
+		if !ignoreLimits {
+			// Check category limits
+			if i.config.Limits != nil && i.config.Limits.Categories != nil {
+				if categoryLimit, exists := i.config.Limits.Categories[configItem.Category]; exists && categoryLimit > 0 {
+					// Count items in this category
+					categoryCount := int64(0)
+					for _, item := range userInventory.Items {
+						if item.Category == configItem.Category {
+							categoryCount += item.Count
+						}
+					}
+					if categoryCount+count > categoryLimit {
+						logger.Info("Category limit exceeded for item %s (category: %s, limit: %d)", itemID, configItem.Category, categoryLimit)
+						notGrantedItemIDs[itemID] = count
+						continue
+					}
+				}
+			}
 
-		// For stackable items, try to find existing item to stack
-		var existingKey string
-		var existingItem *InventoryItem
-		if configItem.Stackable {
-			// Look for existing item with same itemID
-			for key, item := range userInventory.Items {
-				if item.Id == itemID {
-					existingKey = key
-					existingItem = item
-					break
+			// Check item set limits
+			if i.config.Limits != nil && i.config.Limits.ItemSets != nil {
+				limitExceeded := false
+				for _, setID := range configItem.ItemSets {
+					if setLimit, exists := i.config.Limits.ItemSets[setID]; exists && setLimit > 0 {
+						// Count items in this set
+						setCount := int64(0)
+						for _, item := range userInventory.Items {
+							for _, itemSetID := range item.ItemSets {
+								if itemSetID == setID {
+									setCount += item.Count
+									break
+								}
+							}
+						}
+						if setCount+count > setLimit {
+							logger.Info("Item set limit exceeded for item %s (set: %s, limit: %d)", itemID, setID, setLimit)
+							notGrantedItemIDs[itemID] = count
+							limitExceeded = true
+							break
+						}
+					}
+				}
+				if limitExceeded {
+					continue
+				}
+			}
+
+			// Check individual item limits
+			if configItem.MaxCount > 0 {
+				currentCount := int64(0)
+				for _, item := range userInventory.Items {
+					if item.Id == itemID {
+						currentCount += item.Count
+					}
+				}
+				if currentCount+count > configItem.MaxCount {
+					logger.Info("Item limit exceeded for item %s (limit: %d)", itemID, configItem.MaxCount)
+					notGrantedItemIDs[itemID] = count
+					continue
 				}
 			}
 		}
 
-		// Check item-specific limit
-		if existingItem != nil && configItem.MaxCount > 0 && existingItem.Count+count > configItem.MaxCount && !ignoreLimits {
-			logger.Info("Item limit reached: %s (have: %d, max: %d)", itemID, existingItem.Count, configItem.MaxCount)
-			notGrantedItemIDs[itemID] = count
-			continue
+		// Check if the item is stackable and user already has it
+		var existingItem *InventoryItem
+		var existingKey string
+		if configItem.Stackable {
+			for key, item := range userInventory.Items {
+				if item.Id == itemID {
+					existingItem = item
+					existingKey = key
+					break
+				}
+			}
 		}
 
 		if existingItem != nil {
@@ -550,69 +575,102 @@ func (i *NakamaInventorySystem) GrantItems(ctx context.Context, logger runtime.L
 				PermissionWrite: 1,
 			})
 		} else {
-			// Create new item
-			newItem := &InventoryItem{
-				Id:                itemID,
-				Name:              configItem.Name,
-				Description:       configItem.Description,
-				Category:          configItem.Category,
-				ItemSets:          configItem.ItemSets,
-				Count:             count,
-				MaxCount:          configItem.MaxCount,
-				Stackable:         configItem.Stackable,
-				Consumable:        configItem.Consumable,
-				OwnedTimeSec:      now,
-				UpdateTimeSec:     now,
-				StringProperties:  configItem.StringProperties,
-				NumericProperties: configItem.NumericProperties,
-			}
+			// Create new item(s)
+			// For non-stackable items with count > 1, create multiple instances
+			if !configItem.Stackable && count > 1 {
+				for instanceNum := int64(0); instanceNum < count; instanceNum++ {
+					newItem := &InventoryItem{
+						Id:                itemID,
+						Name:              configItem.Name,
+						Description:       configItem.Description,
+						Category:          configItem.Category,
+						ItemSets:          configItem.ItemSets,
+						Count:             1, // Each instance has count = 1 for non-stackable items
+						MaxCount:          configItem.MaxCount,
+						Stackable:         configItem.Stackable,
+						Consumable:        configItem.Consumable,
+						OwnedTimeSec:      now,
+						UpdateTimeSec:     now,
+						StringProperties:  configItem.StringProperties,
+						NumericProperties: configItem.NumericProperties,
+					}
 
-			// Generate instance ID for non-stackable items or when explicitly needed
-			if !configItem.Stackable {
-				newItem.InstanceId = uuid.New().String()
-			}
+					newItem.InstanceId = uuid.New().String()
 
-			// Determine the key for inventory and storage
-			var inventoryKey, storageKey string
-			if newItem.InstanceId != "" {
-				inventoryKey = newItem.InstanceId
-				storageKey = newItem.InstanceId
+					inventoryKey := newItem.InstanceId
+					storageKey := newItem.InstanceId
+
+					userInventory.Items[inventoryKey] = newItem
+					newItems[inventoryKey] = newItem
+
+					// Prepare storage update
+					itemData, err := json.Marshal(newItem)
+					if err != nil {
+						logger.Error("Failed to marshal new inventory item: %v", err)
+						return nil, nil, nil, nil, ErrInternal
+					}
+
+					storageOps = append(storageOps, &runtime.StorageWrite{
+						Collection:      inventoryStorageCollection,
+						Key:             storageKey,
+						UserID:          userID,
+						Value:           string(itemData),
+						PermissionRead:  1,
+						PermissionWrite: 1,
+					})
+				}
 			} else {
-				// For stackable items without instance ID, use itemID
-				inventoryKey = itemID
-				storageKey = itemID
+				// Create single item (for stackable items or count = 1)
+				newItem := &InventoryItem{
+					Id:                itemID,
+					Name:              configItem.Name,
+					Description:       configItem.Description,
+					Category:          configItem.Category,
+					ItemSets:          configItem.ItemSets,
+					Count:             count,
+					MaxCount:          configItem.MaxCount,
+					Stackable:         configItem.Stackable,
+					Consumable:        configItem.Consumable,
+					OwnedTimeSec:      now,
+					UpdateTimeSec:     now,
+					StringProperties:  configItem.StringProperties,
+					NumericProperties: configItem.NumericProperties,
+				}
+
+				newItem.InstanceId = uuid.New().String()
+
+				inventoryKey := newItem.InstanceId
+				storageKey := newItem.InstanceId
+
+				userInventory.Items[inventoryKey] = newItem
+				newItems[inventoryKey] = newItem
+
+				// Prepare storage update
+				itemData, err := json.Marshal(newItem)
+				if err != nil {
+					logger.Error("Failed to marshal new inventory item: %v", err)
+					return nil, nil, nil, nil, ErrInternal
+				}
+
+				storageOps = append(storageOps, &runtime.StorageWrite{
+					Collection:      inventoryStorageCollection,
+					Key:             storageKey,
+					UserID:          userID,
+					Value:           string(itemData),
+					PermissionRead:  1,
+					PermissionWrite: 1,
+				})
 			}
-
-			userInventory.Items[inventoryKey] = newItem
-			newItems[inventoryKey] = newItem
-
-			// Prepare storage update
-			itemData, err := json.Marshal(newItem)
-			if err != nil {
-				logger.Error("Failed to marshal new inventory item: %v", err)
-				return nil, nil, nil, nil, ErrInternal
-			}
-
-			storageOps = append(storageOps, &runtime.StorageWrite{
-				Collection:      inventoryStorageCollection,
-				Key:             storageKey,
-				UserID:          userID,
-				Value:           string(itemData),
-				PermissionRead:  1,
-				PermissionWrite: 1,
-			})
 		}
 	}
 
 	// Write changes to storage if there are any
 	if len(storageOps) > 0 {
-		logger.Info("Writing %d inventory operations to storage for user %s", len(storageOps), userID)
 		_, err = nk.StorageWrite(ctx, storageOps)
 		if err != nil {
 			logger.Error("Failed to update inventory storage: %v", err)
 			return nil, nil, nil, nil, ErrInternal
 		}
-		logger.Debug("Successfully completed %d inventory storage operations", len(storageOps))
 	}
 
 	return userInventory, newItems, updatedItems, notGrantedItemIDs, nil
@@ -625,79 +683,135 @@ func (i *NakamaInventorySystem) UpdateItems(ctx context.Context, logger runtime.
 		return &Inventory{Items: make(map[string]*InventoryItem)}, nil
 	}
 
-	// Get user's current inventory
-	userInventory, err := i.getUserInventory(ctx, logger, nk, userID)
+	if len(instanceIDs) == 0 {
+		// No updates requested, return empty inventory
+		return &Inventory{Items: make(map[string]*InventoryItem)}, nil
+	}
+
+	logger.Info("Updating %d inventory items for user %s", len(instanceIDs), userID)
+
+	// Collect specific instance IDs we need to load
+	specificItems := make([]string, 0, len(instanceIDs))
+	for instanceID := range instanceIDs {
+		specificItems = append(specificItems, instanceID)
+	}
+
+	// Load only the items we need to operate on
+	loadOptions := &InventoryLoadOptions{
+		PageSize:      defaultInventoryPageSize,
+		SpecificItems: specificItems,
+		LoadAllPages:  false, // Only load what we need for updating
+	}
+
+	userInventory, err := i.getUserInventoryWithOptions(ctx, logger, nk, userID, loadOptions)
 	if err != nil {
 		logger.Error("Failed to get user inventory: %v", err)
 		return nil, ErrInternal
 	}
 
-	// Prepare storage operations
-	var storageOps []*runtime.StorageWrite
+	// Pre-allocate storage operations slice with known capacity
+	storageOps := make([]*runtime.StorageWrite, 0, len(instanceIDs))
 
-	// Find and update each instanced item
-	for instanceID, props := range instanceIDs {
-		var foundItem *InventoryItem
-		var itemID string
-
-		// Find the item with this instance ID
-		for id, item := range userInventory.Items {
-			if item.InstanceId == instanceID {
-				foundItem = item
-				itemID = id
-				break
-			}
+	instanceToKey := make(map[string]string, len(userInventory.Items))
+	for key, item := range userInventory.Items {
+		if item.InstanceId != "" {
+			instanceToKey[item.InstanceId] = key
 		}
+	}
 
-		if foundItem == nil || itemID == "" {
+	// Track failed updates for better error reporting
+	var failedUpdates []string
+	updateCount := 0
+
+	for instanceID, props := range instanceIDs {
+		// Use efficient lookup
+		inventoryKey, exists := instanceToKey[instanceID]
+		if !exists {
 			logger.Warn("Attempted to update non-existent instance: %s", instanceID)
+			failedUpdates = append(failedUpdates, instanceID)
 			continue
 		}
 
+		foundItem := userInventory.Items[inventoryKey]
+		if foundItem == nil {
+			logger.Warn("Item not found in inventory for instance: %s", instanceID)
+			failedUpdates = append(failedUpdates, instanceID)
+			continue
+		}
+
+		// Validate that we can update this item type
+		configItem, configExists := i.config.Items[foundItem.Id]
+		if configExists && configItem.Disabled {
+			logger.Warn("Attempted to update disabled item: %s (instance: %s)", foundItem.Id, instanceID)
+			failedUpdates = append(failedUpdates, instanceID)
+			continue
+		}
+
+		// Track if any changes were made
+		itemModified := false
+
 		// Update string properties
-		if props.StringProperties != nil {
+		if props.StringProperties != nil && len(props.StringProperties) > 0 {
 			if foundItem.StringProperties == nil {
 				foundItem.StringProperties = make(map[string]string)
 			}
 			for key, value := range props.StringProperties {
+				// Log property updates for audit trail
+				if existingValue, exists := foundItem.StringProperties[key]; exists {
+					logger.Debug("Updating string property %s from '%s' to '%s' for instance %s", key, existingValue, value, instanceID)
+				} else {
+					logger.Debug("Adding string property %s='%s' for instance %s", key, value, instanceID)
+				}
 				foundItem.StringProperties[key] = value
+				itemModified = true
 			}
 		}
 
 		// Update numeric properties
-		if props.NumericProperties != nil {
+		if props.NumericProperties != nil && len(props.NumericProperties) > 0 {
 			if foundItem.NumericProperties == nil {
 				foundItem.NumericProperties = make(map[string]float64)
 			}
 			for key, value := range props.NumericProperties {
+				// Log property updates for audit trail
+				if existingValue, exists := foundItem.NumericProperties[key]; exists {
+					logger.Debug("Updating numeric property %s from %f to %f for instance %s", key, existingValue, value, instanceID)
+				} else {
+					logger.Debug("Adding numeric property %s=%f for instance %s", key, value, instanceID)
+				}
 				foundItem.NumericProperties[key] = value
+				itemModified = true
 			}
 		}
 
-		// Update timestamp
-		foundItem.UpdateTimeSec = time.Now().Unix()
+		// Only update timestamp and prepare storage if item was actually modified
+		if itemModified {
+			// Update timestamp
+			foundItem.UpdateTimeSec = time.Now().Unix()
 
-		// Prepare storage update
-		itemData, err := json.Marshal(foundItem)
-		if err != nil {
-			logger.Error("Failed to marshal inventory item: %v", err)
-			return nil, ErrInternal
+			// Prepare storage update
+			itemData, err := json.Marshal(foundItem)
+			if err != nil {
+				logger.Error("Failed to marshal inventory item %s: %v", instanceID, err)
+				failedUpdates = append(failedUpdates, instanceID)
+				continue
+			}
+
+			// For instance-based operations, the storage key is always the instance ID
+			storageKey := instanceID
+
+			storageOps = append(storageOps, &runtime.StorageWrite{
+				Collection:      inventoryStorageCollection,
+				Key:             storageKey,
+				UserID:          userID,
+				Value:           string(itemData),
+				PermissionRead:  1,
+				PermissionWrite: 1,
+			})
+			updateCount++
+		} else {
+			logger.Debug("No properties to update for instance %s", instanceID)
 		}
-
-		// Determine storage key: use instance ID if it exists, otherwise use the original key
-		storageKey := instanceID
-		if foundItem.InstanceId != "" {
-			storageKey = foundItem.InstanceId
-		}
-
-		storageOps = append(storageOps, &runtime.StorageWrite{
-			Collection:      inventoryStorageCollection,
-			Key:             storageKey,
-			UserID:          userID,
-			Value:           string(itemData),
-			PermissionRead:  1,
-			PermissionWrite: 1,
-		})
 	}
 
 	// Write changes to storage if there are any
@@ -707,6 +821,14 @@ func (i *NakamaInventorySystem) UpdateItems(ctx context.Context, logger runtime.
 			logger.Error("Failed to update inventory storage: %v", err)
 			return nil, ErrInternal
 		}
+		logger.Info("Successfully updated %d inventory items for user %s", updateCount, userID)
+	} else {
+		logger.Info("No inventory items required updates for user %s", userID)
+	}
+
+	// Log failed updates if any
+	if len(failedUpdates) > 0 {
+		logger.Warn("Failed to update %d items for user %s: %v", len(failedUpdates), userID, failedUpdates)
 	}
 
 	return userInventory, nil
@@ -725,21 +847,153 @@ func (i *NakamaInventorySystem) SetConfigSource(fn ConfigSource[*InventoryConfig
 	}
 }
 
-// Helper function to get a user's inventory from storage
-func (i *NakamaInventorySystem) getUserInventory(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID string) (*Inventory, error) {
+// Helper function to get a user's inventory from storage with improved pagination and memory management
+func (i *NakamaInventorySystem) getUserInventoryWithOptions(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID string, options *InventoryLoadOptions) (*Inventory, error) {
 	inventory := &Inventory{
 		Items: make(map[string]*InventoryItem),
 	}
 
-	// Retrieve all inventory objects from storage
-	objects, _, err := nk.StorageList(ctx, "", userID, inventoryStorageCollection, 100, "")
+	// Apply default options if not provided
+	if options == nil {
+		options = &InventoryLoadOptions{
+			PageSize:     defaultInventoryPageSize,
+			LoadAllPages: true,
+		}
+	}
+
+	// Validate and set page size
+	pageSize := options.PageSize
+	if pageSize <= 0 {
+		pageSize = defaultInventoryPageSize
+	}
+	if pageSize > maxInventoryPageSize {
+		pageSize = maxInventoryPageSize
+		logger.Warn("Page size capped at %d to prevent excessive memory usage", maxInventoryPageSize)
+	}
+
+	// If we have specific items to load, use targeted storage reads
+	if len(options.SpecificItems) > 0 {
+		return i.getUserInventorySpecificItems(ctx, logger, nk, userID, options.SpecificItems)
+	}
+
+	// Track total items loaded and cursor for pagination
+	totalItemsLoaded := 0
+	cursor := ""
+	hasMore := true
+
+	for hasMore {
+		// Retrieve inventory objects from storage with pagination
+		objects, nextCursor, err := nk.StorageList(ctx, "", userID, inventoryStorageCollection, pageSize, cursor)
+		if err != nil {
+			logger.Error("Failed to read inventory from storage: %v", err)
+			return inventory, err
+		}
+
+		// Process each item in the current page
+		for _, obj := range objects {
+			// Check if we've hit the max items limit
+			if options.MaxItems > 0 && totalItemsLoaded >= options.MaxItems {
+				hasMore = false
+				break
+			}
+
+			var item InventoryItem
+			err = json.Unmarshal([]byte(obj.Value), &item)
+			if err != nil {
+				logger.Error("Failed to unmarshal inventory item: %v", err)
+				continue
+			}
+
+			// Determine the item ID from the stored item data
+			itemID := item.Id
+			if itemID == "" {
+				// Fallback to storage key for backward compatibility
+				itemID = obj.Key
+				item.Id = itemID
+			}
+
+			// Apply category filter if specified
+			if options.Category != "" {
+				configItem, exists := i.config.Items[itemID]
+				if !exists || configItem.Category != options.Category {
+					continue
+				}
+			}
+
+			// Only include non-disabled items
+			configItem, exists := i.config.Items[itemID]
+			if exists && !configItem.Disabled {
+				// Update from config if needed
+				item.Name = configItem.Name
+				item.Description = configItem.Description
+				item.Category = configItem.Category
+				item.ItemSets = configItem.ItemSets
+				item.MaxCount = configItem.MaxCount
+				item.Stackable = configItem.Stackable
+				item.Consumable = configItem.Consumable
+
+				// Use instance ID as key if available, otherwise use storage key
+				key := obj.Key
+				if item.InstanceId != "" {
+					key = item.InstanceId
+				}
+
+				// Add to inventory using appropriate key
+				inventory.Items[key] = &item
+				totalItemsLoaded++
+			}
+		}
+
+		// Check if we should continue pagination
+		if nextCursor == "" || !options.LoadAllPages {
+			hasMore = false
+		} else {
+			cursor = nextCursor
+		}
+
+		// If we got fewer items than requested, we've reached the end
+		if len(objects) < pageSize {
+			hasMore = false
+		}
+	}
+
+	logger.Debug("Loaded %d inventory items for user %s", totalItemsLoaded, userID)
+	return inventory, nil
+}
+
+// Helper function to load specific inventory items by ID/instance ID
+func (i *NakamaInventorySystem) getUserInventorySpecificItems(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID string, itemKeys []string) (*Inventory, error) {
+	inventory := &Inventory{
+		Items: make(map[string]*InventoryItem),
+	}
+
+	if len(itemKeys) == 0 {
+		return inventory, nil
+	}
+
+	// Prepare storage read operations for specific items
+	var storageReadIDs []*runtime.StorageRead
+	for _, key := range itemKeys {
+		storageReadIDs = append(storageReadIDs, &runtime.StorageRead{
+			Collection: inventoryStorageCollection,
+			Key:        key,
+			UserID:     userID,
+		})
+	}
+
+	// Perform batch read operation
+	objects, err := nk.StorageRead(ctx, storageReadIDs)
 	if err != nil {
-		logger.Error("Failed to read inventory from storage: %v", err)
+		logger.Error("Failed to read specific inventory items from storage: %v", err)
 		return inventory, err
 	}
 
-	// Process each item in the inventory
+	// Process each retrieved item
 	for _, obj := range objects {
+		if obj == nil {
+			continue // Item not found in storage
+		}
+
 		var item InventoryItem
 		err = json.Unmarshal([]byte(obj.Value), &item)
 		if err != nil {
@@ -778,6 +1032,7 @@ func (i *NakamaInventorySystem) getUserInventory(ctx context.Context, logger run
 		}
 	}
 
+	logger.Debug("Loaded %d specific inventory items for user %s", len(inventory.Items), userID)
 	return inventory, nil
 }
 
@@ -787,7 +1042,7 @@ func (i *NakamaInventorySystem) processItemReward(ctx context.Context, logger ru
 		return nil, nil
 	}
 
-	// Create empty reward
+	// Create a base reward
 	reward := &Reward{
 		Items:           make(map[string]int64),
 		Currencies:      make(map[string]int64),
@@ -795,15 +1050,47 @@ func (i *NakamaInventorySystem) processItemReward(ctx context.Context, logger ru
 		EnergyModifiers: make([]*RewardEnergyModifier, 0),
 		RewardModifiers: make([]*RewardModifier, 0),
 		GrantTimeSec:    time.Now().Unix(),
+		ItemInstances:   make(map[string]*RewardInventoryItem),
+	}
+
+	// Get the economy system from the Pamlogix instance to process the reward configuration
+	var economySystem EconomySystem
+
+	if i.pamlogix != nil {
+		economySystem = i.pamlogix.GetEconomySystem()
+	}
+
+	if economySystem == nil {
+		logger.Error("Economy system is not available in the system")
+		return nil, ErrInternal
+	}
+
+	// Roll the reward using the reward configuration
+	rolledReward, err := economySystem.RewardRoll(ctx, logger, nk, userID, configItem.ConsumeReward)
+	if err != nil {
+		logger.Error("Failed to roll reward for item consumption: %v", err)
+		// Continue with empty reward
+	} else if rolledReward != nil {
+		_, _, _, grantErr := economySystem.RewardGrant(ctx, logger, nk, userID, reward, map[string]interface{}{
+			"reason": "consume_item",
+		}, false)
+		if grantErr != nil {
+			logger.Error("Failed to grant rolled reward for item consumption: %v", grantErr)
+			return nil, grantErr
+		}
+
+		reward = rolledReward
 	}
 
 	// Apply custom reward handler if set
 	if i.onConsumeReward != nil {
-		var err error
-		reward, err = i.onConsumeReward(ctx, logger, nk, userID, itemID, configItem, configItem.ConsumeReward, reward)
+		customReward, err := i.onConsumeReward(ctx, logger, nk, userID, itemID, configItem, configItem.ConsumeReward, reward)
 		if err != nil {
 			logger.Error("Error in custom reward handler: %v", err)
 			return nil, err
+		}
+		if customReward != nil {
+			reward = customReward
 		}
 	}
 

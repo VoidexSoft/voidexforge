@@ -64,7 +64,7 @@
         "description": "Basic head protection made from leather",
         "category": "armor",
         "item_sets": ["leather_armor", "armor"],
-        "max_count": 1,
+        "max_count": 100,
         "stackable": false,
         "consumable": false,
         "string_properties": {
@@ -137,7 +137,7 @@
         "description": "Restores 40 stamina points",
         "category": "consumable",
         "item_sets": ["potions"],
-        "max_count": 50,
+        "max_count": 1000,
         "stackable": true,
         "consumable": true,
         "string_properties": {
@@ -328,7 +328,7 @@
         "starter_equipment": 10,
         "weapons": 8,
         "armor": 12,
-        "potions": 75,
+        "potions": 9223372036854775807,
         "gems": 25,
         "magical_items": 15,
         "tools": 20,

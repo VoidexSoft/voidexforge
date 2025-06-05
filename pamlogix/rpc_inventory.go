@@ -189,7 +189,7 @@ func rpcInventoryGrant(p *pamlogixImpl) func(ctx context.Context, logger runtime
 			logger.Error("Error granting inventory items: %v", err)
 			return "", err
 		}
-
+		//TODO: return all outcomes, not just updated inventory
 		response := &InventoryUpdateAck{
 			Inventory: updatedInventory,
 		}
