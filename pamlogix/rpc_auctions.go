@@ -14,7 +14,7 @@ func rpcAuctionsGetTemplates(p *pamlogixImpl) func(ctx context.Context, logger r
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		auctionsSystem := p.GetAuctionsSystem()
 		if auctionsSystem == nil {
-			return "", runtime.NewError("auctions system not available", 12) // UNIMPLEMENTED
+			return "", runtime.NewError("auctions system not available", UNIMPLEMENTED_ERROR_CODE) // UNIMPLEMENTED
 		}
 
 		userID, ok := ctx.Value(runtime.RUNTIME_CTX_USER_ID).(string)
@@ -43,7 +43,7 @@ func rpcAuctionsList(p *pamlogixImpl) func(ctx context.Context, logger runtime.L
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		auctionsSystem := p.GetAuctionsSystem()
 		if auctionsSystem == nil {
-			return "", runtime.NewError("auctions system not available", 12) // UNIMPLEMENTED
+			return "", runtime.NewError("auctions system not available", UNIMPLEMENTED_ERROR_CODE) // UNIMPLEMENTED
 		}
 
 		var request AuctionListRequest
@@ -84,7 +84,7 @@ func rpcAuctionsBid(p *pamlogixImpl) func(ctx context.Context, logger runtime.Lo
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		auctionsSystem := p.GetAuctionsSystem()
 		if auctionsSystem == nil {
-			return "", runtime.NewError("auctions system not available", 12) // UNIMPLEMENTED
+			return "", runtime.NewError("auctions system not available", UNIMPLEMENTED_ERROR_CODE) // UNIMPLEMENTED
 		}
 
 		var request AuctionBidRequest
@@ -125,7 +125,7 @@ func rpcAuctionsClaimBid(p *pamlogixImpl) func(ctx context.Context, logger runti
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		auctionsSystem := p.GetAuctionsSystem()
 		if auctionsSystem == nil {
-			return "", runtime.NewError("auctions system not available", 12) // UNIMPLEMENTED
+			return "", runtime.NewError("auctions system not available", UNIMPLEMENTED_ERROR_CODE) // UNIMPLEMENTED
 		}
 
 		var request AuctionClaimBidRequest
@@ -160,7 +160,7 @@ func rpcAuctionsClaimCreated(p *pamlogixImpl) func(ctx context.Context, logger r
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		auctionsSystem := p.GetAuctionsSystem()
 		if auctionsSystem == nil {
-			return "", runtime.NewError("auctions system not available", 12) // UNIMPLEMENTED
+			return "", runtime.NewError("auctions system not available", UNIMPLEMENTED_ERROR_CODE) // UNIMPLEMENTED
 		}
 
 		var request AuctionClaimCreatedRequest
@@ -195,7 +195,7 @@ func rpcAuctionsCancel(p *pamlogixImpl) func(ctx context.Context, logger runtime
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		auctionsSystem := p.GetAuctionsSystem()
 		if auctionsSystem == nil {
-			return "", runtime.NewError("auctions system not available", 12) // UNIMPLEMENTED
+			return "", runtime.NewError("auctions system not available", UNIMPLEMENTED_ERROR_CODE) // UNIMPLEMENTED
 		}
 
 		var request AuctionCancelRequest
@@ -230,7 +230,7 @@ func rpcAuctionsCreate(p *pamlogixImpl) func(ctx context.Context, logger runtime
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		auctionsSystem := p.GetAuctionsSystem()
 		if auctionsSystem == nil {
-			return "", runtime.NewError("auctions system not available", 12) // UNIMPLEMENTED
+			return "", runtime.NewError("auctions system not available", UNIMPLEMENTED_ERROR_CODE) // UNIMPLEMENTED
 		}
 
 		var request AuctionCreateRequest
@@ -267,7 +267,7 @@ func rpcAuctionsListBids(p *pamlogixImpl) func(ctx context.Context, logger runti
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		auctionsSystem := p.GetAuctionsSystem()
 		if auctionsSystem == nil {
-			return "", runtime.NewError("auctions system not available", 12) // UNIMPLEMENTED
+			return "", runtime.NewError("auctions system not available", UNIMPLEMENTED_ERROR_CODE) // UNIMPLEMENTED
 		}
 
 		var request AuctionListBidsRequest
@@ -308,7 +308,7 @@ func rpcAuctionsListCreated(p *pamlogixImpl) func(ctx context.Context, logger ru
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		auctionsSystem := p.GetAuctionsSystem()
 		if auctionsSystem == nil {
-			return "", runtime.NewError("auctions system not available", 12) // UNIMPLEMENTED
+			return "", runtime.NewError("auctions system not available", UNIMPLEMENTED_ERROR_CODE) // UNIMPLEMENTED
 		}
 
 		var request AuctionListCreatedRequest
@@ -349,7 +349,7 @@ func rpcAuctionsFollow(p *pamlogixImpl) func(ctx context.Context, logger runtime
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		auctionsSystem := p.GetAuctionsSystem()
 		if auctionsSystem == nil {
-			return "", runtime.NewError("auctions system not available", 12) // UNIMPLEMENTED
+			return "", runtime.NewError("auctions system not available", UNIMPLEMENTED_ERROR_CODE) // UNIMPLEMENTED
 		}
 
 		var request AuctionsFollowRequest

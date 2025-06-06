@@ -400,7 +400,7 @@ func (e *NakamaEconomySystem) RewardConvert(contents *AvailableRewards) (rewardC
 
 func (e *NakamaEconomySystem) RewardRoll(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID string, rewardConfig *EconomyConfigReward) (reward *Reward, err error) {
 	if rewardConfig == nil {
-		return nil, runtime.NewError("reward config is nil", 3) // INVALID_ARGUMENT
+		return nil, runtime.NewError("reward config is nil", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 	}
 
 	reward = &Reward{
@@ -711,11 +711,11 @@ func (e *NakamaEconomySystem) rollRangeFloat64(min, max, multiple float64) float
 
 func (e *NakamaEconomySystem) RewardGrant(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID string, reward *Reward, metadata map[string]interface{}, ignoreLimits bool) (newItems map[string]*InventoryItem, updatedItems map[string]*InventoryItem, notGrantedItemIDs map[string]int64, err error) {
 	if reward == nil {
-		return nil, nil, nil, runtime.NewError("reward is nil", 3) // INVALID_ARGUMENT
+		return nil, nil, nil, runtime.NewError("reward is nil", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 	}
 
 	if userID == "" {
-		return nil, nil, nil, runtime.NewError("user ID is empty", 3) // INVALID_ARGUMENT
+		return nil, nil, nil, runtime.NewError("user ID is empty", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 	}
 
 	// Initialize return values
@@ -729,7 +729,7 @@ func (e *NakamaEconomySystem) RewardGrant(ctx context.Context, logger runtime.Lo
 
 	if err != nil {
 		logger.Error("Failed to update wallet: %v", err)
-		return nil, nil, nil, runtime.NewError("Failed to update wallet", 13) // INTERNAL
+		return nil, nil, nil, runtime.NewError("Failed to update wallet", INTERNAL_ERROR_CODE) // INTERNAL
 	}
 
 	// Process inventory items
@@ -742,7 +742,7 @@ func (e *NakamaEconomySystem) RewardGrant(ctx context.Context, logger runtime.Lo
 				_, grantedNewItems, grantedUpdatedItems, notGrantedItems, err := inventorySystem.GrantItems(ctx, logger, nk, userID, reward.Items, ignoreLimits)
 				if err != nil {
 					logger.Error("Failed to grant items through inventory system: %v", err)
-					return nil, nil, nil, runtime.NewError("Failed to grant items", 13) // INTERNAL
+					return nil, nil, nil, runtime.NewError("Failed to grant items", INTERNAL_ERROR_CODE) // INTERNAL
 				}
 
 				// Merge results
@@ -1062,18 +1062,18 @@ func (e *NakamaEconomySystem) applyRewardModifiers(ctx context.Context, nk runti
 func (e *NakamaEconomySystem) DonationClaim(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID string, donationClaims map[string]*EconomyDonationClaimRequestDetails) (donationsList *EconomyDonationsList, err error) {
 	// Validate inputs
 	if userID == "" {
-		return nil, runtime.NewError("user ID is empty", 3) // INVALID_ARGUMENT
+		return nil, runtime.NewError("user ID is empty", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 	}
 
 	if len(donationClaims) == 0 {
-		return nil, runtime.NewError("donation claims is empty", 3) // INVALID_ARGUMENT
+		return nil, runtime.NewError("donation claims is empty", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 	}
 
 	// Get all user donations
 	userDonations, err := e.getUserDonations(ctx, nk, userID)
 	if err != nil {
 		logger.Error("Failed to get user donations: %v", err)
-		return nil, runtime.NewError("Failed to get user donations", 13) // INTERNAL
+		return nil, runtime.NewError("Failed to get user donations", INTERNAL_ERROR_CODE) // INTERNAL
 	}
 
 	// Process each donation claim
@@ -1283,7 +1283,7 @@ func (e *NakamaEconomySystem) getUserDonations(ctx context.Context, nk runtime.N
 
 func (e *NakamaEconomySystem) DonationGet(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userIDs []string) (donationsList *EconomyDonationsByUserList, err error) {
 	if len(userIDs) == 0 {
-		return nil, runtime.NewError("userIDs is empty", 3)
+		return nil, runtime.NewError("userIDs is empty", INVALID_ARGUMENT_ERROR_CODE)
 	}
 
 	donationsList = &EconomyDonationsByUserList{
@@ -1312,28 +1312,28 @@ func (e *NakamaEconomySystem) DonationGet(ctx context.Context, logger runtime.Lo
 func (e *NakamaEconomySystem) DonationGive(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID, donationID, fromUserID string) (donation *EconomyDonation, updatedWallet map[string]int64, updatedInventory *Inventory, rewardModifiers []*ActiveRewardModifier, contributorReward *Reward, timestamp int64, err error) {
 	// Validate inputs
 	if userID == "" {
-		return nil, nil, nil, nil, nil, 0, runtime.NewError("contributor user ID is empty", 3) // INVALID_ARGUMENT
+		return nil, nil, nil, nil, nil, 0, runtime.NewError("contributor user ID is empty", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 	}
 	if fromUserID == "" {
-		return nil, nil, nil, nil, nil, 0, runtime.NewError("recipient user ID is empty", 3) // INVALID_ARGUMENT
+		return nil, nil, nil, nil, nil, 0, runtime.NewError("recipient user ID is empty", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 	}
 	if donationID == "" {
-		return nil, nil, nil, nil, nil, 0, runtime.NewError("donation ID is empty", 3) // INVALID_ARGUMENT
+		return nil, nil, nil, nil, nil, 0, runtime.NewError("donation ID is empty", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 	}
 
 	// Prevent self-donation
 	if userID == fromUserID {
-		return nil, nil, nil, nil, nil, 0, runtime.NewError("cannot contribute to own donation", 3) // INVALID_ARGUMENT
+		return nil, nil, nil, nil, nil, 0, runtime.NewError("cannot contribute to own donation", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 	}
 
 	// Get donation configuration
 	if e.config == nil || e.config.Donations == nil {
-		return nil, nil, nil, nil, nil, 0, runtime.NewError("donation config not found", 3) // INVALID_ARGUMENT
+		return nil, nil, nil, nil, nil, 0, runtime.NewError("donation config not found", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 	}
 
 	donationConfig, exists := e.config.Donations[donationID]
 	if !exists {
-		return nil, nil, nil, nil, nil, 0, runtime.NewError(fmt.Sprintf("donation config not found for ID: %s", donationID), 3) // INVALID_ARGUMENT
+		return nil, nil, nil, nil, nil, 0, runtime.NewError(fmt.Sprintf("donation config not found for ID: %s", donationID), INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 	}
 
 	// Get the recipient's donation request
@@ -1347,24 +1347,24 @@ func (e *NakamaEconomySystem) DonationGive(ctx context.Context, logger runtime.L
 	})
 
 	if err != nil || len(objects) == 0 {
-		return nil, nil, nil, nil, nil, 0, runtime.NewError("donation request not found", 5) // NOT_FOUND
+		return nil, nil, nil, nil, nil, 0, runtime.NewError("donation request not found", NOT_FOUND_ERROR_CODE) // NOT_FOUND
 	}
 
 	// Parse donation data
 	var donationData EconomyDonation
 	if err := json.Unmarshal([]byte(objects[0].Value), &donationData); err != nil {
-		return nil, nil, nil, nil, nil, 0, runtime.NewError("failed to parse donation data", 13) // INTERNAL
+		return nil, nil, nil, nil, nil, 0, runtime.NewError("failed to parse donation data", INTERNAL_ERROR_CODE) // INTERNAL
 	}
 
 	// Check if donation is expired
 	now := time.Now().Unix()
 	if donationData.ExpireTimeSec > 0 && donationData.ExpireTimeSec <= now {
-		return nil, nil, nil, nil, nil, 0, runtime.NewError("donation request has expired", 9) // FAILED_PRECONDITION
+		return nil, nil, nil, nil, nil, 0, runtime.NewError("donation request has expired", FAILED_PRECONDITION_ERROR_CODE) // FAILED_PRECONDITION
 	}
 
 	// Check if donation is already fulfilled
 	if donationData.Count >= donationData.MaxCount {
-		return nil, nil, nil, nil, nil, 0, runtime.NewError("donation request already fulfilled", 9) // FAILED_PRECONDITION
+		return nil, nil, nil, nil, nil, 0, runtime.NewError("donation request already fulfilled", FAILED_PRECONDITION_ERROR_CODE) // FAILED_PRECONDITION
 	}
 
 	// Check contributor's contribution limit
@@ -1376,7 +1376,7 @@ func (e *NakamaEconomySystem) DonationGive(ctx context.Context, logger runtime.L
 	}
 
 	if donationData.UserContributionMaxCount > 0 && contributorCount >= donationData.UserContributionMaxCount {
-		return nil, nil, nil, nil, nil, 0, runtime.NewError("contribution limit reached for this donation", 9) // FAILED_PRECONDITION
+		return nil, nil, nil, nil, nil, 0, runtime.NewError("contribution limit reached for this donation", FAILED_PRECONDITION_ERROR_CODE) // FAILED_PRECONDITION
 	}
 
 	// Calculate how many contributions can be made
@@ -1394,7 +1394,7 @@ func (e *NakamaEconomySystem) DonationGive(ctx context.Context, logger runtime.L
 	}
 
 	if contributionAmount <= 0 {
-		return nil, nil, nil, nil, nil, 0, runtime.NewError("cannot contribute to this donation", 9) // FAILED_PRECONDITION
+		return nil, nil, nil, nil, nil, 0, runtime.NewError("cannot contribute to this donation", FAILED_PRECONDITION_ERROR_CODE) // FAILED_PRECONDITION
 	}
 
 	// Deduct cost from contributor if configured
@@ -1413,19 +1413,19 @@ func (e *NakamaEconomySystem) DonationGive(ctx context.Context, logger runtime.L
 			}, false)
 			if err != nil {
 				logger.Error("Failed to deduct currency cost for donation: %v", err)
-				return nil, nil, nil, nil, nil, 0, runtime.NewError("insufficient funds for donation", 9) // FAILED_PRECONDITION
+				return nil, nil, nil, nil, nil, 0, runtime.NewError("insufficient funds for donation", FAILED_PRECONDITION_ERROR_CODE) // FAILED_PRECONDITION
 			}
 		}
 
 		// Deduct items
 		if len(donationConfig.Cost.Items) > 0 {
 			if e.pamlogix == nil {
-				return nil, nil, nil, nil, nil, 0, runtime.NewError("inventory system not available", 13) // INTERNAL
+				return nil, nil, nil, nil, nil, 0, runtime.NewError("inventory system not available", INTERNAL_ERROR_CODE) // INTERNAL
 			}
 
 			inventorySystem := e.pamlogix.(interface{ GetInventorySystem() InventorySystem }).GetInventorySystem()
 			if inventorySystem == nil {
-				return nil, nil, nil, nil, nil, 0, runtime.NewError("inventory system not available", 13) // INTERNAL
+				return nil, nil, nil, nil, nil, 0, runtime.NewError("inventory system not available", INTERNAL_ERROR_CODE) // INTERNAL
 			}
 
 			// Create negative amounts for deduction
@@ -1447,7 +1447,7 @@ func (e *NakamaEconomySystem) DonationGive(ctx context.Context, logger runtime.L
 					}, false)
 				}
 				logger.Error("Failed to deduct item cost for donation: err=%v, not_granted=%v", err, notGrantedItems)
-				return nil, nil, nil, nil, nil, 0, runtime.NewError("insufficient items for donation", 9) // FAILED_PRECONDITION
+				return nil, nil, nil, nil, nil, 0, runtime.NewError("insufficient items for donation", FAILED_PRECONDITION_ERROR_CODE) // FAILED_PRECONDITION
 			}
 		}
 	}
@@ -1507,7 +1507,7 @@ func (e *NakamaEconomySystem) DonationGive(ctx context.Context, logger runtime.L
 	donationBytes, err := json.Marshal(&donationData)
 	if err != nil {
 		logger.Error("Failed to marshal donation data: %v", err)
-		return nil, nil, nil, nil, nil, 0, runtime.NewError("failed to update donation", 13) // INTERNAL
+		return nil, nil, nil, nil, nil, 0, runtime.NewError("failed to update donation", INTERNAL_ERROR_CODE) // INTERNAL
 	}
 
 	_, err = nk.StorageWrite(ctx, []*runtime.StorageWrite{
@@ -1523,7 +1523,7 @@ func (e *NakamaEconomySystem) DonationGive(ctx context.Context, logger runtime.L
 	})
 	if err != nil {
 		logger.Error("Failed to update donation: %v", err)
-		return nil, nil, nil, nil, nil, 0, runtime.NewError("failed to update donation", 13) // INTERNAL
+		return nil, nil, nil, nil, nil, 0, runtime.NewError("failed to update donation", INTERNAL_ERROR_CODE) // INTERNAL
 	}
 
 	//TODO: test performance for updated wallet, inventory, reward modifiers
@@ -1567,7 +1567,7 @@ func (e *NakamaEconomySystem) DonationGive(ctx context.Context, logger runtime.L
 
 func (e *NakamaEconomySystem) DonationRequest(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID, donationID string) (donation *EconomyDonation, success bool, err error) {
 	if userID == "" || donationID == "" {
-		err = runtime.NewError("missing required parameters", 3)
+		err = runtime.NewError("missing required parameters", INVALID_ARGUMENT_ERROR_CODE)
 		return
 	}
 
@@ -1648,7 +1648,7 @@ func (e *NakamaEconomySystem) executeDonationRequestTransaction(ctx context.Cont
 			}, false)
 			if err != nil {
 				logger.Error("Failed to deduct currency cost: %v", err)
-				return nil, false, runtime.NewError("Insufficient funds for donation request", 9)
+				return nil, false, runtime.NewError("Insufficient funds for donation request", FAILED_PRECONDITION_ERROR_CODE)
 			}
 
 			currencyDeducted = true
@@ -1677,7 +1677,7 @@ func (e *NakamaEconomySystem) executeDonationRequestTransaction(ctx context.Cont
 	err = e.storeDonation(ctx, logger, nk, userID, donationID, donation)
 	if err != nil {
 		logger.Error("Failed to store donation: %v", err)
-		return nil, false, runtime.NewError("Failed to create donation request", 13)
+		return nil, false, runtime.NewError("Failed to create donation request", INTERNAL_ERROR_CODE)
 	}
 
 	// Step 6: Success - clear compensation actions since transaction completed
@@ -1692,23 +1692,23 @@ func (e *NakamaEconomySystem) executeDonationRequestTransaction(ctx context.Cont
 func (e *NakamaEconomySystem) validateDonationRequest(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID, donationID string) (*EconomyConfigDonation, error) {
 	// Check config exists
 	if e.config == nil || e.config.Donations == nil {
-		return nil, runtime.NewError("donation config not found", 3)
+		return nil, runtime.NewError("donation config not found", INVALID_ARGUMENT_ERROR_CODE)
 	}
 
 	donationConfig, ok := e.config.Donations[donationID]
 	if !ok {
-		return nil, runtime.NewError(fmt.Sprintf("donation config not found for ID: %s", donationID), 3)
+		return nil, runtime.NewError(fmt.Sprintf("donation config not found for ID: %s", donationID), INVALID_ARGUMENT_ERROR_CODE)
 	}
 
 	// Validate inventory system availability if items are required
 	if donationConfig.Cost != nil && len(donationConfig.Cost.Items) > 0 {
 		if e.pamlogix == nil {
-			return nil, runtime.NewError("Item cost deduction not available: pamlogix instance missing", 13)
+			return nil, runtime.NewError("Item cost deduction not available: pamlogix instance missing", INTERNAL_ERROR_CODE)
 		}
 
 		inventorySystem := e.pamlogix.(interface{ GetInventorySystem() InventorySystem }).GetInventorySystem()
 		if inventorySystem == nil {
-			return nil, runtime.NewError("Item cost deduction not available: inventory system missing", 13)
+			return nil, runtime.NewError("Item cost deduction not available: inventory system missing", INTERNAL_ERROR_CODE)
 		}
 	}
 
@@ -1760,7 +1760,7 @@ func (e *NakamaEconomySystem) deductItemCosts(ctx context.Context, logger runtim
 	_, _, _, notGrantedItems, err := inventorySystem.GrantItems(ctx, logger, nk, userID, deductItems, false)
 	if err != nil || len(notGrantedItems) > 0 {
 		logger.Error("Failed to deduct item cost (insufficient items): err=%v, not_granted=%v", err, notGrantedItems)
-		return runtime.NewError("Insufficient items for donation request", 9)
+		return runtime.NewError("Insufficient items for donation request", FAILED_PRECONDITION_ERROR_CODE)
 	}
 
 	// Add compensation action for item rollback
@@ -1797,7 +1797,7 @@ func (e *NakamaEconomySystem) storeDonation(ctx context.Context, logger runtime.
 
 func (e *NakamaEconomySystem) List(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID string) (storeItems map[string]*EconomyConfigStoreItem, placements map[string]*EconomyConfigPlacement, rewardModifiers []*ActiveRewardModifier, timestamp int64, err error) {
 	if e.config == nil {
-		err = runtime.NewError("economy config not loaded", 13)
+		err = runtime.NewError("economy config not loaded", INTERNAL_ERROR_CODE)
 		return
 	}
 	storeItems = e.config.StoreItems
@@ -1823,7 +1823,7 @@ func (e *NakamaEconomySystem) List(ctx context.Context, logger runtime.Logger, n
 // Grant will add currencies, and reward modifiers to a user's economy by ID.
 func (e *NakamaEconomySystem) Grant(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID string, currencies map[string]int64, items map[string]int64, modifiers []*RewardModifier, walletMetadata map[string]interface{}) (updatedWallet map[string]int64, rewardModifiers []*ActiveRewardModifier, timestamp int64, err error) {
 	if userID == "" {
-		err = runtime.NewError("user ID is empty", 3)
+		err = runtime.NewError("user ID is empty", INVALID_ARGUMENT_ERROR_CODE)
 		return
 	}
 
@@ -1889,35 +1889,35 @@ PurchaseIntent should prepare and possibly reserve a store item for purchase by 
 */
 func (e *NakamaEconomySystem) PurchaseIntent(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID, itemID string, store EconomyStoreType, sku string) (err error) {
 	if userID == "" {
-		return runtime.NewError("user ID is empty", 3) // INVALID_ARGUMENT
+		return runtime.NewError("user ID is empty", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 	}
 
 	if itemID == "" {
-		return runtime.NewError("item ID is empty", 3) // INVALID_ARGUMENT
+		return runtime.NewError("item ID is empty", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 	}
 
 	// Validate that the item exists in the store
 	if e.config == nil || e.config.StoreItems == nil {
-		return runtime.NewError("store items configuration not found", 5) // NOT_FOUND
+		return runtime.NewError("store items configuration not found", NOT_FOUND_ERROR_CODE) // NOT_FOUND
 	}
 
 	storeItem, exists := e.config.StoreItems[itemID]
 	if !exists {
-		return runtime.NewError(fmt.Sprintf("store item %s not found", itemID), 5) // NOT_FOUND
+		return runtime.NewError(fmt.Sprintf("store item %s not found", itemID), NOT_FOUND_ERROR_CODE) // NOT_FOUND
 	}
 
 	// Check if the item is available
 	if storeItem.Unavailable {
-		return runtime.NewError(fmt.Sprintf("store item %s is unavailable", itemID), 9) // FAILED_PRECONDITION
+		return runtime.NewError(fmt.Sprintf("store item %s is unavailable", itemID), FAILED_PRECONDITION_ERROR_CODE) // FAILED_PRECONDITION
 	}
 
 	if storeItem.Disabled {
-		return runtime.NewError(fmt.Sprintf("store item %s is disabled", itemID), 9) // FAILED_PRECONDITION
+		return runtime.NewError(fmt.Sprintf("store item %s is disabled", itemID), FAILED_PRECONDITION_ERROR_CODE) // FAILED_PRECONDITION
 	}
 
 	// Check if the SKU is valid for this item
 	if storeItem.Cost != nil && storeItem.Cost.Sku != "" && storeItem.Cost.Sku != sku {
-		return runtime.NewError(fmt.Sprintf("invalid SKU for item %s", itemID), 3) // INVALID_ARGUMENT
+		return runtime.NewError(fmt.Sprintf("invalid SKU for item %s", itemID), INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 	}
 
 	// Create a purchase intent record
@@ -1949,7 +1949,7 @@ func (e *NakamaEconomySystem) PurchaseIntent(ctx context.Context, logger runtime
 	intentData, err := json.Marshal(purchaseIntent)
 	if err != nil {
 		logger.Error("Failed to marshal purchase intent data: %v", err)
-		return runtime.NewError("Failed to create purchase intent", 13) // INTERNAL
+		return runtime.NewError("Failed to create purchase intent", INTERNAL_ERROR_CODE) // INTERNAL
 	}
 
 	intentKey := fmt.Sprintf("purchase_intent:%s:%s", userID, itemID)
@@ -1967,7 +1967,7 @@ func (e *NakamaEconomySystem) PurchaseIntent(ctx context.Context, logger runtime
 
 	if err != nil {
 		logger.Error("Failed to store purchase intent: %v", err)
-		return runtime.NewError("Failed to store purchase intent", 13) // INTERNAL
+		return runtime.NewError("Failed to store purchase intent", INTERNAL_ERROR_CODE) // INTERNAL
 	}
 
 	logger.Info("Created purchase intent for user %s, item %s, store %s", userID, itemID, store)
@@ -1988,15 +1988,15 @@ PurchaseItem validates a purchase and gives the user the appropriate rewards.
 */
 func (e *NakamaEconomySystem) PurchaseItem(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, userID, itemID string, store EconomyStoreType, receipt string) (updatedWallet map[string]int64, updatedInventory *Inventory, reward *Reward, isSandboxPurchase bool, err error) {
 	if userID == "" {
-		return nil, nil, nil, false, runtime.NewError("user ID is empty", 3) // INVALID_ARGUMENT
+		return nil, nil, nil, false, runtime.NewError("user ID is empty", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 	}
 
 	if itemID == "" {
-		return nil, nil, nil, false, runtime.NewError("item ID is empty", 3) // INVALID_ARGUMENT
+		return nil, nil, nil, false, runtime.NewError("item ID is empty", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 	}
 
 	if receipt == "" {
-		return nil, nil, nil, false, runtime.NewError("receipt is empty", 3) // INVALID_ARGUMENT
+		return nil, nil, nil, false, runtime.NewError("receipt is empty", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 	}
 
 	// Initialize return values
@@ -2005,21 +2005,21 @@ func (e *NakamaEconomySystem) PurchaseItem(ctx context.Context, logger runtime.L
 
 	// Validate that the item exists in the store
 	if e.config == nil || e.config.StoreItems == nil {
-		return nil, nil, nil, false, runtime.NewError("store items configuration not found", 5) // NOT_FOUND
+		return nil, nil, nil, false, runtime.NewError("store items configuration not found", NOT_FOUND_ERROR_CODE) // NOT_FOUND
 	}
 
 	storeItem, exists := e.config.StoreItems[itemID]
 	if !exists {
-		return nil, nil, nil, false, runtime.NewError(fmt.Sprintf("store item %s not found", itemID), 5) // NOT_FOUND
+		return nil, nil, nil, false, runtime.NewError(fmt.Sprintf("store item %s not found", itemID), NOT_FOUND_ERROR_CODE) // NOT_FOUND
 	}
 
 	// Check if the item is available
 	if storeItem.Unavailable {
-		return nil, nil, nil, false, runtime.NewError(fmt.Sprintf("store item %s is unavailable", itemID), 9) // FAILED_PRECONDITION
+		return nil, nil, nil, false, runtime.NewError(fmt.Sprintf("store item %s is unavailable", itemID), FAILED_PRECONDITION_ERROR_CODE) // FAILED_PRECONDITION
 	}
 
 	if storeItem.Disabled {
-		return nil, nil, nil, false, runtime.NewError(fmt.Sprintf("store item %s is disabled", itemID), 9) // FAILED_PRECONDITION
+		return nil, nil, nil, false, runtime.NewError(fmt.Sprintf("store item %s is disabled", itemID), FAILED_PRECONDITION_ERROR_CODE) // FAILED_PRECONDITION
 	}
 
 	// Check for a purchase intent
@@ -2042,7 +2042,7 @@ func (e *NakamaEconomySystem) PurchaseItem(ctx context.Context, logger runtime.L
 			// Check if intent has already been consumed
 			isConsumed, ok := purchaseIntent["is_consumed"].(bool)
 			if ok && isConsumed {
-				return nil, nil, nil, false, runtime.NewError("purchase intent already consumed", 9) // FAILED_PRECONDITION
+				return nil, nil, nil, false, runtime.NewError("purchase intent already consumed", FAILED_PRECONDITION_ERROR_CODE) // FAILED_PRECONDITION
 			}
 		}
 	}
@@ -2070,11 +2070,11 @@ func (e *NakamaEconomySystem) PurchaseItem(ctx context.Context, logger runtime.L
 		validPurchase = validationResponse != nil && len(validationResponse.ValidatedPurchases) > 0
 
 	default:
-		return nil, nil, nil, false, runtime.NewError(fmt.Sprintf("unsupported store type: %s", store), 3) // INVALID_ARGUMENT
+		return nil, nil, nil, false, runtime.NewError(fmt.Sprintf("unsupported store type: %s", store), INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 	}
 
 	if !validPurchase {
-		return nil, nil, nil, false, runtime.NewError("invalid receipt", 3) // INVALID_ARGUMENT
+		return nil, nil, nil, false, runtime.NewError("invalid receipt", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 	}
 
 	// Check if the purchase was made in a sandbox environment
@@ -2147,7 +2147,7 @@ func (e *NakamaEconomySystem) PurchaseItem(ctx context.Context, logger runtime.L
 		reward, err = e.RewardRoll(ctx, logger, nk, userID, storeItem.Reward)
 		if err != nil {
 			logger.Error("Failed to roll reward: %v", err)
-			return nil, nil, nil, isSandboxPurchase, runtime.NewError("failed to generate reward", 13) // INTERNAL
+			return nil, nil, nil, isSandboxPurchase, runtime.NewError("failed to generate reward", INTERNAL_ERROR_CODE) // INTERNAL
 		}
 
 		// Grant the reward to the user
@@ -2160,7 +2160,7 @@ func (e *NakamaEconomySystem) PurchaseItem(ctx context.Context, logger runtime.L
 		newItems, updatedItems, _, err := e.RewardGrant(ctx, logger, nk, userID, reward, metadata, false)
 		if err != nil {
 			logger.Error("Failed to grant reward: %v", err)
-			return nil, nil, nil, isSandboxPurchase, runtime.NewError("failed to grant reward", 13) // INTERNAL
+			return nil, nil, nil, isSandboxPurchase, runtime.NewError("failed to grant reward", INTERNAL_ERROR_CODE) // INTERNAL
 		}
 
 		// Get updated wallet
@@ -2209,11 +2209,11 @@ PurchaseRestore processes a restore attempt for the given user, based on a set o
 */
 func (e *NakamaEconomySystem) PurchaseRestore(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID string, store EconomyStoreType, receipts []string) (err error) {
 	if userID == "" {
-		return runtime.NewError("user ID is empty", 3) // INVALID_ARGUMENT
+		return runtime.NewError("user ID is empty", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 	}
 
 	if len(receipts) == 0 {
-		return runtime.NewError("receipts list is empty", 3) // INVALID_ARGUMENT
+		return runtime.NewError("receipts list is empty", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 	}
 
 	// Get existing transactions for this user to avoid duplicates
@@ -2409,10 +2409,10 @@ func (e *NakamaEconomySystem) getUserTransactions(ctx context.Context, nk runtim
 func (e *NakamaEconomySystem) PlacementStatus(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID, rewardID, placementID string, retryCount int) (*EconomyPlacementStatus, error) {
 	// Validate inputs
 	if userID == "" {
-		return nil, runtime.NewError("user ID must not be empty", 3) // INVALID_ARGUMENT
+		return nil, runtime.NewError("user ID must not be empty", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 	}
 	if placementID == "" {
-		return nil, runtime.NewError("placement ID must not be empty", 3) // INVALID_ARGUMENT
+		return nil, runtime.NewError("placement ID must not be empty", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 	}
 
 	// Check if placement exists in configuration
@@ -2468,10 +2468,10 @@ func (e *NakamaEconomySystem) PlacementStatus(ctx context.Context, logger runtim
 func (e *NakamaEconomySystem) PlacementStart(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID, placementID string, metadata map[string]string) (*EconomyPlacementStatus, error) {
 	// Validate inputs
 	if userID == "" {
-		return nil, runtime.NewError("user ID must not be empty", 3) // INVALID_ARGUMENT
+		return nil, runtime.NewError("user ID must not be empty", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 	}
 	if placementID == "" {
-		return nil, runtime.NewError("placement ID must not be empty", 3) // INVALID_ARGUMENT
+		return nil, runtime.NewError("placement ID must not be empty", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 	}
 
 	// Check if placement exists in configuration
@@ -2500,7 +2500,7 @@ func (e *NakamaEconomySystem) PlacementStart(ctx context.Context, logger runtime
 	})
 	if err != nil {
 		logger.Error("Failed to marshal placement data: %v", err)
-		return nil, runtime.NewError("failed to marshal placement data", 13) // INTERNAL
+		return nil, runtime.NewError("failed to marshal placement data", INTERNAL_ERROR_CODE) // INTERNAL
 	}
 
 	_, err = nk.StorageWrite(ctx, []*runtime.StorageWrite{
@@ -2515,7 +2515,7 @@ func (e *NakamaEconomySystem) PlacementStart(ctx context.Context, logger runtime
 	})
 	if err != nil {
 		logger.Error("Failed to write placement data: %v", err)
-		return nil, runtime.NewError("failed to write placement data", 13) // INTERNAL
+		return nil, runtime.NewError("failed to write placement data", INTERNAL_ERROR_CODE) // INTERNAL
 	}
 
 	return status, nil
@@ -2525,13 +2525,13 @@ func (e *NakamaEconomySystem) PlacementStart(ctx context.Context, logger runtime
 func (e *NakamaEconomySystem) PlacementSuccess(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID, rewardID, placementID string) (*Reward, map[string]string, error) {
 	// Validate inputs
 	if userID == "" {
-		return nil, nil, runtime.NewError("user ID must not be empty", 3) // INVALID_ARGUMENT
+		return nil, nil, runtime.NewError("user ID must not be empty", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 	}
 	if placementID == "" {
-		return nil, nil, runtime.NewError("placement ID must not be empty", 3) // INVALID_ARGUMENT
+		return nil, nil, runtime.NewError("placement ID must not be empty", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 	}
 	if rewardID == "" {
-		return nil, nil, runtime.NewError("reward ID must not be empty", 3) // INVALID_ARGUMENT
+		return nil, nil, runtime.NewError("reward ID must not be empty", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 	}
 
 	// Check if placement exists in configuration
@@ -2549,7 +2549,7 @@ func (e *NakamaEconomySystem) PlacementSuccess(ctx context.Context, logger runti
 		},
 	})
 	if err != nil || len(object) == 0 {
-		return nil, nil, runtime.NewError("placement not started", 3) // INVALID_ARGUMENT
+		return nil, nil, runtime.NewError("placement not started", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 	}
 
 	var placementData struct {
@@ -2559,12 +2559,12 @@ func (e *NakamaEconomySystem) PlacementSuccess(ctx context.Context, logger runti
 	}
 
 	if err := json.Unmarshal([]byte(object[0].Value), &placementData); err != nil {
-		return nil, nil, runtime.NewError("invalid placement data", 13) // INTERNAL
+		return nil, nil, runtime.NewError("invalid placement data", INTERNAL_ERROR_CODE) // INTERNAL
 	}
 
 	// Check if placement was started
 	if placementData.Status != "started" {
-		return nil, nil, runtime.NewError("placement not in started state", 3) // INVALID_ARGUMENT
+		return nil, nil, runtime.NewError("placement not in started state", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 	}
 
 	// Roll the reward based on the placement's reward configuration
@@ -2647,10 +2647,10 @@ func (e *NakamaEconomySystem) PlacementSuccess(ctx context.Context, logger runti
 func (e *NakamaEconomySystem) PlacementFail(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID, rewardID, placementID string) (map[string]string, error) {
 	// Validate inputs
 	if userID == "" {
-		return nil, runtime.NewError("user ID must not be empty", 3) // INVALID_ARGUMENT
+		return nil, runtime.NewError("user ID must not be empty", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 	}
 	if placementID == "" {
-		return nil, runtime.NewError("placement ID must not be empty", 3) // INVALID_ARGUMENT
+		return nil, runtime.NewError("placement ID must not be empty", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 	}
 
 	// Check if placement exists in configuration
@@ -2669,7 +2669,7 @@ func (e *NakamaEconomySystem) PlacementFail(ctx context.Context, logger runtime.
 	})
 
 	if err != nil || len(object) == 0 {
-		return nil, runtime.NewError("placement not started", 3) // INVALID_ARGUMENT
+		return nil, runtime.NewError("placement not started", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 	}
 
 	var placementData struct {
@@ -2679,7 +2679,7 @@ func (e *NakamaEconomySystem) PlacementFail(ctx context.Context, logger runtime.
 	}
 
 	if err := json.Unmarshal([]byte(object[0].Value), &placementData); err != nil {
-		return nil, runtime.NewError("invalid placement data", 13) // INTERNAL
+		return nil, runtime.NewError("invalid placement data", INTERNAL_ERROR_CODE) // INTERNAL
 	}
 
 	// Update placement status to failed
@@ -2728,7 +2728,7 @@ func (e *NakamaEconomySystem) grantItemsDirectly(ctx context.Context, logger run
 	inventory, err := e.getInventory(ctx, nk, userID)
 	if err != nil {
 		logger.Error("Failed to retrieve inventory: %v", err)
-		return runtime.NewError("Failed to retrieve inventory", 13) // INTERNAL
+		return runtime.NewError("Failed to retrieve inventory", INTERNAL_ERROR_CODE) // INTERNAL
 	}
 
 	// Prepare item operations
@@ -2840,7 +2840,7 @@ func (e *NakamaEconomySystem) grantItemsDirectly(ctx context.Context, logger run
 		_, err = nk.StorageWrite(ctx, itemsToAdd)
 		if err != nil {
 			logger.Error("Failed to write inventory updates: %v", err)
-			return runtime.NewError("Failed to update inventory", 13) // INTERNAL
+			return runtime.NewError("Failed to update inventory", INTERNAL_ERROR_CODE) // INTERNAL
 		}
 	}
 

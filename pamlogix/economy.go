@@ -9,24 +9,24 @@ import (
 )
 
 var (
-	ErrEconomyNoItem            = runtime.NewError("item not found", 3)                        // INVALID_ARGUMENT
-	ErrEconomyItemUnavailable   = runtime.NewError("item unavailable", 3)                      // INVALID_ARGUMENT
-	ErrEconomyNoSku             = runtime.NewError("sku not found", 3)                         // INVALID_ARGUMENT
-	ErrEconomySkuInvalid        = runtime.NewError("invalid sku", 3)                           // INVALID_ARGUMENT
-	ErrEconomyNotEnoughCurrency = runtime.NewError("not enough currency for purchase", 3)      // INVALID_ARGUMENT
-	ErrEconomyNotEnoughItem     = runtime.NewError("not enough item", 3)                       // INVALID_ARGUMENT
-	ErrEconomyReceiptInvalid    = runtime.NewError("invalid receipt", 3)                       // INVALID_ARGUMENT
-	ErrEconomyReceiptDuplicate  = runtime.NewError("duplicate receipt", 3)                     // INVALID_ARGUMENT
-	ErrEconomyReceiptMismatch   = runtime.NewError("mismatched product receipt", 3)            // INVALID_ARGUMENT
-	ErrEconomyNoPlacement       = runtime.NewError("placement not found", 3)                   // INVALID_ARGUMENT
-	ErrEconomyNoDonation        = runtime.NewError("donation not found", 3)                    // INVALID_ARGUMENT
-	ErrEconomyMaxDonation       = runtime.NewError("donation maximum contribution reached", 3) // INVALID_ARGUMENT
-	ErrEconomyClaimedDonation   = runtime.NewError("donation already claimed", 3)              // INVALID_ARGUMENT
+	ErrEconomyNoItem            = runtime.NewError("item not found", INVALID_ARGUMENT_ERROR_CODE)                        // INVALID_ARGUMENT
+	ErrEconomyItemUnavailable   = runtime.NewError("item unavailable", INVALID_ARGUMENT_ERROR_CODE)                      // INVALID_ARGUMENT
+	ErrEconomyNoSku             = runtime.NewError("sku not found", INVALID_ARGUMENT_ERROR_CODE)                         // INVALID_ARGUMENT
+	ErrEconomySkuInvalid        = runtime.NewError("invalid sku", INVALID_ARGUMENT_ERROR_CODE)                           // INVALID_ARGUMENT
+	ErrEconomyNotEnoughCurrency = runtime.NewError("not enough currency for purchase", INVALID_ARGUMENT_ERROR_CODE)      // INVALID_ARGUMENT
+	ErrEconomyNotEnoughItem     = runtime.NewError("not enough item", INVALID_ARGUMENT_ERROR_CODE)                       // INVALID_ARGUMENT
+	ErrEconomyReceiptInvalid    = runtime.NewError("invalid receipt", INVALID_ARGUMENT_ERROR_CODE)                       // INVALID_ARGUMENT
+	ErrEconomyReceiptDuplicate  = runtime.NewError("duplicate receipt", INVALID_ARGUMENT_ERROR_CODE)                     // INVALID_ARGUMENT
+	ErrEconomyReceiptMismatch   = runtime.NewError("mismatched product receipt", INVALID_ARGUMENT_ERROR_CODE)            // INVALID_ARGUMENT
+	ErrEconomyNoPlacement       = runtime.NewError("placement not found", INVALID_ARGUMENT_ERROR_CODE)                   // INVALID_ARGUMENT
+	ErrEconomyNoDonation        = runtime.NewError("donation not found", INVALID_ARGUMENT_ERROR_CODE)                    // INVALID_ARGUMENT
+	ErrEconomyMaxDonation       = runtime.NewError("donation maximum contribution reached", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
+	ErrEconomyClaimedDonation   = runtime.NewError("donation already claimed", INVALID_ARGUMENT_ERROR_CODE)              // INVALID_ARGUMENT
 
-	ErrInventoryNotInitialized = runtime.NewError("inventory not initialized for batch", 13) // INTERNAL
-	ErrItemsNotConsumable      = runtime.NewError("items not consumable", 3)                 // INVALID_ARGUMENT
-	ErrItemsInsufficient       = runtime.NewError("insufficient items", 9)                   // FAILED_PRECONDITION
-	ErrCurrencyInsufficient    = runtime.NewError("insufficient currency", 9)                // FAILED_PRECONDITION
+	ErrInventoryNotInitialized = runtime.NewError("inventory not initialized for batch", INTERNAL_ERROR_CODE) // INTERNAL
+	ErrItemsNotConsumable      = runtime.NewError("items not consumable", INVALID_ARGUMENT_ERROR_CODE)        // INVALID_ARGUMENT
+	ErrItemsInsufficient       = runtime.NewError("insufficient items", FAILED_PRECONDITION_ERROR_CODE)       // FAILED_PRECONDITION
+	ErrCurrencyInsufficient    = runtime.NewError("insufficient currency", FAILED_PRECONDITION_ERROR_CODE)    // FAILED_PRECONDITION
 )
 
 // EconomyConfig is the data definition for the EconomySystem type.

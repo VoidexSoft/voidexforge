@@ -54,7 +54,7 @@ func (i *NakamaIncentivesSystem) SenderList(ctx context.Context, logger runtime.
 	userIncentives, err := i.getUserIncentives(ctx, logger, nk, userID)
 	if err != nil {
 		logger.Error("Failed to get user incentives: %v", err)
-		return nil, runtime.NewError("failed to get user incentives", 13) // INTERNAL
+		return nil, runtime.NewError("failed to get user incentives", INTERNAL_ERROR_CODE) // INTERNAL
 	}
 
 	// Convert to response format
@@ -70,19 +70,19 @@ func (i *NakamaIncentivesSystem) SenderList(ctx context.Context, logger runtime.
 func (i *NakamaIncentivesSystem) SenderCreate(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID, incentiveID string) (incentives []*Incentive, err error) {
 	// Validate incentive ID exists in config
 	if i.config == nil || i.config.Incentives == nil {
-		return nil, runtime.NewError("incentives system not configured", 9) // FAILED_PRECONDITION
+		return nil, runtime.NewError("incentives system not configured", FAILED_PRECONDITION_ERROR_CODE) // FAILED_PRECONDITION
 	}
 
 	incentiveConfig, exists := i.config.Incentives[incentiveID]
 	if !exists {
-		return nil, runtime.NewError("incentive configuration not found", 5) // NOT_FOUND
+		return nil, runtime.NewError("incentive configuration not found", NOT_FOUND_ERROR_CODE) // NOT_FOUND
 	}
 
 	// Get user's current incentives
 	userIncentives, err := i.getUserIncentives(ctx, logger, nk, userID)
 	if err != nil {
 		logger.Error("Failed to get user incentives: %v", err)
-		return nil, runtime.NewError("failed to get user incentives", 13) // INTERNAL
+		return nil, runtime.NewError("failed to get user incentives", INTERNAL_ERROR_CODE) // INTERNAL
 	}
 
 	// Check max concurrent limit
@@ -94,7 +94,7 @@ func (i *NakamaIncentivesSystem) SenderCreate(ctx context.Context, logger runtim
 			}
 		}
 		if activeCount >= incentiveConfig.MaxConcurrent {
-			return nil, runtime.NewError("maximum concurrent incentives reached", 9) // FAILED_PRECONDITION
+			return nil, runtime.NewError("maximum concurrent incentives reached", FAILED_PRECONDITION_ERROR_CODE) // FAILED_PRECONDITION
 		}
 	}
 
@@ -148,7 +148,7 @@ func (i *NakamaIncentivesSystem) SenderCreate(ctx context.Context, logger runtim
 	err = i.saveUserIncentives(ctx, logger, nk, userID, userIncentives)
 	if err != nil {
 		logger.Error("Failed to save user incentives: %v", err)
-		return nil, runtime.NewError("failed to save incentives", 13) // INTERNAL
+		return nil, runtime.NewError("failed to save incentives", INTERNAL_ERROR_CODE) // INTERNAL
 	}
 
 	// Return updated list
@@ -161,18 +161,18 @@ func (i *NakamaIncentivesSystem) SenderDelete(ctx context.Context, logger runtim
 	userIncentives, err := i.getUserIncentives(ctx, logger, nk, userID)
 	if err != nil {
 		logger.Error("Failed to get user incentives: %v", err)
-		return nil, runtime.NewError("failed to get user incentives", 13) // INTERNAL
+		return nil, runtime.NewError("failed to get user incentives", INTERNAL_ERROR_CODE) // INTERNAL
 	}
 
 	// Check if incentive exists and belongs to user
 	incentive, exists := userIncentives[code]
 	if !exists {
-		return nil, runtime.NewError("incentive not found", 5) // NOT_FOUND
+		return nil, runtime.NewError("incentive not found", NOT_FOUND_ERROR_CODE) // NOT_FOUND
 	}
 
 	// Check if incentive has been claimed (prevent deletion if so)
 	if len(incentive.Claims) > 0 {
-		return nil, runtime.NewError("cannot delete claimed incentive", 9) // FAILED_PRECONDITION
+		return nil, runtime.NewError("cannot delete claimed incentive", FAILED_PRECONDITION_ERROR_CODE) // FAILED_PRECONDITION
 	}
 
 	// Remove from user's incentives
@@ -182,7 +182,7 @@ func (i *NakamaIncentivesSystem) SenderDelete(ctx context.Context, logger runtim
 	err = i.saveUserIncentives(ctx, logger, nk, userID, userIncentives)
 	if err != nil {
 		logger.Error("Failed to save user incentives: %v", err)
-		return nil, runtime.NewError("failed to save incentives", 13) // INTERNAL
+		return nil, runtime.NewError("failed to save incentives", INTERNAL_ERROR_CODE) // INTERNAL
 	}
 
 	// Return updated list
@@ -195,19 +195,19 @@ func (i *NakamaIncentivesSystem) SenderClaim(ctx context.Context, logger runtime
 	userIncentives, err := i.getUserIncentives(ctx, logger, nk, userID)
 	if err != nil {
 		logger.Error("Failed to get user incentives: %v", err)
-		return nil, runtime.NewError("failed to get user incentives", 13) // INTERNAL
+		return nil, runtime.NewError("failed to get user incentives", INTERNAL_ERROR_CODE) // INTERNAL
 	}
 
 	// Check if incentive exists and belongs to user
 	incentive, exists := userIncentives[code]
 	if !exists {
-		return nil, runtime.NewError("incentive not found", 5) // NOT_FOUND
+		return nil, runtime.NewError("incentive not found", NOT_FOUND_ERROR_CODE) // NOT_FOUND
 	}
 
 	// Get incentive config
 	incentiveConfig, configExists := i.config.Incentives[incentive.Id]
 	if !configExists {
-		return nil, runtime.NewError("incentive configuration not found", 5) // NOT_FOUND
+		return nil, runtime.NewError("incentive configuration not found", NOT_FOUND_ERROR_CODE) // NOT_FOUND
 	}
 
 	// Determine which recipients to claim for
@@ -223,7 +223,7 @@ func (i *NakamaIncentivesSystem) SenderClaim(ctx context.Context, logger runtime
 	// Process sender rewards for each recipient
 	economySystem := i.pamlogix.GetEconomySystem()
 	if economySystem == nil {
-		return nil, runtime.NewError("economy system not available", 9) // FAILED_PRECONDITION
+		return nil, runtime.NewError("economy system not available", FAILED_PRECONDITION_ERROR_CODE) // FAILED_PRECONDITION
 	}
 
 	var totalReward *Reward
@@ -312,7 +312,7 @@ func (i *NakamaIncentivesSystem) SenderClaim(ctx context.Context, logger runtime
 	err = i.saveUserIncentives(ctx, logger, nk, userID, userIncentives)
 	if err != nil {
 		logger.Error("Failed to save user incentives: %v", err)
-		return nil, runtime.NewError("failed to save incentives", 13) // INTERNAL
+		return nil, runtime.NewError("failed to save incentives", INTERNAL_ERROR_CODE) // INTERNAL
 	}
 
 	// Return updated list
@@ -327,18 +327,18 @@ func (i *NakamaIncentivesSystem) RecipientGet(ctx context.Context, logger runtim
 		return nil, err
 	}
 	if incentiveData == nil {
-		return nil, runtime.NewError("incentive not found", 5) // NOT_FOUND
+		return nil, runtime.NewError("incentive not found", NOT_FOUND_ERROR_CODE) // NOT_FOUND
 	}
 
 	// Check if incentive has expired
 	if incentiveData.ExpiryTimeSec > 0 && incentiveData.ExpiryTimeSec <= time.Now().Unix() {
-		return nil, runtime.NewError("incentive has expired", 9) // FAILED_PRECONDITION
+		return nil, runtime.NewError("incentive has expired", FAILED_PRECONDITION_ERROR_CODE) // FAILED_PRECONDITION
 	}
 
 	// Get incentive config
 	incentiveConfig, configExists := i.config.Incentives[incentiveData.Id]
 	if !configExists {
-		return nil, runtime.NewError("incentive configuration not found", 5) // NOT_FOUND
+		return nil, runtime.NewError("incentive configuration not found", NOT_FOUND_ERROR_CODE) // NOT_FOUND
 	}
 
 	// Check if user has already claimed this incentive
@@ -384,42 +384,42 @@ func (i *NakamaIncentivesSystem) RecipientClaim(ctx context.Context, logger runt
 		return nil, err
 	}
 	if incentiveData == nil {
-		return nil, runtime.NewError("incentive not found", 5) // NOT_FOUND
+		return nil, runtime.NewError("incentive not found", NOT_FOUND_ERROR_CODE) // NOT_FOUND
 	}
 
 	// Check if incentive has expired
 	if incentiveData.ExpiryTimeSec > 0 && incentiveData.ExpiryTimeSec <= time.Now().Unix() {
-		return nil, runtime.NewError("incentive has expired", 9) // FAILED_PRECONDITION
+		return nil, runtime.NewError("incentive has expired", FAILED_PRECONDITION_ERROR_CODE) // FAILED_PRECONDITION
 	}
 
 	// Get incentive config
 	incentiveConfig, configExists := i.config.Incentives[incentiveData.Id]
 	if !configExists {
-		return nil, runtime.NewError("incentive configuration not found", 5) // NOT_FOUND
+		return nil, runtime.NewError("incentive configuration not found", NOT_FOUND_ERROR_CODE) // NOT_FOUND
 	}
 
 	// Check if user has already claimed this incentive
 	if _, alreadyClaimed := incentiveData.Claims[userID]; alreadyClaimed {
-		return nil, runtime.NewError("incentive already claimed", 9) // FAILED_PRECONDITION
+		return nil, runtime.NewError("incentive already claimed", FAILED_PRECONDITION_ERROR_CODE) // FAILED_PRECONDITION
 	}
 
 	// Check if user can claim this incentive
 	if !i.canUserClaimIncentive(ctx, logger, nk, userID, incentiveData, incentiveConfig) {
-		return nil, runtime.NewError("user cannot claim this incentive", 9) // FAILED_PRECONDITION
+		return nil, runtime.NewError("user cannot claim this incentive", FAILED_PRECONDITION_ERROR_CODE) // FAILED_PRECONDITION
 	}
 
 	// Check max claims limit
 	if incentiveConfig.MaxClaims > 0 && len(incentiveData.Claims) >= incentiveConfig.MaxClaims {
-		return nil, runtime.NewError("incentive claim limit reached", 9) // FAILED_PRECONDITION
+		return nil, runtime.NewError("incentive claim limit reached", FAILED_PRECONDITION_ERROR_CODE) // FAILED_PRECONDITION
 	}
 
 	// Roll recipient reward
 	if i.pamlogix == nil {
-		return nil, runtime.NewError("economy system not available", 9) // FAILED_PRECONDITION
+		return nil, runtime.NewError("economy system not available", FAILED_PRECONDITION_ERROR_CODE) // FAILED_PRECONDITION
 	}
 	economySystem := i.pamlogix.GetEconomySystem()
 	if economySystem == nil {
-		return nil, runtime.NewError("economy system not available", 9) // FAILED_PRECONDITION
+		return nil, runtime.NewError("economy system not available", FAILED_PRECONDITION_ERROR_CODE) // FAILED_PRECONDITION
 	}
 
 	var reward *Reward
@@ -427,7 +427,7 @@ func (i *NakamaIncentivesSystem) RecipientClaim(ctx context.Context, logger runt
 		reward, err = economySystem.RewardRoll(ctx, logger, nk, userID, incentiveConfig.RecipientReward)
 		if err != nil {
 			logger.Error("Failed to roll recipient reward: %v", err)
-			return nil, runtime.NewError("failed to generate reward", 13) // INTERNAL
+			return nil, runtime.NewError("failed to generate reward", INTERNAL_ERROR_CODE) // INTERNAL
 		}
 
 		// Apply custom reward function if set
@@ -435,7 +435,7 @@ func (i *NakamaIncentivesSystem) RecipientClaim(ctx context.Context, logger runt
 			reward, err = i.onRecipientReward(ctx, logger, nk, userID, incentiveData.Id, incentiveConfig, incentiveConfig.RecipientReward, reward)
 			if err != nil {
 				logger.Error("Error in recipient reward callback: %v", err)
-				return nil, runtime.NewError("failed to process reward", 13) // INTERNAL
+				return nil, runtime.NewError("failed to process reward", INTERNAL_ERROR_CODE) // INTERNAL
 			}
 		}
 
@@ -447,7 +447,7 @@ func (i *NakamaIncentivesSystem) RecipientClaim(ctx context.Context, logger runt
 			}, false)
 			if err != nil {
 				logger.Error("Failed to grant recipient reward: %v", err)
-				return nil, runtime.NewError("failed to grant reward", 13) // INTERNAL
+				return nil, runtime.NewError("failed to grant reward", INTERNAL_ERROR_CODE) // INTERNAL
 			}
 		}
 	}
@@ -473,7 +473,7 @@ func (i *NakamaIncentivesSystem) RecipientClaim(ctx context.Context, logger runt
 	err = i.saveIncentiveForSender(ctx, logger, nk, senderID, code, incentiveData)
 	if err != nil {
 		logger.Error("Failed to save updated incentive: %v", err)
-		return nil, runtime.NewError("failed to save incentive", 13) // INTERNAL
+		return nil, runtime.NewError("failed to save incentive", INTERNAL_ERROR_CODE) // INTERNAL
 	}
 
 	// Return incentive info

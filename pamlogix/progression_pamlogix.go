@@ -47,7 +47,7 @@ func (p *NakamaProgressionSystem) GetConfig() any {
 // Get returns all or an optionally-filtered set of progressions for the given user.
 func (p *NakamaProgressionSystem) Get(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID string, lastKnownProgressions map[string]*Progression) (progressions map[string]*Progression, deltas map[string]*ProgressionDelta, err error) {
 	if p.config == nil {
-		return nil, nil, runtime.NewError("progression config not loaded", 13)
+		return nil, nil, runtime.NewError("progression config not loaded", INTERNAL_ERROR_CODE)
 	}
 
 	// Get user's progression data from storage
@@ -131,7 +131,7 @@ func (p *NakamaProgressionSystem) Get(ctx context.Context, logger runtime.Logger
 // Purchase permanently unlocks a specified progression, if that progression supports this operation.
 func (p *NakamaProgressionSystem) Purchase(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID, progressionID string) (progressions map[string]*Progression, err error) {
 	if p.config == nil {
-		return nil, runtime.NewError("progression config not loaded", 13)
+		return nil, runtime.NewError("progression config not loaded", INTERNAL_ERROR_CODE)
 	}
 
 	progressionConfig, exists := p.config.Progressions[progressionID]
@@ -163,7 +163,7 @@ func (p *NakamaProgressionSystem) Purchase(ctx context.Context, logger runtime.L
 	// Process the purchase cost through economy system
 	economySystem := p.pamlogix.GetEconomySystem()
 	if economySystem == nil {
-		return nil, runtime.NewError("economy system not available", 13)
+		return nil, runtime.NewError("economy system not available", INTERNAL_ERROR_CODE)
 	}
 
 	// Create a reward config for the cost (negative amounts)
@@ -234,7 +234,7 @@ func (p *NakamaProgressionSystem) Purchase(ctx context.Context, logger runtime.L
 // Update a specified progression, if that progression supports this operation.
 func (p *NakamaProgressionSystem) Update(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID, progressionID string, counts map[string]int64) (progressions map[string]*Progression, err error) {
 	if p.config == nil {
-		return nil, runtime.NewError("progression config not loaded", 13)
+		return nil, runtime.NewError("progression config not loaded", INTERNAL_ERROR_CODE)
 	}
 
 	progressionConfig, exists := p.config.Progressions[progressionID]
@@ -298,7 +298,7 @@ func (p *NakamaProgressionSystem) Update(ctx context.Context, logger runtime.Log
 // Reset one or more progressions to clear their progress. Only applies to progression counts and unlock costs.
 func (p *NakamaProgressionSystem) Reset(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID string, progressionIDs []string) (progressions map[string]*Progression, err error) {
 	if p.config == nil {
-		return nil, runtime.NewError("progression config not loaded", 13)
+		return nil, runtime.NewError("progression config not loaded", INTERNAL_ERROR_CODE)
 	}
 
 	// Get user's progression data
@@ -338,7 +338,7 @@ func (p *NakamaProgressionSystem) Reset(ctx context.Context, logger runtime.Logg
 // Complete marks a progression as completed and grants any associated rewards.
 func (p *NakamaProgressionSystem) Complete(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID, progressionID string) (progressions map[string]*Progression, reward *Reward, err error) {
 	if p.config == nil {
-		return nil, nil, runtime.NewError("progression config not loaded", 13)
+		return nil, nil, runtime.NewError("progression config not loaded", INTERNAL_ERROR_CODE)
 	}
 
 	progressionConfig, exists := p.config.Progressions[progressionID]
@@ -354,7 +354,7 @@ func (p *NakamaProgressionSystem) Complete(ctx context.Context, logger runtime.L
 
 	progression, exists := currentProgressions[progressionID]
 	if !exists || !progression.Unlocked {
-		return nil, nil, runtime.NewError("progression not unlocked", 3)
+		return nil, nil, runtime.NewError("progression not unlocked", INVALID_ARGUMENT_ERROR_CODE)
 	}
 
 	// Grant rewards if configured

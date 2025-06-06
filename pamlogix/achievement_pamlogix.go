@@ -155,12 +155,12 @@ func (s *NakamaAchievementsSystem) GetConfig() any {
 func (s *NakamaAchievementsSystem) ClaimAchievements(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID string, achievementIDs []string, claimTotal bool) (map[string]*Achievement, map[string]*Achievement, error) {
 	if s.pamlogix == nil {
 		logger.Error("Pamlogix instance not set in AchievementsSystem")
-		return nil, nil, runtime.NewError("Achievements system not initialized: Pamlogix instance missing", 13) // INTERNAL
+		return nil, nil, runtime.NewError("Achievements system not initialized: Pamlogix instance missing", INTERNAL_ERROR_CODE) // INTERNAL
 	}
 	economySystem := s.pamlogix.GetEconomySystem()
 	if economySystem == nil {
 		logger.Error("EconomySystem not available via Pamlogix")
-		return nil, nil, runtime.NewError("Achievements system not initialized: EconomySystem missing", 13) // INTERNAL
+		return nil, nil, runtime.NewError("Achievements system not initialized: EconomySystem missing", INTERNAL_ERROR_CODE) // INTERNAL
 	}
 
 	// Read user achievement state
@@ -171,7 +171,7 @@ func (s *NakamaAchievementsSystem) ClaimAchievements(ctx context.Context, logger
 	}})
 	if err != nil {
 		logger.Error("Failed to read user achievements: %v", err)
-		return nil, nil, runtime.NewError("failed to read user achievements data", 13) // INTERNAL
+		return nil, nil, runtime.NewError("failed to read user achievements data", INTERNAL_ERROR_CODE) // INTERNAL
 	}
 
 	achievementList := &AchievementList{
@@ -182,7 +182,7 @@ func (s *NakamaAchievementsSystem) ClaimAchievements(ctx context.Context, logger
 	if len(objects) > 0 && objects[0].Value != "" {
 		if err := json.Unmarshal([]byte(objects[0].Value), achievementList); err != nil {
 			logger.Error("Failed to unmarshal user achievements: %v", err)
-			return nil, nil, runtime.NewError("failed to parse user achievements data", 13) // INTERNAL
+			return nil, nil, runtime.NewError("failed to parse user achievements data", INTERNAL_ERROR_CODE) // INTERNAL
 		}
 		version = objects[0].Version
 	}
@@ -351,7 +351,7 @@ func (s *NakamaAchievementsSystem) ClaimAchievements(ctx context.Context, logger
 	data, err := json.Marshal(achievementList)
 	if err != nil {
 		logger.Error("Failed to marshal updated achievements: %v", err)
-		return nil, nil, runtime.NewError("failed to serialize achievements update", 13) // INTERNAL
+		return nil, nil, runtime.NewError("failed to serialize achievements update", INTERNAL_ERROR_CODE) // INTERNAL
 	}
 	_, err = nk.StorageWrite(ctx, []*runtime.StorageWrite{{
 		Collection:      achievementStorageCollection,
@@ -364,7 +364,7 @@ func (s *NakamaAchievementsSystem) ClaimAchievements(ctx context.Context, logger
 	}})
 	if err != nil {
 		logger.Error("Failed to write updated achievements: %v", err)
-		return nil, nil, runtime.NewError("failed to save achievements update", 13) // INTERNAL
+		return nil, nil, runtime.NewError("failed to save achievements update", INTERNAL_ERROR_CODE) // INTERNAL
 	}
 
 	return updatedAchievements, updatedRepeatAchievements, nil
@@ -378,7 +378,7 @@ func (s *NakamaAchievementsSystem) GetAchievements(ctx context.Context, logger r
 	}})
 	if err != nil {
 		logger.Error("Failed to read user achievements in GetAchievements: %v", err)
-		return nil, nil, runtime.NewError("failed to read user achievements data", 13) // INTERNAL
+		return nil, nil, runtime.NewError("failed to read user achievements data", INTERNAL_ERROR_CODE) // INTERNAL
 	}
 
 	achievementList := &AchievementList{
@@ -389,7 +389,7 @@ func (s *NakamaAchievementsSystem) GetAchievements(ctx context.Context, logger r
 	if len(objects) > 0 && objects[0].Value != "" {
 		if err := json.Unmarshal([]byte(objects[0].Value), achievementList); err != nil {
 			logger.Error("Failed to unmarshal user achievements in GetAchievements: %v", err)
-			return nil, nil, runtime.NewError("failed to parse user achievements data", 13) // INTERNAL
+			return nil, nil, runtime.NewError("failed to parse user achievements data", INTERNAL_ERROR_CODE) // INTERNAL
 		}
 	}
 
@@ -405,7 +405,7 @@ func (s *NakamaAchievementsSystem) UpdateAchievements(ctx context.Context, logge
 	}})
 	if err != nil {
 		logger.Error("Failed to read user achievements in UpdateAchievements: %v", err)
-		return nil, nil, runtime.NewError("failed to read user achievements data", 13) // INTERNAL
+		return nil, nil, runtime.NewError("failed to read user achievements data", INTERNAL_ERROR_CODE) // INTERNAL
 	}
 
 	achievementList := &AchievementList{
@@ -416,7 +416,7 @@ func (s *NakamaAchievementsSystem) UpdateAchievements(ctx context.Context, logge
 	if len(objects) > 0 && objects[0].Value != "" {
 		if errUnmarshal := json.Unmarshal([]byte(objects[0].Value), achievementList); errUnmarshal != nil {
 			logger.Error("Failed to unmarshal user achievements in UpdateAchievements: %v", errUnmarshal)
-			return nil, nil, runtime.NewError("failed to parse user achievements data", 13) // INTERNAL
+			return nil, nil, runtime.NewError("failed to parse user achievements data", INTERNAL_ERROR_CODE) // INTERNAL
 		}
 		version = objects[0].Version
 	}
@@ -429,12 +429,12 @@ func (s *NakamaAchievementsSystem) UpdateAchievements(ctx context.Context, logge
 
 	if s.pamlogix == nil {
 		logger.Error("Pamlogix instance not set in AchievementsSystem for UpdateAchievements")
-		return nil, nil, runtime.NewError("Achievements system not initialized: Pamlogix instance missing", 13)
+		return nil, nil, runtime.NewError("Achievements system not initialized: Pamlogix instance missing", INTERNAL_ERROR_CODE)
 	}
 	economySystem := s.pamlogix.GetEconomySystem()
 	if economySystem == nil {
 		logger.Error("EconomySystem not available via Pamlogix for UpdateAchievements")
-		return nil, nil, runtime.NewError("Achievements system not initialized: EconomySystem missing", 13)
+		return nil, nil, runtime.NewError("Achievements system not initialized: EconomySystem missing", INTERNAL_ERROR_CODE)
 	}
 
 	for id, updateAmount := range achievementUpdates {
@@ -864,7 +864,7 @@ func (s *NakamaAchievementsSystem) UpdateAchievements(ctx context.Context, logge
 		data, errMarshal := json.Marshal(achievementList)
 		if errMarshal != nil {
 			logger.Error("Failed to marshal updated achievements in UpdateAchievements: %v", errMarshal)
-			return nil, nil, runtime.NewError("failed to serialize achievements update", 13) // INTERNAL
+			return nil, nil, runtime.NewError("failed to serialize achievements update", INTERNAL_ERROR_CODE) // INTERNAL
 		}
 		_, errWrite := nk.StorageWrite(ctx, []*runtime.StorageWrite{{
 			Collection:      achievementStorageCollection,
@@ -877,7 +877,7 @@ func (s *NakamaAchievementsSystem) UpdateAchievements(ctx context.Context, logge
 		}})
 		if errWrite != nil {
 			logger.Error("Failed to write updated achievements in UpdateAchievements: %v", errWrite)
-			return nil, nil, runtime.NewError("failed to save achievements update", 13) // INTERNAL
+			return nil, nil, runtime.NewError("failed to save achievements update", INTERNAL_ERROR_CODE) // INTERNAL
 		}
 	}
 

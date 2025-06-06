@@ -48,7 +48,7 @@ func (s *NakamaStreaksSystem) GetConfig() any {
 // List all streaks and their current state and progress for a given user.
 func (s *NakamaStreaksSystem) List(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID string) (streaks map[string]*Streak, err error) {
 	if s.config == nil {
-		return nil, runtime.NewError("streaks config not loaded", 13)
+		return nil, runtime.NewError("streaks config not loaded", INTERNAL_ERROR_CODE)
 	}
 
 	// Get user streaks from storage
@@ -103,7 +103,7 @@ func (s *NakamaStreaksSystem) List(ctx context.Context, logger runtime.Logger, n
 // Update one or more streaks with the indicated counts for the given user.
 func (s *NakamaStreaksSystem) Update(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID string, streakIDs map[string]int64) (streaks map[string]*Streak, err error) {
 	if s.config == nil {
-		return nil, runtime.NewError("streaks config not loaded", 13)
+		return nil, runtime.NewError("streaks config not loaded", INTERNAL_ERROR_CODE)
 	}
 
 	// Get user streaks from storage
@@ -201,16 +201,16 @@ func (s *NakamaStreaksSystem) Update(ctx context.Context, logger runtime.Logger,
 // Claim rewards for one or more streaks for the given user.
 func (s *NakamaStreaksSystem) Claim(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID string, streakIDs []string) (streaks map[string]*Streak, err error) {
 	if s.config == nil {
-		return nil, runtime.NewError("streaks config not loaded", 13)
+		return nil, runtime.NewError("streaks config not loaded", INTERNAL_ERROR_CODE)
 	}
 
 	if s.pamlogix == nil {
-		return nil, runtime.NewError("pamlogix instance not set", 13)
+		return nil, runtime.NewError("pamlogix instance not set", INTERNAL_ERROR_CODE)
 	}
 
 	economySystem := s.pamlogix.GetEconomySystem()
 	if economySystem == nil {
-		return nil, runtime.NewError("economy system not available", 13)
+		return nil, runtime.NewError("economy system not available", INTERNAL_ERROR_CODE)
 	}
 
 	// Get user streaks from storage
@@ -326,7 +326,7 @@ func (s *NakamaStreaksSystem) Claim(ctx context.Context, logger runtime.Logger, 
 // Reset progress on selected streaks for the given user.
 func (s *NakamaStreaksSystem) Reset(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID string, streakIDs []string) (streaks map[string]*Streak, err error) {
 	if s.config == nil {
-		return nil, runtime.NewError("streaks config not loaded", 13)
+		return nil, runtime.NewError("streaks config not loaded", INTERNAL_ERROR_CODE)
 	}
 
 	// Get user streaks from storage

@@ -292,7 +292,7 @@ func rpcEconomyGrant(p *pamlogixImpl) func(ctx context.Context, logger runtime.L
 		}
 		if err := json.Unmarshal([]byte(payload), &request); err != nil {
 			logger.Error("Failed to unmarshal EconomyGrantRequest: %v", err)
-			return "", runtime.NewError("Failed to unmarshal EconomyGrantRequest: "+err.Error(), 13)
+			return "", runtime.NewError("Failed to unmarshal EconomyGrantRequest: "+err.Error(), INTERNAL_ERROR_CODE)
 		}
 
 		// Extract user ID from session if not provided in the request

@@ -6,7 +6,7 @@ import (
 	"github.com/heroiclabs/nakama-common/runtime"
 )
 
-var ErrStreakResetInvalid = runtime.NewError("streak reset schedule invalid", 13)
+var ErrStreakResetInvalid = runtime.NewError("streak reset schedule invalid", INTERNAL_ERROR_CODE)
 
 // StreaksConfig is the data definition for a StreaksSystem type.
 type StreaksConfig struct {

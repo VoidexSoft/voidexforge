@@ -12,12 +12,12 @@ func rpcEnergyGet(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logg
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		energySystem := p.GetEnergySystem()
 		if energySystem == nil {
-			return "", runtime.NewError("energy system not available", 12) // UNIMPLEMENTED
+			return "", runtime.NewError("energy system not available", UNIMPLEMENTED_ERROR_CODE) // UNIMPLEMENTED
 		}
 
 		userId, ok := ctx.Value(runtime.RUNTIME_CTX_USER_ID).(string)
 		if !ok || userId == "" {
-			return "", runtime.NewError("user id not found in context", 3) // INVALID_ARGUMENT
+			return "", runtime.NewError("user id not found in context", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
 		energies, err := energySystem.Get(ctx, logger, nk, userId)
@@ -28,7 +28,7 @@ func rpcEnergyGet(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logg
 		data, err := json.Marshal(energies)
 		if err != nil {
 			logger.Error("Failed to marshal energies: %v", err)
-			return "", runtime.NewError("failed to marshal energies", 13) // INTERNAL
+			return "", runtime.NewError("failed to marshal energies", INTERNAL_ERROR_CODE) // INTERNAL
 		}
 
 		return string(data), nil
@@ -39,12 +39,12 @@ func rpcEnergySpend(p *pamlogixImpl) func(ctx context.Context, logger runtime.Lo
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		energySystem := p.GetEnergySystem()
 		if energySystem == nil {
-			return "", runtime.NewError("energy system not available", 12) // UNIMPLEMENTED
+			return "", runtime.NewError("energy system not available", UNIMPLEMENTED_ERROR_CODE) // UNIMPLEMENTED
 		}
 
 		userId, ok := ctx.Value(runtime.RUNTIME_CTX_USER_ID).(string)
 		if !ok || userId == "" {
-			return "", runtime.NewError("user id not found in context", 3) // INVALID_ARGUMENT
+			return "", runtime.NewError("user id not found in context", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
 		var request struct {
@@ -56,7 +56,7 @@ func rpcEnergySpend(p *pamlogixImpl) func(ctx context.Context, logger runtime.Lo
 
 		if err := json.Unmarshal([]byte(payload), &request); err != nil {
 			logger.Error("Failed to unmarshal EnergySpendRequest: %v", err)
-			return "", runtime.NewError("failed to unmarshal energy spend request", 13) // INTERNAL
+			return "", runtime.NewError("failed to unmarshal energy spend request", INTERNAL_ERROR_CODE) // INTERNAL
 		}
 
 		amounts := make(map[string]int32)
@@ -83,7 +83,7 @@ func rpcEnergySpend(p *pamlogixImpl) func(ctx context.Context, logger runtime.Lo
 		data, err := json.Marshal(response)
 		if err != nil {
 			logger.Error("Failed to marshal energy response: %v", err)
-			return "", runtime.NewError("failed to marshal energy response", 13) // INTERNAL
+			return "", runtime.NewError("failed to marshal energy response", INTERNAL_ERROR_CODE) // INTERNAL
 		}
 
 		return string(data), nil
@@ -94,12 +94,12 @@ func rpcEnergyGrant(p *pamlogixImpl) func(ctx context.Context, logger runtime.Lo
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		energySystem := p.GetEnergySystem()
 		if energySystem == nil {
-			return "", runtime.NewError("energy system not available", 12) // UNIMPLEMENTED
+			return "", runtime.NewError("energy system not available", UNIMPLEMENTED_ERROR_CODE) // UNIMPLEMENTED
 		}
 
 		userId, ok := ctx.Value(runtime.RUNTIME_CTX_USER_ID).(string)
 		if !ok || userId == "" {
-			return "", runtime.NewError("user id not found in context", 3) // INVALID_ARGUMENT
+			return "", runtime.NewError("user id not found in context", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
 		var request struct {
@@ -112,7 +112,7 @@ func rpcEnergyGrant(p *pamlogixImpl) func(ctx context.Context, logger runtime.Lo
 
 		if err := json.Unmarshal([]byte(payload), &request); err != nil {
 			logger.Error("Failed to unmarshal EnergyGrantRequest: %v", err)
-			return "", runtime.NewError("failed to unmarshal energy grant request", 13) // INTERNAL
+			return "", runtime.NewError("failed to unmarshal energy grant request", INTERNAL_ERROR_CODE) // INTERNAL
 		}
 
 		// Convert to the format expected by the Grant method
@@ -131,7 +131,7 @@ func rpcEnergyGrant(p *pamlogixImpl) func(ctx context.Context, logger runtime.Lo
 		data, err := json.Marshal(energies)
 		if err != nil {
 			logger.Error("Failed to marshal energies: %v", err)
-			return "", runtime.NewError("failed to marshal energies", 13) // INTERNAL
+			return "", runtime.NewError("failed to marshal energies", INTERNAL_ERROR_CODE) // INTERNAL
 		}
 
 		return string(data), nil

@@ -53,12 +53,12 @@ func (t *NakamaTeamsSystem) Create(ctx context.Context, logger runtime.Logger, n
 	// Get user ID from context
 	userID, ok := ctx.Value(runtime.RUNTIME_CTX_USER_ID).(string)
 	if !ok || userID == "" {
-		return nil, runtime.NewError("user id not found in context", 3) // INVALID_ARGUMENT
+		return nil, runtime.NewError("user id not found in context", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 	}
 
 	// Validate the request
 	if req.Name == "" {
-		return nil, runtime.NewError("team name is required", 3) // INVALID_ARGUMENT
+		return nil, runtime.NewError("team name is required", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 	}
 
 	// Apply custom validation if configured
@@ -200,11 +200,11 @@ func (t *NakamaTeamsSystem) checkTeamMembership(ctx context.Context, logger runt
 // WriteChatMessage sends a message to the user's team even when they're not connected on a realtime socket.
 func (t *NakamaTeamsSystem) WriteChatMessage(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID string, req *TeamWriteChatMessageRequest) (*ChannelMessageAck, error) {
 	if req.Id == "" {
-		return nil, runtime.NewError("team id is required", 3) // INVALID_ARGUMENT
+		return nil, runtime.NewError("team id is required", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 	}
 
 	if req.Content == "" {
-		return nil, runtime.NewError("message content is required", 3) // INVALID_ARGUMENT
+		return nil, runtime.NewError("message content is required", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 	}
 
 	// Optimized membership check - use targeted approach instead of fetching all user groups
@@ -214,7 +214,7 @@ func (t *NakamaTeamsSystem) WriteChatMessage(ctx context.Context, logger runtime
 	}
 
 	if !isMember {
-		return nil, runtime.NewError("user is not a member of this team", 7) // PERMISSION_DENIED
+		return nil, runtime.NewError("user is not a member of this team", PERMISSION_DENIED_ERROR_CODE) // PERMISSION_DENIED
 	}
 
 	// Build the channel ID for the group

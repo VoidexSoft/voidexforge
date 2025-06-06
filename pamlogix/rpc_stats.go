@@ -12,12 +12,12 @@ func rpcStatsGet(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logge
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		statsSystem := p.GetStatsSystem()
 		if statsSystem == nil {
-			return "", runtime.NewError("stats system not available", 12) // UNIMPLEMENTED
+			return "", runtime.NewError("stats system not available", UNIMPLEMENTED_ERROR_CODE) // UNIMPLEMENTED
 		}
 
 		userId, ok := ctx.Value(runtime.RUNTIME_CTX_USER_ID).(string)
 		if !ok || userId == "" {
-			return "", runtime.NewError("user id not found in context", 3) // INVALID_ARGUMENT
+			return "", runtime.NewError("user id not found in context", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
 		// List only for the current user
@@ -32,7 +32,7 @@ func rpcStatsGet(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logge
 		data, err := json.Marshal(stats)
 		if err != nil {
 			logger.Error("Failed to marshal stats: %v", err)
-			return "", runtime.NewError("failed to marshal stats", 13) // INTERNAL
+			return "", runtime.NewError("failed to marshal stats", INTERNAL_ERROR_CODE) // INTERNAL
 		}
 		return string(data), nil
 	}
@@ -42,18 +42,18 @@ func rpcStatsUpdate(p *pamlogixImpl) func(ctx context.Context, logger runtime.Lo
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		statsSystem := p.GetStatsSystem()
 		if statsSystem == nil {
-			return "", runtime.NewError("stats system not available", 12) // UNIMPLEMENTED
+			return "", runtime.NewError("stats system not available", UNIMPLEMENTED_ERROR_CODE) // UNIMPLEMENTED
 		}
 
 		userId, ok := ctx.Value(runtime.RUNTIME_CTX_USER_ID).(string)
 		if !ok || userId == "" {
-			return "", runtime.NewError("user id not found in context", 3) // INVALID_ARGUMENT
+			return "", runtime.NewError("user id not found in context", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
 		var req StatUpdateRequest
 		if err := json.Unmarshal([]byte(payload), &req); err != nil {
 			logger.Error("Failed to unmarshal StatUpdateRequest: %v", err)
-			return "", runtime.NewError("failed to unmarshal stat update request", 13) // INTERNAL
+			return "", runtime.NewError("failed to unmarshal stat update request", INTERNAL_ERROR_CODE) // INTERNAL
 		}
 
 		stats, err := statsSystem.Update(ctx, logger, nk, userId, req.Public, req.Private)
@@ -63,7 +63,7 @@ func rpcStatsUpdate(p *pamlogixImpl) func(ctx context.Context, logger runtime.Lo
 		data, err := json.Marshal(stats)
 		if err != nil {
 			logger.Error("Failed to marshal updated stats: %v", err)
-			return "", runtime.NewError("failed to marshal updated stats", 13) // INTERNAL
+			return "", runtime.NewError("failed to marshal updated stats", INTERNAL_ERROR_CODE) // INTERNAL
 		}
 		return string(data), nil
 	}

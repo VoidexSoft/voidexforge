@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"encoding/json"
+
 	"github.com/heroiclabs/nakama-common/runtime"
 )
 
@@ -12,12 +13,12 @@ func rpcIncentivesSenderList(p *pamlogixImpl) func(ctx context.Context, logger r
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		incentivesSystem := p.GetIncentivesSystem()
 		if incentivesSystem == nil {
-			return "", runtime.NewError("incentives system not available", 12) // UNIMPLEMENTED
+			return "", runtime.NewError("incentives system not available", UNIMPLEMENTED_ERROR_CODE) // UNIMPLEMENTED
 		}
 
 		userId, ok := ctx.Value(runtime.RUNTIME_CTX_USER_ID).(string)
 		if !ok || userId == "" {
-			return "", runtime.NewError("user id not found in context", 3) // INVALID_ARGUMENT
+			return "", runtime.NewError("user id not found in context", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
 		incentives, err := incentivesSystem.SenderList(ctx, logger, nk, userId)
@@ -28,7 +29,7 @@ func rpcIncentivesSenderList(p *pamlogixImpl) func(ctx context.Context, logger r
 		data, err := json.Marshal(incentives)
 		if err != nil {
 			logger.Error("Failed to marshal incentives: %v", err)
-			return "", runtime.NewError("failed to marshal incentives", 13) // INTERNAL
+			return "", runtime.NewError("failed to marshal incentives", INTERNAL_ERROR_CODE) // INTERNAL
 		}
 		return string(data), nil
 	}
@@ -39,12 +40,12 @@ func rpcIncentivesSenderCreate(p *pamlogixImpl) func(ctx context.Context, logger
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		incentivesSystem := p.GetIncentivesSystem()
 		if incentivesSystem == nil {
-			return "", runtime.NewError("incentives system not available", 12) // UNIMPLEMENTED
+			return "", runtime.NewError("incentives system not available", UNIMPLEMENTED_ERROR_CODE) // UNIMPLEMENTED
 		}
 
 		userId, ok := ctx.Value(runtime.RUNTIME_CTX_USER_ID).(string)
 		if !ok || userId == "" {
-			return "", runtime.NewError("user id not found in context", 3) // INVALID_ARGUMENT
+			return "", runtime.NewError("user id not found in context", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
 		var req struct {
@@ -52,11 +53,11 @@ func rpcIncentivesSenderCreate(p *pamlogixImpl) func(ctx context.Context, logger
 		}
 		if err := json.Unmarshal([]byte(payload), &req); err != nil {
 			logger.Error("Failed to unmarshal incentive create request: %v", err)
-			return "", runtime.NewError("failed to unmarshal incentive create request", 3) // INVALID_ARGUMENT
+			return "", runtime.NewError("failed to unmarshal incentive create request", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
 		if req.IncentiveID == "" {
-			return "", runtime.NewError("incentive_id is required", 3) // INVALID_ARGUMENT
+			return "", runtime.NewError("incentive_id is required", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
 		incentives, err := incentivesSystem.SenderCreate(ctx, logger, nk, userId, req.IncentiveID)
@@ -67,7 +68,7 @@ func rpcIncentivesSenderCreate(p *pamlogixImpl) func(ctx context.Context, logger
 		data, err := json.Marshal(incentives)
 		if err != nil {
 			logger.Error("Failed to marshal incentives: %v", err)
-			return "", runtime.NewError("failed to marshal incentives", 13) // INTERNAL
+			return "", runtime.NewError("failed to marshal incentives", INTERNAL_ERROR_CODE) // INTERNAL
 		}
 		return string(data), nil
 	}
@@ -78,12 +79,12 @@ func rpcIncentivesSenderDelete(p *pamlogixImpl) func(ctx context.Context, logger
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		incentivesSystem := p.GetIncentivesSystem()
 		if incentivesSystem == nil {
-			return "", runtime.NewError("incentives system not available", 12) // UNIMPLEMENTED
+			return "", runtime.NewError("incentives system not available", UNIMPLEMENTED_ERROR_CODE) // UNIMPLEMENTED
 		}
 
 		userId, ok := ctx.Value(runtime.RUNTIME_CTX_USER_ID).(string)
 		if !ok || userId == "" {
-			return "", runtime.NewError("user id not found in context", 3) // INVALID_ARGUMENT
+			return "", runtime.NewError("user id not found in context", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
 		var req struct {
@@ -91,11 +92,11 @@ func rpcIncentivesSenderDelete(p *pamlogixImpl) func(ctx context.Context, logger
 		}
 		if err := json.Unmarshal([]byte(payload), &req); err != nil {
 			logger.Error("Failed to unmarshal incentive delete request: %v", err)
-			return "", runtime.NewError("failed to unmarshal incentive delete request", 3) // INVALID_ARGUMENT
+			return "", runtime.NewError("failed to unmarshal incentive delete request", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
 		if req.Code == "" {
-			return "", runtime.NewError("code is required", 3) // INVALID_ARGUMENT
+			return "", runtime.NewError("code is required", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
 		incentives, err := incentivesSystem.SenderDelete(ctx, logger, nk, userId, req.Code)
@@ -106,7 +107,7 @@ func rpcIncentivesSenderDelete(p *pamlogixImpl) func(ctx context.Context, logger
 		data, err := json.Marshal(incentives)
 		if err != nil {
 			logger.Error("Failed to marshal incentives: %v", err)
-			return "", runtime.NewError("failed to marshal incentives", 13) // INTERNAL
+			return "", runtime.NewError("failed to marshal incentives", INTERNAL_ERROR_CODE) // INTERNAL
 		}
 		return string(data), nil
 	}
@@ -117,12 +118,12 @@ func rpcIncentivesSenderClaim(p *pamlogixImpl) func(ctx context.Context, logger 
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		incentivesSystem := p.GetIncentivesSystem()
 		if incentivesSystem == nil {
-			return "", runtime.NewError("incentives system not available", 12) // UNIMPLEMENTED
+			return "", runtime.NewError("incentives system not available", UNIMPLEMENTED_ERROR_CODE) // UNIMPLEMENTED
 		}
 
 		userId, ok := ctx.Value(runtime.RUNTIME_CTX_USER_ID).(string)
 		if !ok || userId == "" {
-			return "", runtime.NewError("user id not found in context", 3) // INVALID_ARGUMENT
+			return "", runtime.NewError("user id not found in context", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
 		var req struct {
@@ -131,11 +132,11 @@ func rpcIncentivesSenderClaim(p *pamlogixImpl) func(ctx context.Context, logger 
 		}
 		if err := json.Unmarshal([]byte(payload), &req); err != nil {
 			logger.Error("Failed to unmarshal incentive claim request: %v", err)
-			return "", runtime.NewError("failed to unmarshal incentive claim request", 3) // INVALID_ARGUMENT
+			return "", runtime.NewError("failed to unmarshal incentive claim request", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
 		if req.Code == "" {
-			return "", runtime.NewError("code is required", 3) // INVALID_ARGUMENT
+			return "", runtime.NewError("code is required", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
 		incentives, err := incentivesSystem.SenderClaim(ctx, logger, nk, userId, req.Code, req.ClaimantIDs)
@@ -146,7 +147,7 @@ func rpcIncentivesSenderClaim(p *pamlogixImpl) func(ctx context.Context, logger 
 		data, err := json.Marshal(incentives)
 		if err != nil {
 			logger.Error("Failed to marshal incentives: %v", err)
-			return "", runtime.NewError("failed to marshal incentives", 13) // INTERNAL
+			return "", runtime.NewError("failed to marshal incentives", INTERNAL_ERROR_CODE) // INTERNAL
 		}
 		return string(data), nil
 	}
@@ -157,12 +158,12 @@ func rpcIncentivesRecipientGet(p *pamlogixImpl) func(ctx context.Context, logger
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		incentivesSystem := p.GetIncentivesSystem()
 		if incentivesSystem == nil {
-			return "", runtime.NewError("incentives system not available", 12) // UNIMPLEMENTED
+			return "", runtime.NewError("incentives system not available", UNIMPLEMENTED_ERROR_CODE) // UNIMPLEMENTED
 		}
 
 		userId, ok := ctx.Value(runtime.RUNTIME_CTX_USER_ID).(string)
 		if !ok || userId == "" {
-			return "", runtime.NewError("user id not found in context", 3) // INVALID_ARGUMENT
+			return "", runtime.NewError("user id not found in context", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
 		var req struct {
@@ -170,11 +171,11 @@ func rpcIncentivesRecipientGet(p *pamlogixImpl) func(ctx context.Context, logger
 		}
 		if err := json.Unmarshal([]byte(payload), &req); err != nil {
 			logger.Error("Failed to unmarshal incentive get request: %v", err)
-			return "", runtime.NewError("failed to unmarshal incentive get request", 3) // INVALID_ARGUMENT
+			return "", runtime.NewError("failed to unmarshal incentive get request", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
 		if req.Code == "" {
-			return "", runtime.NewError("code is required", 3) // INVALID_ARGUMENT
+			return "", runtime.NewError("code is required", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
 		incentive, err := incentivesSystem.RecipientGet(ctx, logger, nk, userId, req.Code)
@@ -185,7 +186,7 @@ func rpcIncentivesRecipientGet(p *pamlogixImpl) func(ctx context.Context, logger
 		data, err := json.Marshal(incentive)
 		if err != nil {
 			logger.Error("Failed to marshal incentive info: %v", err)
-			return "", runtime.NewError("failed to marshal incentive info", 13) // INTERNAL
+			return "", runtime.NewError("failed to marshal incentive info", INTERNAL_ERROR_CODE) // INTERNAL
 		}
 		return string(data), nil
 	}
@@ -196,12 +197,12 @@ func rpcIncentivesRecipientClaim(p *pamlogixImpl) func(ctx context.Context, logg
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		incentivesSystem := p.GetIncentivesSystem()
 		if incentivesSystem == nil {
-			return "", runtime.NewError("incentives system not available", 12) // UNIMPLEMENTED
+			return "", runtime.NewError("incentives system not available", UNIMPLEMENTED_ERROR_CODE) // UNIMPLEMENTED
 		}
 
 		userId, ok := ctx.Value(runtime.RUNTIME_CTX_USER_ID).(string)
 		if !ok || userId == "" {
-			return "", runtime.NewError("user id not found in context", 3) // INVALID_ARGUMENT
+			return "", runtime.NewError("user id not found in context", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
 		var req struct {
@@ -209,11 +210,11 @@ func rpcIncentivesRecipientClaim(p *pamlogixImpl) func(ctx context.Context, logg
 		}
 		if err := json.Unmarshal([]byte(payload), &req); err != nil {
 			logger.Error("Failed to unmarshal incentive claim request: %v", err)
-			return "", runtime.NewError("failed to unmarshal incentive claim request", 3) // INVALID_ARGUMENT
+			return "", runtime.NewError("failed to unmarshal incentive claim request", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
 		if req.Code == "" {
-			return "", runtime.NewError("code is required", 3) // INVALID_ARGUMENT
+			return "", runtime.NewError("code is required", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
 		incentive, err := incentivesSystem.RecipientClaim(ctx, logger, nk, userId, req.Code)
@@ -224,7 +225,7 @@ func rpcIncentivesRecipientClaim(p *pamlogixImpl) func(ctx context.Context, logg
 		data, err := json.Marshal(incentive)
 		if err != nil {
 			logger.Error("Failed to marshal incentive info: %v", err)
-			return "", runtime.NewError("failed to marshal incentive info", 13) // INTERNAL
+			return "", runtime.NewError("failed to marshal incentive info", INTERNAL_ERROR_CODE) // INTERNAL
 		}
 		return string(data), nil
 	}

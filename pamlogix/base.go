@@ -9,19 +9,19 @@ import (
 )
 
 var (
-	ErrInternal           = runtime.NewError("internal error occurred", 13) // INTERNAL
-	ErrBadInput           = runtime.NewError("bad input", 3)                // INVALID_ARGUMENT
-	ErrFileNotFound       = runtime.NewError("file not found", 3)
-	ErrNoSessionUser      = runtime.NewError("no user ID in session", 3)       // INVALID_ARGUMENT
-	ErrNoSessionID        = runtime.NewError("no session ID in session", 3)    // INVALID_ARGUMENT
-	ErrNoSessionUsername  = runtime.NewError("no username in session", 3)      // INVALID_ARGUMENT
-	ErrPayloadDecode      = runtime.NewError("cannot decode json", 13)         // INTERNAL
-	ErrPayloadEmpty       = runtime.NewError("payload should not be empty", 3) // INVALID_ARGUMENT
-	ErrPayloadEncode      = runtime.NewError("cannot encode json", 13)         // INTERNAL
-	ErrPayloadInvalid     = runtime.NewError("payload is invalid", 3)          // INVALID_ARGUMENT
-	ErrSessionUser        = runtime.NewError("user ID in session", 3)          // INVALID_ARGUMENT
-	ErrSystemNotAvailable = runtime.NewError("system not available", 13)       // INTERNAL
-	ErrSystemNotFound     = runtime.NewError("system not found", 13)           // INTERNAL
+	ErrInternal           = runtime.NewError("internal error occurred", INTERNAL_ERROR_CODE)
+	ErrBadInput           = runtime.NewError("bad input", INVALID_ARGUMENT_ERROR_CODE)
+	ErrFileNotFound       = runtime.NewError("file not found", INVALID_ARGUMENT_ERROR_CODE)
+	ErrNoSessionUser      = runtime.NewError("no user ID in session", INVALID_ARGUMENT_ERROR_CODE)
+	ErrNoSessionID        = runtime.NewError("no session ID in session", INVALID_ARGUMENT_ERROR_CODE)
+	ErrNoSessionUsername  = runtime.NewError("no username in session", INVALID_ARGUMENT_ERROR_CODE)
+	ErrPayloadDecode      = runtime.NewError("cannot decode json", INTERNAL_ERROR_CODE)
+	ErrPayloadEmpty       = runtime.NewError("payload should not be empty", INVALID_ARGUMENT_ERROR_CODE)
+	ErrPayloadEncode      = runtime.NewError("cannot encode json", INTERNAL_ERROR_CODE)
+	ErrPayloadInvalid     = runtime.NewError("payload is invalid", INVALID_ARGUMENT_ERROR_CODE)
+	ErrSessionUser        = runtime.NewError("user ID in session", INVALID_ARGUMENT_ERROR_CODE)
+	ErrSystemNotAvailable = runtime.NewError("system not available", INTERNAL_ERROR_CODE)
+	ErrSystemNotFound     = runtime.NewError("system not found", INTERNAL_ERROR_CODE)
 )
 
 // The BaseSystem provides various small features which aren't large enough to be in their own gameplay systems.
@@ -316,7 +316,7 @@ func WithStreaksSystem(configFile string, register bool) SystemConfig {
 // only after `pamlogix.Init` has been executed.
 func UnregisterRpc(initializer runtime.Initializer, ids ...RpcId) error {
 	noopFn := func(context.Context, runtime.Logger, *sql.DB, runtime.NakamaModule, string) (string, error) {
-		return "", runtime.NewError("not found", 12) // GRPC - UNIMPLEMENTED
+		return "", runtime.NewError("not found", UNIMPLEMENTED_ERROR_CODE) // GRPC - UNIMPLEMENTED
 	}
 	for _, id := range ids {
 		if err := initializer.RegisterRpc(id.String(), noopFn); err != nil {

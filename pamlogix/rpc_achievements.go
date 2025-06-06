@@ -30,7 +30,7 @@ func rpcAchievementsClaim(p *pamlogixImpl) func(ctx context.Context, logger runt
 		// Validate request
 		if len(request.AchievementIds) == 0 {
 			logger.Error("No achievement IDs provided in request")
-			return "", runtime.NewError("achievement_ids is required and cannot be empty", 3) // INVALID_ARGUMENT
+			return "", runtime.NewError("achievement_ids is required and cannot be empty", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
 		// Extract user ID from session
@@ -319,7 +319,7 @@ func rpcAchievementsProgress(p *pamlogixImpl) func(ctx context.Context, logger r
 		// Validate input
 		if request.AchievementId == "" {
 			logger.Error("Achievement ID is required")
-			return "", runtime.NewError("achievement_id is required", 3) // INVALID_ARGUMENT
+			return "", runtime.NewError("achievement_id is required", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
 		// Extract user ID from session
@@ -487,7 +487,7 @@ func rpcAchievementDetails(p *pamlogixImpl) func(ctx context.Context, logger run
 		// Validate input
 		if request.AchievementId == "" {
 			logger.Error("Achievement ID is required")
-			return "", runtime.NewError("achievement_id is required", 3) // INVALID_ARGUMENT
+			return "", runtime.NewError("achievement_id is required", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
 		// Extract user ID from session
@@ -518,7 +518,7 @@ func rpcAchievementDetails(p *pamlogixImpl) func(ctx context.Context, logger run
 
 		if achievement == nil {
 			logger.Error("Achievement not found: %s", request.AchievementId)
-			return "", runtime.NewError("achievement not found", 5) // NOT_FOUND
+			return "", runtime.NewError("achievement not found", NOT_FOUND_ERROR_CODE) // NOT_FOUND
 		}
 
 		// Calculate progress percentage

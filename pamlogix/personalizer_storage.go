@@ -313,7 +313,7 @@ func (p *StoragePersonalizer) GetValue(ctx context.Context, logger runtime.Logge
 		case SystemTypeStreaks:
 			readOp = &runtime.StorageRead{Collection: p.collection, Key: storagePersonalizerKeyStreaks}
 		default:
-			return nil, runtime.NewError("Pamlogix system type unknown", 3)
+			return nil, runtime.NewError("Pamlogix system type unknown", INVALID_ARGUMENT_ERROR_CODE)
 		}
 
 		objects, err := nk.StorageRead(ctx, []*runtime.StorageRead{readOp})

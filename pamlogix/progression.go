@@ -7,12 +7,12 @@ import (
 )
 
 var (
-	ErrProgressionNotFound             = runtime.NewError("progression not found", 3)                 // INVALID_ARGUMENT
-	ErrProgressionNotAvailablePurchase = runtime.NewError("progression not available to purchase", 3) // INVALID_ARGUMENT
-	ErrProgressionNotAvailableUpdate   = runtime.NewError("progression not available to update", 3)   // INVALID_ARGUMENT
-	ErrProgressionNoCost               = runtime.NewError("progression no cost associated", 3)        // INVALID_ARGUMENT
-	ErrProgressionNoCount              = runtime.NewError("progression no count associated", 3)       // INVALID_ARGUMENT
-	ErrProgressionAlreadyUnlocked      = runtime.NewError("progression already unlocked", 3)          // INVALID_ARGUMENT
+	ErrProgressionNotFound             = runtime.NewError("progression not found", INVALID_ARGUMENT_ERROR_CODE)                 // INVALID_ARGUMENT
+	ErrProgressionNotAvailablePurchase = runtime.NewError("progression not available to purchase", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
+	ErrProgressionNotAvailableUpdate   = runtime.NewError("progression not available to update", INVALID_ARGUMENT_ERROR_CODE)   // INVALID_ARGUMENT
+	ErrProgressionNoCost               = runtime.NewError("progression no cost associated", INVALID_ARGUMENT_ERROR_CODE)        // INVALID_ARGUMENT
+	ErrProgressionNoCount              = runtime.NewError("progression no count associated", INVALID_ARGUMENT_ERROR_CODE)       // INVALID_ARGUMENT
+	ErrProgressionAlreadyUnlocked      = runtime.NewError("progression already unlocked", INVALID_ARGUMENT_ERROR_CODE)          // INVALID_ARGUMENT
 )
 
 // ProgressionConfig is the data definition for a ProgressionSystem type.

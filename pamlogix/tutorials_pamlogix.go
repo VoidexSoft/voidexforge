@@ -94,7 +94,7 @@ func (t *NakamaTutorialsSystem) Accept(ctx context.Context, logger runtime.Logge
 	// Check if tutorial exists in config
 	tutorialConfig, exists := t.config.Tutorials[tutorialID]
 	if !exists {
-		return nil, runtime.NewError("tutorial not found", 5) // NOT_FOUND
+		return nil, runtime.NewError("tutorial not found", NOT_FOUND_ERROR_CODE) // NOT_FOUND
 	}
 
 	// Get current user tutorials
@@ -118,7 +118,7 @@ func (t *NakamaTutorialsSystem) Accept(ctx context.Context, logger runtime.Logge
 	if existingTutorial, exists := userTutorials[tutorialID]; exists {
 		// Only allow accepting if not already completed
 		if existingTutorial.State == TutorialState_TUTORIAL_STATE_COMPLETED {
-			return nil, runtime.NewError("tutorial already completed", 9) // FAILED_PRECONDITION
+			return nil, runtime.NewError("tutorial already completed", FAILED_PRECONDITION_ERROR_CODE) // FAILED_PRECONDITION
 		}
 		// Preserve current step if it's higher than start step
 		if existingTutorial.Current > int32(tutorialConfig.StartStep) {
@@ -144,7 +144,7 @@ func (t *NakamaTutorialsSystem) Decline(ctx context.Context, logger runtime.Logg
 	// Check if tutorial exists in config
 	tutorialConfig, exists := t.config.Tutorials[tutorialID]
 	if !exists {
-		return nil, runtime.NewError("tutorial not found", 5) // NOT_FOUND
+		return nil, runtime.NewError("tutorial not found", NOT_FOUND_ERROR_CODE) // NOT_FOUND
 	}
 
 	// Get current user tutorials
@@ -186,7 +186,7 @@ func (t *NakamaTutorialsSystem) Abandon(ctx context.Context, logger runtime.Logg
 	// Check if tutorial exists in config
 	tutorialConfig, exists := t.config.Tutorials[tutorialID]
 	if !exists {
-		return nil, runtime.NewError("tutorial not found", 5) // NOT_FOUND
+		return nil, runtime.NewError("tutorial not found", NOT_FOUND_ERROR_CODE) // NOT_FOUND
 	}
 
 	// Get current user tutorials
@@ -228,12 +228,12 @@ func (t *NakamaTutorialsSystem) Update(ctx context.Context, logger runtime.Logge
 	// Check if tutorial exists in config
 	tutorialConfig, exists := t.config.Tutorials[tutorialID]
 	if !exists {
-		return nil, runtime.NewError("tutorial not found", 5) // NOT_FOUND
+		return nil, runtime.NewError("tutorial not found", NOT_FOUND_ERROR_CODE) // NOT_FOUND
 	}
 
 	// Validate step
 	if step < tutorialConfig.StartStep || step > tutorialConfig.MaxStep {
-		return nil, runtime.NewError("invalid step", 3) // INVALID_ARGUMENT
+		return nil, runtime.NewError("invalid step", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 	}
 
 	// Get current user tutorials
@@ -361,14 +361,14 @@ func (t *NakamaTutorialsSystem) getUserTutorials(ctx context.Context, logger run
 	})
 	if err != nil {
 		logger.Error("Failed to read user tutorials from storage: %v", err)
-		return nil, runtime.NewError("failed to read user tutorials", 13) // INTERNAL
+		return nil, runtime.NewError("failed to read user tutorials", INTERNAL_ERROR_CODE) // INTERNAL
 	}
 
 	userTutorials := make(map[string]*Tutorial)
 	if len(objects) > 0 && objects[0].Value != "" {
 		if err := json.Unmarshal([]byte(objects[0].Value), &userTutorials); err != nil {
 			logger.Error("Failed to unmarshal user tutorials: %v", err)
-			return nil, runtime.NewError("failed to unmarshal user tutorials", 13) // INTERNAL
+			return nil, runtime.NewError("failed to unmarshal user tutorials", INTERNAL_ERROR_CODE) // INTERNAL
 		}
 	}
 
@@ -390,7 +390,7 @@ func (t *NakamaTutorialsSystem) saveUserTutorials(ctx context.Context, logger ru
 	data, err := json.Marshal(userTutorials)
 	if err != nil {
 		logger.Error("Failed to marshal user tutorials: %v", err)
-		return runtime.NewError("failed to marshal user tutorials", 13) // INTERNAL
+		return runtime.NewError("failed to marshal user tutorials", INTERNAL_ERROR_CODE) // INTERNAL
 	}
 
 	_, err = nk.StorageWrite(ctx, []*runtime.StorageWrite{
@@ -403,7 +403,7 @@ func (t *NakamaTutorialsSystem) saveUserTutorials(ctx context.Context, logger ru
 	})
 	if err != nil {
 		logger.Error("Failed to write user tutorials to storage: %v", err)
-		return runtime.NewError("failed to write user tutorials", 13) // INTERNAL
+		return runtime.NewError("failed to write user tutorials", INTERNAL_ERROR_CODE) // INTERNAL
 	}
 
 	return nil

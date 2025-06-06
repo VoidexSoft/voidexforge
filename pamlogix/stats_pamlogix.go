@@ -51,7 +51,7 @@ func (s *NakamaStatsSystem) validateStatName(name string, isPublic bool) error {
 				return nil // Found in whitelist
 			}
 		}
-		return runtime.NewError(fmt.Sprintf("stat '%s' is not in the configured whitelist", name), 3) // INVALID_ARGUMENT
+		return runtime.NewError(fmt.Sprintf("stat '%s' is not in the configured whitelist", name), INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 	}
 	return nil // No whitelist configured, allow all stats
 }

@@ -66,7 +66,7 @@ func (u *UnlockablesPamlogix) GetConfig() any {
 // validateUserID validates that userID is not empty
 func (u *UnlockablesPamlogix) validateUserID(userID string) error {
 	if userID == "" {
-		return runtime.NewError("user ID cannot be empty", 3) // INVALID_ARGUMENT
+		return runtime.NewError("user ID cannot be empty", INVALID_ARGUMENT_ERROR_CODE)
 	}
 	return nil
 }
@@ -74,11 +74,11 @@ func (u *UnlockablesPamlogix) validateUserID(userID string) error {
 // validateInstanceID validates that instanceID is not empty and appears to be a valid UUID
 func (u *UnlockablesPamlogix) validateInstanceID(instanceID string) error {
 	if instanceID == "" {
-		return runtime.NewError("instance ID cannot be empty", 3) // INVALID_ARGUMENT
+		return runtime.NewError("instance ID cannot be empty", INVALID_ARGUMENT_ERROR_CODE)
 	}
 	// Basic UUID format validation (36 characters with hyphens in right places)
 	if len(instanceID) != 36 || instanceID[8] != '-' || instanceID[13] != '-' || instanceID[18] != '-' || instanceID[23] != '-' {
-		return runtime.NewError("instance ID must be a valid UUID format", 3) // INVALID_ARGUMENT
+		return runtime.NewError("instance ID must be a valid UUID format", INVALID_ARGUMENT_ERROR_CODE)
 	}
 	return nil
 }
@@ -86,11 +86,11 @@ func (u *UnlockablesPamlogix) validateInstanceID(instanceID string) error {
 // validateInstanceIDs validates a slice of instance IDs
 func (u *UnlockablesPamlogix) validateInstanceIDs(instanceIDs []string) error {
 	if len(instanceIDs) == 0 {
-		return runtime.NewError("instance IDs list cannot be empty", 3) // INVALID_ARGUMENT
+		return runtime.NewError("instance IDs list cannot be empty", INVALID_ARGUMENT_ERROR_CODE)
 	}
 	for _, instanceID := range instanceIDs {
 		if err := u.validateInstanceID(instanceID); err != nil {
-			return runtime.NewError("invalid instance ID in list: "+err.Error(), 3) // INVALID_ARGUMENT
+			return runtime.NewError("invalid instance ID in list: "+err.Error(), INVALID_ARGUMENT_ERROR_CODE)
 		}
 	}
 	return nil
@@ -99,7 +99,7 @@ func (u *UnlockablesPamlogix) validateInstanceIDs(instanceIDs []string) error {
 // validatePositiveSeconds validates that seconds is positive
 func (u *UnlockablesPamlogix) validatePositiveSeconds(seconds int64) error {
 	if seconds <= 0 {
-		return runtime.NewError("seconds must be positive", 3) // INVALID_ARGUMENT
+		return runtime.NewError("seconds must be positive", INVALID_ARGUMENT_ERROR_CODE)
 	}
 	return nil
 }

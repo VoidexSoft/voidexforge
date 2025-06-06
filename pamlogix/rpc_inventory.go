@@ -12,7 +12,7 @@ func rpcInventoryList(p *pamlogixImpl) func(ctx context.Context, logger runtime.
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		inventorySystem := p.GetInventorySystem()
 		if inventorySystem == nil {
-			return "", runtime.NewError("inventory system not available", 12) // UNIMPLEMENTED
+			return "", runtime.NewError("inventory system not available", UNIMPLEMENTED_ERROR_CODE) // UNIMPLEMENTED
 		}
 
 		var request struct {
@@ -62,7 +62,7 @@ func rpcInventoryListInventory(p *pamlogixImpl) func(ctx context.Context, logger
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		inventorySystem := p.GetInventorySystem()
 		if inventorySystem == nil {
-			return "", runtime.NewError("inventory system not available", 12) // UNIMPLEMENTED
+			return "", runtime.NewError("inventory system not available", UNIMPLEMENTED_ERROR_CODE) // UNIMPLEMENTED
 		}
 
 		var request struct {
@@ -98,7 +98,7 @@ func rpcInventoryConsume(p *pamlogixImpl) func(ctx context.Context, logger runti
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		inventorySystem := p.GetInventorySystem()
 		if inventorySystem == nil {
-			return "", runtime.NewError("inventory system not available", 12) // UNIMPLEMENTED
+			return "", runtime.NewError("inventory system not available", UNIMPLEMENTED_ERROR_CODE) // UNIMPLEMENTED
 		}
 
 		var request InventoryConsumeRequest
@@ -169,7 +169,7 @@ func rpcInventoryGrant(p *pamlogixImpl) func(ctx context.Context, logger runtime
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		inventorySystem := p.GetInventorySystem()
 		if inventorySystem == nil {
-			return "", runtime.NewError("inventory system not available", 12) // UNIMPLEMENTED
+			return "", runtime.NewError("inventory system not available", UNIMPLEMENTED_ERROR_CODE) // UNIMPLEMENTED
 		}
 
 		var request InventoryGrantRequest
@@ -208,7 +208,7 @@ func rpcInventoryUpdate(p *pamlogixImpl) func(ctx context.Context, logger runtim
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		inventorySystem := p.GetInventorySystem()
 		if inventorySystem == nil {
-			return "", runtime.NewError("inventory system not available", 12) // UNIMPLEMENTED
+			return "", runtime.NewError("inventory system not available", UNIMPLEMENTED_ERROR_CODE) // UNIMPLEMENTED
 		}
 
 		var request InventoryUpdateItemsRequest

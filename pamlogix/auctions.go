@@ -8,19 +8,19 @@ import (
 )
 
 var (
-	ErrAuctionTemplateNotFound  = runtime.NewError("auction template not found", 3)     // INVALID_ARGUMENT
-	ErrAuctionConditionNotFound = runtime.NewError("auction condition not found", 3)    // INVALID_ARGUMENT
-	ErrAuctionItemsInvalid      = runtime.NewError("auction items invalid", 3)          // INVALID_ARGUMENT
-	ErrAuctionNotFound          = runtime.NewError("auction not found", 3)              // INVALID_ARGUMENT
-	ErrAuctionVersionMismatch   = runtime.NewError("auction version mismatch", 3)       // INVALID_ARGUMENT
-	ErrAuctionOwnBid            = runtime.NewError("cannot bid on own auction", 3)      // INVALID_ARGUMENT
-	ErrAuctionAlreadyBid        = runtime.NewError("already high bidder on auction", 3) // INVALID_ARGUMENT
-	ErrAuctionNotStarted        = runtime.NewError("auction not started", 3)            // INVALID_ARGUMENT
-	ErrAuctionEnded             = runtime.NewError("auction ended", 3)                  // INVALID_ARGUMENT
-	ErrAuctionBidInsufficient   = runtime.NewError("auction bid insufficient", 3)       // INVALID_ARGUMENT
-	ErrAuctionBidInvalid        = runtime.NewError("auction bid invalid", 3)            // INVALID_ARGUMENT
-	ErrAuctionCannotClaim       = runtime.NewError("auction cannot be claimed", 3)      // INVALID_ARGUMENT
-	ErrAuctionCannotCancel      = runtime.NewError("auction cannot be cancelled", 3)    // INVALID_ARGUMENT
+	ErrAuctionTemplateNotFound  = runtime.NewError("auction template not found", INVALID_ARGUMENT_ERROR_CODE)     // INVALID_ARGUMENT
+	ErrAuctionConditionNotFound = runtime.NewError("auction condition not found", INVALID_ARGUMENT_ERROR_CODE)    // INVALID_ARGUMENT
+	ErrAuctionItemsInvalid      = runtime.NewError("auction items invalid", INVALID_ARGUMENT_ERROR_CODE)          // INVALID_ARGUMENT
+	ErrAuctionNotFound          = runtime.NewError("auction not found", INVALID_ARGUMENT_ERROR_CODE)              // INVALID_ARGUMENT
+	ErrAuctionVersionMismatch   = runtime.NewError("auction version mismatch", INVALID_ARGUMENT_ERROR_CODE)       // INVALID_ARGUMENT
+	ErrAuctionOwnBid            = runtime.NewError("cannot bid on own auction", INVALID_ARGUMENT_ERROR_CODE)      // INVALID_ARGUMENT
+	ErrAuctionAlreadyBid        = runtime.NewError("already high bidder on auction", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
+	ErrAuctionNotStarted        = runtime.NewError("auction not started", INVALID_ARGUMENT_ERROR_CODE)            // INVALID_ARGUMENT
+	ErrAuctionEnded             = runtime.NewError("auction ended", INVALID_ARGUMENT_ERROR_CODE)                  // INVALID_ARGUMENT
+	ErrAuctionBidInsufficient   = runtime.NewError("auction bid insufficient", INVALID_ARGUMENT_ERROR_CODE)       // INVALID_ARGUMENT
+	ErrAuctionBidInvalid        = runtime.NewError("auction bid invalid", INVALID_ARGUMENT_ERROR_CODE)            // INVALID_ARGUMENT
+	ErrAuctionCannotClaim       = runtime.NewError("auction cannot be claimed", INVALID_ARGUMENT_ERROR_CODE)      // INVALID_ARGUMENT
+	ErrAuctionCannotCancel      = runtime.NewError("auction cannot be cancelled", INVALID_ARGUMENT_ERROR_CODE)    // INVALID_ARGUMENT
 )
 
 // AuctionsConfig is the data definition for the AuctionsSystem type.

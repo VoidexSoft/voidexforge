@@ -12,12 +12,12 @@ func rpcTutorialsGet(p *pamlogixImpl) func(ctx context.Context, logger runtime.L
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		tutorialsSystem := p.GetTutorialsSystem()
 		if tutorialsSystem == nil {
-			return "", runtime.NewError("tutorials system not available", 12) // UNIMPLEMENTED
+			return "", runtime.NewError("tutorials system not available", UNIMPLEMENTED_ERROR_CODE) // UNIMPLEMENTED
 		}
 
 		userID, ok := ctx.Value(runtime.RUNTIME_CTX_USER_ID).(string)
 		if !ok || userID == "" {
-			return "", runtime.NewError("user id not found in context", 3) // INVALID_ARGUMENT
+			return "", runtime.NewError("user id not found in context", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
 		tutorials, err := tutorialsSystem.Get(ctx, logger, nk, userID)
@@ -33,7 +33,7 @@ func rpcTutorialsGet(p *pamlogixImpl) func(ctx context.Context, logger runtime.L
 		data, err := json.Marshal(response)
 		if err != nil {
 			logger.Error("Failed to marshal tutorials: %v", err)
-			return "", runtime.NewError("failed to marshal tutorials", 13) // INTERNAL
+			return "", runtime.NewError("failed to marshal tutorials", INTERNAL_ERROR_CODE) // INTERNAL
 		}
 
 		return string(data), nil
@@ -44,22 +44,22 @@ func rpcTutorialsAccept(p *pamlogixImpl) func(ctx context.Context, logger runtim
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		tutorialsSystem := p.GetTutorialsSystem()
 		if tutorialsSystem == nil {
-			return "", runtime.NewError("tutorials system not available", 12) // UNIMPLEMENTED
+			return "", runtime.NewError("tutorials system not available", UNIMPLEMENTED_ERROR_CODE) // UNIMPLEMENTED
 		}
 
 		userID, ok := ctx.Value(runtime.RUNTIME_CTX_USER_ID).(string)
 		if !ok || userID == "" {
-			return "", runtime.NewError("user id not found in context", 3) // INVALID_ARGUMENT
+			return "", runtime.NewError("user id not found in context", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
 		var request TutorialAcceptRequest
 		if err := json.Unmarshal([]byte(payload), &request); err != nil {
 			logger.Error("Failed to unmarshal TutorialAcceptRequest: %v", err)
-			return "", runtime.NewError("failed to unmarshal tutorial accept request", 3) // INVALID_ARGUMENT
+			return "", runtime.NewError("failed to unmarshal tutorial accept request", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
 		if request.Id == "" {
-			return "", runtime.NewError("tutorial id is required", 3) // INVALID_ARGUMENT
+			return "", runtime.NewError("tutorial id is required", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
 		tutorial, err := tutorialsSystem.Accept(ctx, logger, nk, request.Id, userID)
@@ -70,7 +70,7 @@ func rpcTutorialsAccept(p *pamlogixImpl) func(ctx context.Context, logger runtim
 		data, err := json.Marshal(tutorial)
 		if err != nil {
 			logger.Error("Failed to marshal tutorial: %v", err)
-			return "", runtime.NewError("failed to marshal tutorial", 13) // INTERNAL
+			return "", runtime.NewError("failed to marshal tutorial", INTERNAL_ERROR_CODE) // INTERNAL
 		}
 
 		return string(data), nil
@@ -81,22 +81,22 @@ func rpcTutorialsDecline(p *pamlogixImpl) func(ctx context.Context, logger runti
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		tutorialsSystem := p.GetTutorialsSystem()
 		if tutorialsSystem == nil {
-			return "", runtime.NewError("tutorials system not available", 12) // UNIMPLEMENTED
+			return "", runtime.NewError("tutorials system not available", UNIMPLEMENTED_ERROR_CODE) // UNIMPLEMENTED
 		}
 
 		userID, ok := ctx.Value(runtime.RUNTIME_CTX_USER_ID).(string)
 		if !ok || userID == "" {
-			return "", runtime.NewError("user id not found in context", 3) // INVALID_ARGUMENT
+			return "", runtime.NewError("user id not found in context", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
 		var request TutorialDeclineRequest
 		if err := json.Unmarshal([]byte(payload), &request); err != nil {
 			logger.Error("Failed to unmarshal TutorialDeclineRequest: %v", err)
-			return "", runtime.NewError("failed to unmarshal tutorial decline request", 3) // INVALID_ARGUMENT
+			return "", runtime.NewError("failed to unmarshal tutorial decline request", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
 		if request.Id == "" {
-			return "", runtime.NewError("tutorial id is required", 3) // INVALID_ARGUMENT
+			return "", runtime.NewError("tutorial id is required", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
 		tutorial, err := tutorialsSystem.Decline(ctx, logger, nk, request.Id, userID)
@@ -107,7 +107,7 @@ func rpcTutorialsDecline(p *pamlogixImpl) func(ctx context.Context, logger runti
 		data, err := json.Marshal(tutorial)
 		if err != nil {
 			logger.Error("Failed to marshal tutorial: %v", err)
-			return "", runtime.NewError("failed to marshal tutorial", 13) // INTERNAL
+			return "", runtime.NewError("failed to marshal tutorial", INTERNAL_ERROR_CODE) // INTERNAL
 		}
 
 		return string(data), nil
@@ -118,22 +118,22 @@ func rpcTutorialsAbandon(p *pamlogixImpl) func(ctx context.Context, logger runti
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		tutorialsSystem := p.GetTutorialsSystem()
 		if tutorialsSystem == nil {
-			return "", runtime.NewError("tutorials system not available", 12) // UNIMPLEMENTED
+			return "", runtime.NewError("tutorials system not available", UNIMPLEMENTED_ERROR_CODE) // UNIMPLEMENTED
 		}
 
 		userID, ok := ctx.Value(runtime.RUNTIME_CTX_USER_ID).(string)
 		if !ok || userID == "" {
-			return "", runtime.NewError("user id not found in context", 3) // INVALID_ARGUMENT
+			return "", runtime.NewError("user id not found in context", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
 		var request TutorialAbandonRequest
 		if err := json.Unmarshal([]byte(payload), &request); err != nil {
 			logger.Error("Failed to unmarshal TutorialAbandonRequest: %v", err)
-			return "", runtime.NewError("failed to unmarshal tutorial abandon request", 3) // INVALID_ARGUMENT
+			return "", runtime.NewError("failed to unmarshal tutorial abandon request", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
 		if request.Id == "" {
-			return "", runtime.NewError("tutorial id is required", 3) // INVALID_ARGUMENT
+			return "", runtime.NewError("tutorial id is required", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
 		tutorial, err := tutorialsSystem.Abandon(ctx, logger, nk, request.Id, userID)
@@ -144,7 +144,7 @@ func rpcTutorialsAbandon(p *pamlogixImpl) func(ctx context.Context, logger runti
 		data, err := json.Marshal(tutorial)
 		if err != nil {
 			logger.Error("Failed to marshal tutorial: %v", err)
-			return "", runtime.NewError("failed to marshal tutorial", 13) // INTERNAL
+			return "", runtime.NewError("failed to marshal tutorial", INTERNAL_ERROR_CODE) // INTERNAL
 		}
 
 		return string(data), nil
@@ -155,22 +155,22 @@ func rpcTutorialsUpdate(p *pamlogixImpl) func(ctx context.Context, logger runtim
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		tutorialsSystem := p.GetTutorialsSystem()
 		if tutorialsSystem == nil {
-			return "", runtime.NewError("tutorials system not available", 12) // UNIMPLEMENTED
+			return "", runtime.NewError("tutorials system not available", UNIMPLEMENTED_ERROR_CODE) // UNIMPLEMENTED
 		}
 
 		userID, ok := ctx.Value(runtime.RUNTIME_CTX_USER_ID).(string)
 		if !ok || userID == "" {
-			return "", runtime.NewError("user id not found in context", 3) // INVALID_ARGUMENT
+			return "", runtime.NewError("user id not found in context", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
 		var request TutorialUpdateRequest
 		if err := json.Unmarshal([]byte(payload), &request); err != nil {
 			logger.Error("Failed to unmarshal TutorialUpdateRequest: %v", err)
-			return "", runtime.NewError("failed to unmarshal tutorial update request", 3) // INVALID_ARGUMENT
+			return "", runtime.NewError("failed to unmarshal tutorial update request", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
 		if request.Id == "" {
-			return "", runtime.NewError("tutorial id is required", 3) // INVALID_ARGUMENT
+			return "", runtime.NewError("tutorial id is required", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
 		tutorials, err := tutorialsSystem.Update(ctx, logger, nk, userID, request.Id, int(request.Step))
@@ -186,7 +186,7 @@ func rpcTutorialsUpdate(p *pamlogixImpl) func(ctx context.Context, logger runtim
 		data, err := json.Marshal(response)
 		if err != nil {
 			logger.Error("Failed to marshal tutorials: %v", err)
-			return "", runtime.NewError("failed to marshal tutorials", 13) // INTERNAL
+			return "", runtime.NewError("failed to marshal tutorials", INTERNAL_ERROR_CODE) // INTERNAL
 		}
 
 		return string(data), nil
@@ -197,22 +197,22 @@ func rpcTutorialsReset(p *pamlogixImpl) func(ctx context.Context, logger runtime
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		tutorialsSystem := p.GetTutorialsSystem()
 		if tutorialsSystem == nil {
-			return "", runtime.NewError("tutorials system not available", 12) // UNIMPLEMENTED
+			return "", runtime.NewError("tutorials system not available", UNIMPLEMENTED_ERROR_CODE) // UNIMPLEMENTED
 		}
 
 		userID, ok := ctx.Value(runtime.RUNTIME_CTX_USER_ID).(string)
 		if !ok || userID == "" {
-			return "", runtime.NewError("user id not found in context", 3) // INVALID_ARGUMENT
+			return "", runtime.NewError("user id not found in context", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
 		var request TutorialResetRequest
 		if err := json.Unmarshal([]byte(payload), &request); err != nil {
 			logger.Error("Failed to unmarshal TutorialResetRequest: %v", err)
-			return "", runtime.NewError("failed to unmarshal tutorial reset request", 3) // INVALID_ARGUMENT
+			return "", runtime.NewError("failed to unmarshal tutorial reset request", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
 		if len(request.Ids) == 0 {
-			return "", runtime.NewError("at least one tutorial id is required", 3) // INVALID_ARGUMENT
+			return "", runtime.NewError("at least one tutorial id is required", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
 		tutorials, err := tutorialsSystem.Reset(ctx, logger, nk, userID, request.Ids)
@@ -228,7 +228,7 @@ func rpcTutorialsReset(p *pamlogixImpl) func(ctx context.Context, logger runtime
 		data, err := json.Marshal(response)
 		if err != nil {
 			logger.Error("Failed to marshal tutorials: %v", err)
-			return "", runtime.NewError("failed to marshal tutorials", 13) // INTERNAL
+			return "", runtime.NewError("failed to marshal tutorials", INTERNAL_ERROR_CODE) // INTERNAL
 		}
 
 		return string(data), nil
