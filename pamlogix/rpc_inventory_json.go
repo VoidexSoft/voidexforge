@@ -3,20 +3,22 @@ package pamlogix
 import (
 	"context"
 	"database/sql"
+	"encoding/json"
 
 	"github.com/heroiclabs/nakama-common/runtime"
-	"google.golang.org/protobuf/proto"
 )
 
-func rpcInventoryList(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+func rpcJsonInventoryList(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		inventorySystem := p.GetInventorySystem()
 		if inventorySystem == nil {
 			return "", runtime.NewError("inventory system not available", UNIMPLEMENTED_ERROR_CODE) // UNIMPLEMENTED
 		}
 
-		request := &InventoryListRequest{}
-		if err := proto.Unmarshal([]byte(payload), request); err != nil {
+		var request struct {
+			Category string `json:"category,omitempty"`
+		}
+		if err := json.Unmarshal([]byte(payload), &request); err != nil {
 			logger.Error("Failed to unmarshal InventoryListRequest: %v", err)
 			return "", ErrPayloadDecode
 		}
@@ -26,44 +28,27 @@ func rpcInventoryList(p *pamlogixImpl) func(ctx context.Context, logger runtime.
 			return "", ErrNoSessionUser
 		}
 
-		items, _, err := inventorySystem.List(ctx, logger, nk, userID, request.ItemCategory)
+		items, itemSets, err := inventorySystem.List(ctx, logger, nk, userID, request.Category)
 		if err != nil {
 			logger.Error("Error listing inventory items: %v", err)
 			return "", err
 		}
 
-		// Convert maps to protobuf format
-		protoItems := make(map[string]*InventoryItem)
-		for itemID, item := range items {
-			protoItem := &InventoryItem{
-				Id:                itemID,
-				Name:              item.Name,
-				Description:       item.Description,
-				Category:          item.Category,
-				ItemSets:          item.ItemSets,
-				MaxCount:          item.MaxCount,
-				Stackable:         item.Stackable,
-				Consumable:        item.Consumable,
-				StringProperties:  item.StringProperties,
-				NumericProperties: item.NumericProperties,
-			}
-
-			// Convert consume reward if present
-			if item.ConsumeReward != nil {
-				// Convert EconomyConfigReward to AvailableRewards
-				// This would need proper conversion logic based on your types
-				// For now, creating an empty AvailableRewards to maintain structure
-				protoItem.ConsumeAvailableRewards = &AvailableRewards{}
-			}
-
-			protoItems[itemID] = protoItem
+		// Convert maps to slices for response
+		itemsList := make([]*InventoryConfigItem, 0, len(items))
+		for _, item := range items {
+			itemsList = append(itemsList, item)
 		}
 
-		response := &InventoryList{
-			Items: protoItems,
+		response := struct {
+			Items    []*InventoryConfigItem `json:"items"`
+			ItemSets map[string][]string    `json:"item_sets"`
+		}{
+			Items:    itemsList,
+			ItemSets: itemSets,
 		}
 
-		responseData, err := proto.Marshal(response)
+		responseData, err := json.Marshal(response)
 		if err != nil {
 			logger.Error("Failed to marshal response: %v", err)
 			return "", ErrPayloadEncode
@@ -73,15 +58,17 @@ func rpcInventoryList(p *pamlogixImpl) func(ctx context.Context, logger runtime.
 	}
 }
 
-func rpcInventoryListInventory(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+func rpcJsonInventoryListInventory(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		inventorySystem := p.GetInventorySystem()
 		if inventorySystem == nil {
 			return "", runtime.NewError("inventory system not available", UNIMPLEMENTED_ERROR_CODE) // UNIMPLEMENTED
 		}
 
-		request := &InventoryListRequest{}
-		if err := proto.Unmarshal([]byte(payload), request); err != nil {
+		var request struct {
+			Category string `json:"category,omitempty"`
+		}
+		if err := json.Unmarshal([]byte(payload), &request); err != nil {
 			logger.Error("Failed to unmarshal InventoryListInventoryRequest: %v", err)
 			return "", ErrPayloadDecode
 		}
@@ -91,13 +78,13 @@ func rpcInventoryListInventory(p *pamlogixImpl) func(ctx context.Context, logger
 			return "", ErrNoSessionUser
 		}
 
-		inventoryItems, err := inventorySystem.ListInventoryItems(ctx, logger, nk, userID, request.ItemCategory)
+		inventoryItems, err := inventorySystem.ListInventoryItems(ctx, logger, nk, userID, request.Category)
 		if err != nil {
 			logger.Error("Error listing inventory items: %v", err)
 			return "", err
 		}
 
-		responseData, err := proto.Marshal(inventoryItems)
+		responseData, err := json.Marshal(inventoryItems)
 		if err != nil {
 			logger.Error("Failed to marshal response: %v", err)
 			return "", ErrPayloadEncode
@@ -107,15 +94,15 @@ func rpcInventoryListInventory(p *pamlogixImpl) func(ctx context.Context, logger
 	}
 }
 
-func rpcInventoryConsume(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+func rpcJsonInventoryConsume(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		inventorySystem := p.GetInventorySystem()
 		if inventorySystem == nil {
 			return "", runtime.NewError("inventory system not available", UNIMPLEMENTED_ERROR_CODE) // UNIMPLEMENTED
 		}
 
-		request := &InventoryConsumeRequest{}
-		if err := proto.Unmarshal([]byte(payload), request); err != nil {
+		var request InventoryConsumeRequest
+		if err := json.Unmarshal([]byte(payload), &request); err != nil {
 			logger.Error("Failed to unmarshal InventoryConsumeRequest: %v", err)
 			return "", ErrPayloadDecode
 		}
@@ -168,7 +155,7 @@ func rpcInventoryConsume(p *pamlogixImpl) func(ctx context.Context, logger runti
 			InstanceRewards: responseInstanceRewards,
 		}
 
-		responseData, err := proto.Marshal(response)
+		responseData, err := json.Marshal(response)
 		if err != nil {
 			logger.Error("Failed to marshal response: %v", err)
 			return "", ErrPayloadEncode
@@ -178,15 +165,15 @@ func rpcInventoryConsume(p *pamlogixImpl) func(ctx context.Context, logger runti
 	}
 }
 
-func rpcInventoryGrant(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+func rpcJsonInventoryGrant(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		inventorySystem := p.GetInventorySystem()
 		if inventorySystem == nil {
 			return "", runtime.NewError("inventory system not available", UNIMPLEMENTED_ERROR_CODE) // UNIMPLEMENTED
 		}
 
-		request := &InventoryGrantRequest{}
-		if err := proto.Unmarshal([]byte(payload), request); err != nil {
+		var request InventoryGrantRequest
+		if err := json.Unmarshal([]byte(payload), &request); err != nil {
 			logger.Error("Failed to unmarshal InventoryGrantRequest: %v", err)
 			return "", ErrPayloadDecode
 		}
@@ -207,7 +194,7 @@ func rpcInventoryGrant(p *pamlogixImpl) func(ctx context.Context, logger runtime
 			Inventory: updatedInventory,
 		}
 
-		responseData, err := proto.Marshal(response)
+		responseData, err := json.Marshal(response)
 		if err != nil {
 			logger.Error("Failed to marshal response: %v", err)
 			return "", ErrPayloadEncode
@@ -217,15 +204,15 @@ func rpcInventoryGrant(p *pamlogixImpl) func(ctx context.Context, logger runtime
 	}
 }
 
-func rpcInventoryUpdate(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+func rpcJsonInventoryUpdate(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		inventorySystem := p.GetInventorySystem()
 		if inventorySystem == nil {
 			return "", runtime.NewError("inventory system not available", UNIMPLEMENTED_ERROR_CODE) // UNIMPLEMENTED
 		}
 
-		request := &InventoryUpdateItemsRequest{}
-		if err := proto.Unmarshal([]byte(payload), request); err != nil {
+		var request InventoryUpdateItemsRequest
+		if err := json.Unmarshal([]byte(payload), &request); err != nil {
 			logger.Error("Failed to unmarshal InventoryUpdateItemsRequest: %v", err)
 			return "", ErrPayloadDecode
 		}
@@ -254,7 +241,7 @@ func rpcInventoryUpdate(p *pamlogixImpl) func(ctx context.Context, logger runtim
 			Inventory: updatedInventory,
 		}
 
-		responseData, err := proto.Marshal(response)
+		responseData, err := json.Marshal(response)
 		if err != nil {
 			logger.Error("Failed to marshal response: %v", err)
 			return "", ErrPayloadEncode
