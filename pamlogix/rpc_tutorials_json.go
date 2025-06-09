@@ -3,12 +3,12 @@ package pamlogix
 import (
 	"context"
 	"database/sql"
+	"encoding/json"
 
 	"github.com/heroiclabs/nakama-common/runtime"
-	"google.golang.org/protobuf/proto"
 )
 
-func rpcTutorialsGet(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+func rpcTutorialsGetJson(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		tutorialsSystem := p.GetTutorialsSystem()
 		if tutorialsSystem == nil {
@@ -25,12 +25,12 @@ func rpcTutorialsGet(p *pamlogixImpl) func(ctx context.Context, logger runtime.L
 			return "", err
 		}
 
-		// Create response in the format expected by the protobuf TutorialList
+		// Create response in JSON format
 		response := &TutorialList{
 			Tutorials: tutorials,
 		}
 
-		data, err := proto.Marshal(response)
+		data, err := json.Marshal(response)
 		if err != nil {
 			logger.Error("Failed to marshal tutorials: %v", err)
 			return "", runtime.NewError("failed to marshal tutorials", INTERNAL_ERROR_CODE) // INTERNAL
@@ -40,7 +40,7 @@ func rpcTutorialsGet(p *pamlogixImpl) func(ctx context.Context, logger runtime.L
 	}
 }
 
-func rpcTutorialsAccept(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+func rpcTutorialsAcceptJson(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		tutorialsSystem := p.GetTutorialsSystem()
 		if tutorialsSystem == nil {
@@ -53,8 +53,8 @@ func rpcTutorialsAccept(p *pamlogixImpl) func(ctx context.Context, logger runtim
 		}
 
 		var request TutorialAcceptRequest
-		if err := proto.Unmarshal([]byte(payload), &request); err != nil {
-			logger.Error("Failed to unmarshal TutorialAcceptRequest: %v", err)
+		if err := json.Unmarshal([]byte(payload), &request); err != nil {
+			logger.Error("Failed to unmarshal TutorialAcceptRequestJson: %v", err)
 			return "", runtime.NewError("failed to unmarshal tutorial accept request", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
@@ -67,7 +67,7 @@ func rpcTutorialsAccept(p *pamlogixImpl) func(ctx context.Context, logger runtim
 			return "", err
 		}
 
-		data, err := proto.Marshal(tutorial)
+		data, err := json.Marshal(tutorial)
 		if err != nil {
 			logger.Error("Failed to marshal tutorial: %v", err)
 			return "", runtime.NewError("failed to marshal tutorial", INTERNAL_ERROR_CODE) // INTERNAL
@@ -77,7 +77,7 @@ func rpcTutorialsAccept(p *pamlogixImpl) func(ctx context.Context, logger runtim
 	}
 }
 
-func rpcTutorialsDecline(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+func rpcTutorialsDeclineJson(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		tutorialsSystem := p.GetTutorialsSystem()
 		if tutorialsSystem == nil {
@@ -90,8 +90,8 @@ func rpcTutorialsDecline(p *pamlogixImpl) func(ctx context.Context, logger runti
 		}
 
 		var request TutorialDeclineRequest
-		if err := proto.Unmarshal([]byte(payload), &request); err != nil {
-			logger.Error("Failed to unmarshal TutorialDeclineRequest: %v", err)
+		if err := json.Unmarshal([]byte(payload), &request); err != nil {
+			logger.Error("Failed to unmarshal TutorialDeclineRequestJson: %v", err)
 			return "", runtime.NewError("failed to unmarshal tutorial decline request", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
@@ -104,7 +104,7 @@ func rpcTutorialsDecline(p *pamlogixImpl) func(ctx context.Context, logger runti
 			return "", err
 		}
 
-		data, err := proto.Marshal(tutorial)
+		data, err := json.Marshal(tutorial)
 		if err != nil {
 			logger.Error("Failed to marshal tutorial: %v", err)
 			return "", runtime.NewError("failed to marshal tutorial", INTERNAL_ERROR_CODE) // INTERNAL
@@ -114,7 +114,7 @@ func rpcTutorialsDecline(p *pamlogixImpl) func(ctx context.Context, logger runti
 	}
 }
 
-func rpcTutorialsAbandon(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+func rpcTutorialsAbandonJson(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		tutorialsSystem := p.GetTutorialsSystem()
 		if tutorialsSystem == nil {
@@ -127,8 +127,8 @@ func rpcTutorialsAbandon(p *pamlogixImpl) func(ctx context.Context, logger runti
 		}
 
 		var request TutorialAbandonRequest
-		if err := proto.Unmarshal([]byte(payload), &request); err != nil {
-			logger.Error("Failed to unmarshal TutorialAbandonRequest: %v", err)
+		if err := json.Unmarshal([]byte(payload), &request); err != nil {
+			logger.Error("Failed to unmarshal TutorialAbandonRequestJson: %v", err)
 			return "", runtime.NewError("failed to unmarshal tutorial abandon request", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
@@ -141,7 +141,7 @@ func rpcTutorialsAbandon(p *pamlogixImpl) func(ctx context.Context, logger runti
 			return "", err
 		}
 
-		data, err := proto.Marshal(tutorial)
+		data, err := json.Marshal(tutorial)
 		if err != nil {
 			logger.Error("Failed to marshal tutorial: %v", err)
 			return "", runtime.NewError("failed to marshal tutorial", INTERNAL_ERROR_CODE) // INTERNAL
@@ -151,7 +151,7 @@ func rpcTutorialsAbandon(p *pamlogixImpl) func(ctx context.Context, logger runti
 	}
 }
 
-func rpcTutorialsUpdate(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+func rpcTutorialsUpdateJson(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		tutorialsSystem := p.GetTutorialsSystem()
 		if tutorialsSystem == nil {
@@ -164,8 +164,8 @@ func rpcTutorialsUpdate(p *pamlogixImpl) func(ctx context.Context, logger runtim
 		}
 
 		var request TutorialUpdateRequest
-		if err := proto.Unmarshal([]byte(payload), &request); err != nil {
-			logger.Error("Failed to unmarshal TutorialUpdateRequest: %v", err)
+		if err := json.Unmarshal([]byte(payload), &request); err != nil {
+			logger.Error("Failed to unmarshal TutorialUpdateRequestJson: %v", err)
 			return "", runtime.NewError("failed to unmarshal tutorial update request", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
@@ -178,12 +178,12 @@ func rpcTutorialsUpdate(p *pamlogixImpl) func(ctx context.Context, logger runtim
 			return "", err
 		}
 
-		// Create response in the format expected by the protobuf TutorialList
+		// Create response in JSON format
 		response := &TutorialList{
 			Tutorials: tutorials,
 		}
 
-		data, err := proto.Marshal(response)
+		data, err := json.Marshal(response)
 		if err != nil {
 			logger.Error("Failed to marshal tutorials: %v", err)
 			return "", runtime.NewError("failed to marshal tutorials", INTERNAL_ERROR_CODE) // INTERNAL
@@ -193,7 +193,7 @@ func rpcTutorialsUpdate(p *pamlogixImpl) func(ctx context.Context, logger runtim
 	}
 }
 
-func rpcTutorialsReset(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+func rpcTutorialsResetJson(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		tutorialsSystem := p.GetTutorialsSystem()
 		if tutorialsSystem == nil {
@@ -206,8 +206,8 @@ func rpcTutorialsReset(p *pamlogixImpl) func(ctx context.Context, logger runtime
 		}
 
 		var request TutorialResetRequest
-		if err := proto.Unmarshal([]byte(payload), &request); err != nil {
-			logger.Error("Failed to unmarshal TutorialResetRequest: %v", err)
+		if err := json.Unmarshal([]byte(payload), &request); err != nil {
+			logger.Error("Failed to unmarshal TutorialResetRequestJson: %v", err)
 			return "", runtime.NewError("failed to unmarshal tutorial reset request", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
@@ -220,12 +220,12 @@ func rpcTutorialsReset(p *pamlogixImpl) func(ctx context.Context, logger runtime
 			return "", err
 		}
 
-		// Create response in the format expected by the protobuf TutorialList
+		// Create response in JSON format
 		response := &TutorialList{
 			Tutorials: tutorials,
 		}
 
-		data, err := proto.Marshal(response)
+		data, err := json.Marshal(response)
 		if err != nil {
 			logger.Error("Failed to marshal tutorials: %v", err)
 			return "", runtime.NewError("failed to marshal tutorials", INTERNAL_ERROR_CODE) // INTERNAL
