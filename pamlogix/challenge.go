@@ -39,6 +39,7 @@ type ChallengesConfigPlayers struct {
 	Max int64 `json:"max,omitempty"`
 }
 
+// ChallengesSystem is the interface for players to compete with each other on private leaderboards.
 type ChallengesSystem interface {
 	System
 

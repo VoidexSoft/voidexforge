@@ -692,6 +692,13 @@ func (p *pamlogixImpl) GetStreaksSystem() StreaksSystem {
 	return nil
 }
 
+func (p *pamlogixImpl) GetChallengesSystem() ChallengesSystem {
+	if sys, ok := p.systems[SystemTypeChallenges].(ChallengesSystem); ok {
+		return sys
+	}
+	return nil
+}
+
 // SendPublisherEvents broadcasts events to all registered publishers
 func (p *pamlogixImpl) SendPublisherEvents(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID string, events []*PublisherEvent) {
 	if len(p.publishers) == 0 || len(events) == 0 {
