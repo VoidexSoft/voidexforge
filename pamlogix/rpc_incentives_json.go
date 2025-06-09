@@ -3,13 +3,13 @@ package pamlogix
 import (
 	"context"
 	"database/sql"
+	"encoding/json"
 
 	"github.com/heroiclabs/nakama-common/runtime"
-	"google.golang.org/protobuf/proto"
 )
 
-// rpcIncentivesSenderList returns all incentives created by the user
-func rpcIncentivesSenderList(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+// rpcIncentivesSenderListJson returns all incentives created by the user in JSON format
+func rpcIncentivesSenderListJson(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		incentivesSystem := p.GetIncentivesSystem()
 		if incentivesSystem == nil {
@@ -26,11 +26,13 @@ func rpcIncentivesSenderList(p *pamlogixImpl) func(ctx context.Context, logger r
 			return "", err
 		}
 
-		response := &IncentiveList{
+		response := struct {
+			Incentives []*Incentive `json:"incentives"`
+		}{
 			Incentives: incentives,
 		}
 
-		data, err := proto.Marshal(response)
+		data, err := json.Marshal(response)
 		if err != nil {
 			logger.Error("Failed to marshal incentives: %v", err)
 			return "", runtime.NewError("failed to marshal incentives", INTERNAL_ERROR_CODE) // INTERNAL
@@ -39,8 +41,8 @@ func rpcIncentivesSenderList(p *pamlogixImpl) func(ctx context.Context, logger r
 	}
 }
 
-// rpcIncentivesSenderCreate creates a new incentive for the user
-func rpcIncentivesSenderCreate(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+// rpcIncentivesSenderCreateJson creates a new incentive for the user using JSON
+func rpcIncentivesSenderCreateJson(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		incentivesSystem := p.GetIncentivesSystem()
 		if incentivesSystem == nil {
@@ -53,7 +55,7 @@ func rpcIncentivesSenderCreate(p *pamlogixImpl) func(ctx context.Context, logger
 		}
 
 		request := &IncentiveSenderCreateRequest{}
-		if err := proto.Unmarshal([]byte(payload), request); err != nil {
+		if err := json.Unmarshal([]byte(payload), request); err != nil {
 			logger.Error("Failed to unmarshal incentive create request: %v", err)
 			return "", runtime.NewError("failed to unmarshal incentive create request", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
@@ -67,11 +69,13 @@ func rpcIncentivesSenderCreate(p *pamlogixImpl) func(ctx context.Context, logger
 			return "", err
 		}
 
-		response := &IncentiveList{
+		response := struct {
+			Incentives []*Incentive `json:"incentives"`
+		}{
 			Incentives: incentives,
 		}
 
-		data, err := proto.Marshal(response)
+		data, err := json.Marshal(response)
 		if err != nil {
 			logger.Error("Failed to marshal incentives: %v", err)
 			return "", runtime.NewError("failed to marshal incentives", INTERNAL_ERROR_CODE) // INTERNAL
@@ -80,8 +84,8 @@ func rpcIncentivesSenderCreate(p *pamlogixImpl) func(ctx context.Context, logger
 	}
 }
 
-// rpcIncentivesSenderDelete deletes an incentive created by the user
-func rpcIncentivesSenderDelete(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+// rpcIncentivesSenderDeleteJson deletes an incentive created by the user using JSON
+func rpcIncentivesSenderDeleteJson(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		incentivesSystem := p.GetIncentivesSystem()
 		if incentivesSystem == nil {
@@ -94,7 +98,7 @@ func rpcIncentivesSenderDelete(p *pamlogixImpl) func(ctx context.Context, logger
 		}
 
 		request := &IncentiveSenderDeleteRequest{}
-		if err := proto.Unmarshal([]byte(payload), request); err != nil {
+		if err := json.Unmarshal([]byte(payload), request); err != nil {
 			logger.Error("Failed to unmarshal incentive delete request: %v", err)
 			return "", runtime.NewError("failed to unmarshal incentive delete request", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
@@ -108,11 +112,13 @@ func rpcIncentivesSenderDelete(p *pamlogixImpl) func(ctx context.Context, logger
 			return "", err
 		}
 
-		response := &IncentiveList{
+		response := struct {
+			Incentives []*Incentive `json:"incentives"`
+		}{
 			Incentives: incentives,
 		}
 
-		data, err := proto.Marshal(response)
+		data, err := json.Marshal(response)
 		if err != nil {
 			logger.Error("Failed to marshal incentives: %v", err)
 			return "", runtime.NewError("failed to marshal incentives", INTERNAL_ERROR_CODE) // INTERNAL
@@ -121,8 +127,8 @@ func rpcIncentivesSenderDelete(p *pamlogixImpl) func(ctx context.Context, logger
 	}
 }
 
-// rpcIncentivesSenderClaim allows the incentive creator to claim rewards for recipients
-func rpcIncentivesSenderClaim(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+// rpcIncentivesSenderClaimJson allows the incentive creator to claim rewards for recipients using JSON
+func rpcIncentivesSenderClaimJson(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		incentivesSystem := p.GetIncentivesSystem()
 		if incentivesSystem == nil {
@@ -135,7 +141,7 @@ func rpcIncentivesSenderClaim(p *pamlogixImpl) func(ctx context.Context, logger 
 		}
 
 		request := &IncentiveSenderClaimRequest{}
-		if err := proto.Unmarshal([]byte(payload), request); err != nil {
+		if err := json.Unmarshal([]byte(payload), request); err != nil {
 			logger.Error("Failed to unmarshal incentive claim request: %v", err)
 			return "", runtime.NewError("failed to unmarshal incentive claim request", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
@@ -149,11 +155,13 @@ func rpcIncentivesSenderClaim(p *pamlogixImpl) func(ctx context.Context, logger 
 			return "", err
 		}
 
-		response := &IncentiveList{
+		response := struct {
+			Incentives []*Incentive `json:"incentives"`
+		}{
 			Incentives: incentives,
 		}
 
-		data, err := proto.Marshal(response)
+		data, err := json.Marshal(response)
 		if err != nil {
 			logger.Error("Failed to marshal incentives: %v", err)
 			return "", runtime.NewError("failed to marshal incentives", INTERNAL_ERROR_CODE) // INTERNAL
@@ -162,8 +170,8 @@ func rpcIncentivesSenderClaim(p *pamlogixImpl) func(ctx context.Context, logger 
 	}
 }
 
-// rpcIncentivesRecipientGet allows a potential recipient to view information about an incentive
-func rpcIncentivesRecipientGet(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+// rpcIncentivesRecipientGetJson allows a potential recipient to view information about an incentive using JSON
+func rpcIncentivesRecipientGetJson(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		incentivesSystem := p.GetIncentivesSystem()
 		if incentivesSystem == nil {
@@ -176,7 +184,7 @@ func rpcIncentivesRecipientGet(p *pamlogixImpl) func(ctx context.Context, logger
 		}
 
 		request := &IncentiveRecipientGetRequest{}
-		if err := proto.Unmarshal([]byte(payload), request); err != nil {
+		if err := json.Unmarshal([]byte(payload), request); err != nil {
 			logger.Error("Failed to unmarshal incentive get request: %v", err)
 			return "", runtime.NewError("failed to unmarshal incentive get request", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
@@ -190,7 +198,7 @@ func rpcIncentivesRecipientGet(p *pamlogixImpl) func(ctx context.Context, logger
 			return "", err
 		}
 
-		data, err := proto.Marshal(incentive)
+		data, err := json.Marshal(incentive)
 		if err != nil {
 			logger.Error("Failed to marshal incentive info: %v", err)
 			return "", runtime.NewError("failed to marshal incentive info", INTERNAL_ERROR_CODE) // INTERNAL
@@ -199,8 +207,8 @@ func rpcIncentivesRecipientGet(p *pamlogixImpl) func(ctx context.Context, logger
 	}
 }
 
-// rpcIncentivesRecipientClaim allows a user to claim an incentive and receive rewards
-func rpcIncentivesRecipientClaim(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+// rpcIncentivesRecipientClaimJson allows a user to claim an incentive and receive rewards using JSON
+func rpcIncentivesRecipientClaimJson(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		incentivesSystem := p.GetIncentivesSystem()
 		if incentivesSystem == nil {
@@ -213,7 +221,7 @@ func rpcIncentivesRecipientClaim(p *pamlogixImpl) func(ctx context.Context, logg
 		}
 
 		request := &IncentiveRecipientClaimRequest{}
-		if err := proto.Unmarshal([]byte(payload), request); err != nil {
+		if err := json.Unmarshal([]byte(payload), request); err != nil {
 			logger.Error("Failed to unmarshal incentive claim request: %v", err)
 			return "", runtime.NewError("failed to unmarshal incentive claim request", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
@@ -227,7 +235,7 @@ func rpcIncentivesRecipientClaim(p *pamlogixImpl) func(ctx context.Context, logg
 			return "", err
 		}
 
-		data, err := proto.Marshal(incentive)
+		data, err := json.Marshal(incentive)
 		if err != nil {
 			logger.Error("Failed to marshal incentive info: %v", err)
 			return "", runtime.NewError("failed to marshal incentive info", INTERNAL_ERROR_CODE) // INTERNAL
