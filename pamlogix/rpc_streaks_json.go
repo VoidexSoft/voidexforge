@@ -3,14 +3,14 @@ package pamlogix
 import (
 	"context"
 	"database/sql"
+	"encoding/json"
 
 	"github.com/heroiclabs/nakama-common/runtime"
-	"google.golang.org/protobuf/proto"
 )
 
-// Streaks RPC functions
+// Streaks RPC functions with JSON support
 
-func rpcStreaksList(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+func rpcStreaksList_Json(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		streaksSystem := p.GetStreaksSystem()
 		if streaksSystem == nil {
@@ -27,12 +27,12 @@ func rpcStreaksList(p *pamlogixImpl) func(ctx context.Context, logger runtime.Lo
 			return "", err
 		}
 
-		// Create response in the format expected by the protobuf StreaksList
+		// Create response in the format expected by the JSON StreaksList
 		response := &StreaksList{
 			Streaks: streaks,
 		}
 
-		data, err := proto.Marshal(response)
+		data, err := json.Marshal(response)
 		if err != nil {
 			logger.Error("Failed to marshal streaks: %v", err)
 			return "", runtime.NewError("failed to marshal streaks", INTERNAL_ERROR_CODE) // INTERNAL
@@ -42,7 +42,7 @@ func rpcStreaksList(p *pamlogixImpl) func(ctx context.Context, logger runtime.Lo
 	}
 }
 
-func rpcStreaksUpdate(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+func rpcStreaksUpdate_Json(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		streaksSystem := p.GetStreaksSystem()
 		if streaksSystem == nil {
@@ -55,7 +55,7 @@ func rpcStreaksUpdate(p *pamlogixImpl) func(ctx context.Context, logger runtime.
 		}
 
 		var request StreaksUpdateRequest
-		if err := proto.Unmarshal([]byte(payload), &request); err != nil {
+		if err := json.Unmarshal([]byte(payload), &request); err != nil {
 			logger.Error("Failed to unmarshal StreaksUpdateRequest: %v", err)
 			return "", runtime.NewError("failed to unmarshal streaks update request", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
@@ -69,12 +69,12 @@ func rpcStreaksUpdate(p *pamlogixImpl) func(ctx context.Context, logger runtime.
 			return "", err
 		}
 
-		// Create response using protobuf StreaksList
+		// Create response using JSON StreaksList
 		response := &StreaksList{
 			Streaks: streaks,
 		}
 
-		data, err := proto.Marshal(response)
+		data, err := json.Marshal(response)
 		if err != nil {
 			logger.Error("Failed to marshal streaks: %v", err)
 			return "", runtime.NewError("failed to marshal streaks", INTERNAL_ERROR_CODE) // INTERNAL
@@ -84,7 +84,7 @@ func rpcStreaksUpdate(p *pamlogixImpl) func(ctx context.Context, logger runtime.
 	}
 }
 
-func rpcStreaksClaim(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+func rpcStreaksClaim_Json(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		streaksSystem := p.GetStreaksSystem()
 		if streaksSystem == nil {
@@ -97,7 +97,7 @@ func rpcStreaksClaim(p *pamlogixImpl) func(ctx context.Context, logger runtime.L
 		}
 
 		var request StreaksClaimRequest
-		if err := proto.Unmarshal([]byte(payload), &request); err != nil {
+		if err := json.Unmarshal([]byte(payload), &request); err != nil {
 			logger.Error("Failed to unmarshal StreaksClaimRequest: %v", err)
 			return "", runtime.NewError("failed to unmarshal streaks claim request", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
@@ -111,12 +111,12 @@ func rpcStreaksClaim(p *pamlogixImpl) func(ctx context.Context, logger runtime.L
 			return "", err
 		}
 
-		// Create response using protobuf StreaksList
+		// Create response using JSON StreaksList
 		response := &StreaksList{
 			Streaks: streaks,
 		}
 
-		data, err := proto.Marshal(response)
+		data, err := json.Marshal(response)
 		if err != nil {
 			logger.Error("Failed to marshal streaks: %v", err)
 			return "", runtime.NewError("failed to marshal streaks", INTERNAL_ERROR_CODE) // INTERNAL
@@ -126,7 +126,7 @@ func rpcStreaksClaim(p *pamlogixImpl) func(ctx context.Context, logger runtime.L
 	}
 }
 
-func rpcStreaksReset(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+func rpcStreaksReset_Json(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		streaksSystem := p.GetStreaksSystem()
 		if streaksSystem == nil {
@@ -139,7 +139,7 @@ func rpcStreaksReset(p *pamlogixImpl) func(ctx context.Context, logger runtime.L
 		}
 
 		var request StreaksResetRequest
-		if err := proto.Unmarshal([]byte(payload), &request); err != nil {
+		if err := json.Unmarshal([]byte(payload), &request); err != nil {
 			logger.Error("Failed to unmarshal StreaksResetRequest: %v", err)
 			return "", runtime.NewError("failed to unmarshal streaks reset request", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
@@ -153,12 +153,12 @@ func rpcStreaksReset(p *pamlogixImpl) func(ctx context.Context, logger runtime.L
 			return "", err
 		}
 
-		// Create response using protobuf StreaksList
+		// Create response using JSON StreaksList
 		response := &StreaksList{
 			Streaks: streaks,
 		}
 
-		data, err := proto.Marshal(response)
+		data, err := json.Marshal(response)
 		if err != nil {
 			logger.Error("Failed to marshal streaks: %v", err)
 			return "", runtime.NewError("failed to marshal streaks", INTERNAL_ERROR_CODE) // INTERNAL
