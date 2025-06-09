@@ -3,14 +3,14 @@ package pamlogix
 import (
 	"context"
 	"database/sql"
+	"encoding/json"
 	"time"
 
 	"github.com/heroiclabs/nakama-common/runtime"
-	"google.golang.org/protobuf/proto"
 )
 
-// Economy system RPC handlers
-func rpcEconomyDonationClaim(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+// Economy system RPC handlers with JSON serialization
+func rpcEconomyDonationClaim_Json(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		if p.GetEconomySystem() == nil {
 			return "", ErrSystemNotFound
@@ -18,7 +18,7 @@ func rpcEconomyDonationClaim(p *pamlogixImpl) func(ctx context.Context, logger r
 
 		// Parse the input request
 		request := &EconomyDonationClaimRequest{}
-		if err := proto.Unmarshal([]byte(payload), request); err != nil {
+		if err := json.Unmarshal([]byte(payload), request); err != nil {
 			logger.Error("Failed to unmarshal EconomyDonationClaimRequest: %v", err)
 			return "", ErrPayloadDecode
 		}
@@ -38,7 +38,7 @@ func rpcEconomyDonationClaim(p *pamlogixImpl) func(ctx context.Context, logger r
 		}
 
 		// Encode the response
-		responseData, err := proto.Marshal(donationsList)
+		responseData, err := json.Marshal(donationsList)
 		if err != nil {
 			logger.Error("Failed to marshal response: %v", err)
 			return "", ErrPayloadEncode
@@ -48,7 +48,7 @@ func rpcEconomyDonationClaim(p *pamlogixImpl) func(ctx context.Context, logger r
 	}
 }
 
-func rpcEconomyDonationGive(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+func rpcEconomyDonationGive_Json(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		if p.GetEconomySystem() == nil {
 			return "", ErrSystemNotFound
@@ -56,7 +56,7 @@ func rpcEconomyDonationGive(p *pamlogixImpl) func(ctx context.Context, logger ru
 
 		// Parse the input request
 		request := &EconomyDonationGiveRequest{}
-		if err := proto.Unmarshal([]byte(payload), request); err != nil {
+		if err := json.Unmarshal([]byte(payload), request); err != nil {
 			logger.Error("Failed to unmarshal EconomyDonationGiveRequest: %v", err)
 			return "", ErrPayloadDecode
 		}
@@ -85,7 +85,7 @@ func rpcEconomyDonationGive(p *pamlogixImpl) func(ctx context.Context, logger ru
 		}
 
 		// Encode the response
-		responseData, err := proto.Marshal(response)
+		responseData, err := json.Marshal(response)
 		if err != nil {
 			logger.Error("Failed to marshal response: %v", err)
 			return "", ErrPayloadEncode
@@ -95,7 +95,7 @@ func rpcEconomyDonationGive(p *pamlogixImpl) func(ctx context.Context, logger ru
 	}
 }
 
-func rpcEconomyDonationGet(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+func rpcEconomyDonationGet_Json(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		if p.GetEconomySystem() == nil {
 			return "", ErrSystemNotFound
@@ -103,7 +103,7 @@ func rpcEconomyDonationGet(p *pamlogixImpl) func(ctx context.Context, logger run
 
 		// Parse the input request
 		request := &EconomyDonationGetRequest{}
-		if err := proto.Unmarshal([]byte(payload), request); err != nil {
+		if err := json.Unmarshal([]byte(payload), request); err != nil {
 			logger.Error("Failed to unmarshal EconomyDonationGetRequest: %v", err)
 			return "", ErrPayloadDecode
 		}
@@ -116,7 +116,7 @@ func rpcEconomyDonationGet(p *pamlogixImpl) func(ctx context.Context, logger run
 		}
 
 		// Encode the response
-		responseData, err := proto.Marshal(donationsList)
+		responseData, err := json.Marshal(donationsList)
 		if err != nil {
 			logger.Error("Failed to marshal response: %v", err)
 			return "", ErrPayloadEncode
@@ -126,7 +126,7 @@ func rpcEconomyDonationGet(p *pamlogixImpl) func(ctx context.Context, logger run
 	}
 }
 
-func rpcEconomyDonationRequest(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+func rpcEconomyDonationRequest_Json(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		if p.GetEconomySystem() == nil {
 			return "", ErrSystemNotFound
@@ -134,7 +134,7 @@ func rpcEconomyDonationRequest(p *pamlogixImpl) func(ctx context.Context, logger
 
 		// Parse the input request
 		request := &EconomyDonationRequest{}
-		if err := proto.Unmarshal([]byte(payload), request); err != nil {
+		if err := json.Unmarshal([]byte(payload), request); err != nil {
 			logger.Error("Failed to unmarshal EconomyDonationRequest: %v", err)
 			return "", ErrPayloadDecode
 		}
@@ -160,7 +160,7 @@ func rpcEconomyDonationRequest(p *pamlogixImpl) func(ctx context.Context, logger
 		}
 
 		// Encode the response
-		responseData, err := proto.Marshal(response)
+		responseData, err := json.Marshal(response)
 		if err != nil {
 			logger.Error("Failed to marshal response: %v", err)
 			return "", ErrPayloadEncode
@@ -170,7 +170,7 @@ func rpcEconomyDonationRequest(p *pamlogixImpl) func(ctx context.Context, logger
 	}
 }
 
-func rpcEconomyStoreGet(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+func rpcEconomyStoreGet_Json(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		if p.GetEconomySystem() == nil {
 			return "", ErrSystemNotFound
@@ -178,7 +178,7 @@ func rpcEconomyStoreGet(p *pamlogixImpl) func(ctx context.Context, logger runtim
 
 		// Parse the input request
 		request := &EconomyListRequest{}
-		if err := proto.Unmarshal([]byte(payload), request); err != nil {
+		if err := json.Unmarshal([]byte(payload), request); err != nil {
 			logger.Error("Failed to unmarshal EconomyListRequest: %v", err)
 			return "", ErrPayloadDecode
 		}
@@ -235,7 +235,7 @@ func rpcEconomyStoreGet(p *pamlogixImpl) func(ctx context.Context, logger runtim
 		}
 
 		// Encode the response
-		responseData, err := proto.Marshal(response)
+		responseData, err := json.Marshal(response)
 		if err != nil {
 			logger.Error("Failed to marshal response: %v", err)
 			return "", ErrPayloadEncode
@@ -245,7 +245,7 @@ func rpcEconomyStoreGet(p *pamlogixImpl) func(ctx context.Context, logger runtim
 	}
 }
 
-func rpcEconomyGrant(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+func rpcEconomyGrant_Json(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		if p.GetEconomySystem() == nil {
 			return "", ErrSystemNotFound
@@ -253,7 +253,7 @@ func rpcEconomyGrant(p *pamlogixImpl) func(ctx context.Context, logger runtime.L
 
 		// Parse the input request
 		request := &EconomyGrantRequest{}
-		if err := proto.Unmarshal([]byte(payload), request); err != nil {
+		if err := json.Unmarshal([]byte(payload), request); err != nil {
 			logger.Error("Failed to unmarshal EconomyGrantRequest: %v", err)
 			return "", ErrPayloadDecode
 		}
@@ -280,7 +280,7 @@ func rpcEconomyGrant(p *pamlogixImpl) func(ctx context.Context, logger runtime.L
 		}
 
 		// Encode the response
-		responseData, err := proto.Marshal(response)
+		responseData, err := json.Marshal(response)
 		if err != nil {
 			logger.Error("Failed to marshal response: %v", err)
 			return "", ErrPayloadEncode
@@ -290,7 +290,7 @@ func rpcEconomyGrant(p *pamlogixImpl) func(ctx context.Context, logger runtime.L
 	}
 }
 
-func rpcEconomyPurchaseIntent(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+func rpcEconomyPurchaseIntent_Json(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		if p.GetEconomySystem() == nil {
 			return "", ErrSystemNotFound
@@ -298,7 +298,7 @@ func rpcEconomyPurchaseIntent(p *pamlogixImpl) func(ctx context.Context, logger 
 
 		// Parse the input request
 		request := &EconomyPurchaseIntentRequest{}
-		if err := proto.Unmarshal([]byte(payload), request); err != nil {
+		if err := json.Unmarshal([]byte(payload), request); err != nil {
 			logger.Error("Failed to unmarshal EconomyPurchaseIntentRequest: %v", err)
 			return "", ErrPayloadDecode
 		}
@@ -323,7 +323,7 @@ func rpcEconomyPurchaseIntent(p *pamlogixImpl) func(ctx context.Context, logger 
 	}
 }
 
-func rpcEconomyPurchaseItem(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+func rpcEconomyPurchaseItem_Json(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		if p.GetEconomySystem() == nil {
 			return "", ErrSystemNotFound
@@ -331,7 +331,7 @@ func rpcEconomyPurchaseItem(p *pamlogixImpl) func(ctx context.Context, logger ru
 
 		// Parse the input request
 		request := &EconomyPurchaseRequest{}
-		if err := proto.Unmarshal([]byte(payload), request); err != nil {
+		if err := json.Unmarshal([]byte(payload), request); err != nil {
 			logger.Error("Failed to unmarshal EconomyPurchaseRequest: %v", err)
 			return "", ErrPayloadDecode
 		}
@@ -358,7 +358,7 @@ func rpcEconomyPurchaseItem(p *pamlogixImpl) func(ctx context.Context, logger ru
 		}
 
 		// Encode the response
-		responseData, err := proto.Marshal(response)
+		responseData, err := json.Marshal(response)
 		if err != nil {
 			logger.Error("Failed to marshal response: %v", err)
 			return "", ErrPayloadEncode
@@ -368,7 +368,7 @@ func rpcEconomyPurchaseItem(p *pamlogixImpl) func(ctx context.Context, logger ru
 	}
 }
 
-func rpcEconomyPurchaseRestore(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+func rpcEconomyPurchaseRestore_Json(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		if p.GetEconomySystem() == nil {
 			return "", ErrSystemNotFound
@@ -376,7 +376,7 @@ func rpcEconomyPurchaseRestore(p *pamlogixImpl) func(ctx context.Context, logger
 
 		// Parse the input request
 		request := &EconomyPurchaseRestoreRequest{}
-		if err := proto.Unmarshal([]byte(payload), request); err != nil {
+		if err := json.Unmarshal([]byte(payload), request); err != nil {
 			logger.Error("Failed to unmarshal EconomyPurchaseRestoreRequest: %v", err)
 			return "", ErrPayloadDecode
 		}
@@ -401,7 +401,7 @@ func rpcEconomyPurchaseRestore(p *pamlogixImpl) func(ctx context.Context, logger
 	}
 }
 
-func rpcEconomyPlacementStatus(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+func rpcEconomyPlacementStatus_Json(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		if p.GetEconomySystem() == nil {
 			return "", ErrSystemNotFound
@@ -409,7 +409,7 @@ func rpcEconomyPlacementStatus(p *pamlogixImpl) func(ctx context.Context, logger
 
 		// Parse the input request
 		request := &EconomyPlacementStatusRequest{}
-		if err := proto.Unmarshal([]byte(payload), request); err != nil {
+		if err := json.Unmarshal([]byte(payload), request); err != nil {
 			logger.Error("Failed to unmarshal EconomyPlacementStatusRequest: %v", err)
 			return "", ErrPayloadDecode
 		}
@@ -429,7 +429,7 @@ func rpcEconomyPlacementStatus(p *pamlogixImpl) func(ctx context.Context, logger
 		}
 
 		// Encode the response
-		responseData, err := proto.Marshal(status)
+		responseData, err := json.Marshal(status)
 		if err != nil {
 			logger.Error("Failed to marshal response: %v", err)
 			return "", ErrPayloadEncode
@@ -439,7 +439,7 @@ func rpcEconomyPlacementStatus(p *pamlogixImpl) func(ctx context.Context, logger
 	}
 }
 
-func rpcEconomyPlacementStart(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+func rpcEconomyPlacementStart_Json(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		if p.GetEconomySystem() == nil {
 			return "", ErrSystemNotFound
@@ -447,7 +447,7 @@ func rpcEconomyPlacementStart(p *pamlogixImpl) func(ctx context.Context, logger 
 
 		// Parse the input request
 		request := &EconomyPlacementStartRequest{}
-		if err := proto.Unmarshal([]byte(payload), request); err != nil {
+		if err := json.Unmarshal([]byte(payload), request); err != nil {
 			logger.Error("Failed to unmarshal EconomyPlacementStartRequest: %v", err)
 			return "", ErrPayloadDecode
 		}
@@ -467,7 +467,7 @@ func rpcEconomyPlacementStart(p *pamlogixImpl) func(ctx context.Context, logger 
 		}
 
 		// Encode the response
-		responseData, err := proto.Marshal(status)
+		responseData, err := json.Marshal(status)
 		if err != nil {
 			logger.Error("Failed to marshal response: %v", err)
 			return "", ErrPayloadEncode
@@ -477,7 +477,7 @@ func rpcEconomyPlacementStart(p *pamlogixImpl) func(ctx context.Context, logger 
 	}
 }
 
-func rpcEconomyPlacementSuccess(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+func rpcEconomyPlacementSuccess_Json(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		if p.GetEconomySystem() == nil {
 			return "", ErrSystemNotFound
@@ -485,7 +485,7 @@ func rpcEconomyPlacementSuccess(p *pamlogixImpl) func(ctx context.Context, logge
 
 		//use EconomyPlacementStatusRequest
 		request := &EconomyPlacementStatusRequest{}
-		if err := proto.Unmarshal([]byte(payload), request); err != nil {
+		if err := json.Unmarshal([]byte(payload), request); err != nil {
 			logger.Error("Failed to unmarshal EconomyPlacementStatusRequest: %v", err)
 			return "", ErrPayloadDecode
 		}
@@ -515,7 +515,7 @@ func rpcEconomyPlacementSuccess(p *pamlogixImpl) func(ctx context.Context, logge
 		}
 
 		// Encode the response
-		responseData, err := proto.Marshal(response)
+		responseData, err := json.Marshal(response)
 		if err != nil {
 			logger.Error("Failed to marshal response: %v", err)
 			return "", ErrPayloadEncode
@@ -525,14 +525,14 @@ func rpcEconomyPlacementSuccess(p *pamlogixImpl) func(ctx context.Context, logge
 	}
 }
 
-func rpcEconomyPlacementFail(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+func rpcEconomyPlacementFail_Json(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		if p.GetEconomySystem() == nil {
 			return "", ErrSystemNotFound
 		}
 
 		request := &EconomyPlacementStatusRequest{}
-		if err := proto.Unmarshal([]byte(payload), request); err != nil {
+		if err := json.Unmarshal([]byte(payload), request); err != nil {
 			logger.Error("Failed to unmarshal EconomyPlacementStatusRequest: %v", err)
 			return "", ErrPayloadDecode
 		}
@@ -560,7 +560,7 @@ func rpcEconomyPlacementFail(p *pamlogixImpl) func(ctx context.Context, logger r
 		}
 
 		// Encode the response
-		responseData, err := proto.Marshal(response)
+		responseData, err := json.Marshal(response)
 		if err != nil {
 			logger.Error("Failed to marshal response: %v", err)
 			return "", ErrPayloadEncode

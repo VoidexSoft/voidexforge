@@ -8,7 +8,7 @@ import (
 	"github.com/heroiclabs/nakama-common/runtime"
 )
 
-func rpcJsonInventoryList(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+func rpcInventoryList_Json(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		inventorySystem := p.GetInventorySystem()
 		if inventorySystem == nil {
@@ -58,7 +58,7 @@ func rpcJsonInventoryList(p *pamlogixImpl) func(ctx context.Context, logger runt
 	}
 }
 
-func rpcJsonInventoryListInventory(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+func rpcInventoryListInventory_Json(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		inventorySystem := p.GetInventorySystem()
 		if inventorySystem == nil {
@@ -94,7 +94,7 @@ func rpcJsonInventoryListInventory(p *pamlogixImpl) func(ctx context.Context, lo
 	}
 }
 
-func rpcJsonInventoryConsume(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+func rpcInventoryConsume_Json(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		inventorySystem := p.GetInventorySystem()
 		if inventorySystem == nil {
@@ -165,7 +165,7 @@ func rpcJsonInventoryConsume(p *pamlogixImpl) func(ctx context.Context, logger r
 	}
 }
 
-func rpcJsonInventoryGrant(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+func rpcInventoryGrant_Json(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		inventorySystem := p.GetInventorySystem()
 		if inventorySystem == nil {
@@ -204,7 +204,7 @@ func rpcJsonInventoryGrant(p *pamlogixImpl) func(ctx context.Context, logger run
 	}
 }
 
-func rpcJsonInventoryUpdate(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+func rpcInventoryUpdate_Json(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		inventorySystem := p.GetInventorySystem()
 		if inventorySystem == nil {
