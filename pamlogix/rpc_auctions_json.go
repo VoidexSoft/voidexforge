@@ -3,13 +3,13 @@ package pamlogix
 import (
 	"context"
 	"database/sql"
+	"encoding/json"
 
 	"github.com/heroiclabs/nakama-common/runtime"
-	"google.golang.org/protobuf/encoding/protojson"
 )
 
-// rpcAuctionsGetTemplates handles the get templates RPC
-func rpcAuctionsGetTemplates(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+// rpcAuctionsGetTemplates_Json handles the get templates RPC with JSON
+func rpcAuctionsGetTemplates_Json(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		auctionsSystem := p.GetAuctionsSystem()
 		if auctionsSystem == nil {
@@ -27,8 +27,7 @@ func rpcAuctionsGetTemplates(p *pamlogixImpl) func(ctx context.Context, logger r
 			return "", err
 		}
 
-		marshaler := &protojson.MarshalOptions{}
-		responseData, err := marshaler.Marshal(templates)
+		responseData, err := json.Marshal(templates)
 		if err != nil {
 			logger.Error("Failed to marshal auction templates response: %v", err)
 			return "", ErrPayloadEncode
@@ -38,8 +37,8 @@ func rpcAuctionsGetTemplates(p *pamlogixImpl) func(ctx context.Context, logger r
 	}
 }
 
-// rpcAuctionsList handles the list auctions RPC
-func rpcAuctionsList(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+// rpcAuctionsList_Json handles the list auctions RPC with JSON
+func rpcAuctionsList_Json(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		auctionsSystem := p.GetAuctionsSystem()
 		if auctionsSystem == nil {
@@ -47,8 +46,7 @@ func rpcAuctionsList(p *pamlogixImpl) func(ctx context.Context, logger runtime.L
 		}
 
 		request := &AuctionListRequest{}
-		unmarshaler := &protojson.UnmarshalOptions{}
-		if err := unmarshaler.Unmarshal([]byte(payload), request); err != nil {
+		if err := json.Unmarshal([]byte(payload), request); err != nil {
 			logger.Error("Failed to unmarshal AuctionListRequest: %v", err)
 			return "", ErrPayloadDecode
 		}
@@ -70,8 +68,7 @@ func rpcAuctionsList(p *pamlogixImpl) func(ctx context.Context, logger runtime.L
 			return "", err
 		}
 
-		marshaler := &protojson.MarshalOptions{}
-		responseData, err := marshaler.Marshal(auctionList)
+		responseData, err := json.Marshal(auctionList)
 		if err != nil {
 			logger.Error("Failed to marshal auction list response: %v", err)
 			return "", ErrPayloadEncode
@@ -81,8 +78,8 @@ func rpcAuctionsList(p *pamlogixImpl) func(ctx context.Context, logger runtime.L
 	}
 }
 
-// rpcAuctionsBid handles the bid on auction RPC
-func rpcAuctionsBid(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+// rpcAuctionsBid_Json handles the bid on auction RPC with JSON
+func rpcAuctionsBid_Json(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		auctionsSystem := p.GetAuctionsSystem()
 		if auctionsSystem == nil {
@@ -90,8 +87,7 @@ func rpcAuctionsBid(p *pamlogixImpl) func(ctx context.Context, logger runtime.Lo
 		}
 
 		request := &AuctionBidRequest{}
-		unmarshaler := &protojson.UnmarshalOptions{}
-		if err := unmarshaler.Unmarshal([]byte(payload), request); err != nil {
+		if err := json.Unmarshal([]byte(payload), request); err != nil {
 			logger.Error("Failed to unmarshal AuctionBidRequest: %v", err)
 			return "", ErrPayloadDecode
 		}
@@ -106,14 +102,14 @@ func rpcAuctionsBid(p *pamlogixImpl) func(ctx context.Context, logger runtime.Lo
 			return "", ErrNoSessionID
 		}
 
-		marshaler := &protojson.MarshalOptions{}
-		auction, err := auctionsSystem.Bid(ctx, logger, nk, userID, sessionID, request.GetId(), request.GetVersion(), request.GetBid(), marshaler)
+		// For JSON version, we don't pass the marshaler since it's protobuf-specific
+		auction, err := auctionsSystem.Bid(ctx, logger, nk, userID, sessionID, request.GetId(), request.GetVersion(), request.GetBid(), nil)
 		if err != nil {
 			logger.Error("Error placing bid on auction: %v", err)
 			return "", err
 		}
 
-		responseData, err := marshaler.Marshal(auction)
+		responseData, err := json.Marshal(auction)
 		if err != nil {
 			logger.Error("Failed to marshal auction bid response: %v", err)
 			return "", ErrPayloadEncode
@@ -123,8 +119,8 @@ func rpcAuctionsBid(p *pamlogixImpl) func(ctx context.Context, logger runtime.Lo
 	}
 }
 
-// rpcAuctionsClaimBid handles the claim bid RPC
-func rpcAuctionsClaimBid(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+// rpcAuctionsClaimBid_Json handles the claim bid RPC with JSON
+func rpcAuctionsClaimBid_Json(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		auctionsSystem := p.GetAuctionsSystem()
 		if auctionsSystem == nil {
@@ -132,8 +128,7 @@ func rpcAuctionsClaimBid(p *pamlogixImpl) func(ctx context.Context, logger runti
 		}
 
 		request := &AuctionClaimBidRequest{}
-		unmarshaler := &protojson.UnmarshalOptions{}
-		if err := unmarshaler.Unmarshal([]byte(payload), request); err != nil {
+		if err := json.Unmarshal([]byte(payload), request); err != nil {
 			logger.Error("Failed to unmarshal AuctionClaimBidRequest: %v", err)
 			return "", ErrPayloadDecode
 		}
@@ -149,8 +144,7 @@ func rpcAuctionsClaimBid(p *pamlogixImpl) func(ctx context.Context, logger runti
 			return "", err
 		}
 
-		marshaler := &protojson.MarshalOptions{}
-		responseData, err := marshaler.Marshal(claimResult)
+		responseData, err := json.Marshal(claimResult)
 		if err != nil {
 			logger.Error("Failed to marshal auction claim bid response: %v", err)
 			return "", ErrPayloadEncode
@@ -160,8 +154,8 @@ func rpcAuctionsClaimBid(p *pamlogixImpl) func(ctx context.Context, logger runti
 	}
 }
 
-// rpcAuctionsClaimCreated handles the claim created auction RPC
-func rpcAuctionsClaimCreated(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+// rpcAuctionsClaimCreated_Json handles the claim created auction RPC with JSON
+func rpcAuctionsClaimCreated_Json(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		auctionsSystem := p.GetAuctionsSystem()
 		if auctionsSystem == nil {
@@ -169,8 +163,7 @@ func rpcAuctionsClaimCreated(p *pamlogixImpl) func(ctx context.Context, logger r
 		}
 
 		request := &AuctionClaimCreatedRequest{}
-		unmarshaler := &protojson.UnmarshalOptions{}
-		if err := unmarshaler.Unmarshal([]byte(payload), request); err != nil {
+		if err := json.Unmarshal([]byte(payload), request); err != nil {
 			logger.Error("Failed to unmarshal AuctionClaimCreatedRequest: %v", err)
 			return "", ErrPayloadDecode
 		}
@@ -186,8 +179,7 @@ func rpcAuctionsClaimCreated(p *pamlogixImpl) func(ctx context.Context, logger r
 			return "", err
 		}
 
-		marshaler := &protojson.MarshalOptions{}
-		responseData, err := marshaler.Marshal(claimResult)
+		responseData, err := json.Marshal(claimResult)
 		if err != nil {
 			logger.Error("Failed to marshal auction claim created response: %v", err)
 			return "", ErrPayloadEncode
@@ -197,8 +189,8 @@ func rpcAuctionsClaimCreated(p *pamlogixImpl) func(ctx context.Context, logger r
 	}
 }
 
-// rpcAuctionsCancel handles the cancel auction RPC
-func rpcAuctionsCancel(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+// rpcAuctionsCancel_Json handles the cancel auction RPC with JSON
+func rpcAuctionsCancel_Json(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		auctionsSystem := p.GetAuctionsSystem()
 		if auctionsSystem == nil {
@@ -206,8 +198,7 @@ func rpcAuctionsCancel(p *pamlogixImpl) func(ctx context.Context, logger runtime
 		}
 
 		request := &AuctionCancelRequest{}
-		unmarshaler := &protojson.UnmarshalOptions{}
-		if err := unmarshaler.Unmarshal([]byte(payload), request); err != nil {
+		if err := json.Unmarshal([]byte(payload), request); err != nil {
 			logger.Error("Failed to unmarshal AuctionCancelRequest: %v", err)
 			return "", ErrPayloadDecode
 		}
@@ -223,8 +214,7 @@ func rpcAuctionsCancel(p *pamlogixImpl) func(ctx context.Context, logger runtime
 			return "", err
 		}
 
-		marshaler := &protojson.MarshalOptions{}
-		responseData, err := marshaler.Marshal(cancelResult)
+		responseData, err := json.Marshal(cancelResult)
 		if err != nil {
 			logger.Error("Failed to marshal auction cancel response: %v", err)
 			return "", ErrPayloadEncode
@@ -234,8 +224,8 @@ func rpcAuctionsCancel(p *pamlogixImpl) func(ctx context.Context, logger runtime
 	}
 }
 
-// rpcAuctionsCreate handles the create auction RPC
-func rpcAuctionsCreate(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+// rpcAuctionsCreate_Json handles the create auction RPC with JSON
+func rpcAuctionsCreate_Json(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		auctionsSystem := p.GetAuctionsSystem()
 		if auctionsSystem == nil {
@@ -243,8 +233,7 @@ func rpcAuctionsCreate(p *pamlogixImpl) func(ctx context.Context, logger runtime
 		}
 
 		request := &AuctionCreateRequest{}
-		unmarshaler := &protojson.UnmarshalOptions{}
-		if err := unmarshaler.Unmarshal([]byte(payload), request); err != nil {
+		if err := json.Unmarshal([]byte(payload), request); err != nil {
 			logger.Error("Failed to unmarshal AuctionCreateRequest: %v", err)
 			return "", ErrPayloadDecode
 		}
@@ -262,8 +251,7 @@ func rpcAuctionsCreate(p *pamlogixImpl) func(ctx context.Context, logger runtime
 			return "", err
 		}
 
-		marshaler := &protojson.MarshalOptions{}
-		responseData, err := marshaler.Marshal(auction)
+		responseData, err := json.Marshal(auction)
 		if err != nil {
 			logger.Error("Failed to marshal auction create response: %v", err)
 			return "", ErrPayloadEncode
@@ -273,8 +261,8 @@ func rpcAuctionsCreate(p *pamlogixImpl) func(ctx context.Context, logger runtime
 	}
 }
 
-// rpcAuctionsListBids handles the list user bids RPC
-func rpcAuctionsListBids(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+// rpcAuctionsListBids_Json handles the list user bids RPC with JSON
+func rpcAuctionsListBids_Json(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		auctionsSystem := p.GetAuctionsSystem()
 		if auctionsSystem == nil {
@@ -282,8 +270,7 @@ func rpcAuctionsListBids(p *pamlogixImpl) func(ctx context.Context, logger runti
 		}
 
 		request := &AuctionListBidsRequest{}
-		unmarshaler := &protojson.UnmarshalOptions{}
-		if err := unmarshaler.Unmarshal([]byte(payload), request); err != nil {
+		if err := json.Unmarshal([]byte(payload), request); err != nil {
 			logger.Error("Failed to unmarshal AuctionListBidsRequest: %v", err)
 			return "", ErrPayloadDecode
 		}
@@ -305,8 +292,7 @@ func rpcAuctionsListBids(p *pamlogixImpl) func(ctx context.Context, logger runti
 			return "", err
 		}
 
-		marshaler := &protojson.MarshalOptions{}
-		responseData, err := marshaler.Marshal(auctionList)
+		responseData, err := json.Marshal(auctionList)
 		if err != nil {
 			logger.Error("Failed to marshal auction list bids response: %v", err)
 			return "", ErrPayloadEncode
@@ -316,8 +302,8 @@ func rpcAuctionsListBids(p *pamlogixImpl) func(ctx context.Context, logger runti
 	}
 }
 
-// rpcAuctionsListCreated handles the list user created auctions RPC
-func rpcAuctionsListCreated(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+// rpcAuctionsListCreated_Json handles the list user created auctions RPC with JSON
+func rpcAuctionsListCreated_Json(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		auctionsSystem := p.GetAuctionsSystem()
 		if auctionsSystem == nil {
@@ -325,8 +311,7 @@ func rpcAuctionsListCreated(p *pamlogixImpl) func(ctx context.Context, logger ru
 		}
 
 		request := &AuctionListCreatedRequest{}
-		unmarshaler := &protojson.UnmarshalOptions{}
-		if err := unmarshaler.Unmarshal([]byte(payload), request); err != nil {
+		if err := json.Unmarshal([]byte(payload), request); err != nil {
 			logger.Error("Failed to unmarshal AuctionListCreatedRequest: %v", err)
 			return "", ErrPayloadDecode
 		}
@@ -348,8 +333,7 @@ func rpcAuctionsListCreated(p *pamlogixImpl) func(ctx context.Context, logger ru
 			return "", err
 		}
 
-		marshaler := &protojson.MarshalOptions{}
-		responseData, err := marshaler.Marshal(auctionList)
+		responseData, err := json.Marshal(auctionList)
 		if err != nil {
 			logger.Error("Failed to marshal auction list created response: %v", err)
 			return "", ErrPayloadEncode
@@ -359,8 +343,8 @@ func rpcAuctionsListCreated(p *pamlogixImpl) func(ctx context.Context, logger ru
 	}
 }
 
-// rpcAuctionsFollow handles the follow auctions RPC (for real-time updates)
-func rpcAuctionsFollow(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+// rpcAuctionsFollow_Json handles the follow auctions RPC (for real-time updates) with JSON
+func rpcAuctionsFollow_Json(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		auctionsSystem := p.GetAuctionsSystem()
 		if auctionsSystem == nil {
@@ -368,8 +352,7 @@ func rpcAuctionsFollow(p *pamlogixImpl) func(ctx context.Context, logger runtime
 		}
 
 		request := &AuctionsFollowRequest{}
-		unmarshaler := &protojson.UnmarshalOptions{}
-		if err := unmarshaler.Unmarshal([]byte(payload), request); err != nil {
+		if err := json.Unmarshal([]byte(payload), request); err != nil {
 			logger.Error("Failed to unmarshal AuctionsFollowRequest: %v", err)
 			return "", ErrPayloadDecode
 		}
@@ -390,8 +373,7 @@ func rpcAuctionsFollow(p *pamlogixImpl) func(ctx context.Context, logger runtime
 			return "", err
 		}
 
-		marshaler := &protojson.MarshalOptions{}
-		responseData, err := marshaler.Marshal(auctionList)
+		responseData, err := json.Marshal(auctionList)
 		if err != nil {
 			logger.Error("Failed to marshal auction follow response: %v", err)
 			return "", ErrPayloadEncode
