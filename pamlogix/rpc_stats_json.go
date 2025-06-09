@@ -3,12 +3,12 @@ package pamlogix
 import (
 	"context"
 	"database/sql"
+	"encoding/json"
 
 	"github.com/heroiclabs/nakama-common/runtime"
-	"google.golang.org/protobuf/proto"
 )
 
-func rpcStatsGet(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+func rpcStatsGet_Json(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		statsSystem := p.GetStatsSystem()
 		if statsSystem == nil {
@@ -29,7 +29,7 @@ func rpcStatsGet(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logge
 		if !ok || stats == nil {
 			stats = &StatList{Public: map[string]*Stat{}, Private: map[string]*Stat{}}
 		}
-		data, err := proto.Marshal(stats)
+		data, err := json.Marshal(stats)
 		if err != nil {
 			logger.Error("Failed to marshal stats: %v", err)
 			return "", runtime.NewError("failed to marshal stats", INTERNAL_ERROR_CODE) // INTERNAL
@@ -38,7 +38,7 @@ func rpcStatsGet(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logge
 	}
 }
 
-func rpcStatsUpdate(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+func rpcStatsUpdate_Json(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		statsSystem := p.GetStatsSystem()
 		if statsSystem == nil {
@@ -51,7 +51,7 @@ func rpcStatsUpdate(p *pamlogixImpl) func(ctx context.Context, logger runtime.Lo
 		}
 
 		var req StatUpdateRequest
-		if err := proto.Unmarshal([]byte(payload), &req); err != nil {
+		if err := json.Unmarshal([]byte(payload), &req); err != nil {
 			logger.Error("Failed to unmarshal StatUpdateRequest: %v", err)
 			return "", runtime.NewError("failed to unmarshal stat update request", INTERNAL_ERROR_CODE) // INTERNAL
 		}
@@ -60,7 +60,7 @@ func rpcStatsUpdate(p *pamlogixImpl) func(ctx context.Context, logger runtime.Lo
 		if err != nil {
 			return "", err
 		}
-		data, err := proto.Marshal(stats)
+		data, err := json.Marshal(stats)
 		if err != nil {
 			logger.Error("Failed to marshal updated stats: %v", err)
 			return "", runtime.NewError("failed to marshal updated stats", INTERNAL_ERROR_CODE) // INTERNAL
