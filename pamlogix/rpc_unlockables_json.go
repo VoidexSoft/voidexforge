@@ -3,14 +3,14 @@ package pamlogix
 import (
 	"context"
 	"database/sql"
+	"encoding/json"
 
 	"github.com/heroiclabs/nakama-common/runtime"
-	"google.golang.org/protobuf/proto"
 )
 
-// Unlockables RPC functions
+// Unlockables RPC functions with JSON support
 
-func rpcUnlockablesCreate(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+func rpcUnlockablesCreateJson(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		unlockablesSystem := p.GetUnlockablesSystem()
 		if unlockablesSystem == nil {
@@ -28,9 +28,10 @@ func rpcUnlockablesCreate(p *pamlogixImpl) func(ctx context.Context, logger runt
 			return "", err
 		}
 
-		data, err := proto.Marshal(unlockables)
+		// Convert to JSON
+		data, err := json.Marshal(unlockables)
 		if err != nil {
-			logger.Error("Failed to marshal unlockables: %v", err)
+			logger.Error("Failed to marshal unlockables to JSON: %v", err)
 			return "", runtime.NewError("failed to marshal unlockables", INTERNAL_ERROR_CODE) // INTERNAL
 		}
 
@@ -38,7 +39,7 @@ func rpcUnlockablesCreate(p *pamlogixImpl) func(ctx context.Context, logger runt
 	}
 }
 
-func rpcUnlockablesGet(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+func rpcUnlockablesGetJson(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		unlockablesSystem := p.GetUnlockablesSystem()
 		if unlockablesSystem == nil {
@@ -55,9 +56,10 @@ func rpcUnlockablesGet(p *pamlogixImpl) func(ctx context.Context, logger runtime
 			return "", err
 		}
 
-		data, err := proto.Marshal(unlockables)
+		// Convert to JSON
+		data, err := json.Marshal(unlockables)
 		if err != nil {
-			logger.Error("Failed to marshal unlockables: %v", err)
+			logger.Error("Failed to marshal unlockables to JSON: %v", err)
 			return "", runtime.NewError("failed to marshal unlockables", INTERNAL_ERROR_CODE) // INTERNAL
 		}
 
@@ -65,7 +67,7 @@ func rpcUnlockablesGet(p *pamlogixImpl) func(ctx context.Context, logger runtime
 	}
 }
 
-func rpcUnlockablesUnlockStart(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+func rpcUnlockablesUnlockStartJson(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		unlockablesSystem := p.GetUnlockablesSystem()
 		if unlockablesSystem == nil {
@@ -77,9 +79,11 @@ func rpcUnlockablesUnlockStart(p *pamlogixImpl) func(ctx context.Context, logger
 			return "", runtime.NewError("user id not found in context", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
-		var request UnlockablesRequest
-		if err := proto.Unmarshal([]byte(payload), &request); err != nil {
-			logger.Error("Failed to unmarshal UnlockablesRequest: %v", err)
+		var request struct {
+			InstanceId string `json:"instanceId"`
+		}
+		if err := json.Unmarshal([]byte(payload), &request); err != nil {
+			logger.Error("Failed to unmarshal UnlockablesRequest from JSON: %v", err)
 			return "", runtime.NewError("failed to unmarshal unlockables request", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
@@ -92,9 +96,10 @@ func rpcUnlockablesUnlockStart(p *pamlogixImpl) func(ctx context.Context, logger
 			return "", err
 		}
 
-		data, err := proto.Marshal(unlockables)
+		// Convert to JSON
+		data, err := json.Marshal(unlockables)
 		if err != nil {
-			logger.Error("Failed to marshal unlockables: %v", err)
+			logger.Error("Failed to marshal unlockables to JSON: %v", err)
 			return "", runtime.NewError("failed to marshal unlockables", INTERNAL_ERROR_CODE) // INTERNAL
 		}
 
@@ -102,7 +107,7 @@ func rpcUnlockablesUnlockStart(p *pamlogixImpl) func(ctx context.Context, logger
 	}
 }
 
-func rpcUnlockablesPurchaseUnlock(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+func rpcUnlockablesPurchaseUnlockJson(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		unlockablesSystem := p.GetUnlockablesSystem()
 		if unlockablesSystem == nil {
@@ -114,9 +119,11 @@ func rpcUnlockablesPurchaseUnlock(p *pamlogixImpl) func(ctx context.Context, log
 			return "", runtime.NewError("user id not found in context", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
-		var request UnlockablesRequest
-		if err := proto.Unmarshal([]byte(payload), &request); err != nil {
-			logger.Error("Failed to unmarshal UnlockablesRequest: %v", err)
+		var request struct {
+			InstanceId string `json:"instanceId"`
+		}
+		if err := json.Unmarshal([]byte(payload), &request); err != nil {
+			logger.Error("Failed to unmarshal UnlockablesRequest from JSON: %v", err)
 			return "", runtime.NewError("failed to unmarshal unlockables request", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
@@ -129,9 +136,10 @@ func rpcUnlockablesPurchaseUnlock(p *pamlogixImpl) func(ctx context.Context, log
 			return "", err
 		}
 
-		data, err := proto.Marshal(unlockables)
+		// Convert to JSON
+		data, err := json.Marshal(unlockables)
 		if err != nil {
-			logger.Error("Failed to marshal unlockables: %v", err)
+			logger.Error("Failed to marshal unlockables to JSON: %v", err)
 			return "", runtime.NewError("failed to marshal unlockables", INTERNAL_ERROR_CODE) // INTERNAL
 		}
 
@@ -139,7 +147,7 @@ func rpcUnlockablesPurchaseUnlock(p *pamlogixImpl) func(ctx context.Context, log
 	}
 }
 
-func rpcUnlockablesPurchaseSlot(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+func rpcUnlockablesPurchaseSlotJson(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		unlockablesSystem := p.GetUnlockablesSystem()
 		if unlockablesSystem == nil {
@@ -156,9 +164,10 @@ func rpcUnlockablesPurchaseSlot(p *pamlogixImpl) func(ctx context.Context, logge
 			return "", err
 		}
 
-		data, err := proto.Marshal(unlockables)
+		// Convert to JSON
+		data, err := json.Marshal(unlockables)
 		if err != nil {
-			logger.Error("Failed to marshal unlockables: %v", err)
+			logger.Error("Failed to marshal unlockables to JSON: %v", err)
 			return "", runtime.NewError("failed to marshal unlockables", INTERNAL_ERROR_CODE) // INTERNAL
 		}
 
@@ -166,7 +175,7 @@ func rpcUnlockablesPurchaseSlot(p *pamlogixImpl) func(ctx context.Context, logge
 	}
 }
 
-func rpcUnlockablesClaim(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+func rpcUnlockablesClaimJson(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		unlockablesSystem := p.GetUnlockablesSystem()
 		if unlockablesSystem == nil {
@@ -178,9 +187,11 @@ func rpcUnlockablesClaim(p *pamlogixImpl) func(ctx context.Context, logger runti
 			return "", runtime.NewError("user id not found in context", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
-		var request UnlockablesRequest
-		if err := proto.Unmarshal([]byte(payload), &request); err != nil {
-			logger.Error("Failed to unmarshal UnlockablesRequest: %v", err)
+		var request struct {
+			InstanceId string `json:"instanceId"`
+		}
+		if err := json.Unmarshal([]byte(payload), &request); err != nil {
+			logger.Error("Failed to unmarshal UnlockablesRequest from JSON: %v", err)
 			return "", runtime.NewError("failed to unmarshal unlockables request", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
@@ -193,25 +204,10 @@ func rpcUnlockablesClaim(p *pamlogixImpl) func(ctx context.Context, logger runti
 			return "", err
 		}
 
-		// Create response in the format expected by the protobuf UnlockablesReward
-		response := &UnlockablesReward{
-			Unlockables: &UnlockablesList{
-				Unlockables:      reward.Unlockables.Unlockables,
-				Overflow:         reward.Unlockables.Overflow,
-				Slots:            reward.Unlockables.Slots,
-				ActiveSlots:      reward.Unlockables.ActiveSlots,
-				MaxActiveSlots:   reward.Unlockables.MaxActiveSlots,
-				SlotCost:         reward.Unlockables.SlotCost,
-				InstanceId:       reward.Unlockables.InstanceId,
-				QueuedUnlocks:    reward.Unlockables.QueuedUnlocks,
-				MaxQueuedUnlocks: reward.Unlockables.MaxQueuedUnlocks,
-			},
-			Reward: reward.Reward,
-		}
-
-		data, err := proto.Marshal(response)
+		// Convert to JSON
+		data, err := json.Marshal(reward)
 		if err != nil {
-			logger.Error("Failed to marshal unlockables reward: %v", err)
+			logger.Error("Failed to marshal unlockables reward to JSON: %v", err)
 			return "", runtime.NewError("failed to marshal unlockables reward", INTERNAL_ERROR_CODE) // INTERNAL
 		}
 
@@ -219,7 +215,7 @@ func rpcUnlockablesClaim(p *pamlogixImpl) func(ctx context.Context, logger runti
 	}
 }
 
-func rpcUnlockablesQueueAdd(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+func rpcUnlockablesQueueAddJson(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		unlockablesSystem := p.GetUnlockablesSystem()
 		if unlockablesSystem == nil {
@@ -231,9 +227,11 @@ func rpcUnlockablesQueueAdd(p *pamlogixImpl) func(ctx context.Context, logger ru
 			return "", runtime.NewError("user id not found in context", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
-		var request UnlockablesQueueAddRequest
-		if err := proto.Unmarshal([]byte(payload), &request); err != nil {
-			logger.Error("Failed to unmarshal UnlockablesQueueAddRequest: %v", err)
+		var request struct {
+			InstanceIds []string `json:"instanceIds"`
+		}
+		if err := json.Unmarshal([]byte(payload), &request); err != nil {
+			logger.Error("Failed to unmarshal UnlockablesQueueAddRequest from JSON: %v", err)
 			return "", runtime.NewError("failed to unmarshal unlockables queue add request", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
@@ -246,9 +244,10 @@ func rpcUnlockablesQueueAdd(p *pamlogixImpl) func(ctx context.Context, logger ru
 			return "", err
 		}
 
-		data, err := proto.Marshal(unlockables)
+		// Convert to JSON
+		data, err := json.Marshal(unlockables)
 		if err != nil {
-			logger.Error("Failed to marshal unlockables: %v", err)
+			logger.Error("Failed to marshal unlockables to JSON: %v", err)
 			return "", runtime.NewError("failed to marshal unlockables", INTERNAL_ERROR_CODE) // INTERNAL
 		}
 
@@ -256,7 +255,7 @@ func rpcUnlockablesQueueAdd(p *pamlogixImpl) func(ctx context.Context, logger ru
 	}
 }
 
-func rpcUnlockablesQueueRemove(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+func rpcUnlockablesQueueRemoveJson(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		unlockablesSystem := p.GetUnlockablesSystem()
 		if unlockablesSystem == nil {
@@ -268,9 +267,11 @@ func rpcUnlockablesQueueRemove(p *pamlogixImpl) func(ctx context.Context, logger
 			return "", runtime.NewError("user id not found in context", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
-		var request UnlockablesQueueRemoveRequest
-		if err := proto.Unmarshal([]byte(payload), &request); err != nil {
-			logger.Error("Failed to unmarshal UnlockablesQueueRemoveRequest: %v", err)
+		var request struct {
+			InstanceIds []string `json:"instanceIds"`
+		}
+		if err := json.Unmarshal([]byte(payload), &request); err != nil {
+			logger.Error("Failed to unmarshal UnlockablesQueueRemoveRequest from JSON: %v", err)
 			return "", runtime.NewError("failed to unmarshal unlockables queue remove request", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
@@ -283,9 +284,10 @@ func rpcUnlockablesQueueRemove(p *pamlogixImpl) func(ctx context.Context, logger
 			return "", err
 		}
 
-		data, err := proto.Marshal(unlockables)
+		// Convert to JSON
+		data, err := json.Marshal(unlockables)
 		if err != nil {
-			logger.Error("Failed to marshal unlockables: %v", err)
+			logger.Error("Failed to marshal unlockables to JSON: %v", err)
 			return "", runtime.NewError("failed to marshal unlockables", INTERNAL_ERROR_CODE) // INTERNAL
 		}
 
@@ -293,7 +295,7 @@ func rpcUnlockablesQueueRemove(p *pamlogixImpl) func(ctx context.Context, logger
 	}
 }
 
-func rpcUnlockablesQueueSet(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+func rpcUnlockablesQueueSetJson(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		unlockablesSystem := p.GetUnlockablesSystem()
 		if unlockablesSystem == nil {
@@ -305,9 +307,11 @@ func rpcUnlockablesQueueSet(p *pamlogixImpl) func(ctx context.Context, logger ru
 			return "", runtime.NewError("user id not found in context", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
-		var request UnlockablesQueueSetRequest
-		if err := proto.Unmarshal([]byte(payload), &request); err != nil {
-			logger.Error("Failed to unmarshal UnlockablesQueueSetRequest: %v", err)
+		var request struct {
+			InstanceIds []string `json:"instanceIds"`
+		}
+		if err := json.Unmarshal([]byte(payload), &request); err != nil {
+			logger.Error("Failed to unmarshal UnlockablesQueueSetRequest from JSON: %v", err)
 			return "", runtime.NewError("failed to unmarshal unlockables queue set request", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
@@ -316,9 +320,10 @@ func rpcUnlockablesQueueSet(p *pamlogixImpl) func(ctx context.Context, logger ru
 			return "", err
 		}
 
-		data, err := proto.Marshal(unlockables)
+		// Convert to JSON
+		data, err := json.Marshal(unlockables)
 		if err != nil {
-			logger.Error("Failed to marshal unlockables: %v", err)
+			logger.Error("Failed to marshal unlockables to JSON: %v", err)
 			return "", runtime.NewError("failed to marshal unlockables", INTERNAL_ERROR_CODE) // INTERNAL
 		}
 
