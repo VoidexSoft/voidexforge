@@ -303,16 +303,10 @@ func (p *pamlogixImpl) registerSystemRpcs(initializer runtime.Initializer, syste
 		if err := initializer.RegisterRpc(RpcId_RPC_ID_ACHIEVEMENTS_UPDATE.String(), rpcAchievementsUpdate(p)); err != nil {
 			return err
 		}
-		// Register additional achievement RPCs using the same RPC IDs with different endpoints
-		if err := initializer.RegisterRpc("achievements_list", rpcAchievementsList(p)); err != nil {
-			return err
-		}
-		if err := initializer.RegisterRpc("achievements_progress", rpcAchievementsProgress(p)); err != nil {
-			return err
-		}
-		if err := initializer.RegisterRpc("achievement_details", rpcAchievementDetails(p)); err != nil {
-			return err
-		}
+		//// Register additional achievement RPCs using the same RPC IDs with different endpoints
+		//if err := initializer.RegisterRpc("achievements_list", rpcAchievementsList(p)); err != nil {
+		//	return err
+		//}
 
 	case SystemTypeBase:
 		// Register Base system RPCs
