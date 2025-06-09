@@ -184,6 +184,26 @@ const (
 	RpcId_RPC_ID_STREAKS_CLAIM RpcId = 77
 	// Reset all progress for one or more streaks.
 	RpcId_RPC_ID_STREAKS_RESET RpcId = 78
+	// List all available templates for challenges.
+	RpcId_RPC_ID_CHALLENGES_GET_TEMPLATES RpcId = 81
+	// Get a challenge by id.
+	RpcId_RPC_ID_CHALLENGE_GET RpcId = 82
+	// List all the user's challenges.
+	RpcId_RPC_ID_CHALLENGE_LIST RpcId = 83
+	// Create a new challenge based on a template.
+	RpcId_RPC_ID_CHALLENGE_CREATE RpcId = 84
+	// Join a challenge.
+	RpcId_RPC_ID_CHALLENGE_JOIN RpcId = 85
+	// Leave a challenge.
+	RpcId_RPC_ID_CHALLENGE_LEAVE RpcId = 86
+	// Submit a score to a challenge.
+	RpcId_RPC_ID_CHALLENGE_SUBMIT_SCORE RpcId = 87
+	// Claim a reward of a challenge.
+	RpcId_RPC_ID_CHALLENGE_CLAIM RpcId = 88
+	// Search for an open challenge to join.
+	RpcId_RPC_ID_CHALLENGE_SEARCH RpcId = 89
+	// Invite more users to an ongoing challenge.
+	RpcId_RPC_ID_CHALLENGE_INVITE RpcId = 90
 	// Webhook RPC to handle Rewarded Video Ad placement success callbacks.
 	RpcId_RPC_ID_ECONOMY_PLACEMENT_SUCCESS RpcId = 1001
 	// Webhook RPC to handle Rewarded Video Ad placement failure callbacks.
@@ -273,6 +293,16 @@ var (
 		76:   "RPC_ID_STREAKS_UPDATE",
 		77:   "RPC_ID_STREAKS_CLAIM",
 		78:   "RPC_ID_STREAKS_RESET",
+		81:   "RPC_ID_CHALLENGES_GET_TEMPLATES",
+		82:   "RPC_ID_CHALLENGE_GET",
+		83:   "RPC_ID_CHALLENGE_LIST",
+		84:   "RPC_ID_CHALLENGE_CREATE",
+		85:   "RPC_ID_CHALLENGE_JOIN",
+		86:   "RPC_ID_CHALLENGE_LEAVE",
+		87:   "RPC_ID_CHALLENGE_SUBMIT_SCORE",
+		88:   "RPC_ID_CHALLENGE_CLAIM",
+		89:   "RPC_ID_CHALLENGE_SEARCH",
+		90:   "RPC_ID_CHALLENGE_INVITE",
 		1001: "RPC_ID_ECONOMY_PLACEMENT_SUCCESS",
 		1002: "RPC_ID_ECONOMY_PLACEMENT_FAIL",
 		1003: "RPC_ID_STORAGE_PERSONALIZER_UPLOAD",
@@ -356,6 +386,16 @@ var (
 		"RPC_ID_STREAKS_UPDATE":                        76,
 		"RPC_ID_STREAKS_CLAIM":                         77,
 		"RPC_ID_STREAKS_RESET":                         78,
+		"RPC_ID_CHALLENGES_GET_TEMPLATES":              81,
+		"RPC_ID_CHALLENGE_GET":                         82,
+		"RPC_ID_CHALLENGE_LIST":                        83,
+		"RPC_ID_CHALLENGE_CREATE":                      84,
+		"RPC_ID_CHALLENGE_JOIN":                        85,
+		"RPC_ID_CHALLENGE_LEAVE":                       86,
+		"RPC_ID_CHALLENGE_SUBMIT_SCORE":                87,
+		"RPC_ID_CHALLENGE_CLAIM":                       88,
+		"RPC_ID_CHALLENGE_SEARCH":                      89,
+		"RPC_ID_CHALLENGE_INVITE":                      90,
 		"RPC_ID_ECONOMY_PLACEMENT_SUCCESS":             1001,
 		"RPC_ID_ECONOMY_PLACEMENT_FAIL":                1002,
 		"RPC_ID_STORAGE_PERSONALIZER_UPLOAD":           1003,
@@ -727,6 +767,71 @@ func (IncentiveType) EnumDescriptor() ([]byte, []int) {
 	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{6}
 }
 
+// The state of a user's participation in a challenge.
+type ChallengeState int32
+
+const (
+	// There is no applicable state
+	ChallengeState_CHALLENGE_STATE_NONE ChallengeState = 0
+	// The user has a pending invitation to the challenge.
+	ChallengeState_CHALLENGE_STATE_INVITED ChallengeState = 1
+	// The challenge was accepted.
+	ChallengeState_CHALLENGE_STATE_JOINED ChallengeState = 2
+	// The challenge was claimed.
+	ChallengeState_CHALLENGE_STATE_CLAIMED ChallengeState = 3
+	// The challenge was declined.
+	ChallengeState_CHALLENGE_STATE_DECLINED ChallengeState = 4
+	// The challenge was joined but later left.
+	ChallengeState_CHALLENGE_STATE_LEFT ChallengeState = 5
+)
+
+// Enum value maps for ChallengeState.
+var (
+	ChallengeState_name = map[int32]string{
+		0: "CHALLENGE_STATE_NONE",
+		1: "CHALLENGE_STATE_INVITED",
+		2: "CHALLENGE_STATE_JOINED",
+		3: "CHALLENGE_STATE_CLAIMED",
+		4: "CHALLENGE_STATE_DECLINED",
+		5: "CHALLENGE_STATE_LEFT",
+	}
+	ChallengeState_value = map[string]int32{
+		"CHALLENGE_STATE_NONE":     0,
+		"CHALLENGE_STATE_INVITED":  1,
+		"CHALLENGE_STATE_JOINED":   2,
+		"CHALLENGE_STATE_CLAIMED":  3,
+		"CHALLENGE_STATE_DECLINED": 4,
+		"CHALLENGE_STATE_LEFT":     5,
+	}
+)
+
+func (x ChallengeState) Enum() *ChallengeState {
+	p := new(ChallengeState)
+	*p = x
+	return p
+}
+
+func (x ChallengeState) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (ChallengeState) Descriptor() protoreflect.EnumDescriptor {
+	return file_pamlogix_pamlogix_proto_enumTypes[7].Descriptor()
+}
+
+func (ChallengeState) Type() protoreflect.EnumType {
+	return &file_pamlogix_pamlogix_proto_enumTypes[7]
+}
+
+func (x ChallengeState) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use ChallengeState.Descriptor instead.
+func (ChallengeState) EnumDescriptor() ([]byte, []int) {
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{7}
+}
+
 // The states of a Tutorial.
 type TutorialState int32
 
@@ -776,11 +881,11 @@ func (x TutorialState) String() string {
 }
 
 func (TutorialState) Descriptor() protoreflect.EnumDescriptor {
-	return file_pamlogix_pamlogix_proto_enumTypes[7].Descriptor()
+	return file_pamlogix_pamlogix_proto_enumTypes[8].Descriptor()
 }
 
 func (TutorialState) Type() protoreflect.EnumType {
-	return &file_pamlogix_pamlogix_proto_enumTypes[7]
+	return &file_pamlogix_pamlogix_proto_enumTypes[8]
 }
 
 func (x TutorialState) Number() protoreflect.EnumNumber {
@@ -789,7 +894,7 @@ func (x TutorialState) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use TutorialState.Descriptor instead.
 func (TutorialState) EnumDescriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{7}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{8}
 }
 
 // The cost(s) associated with permanently unlocking a progression.
@@ -4078,6 +4183,1336 @@ func (x *IncentiveRecipientClaimRequest) GetCode() string {
 	return ""
 }
 
+// Request to create a new challenge based on a template.
+type ChallengeCreateRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Challenge template ID.
+	TemplateId string `protobuf:"bytes,1,opt,name=template_id,json=templateId,proto3" json:"template_id,omitempty"`
+	// The name of the challenge. May be an i18n code.
+	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	// A description of the challenge. May be an i18n code.
+	Description string `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
+	// UserIDs of the users to challenge.
+	Invitees []string `protobuf:"bytes,4,rep,name=invitees,proto3" json:"invitees,omitempty"`
+	// Whether the challenged users have to accept the challenge or not.
+	Open bool `protobuf:"varint,5,opt,name=open,proto3" json:"open,omitempty"`
+	// Maximum number of scores a user can submit to the leaderboard.
+	MaxScores int64 `protobuf:"varint,6,opt,name=max_scores,json=maxScores,proto3" json:"max_scores,omitempty"`
+	// Start time of the challenge. Set to 0 to start immediately.
+	StartDelaySec int64 `protobuf:"varint,7,opt,name=start_delay_sec,json=startDelaySec,proto3" json:"start_delay_sec,omitempty"`
+	// Duration of the challenge. Set to 0 to have an unlimited challenge.
+	DurationSec int64 `protobuf:"varint,8,opt,name=duration_sec,json=durationSec,proto3" json:"duration_sec,omitempty"`
+	// Maximum number of participants in the challenge.
+	MaxParticipants int64 `protobuf:"varint,9,opt,name=max_participants,json=maxParticipants,proto3" json:"max_participants,omitempty"`
+	// Category of the challenge.
+	Category      string `protobuf:"bytes,10,opt,name=category,proto3" json:"category,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ChallengeCreateRequest) Reset() {
+	*x = ChallengeCreateRequest{}
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[45]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ChallengeCreateRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ChallengeCreateRequest) ProtoMessage() {}
+
+func (x *ChallengeCreateRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[45]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ChallengeCreateRequest.ProtoReflect.Descriptor instead.
+func (*ChallengeCreateRequest) Descriptor() ([]byte, []int) {
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{45}
+}
+
+func (x *ChallengeCreateRequest) GetTemplateId() string {
+	if x != nil {
+		return x.TemplateId
+	}
+	return ""
+}
+
+func (x *ChallengeCreateRequest) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *ChallengeCreateRequest) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+func (x *ChallengeCreateRequest) GetInvitees() []string {
+	if x != nil {
+		return x.Invitees
+	}
+	return nil
+}
+
+func (x *ChallengeCreateRequest) GetOpen() bool {
+	if x != nil {
+		return x.Open
+	}
+	return false
+}
+
+func (x *ChallengeCreateRequest) GetMaxScores() int64 {
+	if x != nil {
+		return x.MaxScores
+	}
+	return 0
+}
+
+func (x *ChallengeCreateRequest) GetStartDelaySec() int64 {
+	if x != nil {
+		return x.StartDelaySec
+	}
+	return 0
+}
+
+func (x *ChallengeCreateRequest) GetDurationSec() int64 {
+	if x != nil {
+		return x.DurationSec
+	}
+	return 0
+}
+
+func (x *ChallengeCreateRequest) GetMaxParticipants() int64 {
+	if x != nil {
+		return x.MaxParticipants
+	}
+	return 0
+}
+
+func (x *ChallengeCreateRequest) GetCategory() string {
+	if x != nil {
+		return x.Category
+	}
+	return ""
+}
+
+// Request to join an ongoing challenge.
+type ChallengeJoinRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Challenge id.
+	ChallengeId   string `protobuf:"bytes,1,opt,name=challenge_id,json=challengeId,proto3" json:"challenge_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ChallengeJoinRequest) Reset() {
+	*x = ChallengeJoinRequest{}
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[46]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ChallengeJoinRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ChallengeJoinRequest) ProtoMessage() {}
+
+func (x *ChallengeJoinRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[46]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ChallengeJoinRequest.ProtoReflect.Descriptor instead.
+func (*ChallengeJoinRequest) Descriptor() ([]byte, []int) {
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{46}
+}
+
+func (x *ChallengeJoinRequest) GetChallengeId() string {
+	if x != nil {
+		return x.ChallengeId
+	}
+	return ""
+}
+
+// Request to leave a challenge.
+type ChallengeLeaveRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Challenge id.
+	ChallengeId   string `protobuf:"bytes,1,opt,name=challenge_id,json=challengeId,proto3" json:"challenge_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ChallengeLeaveRequest) Reset() {
+	*x = ChallengeLeaveRequest{}
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[47]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ChallengeLeaveRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ChallengeLeaveRequest) ProtoMessage() {}
+
+func (x *ChallengeLeaveRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[47]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ChallengeLeaveRequest.ProtoReflect.Descriptor instead.
+func (*ChallengeLeaveRequest) Descriptor() ([]byte, []int) {
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{47}
+}
+
+func (x *ChallengeLeaveRequest) GetChallengeId() string {
+	if x != nil {
+		return x.ChallengeId
+	}
+	return ""
+}
+
+// Request to claim a reward from a challenge, if available. It also culls the challenge once all rewards are claimed.
+type ChallengeClaimRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Challenge id.
+	ChallengeId   string `protobuf:"bytes,1,opt,name=challenge_id,json=challengeId,proto3" json:"challenge_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ChallengeClaimRequest) Reset() {
+	*x = ChallengeClaimRequest{}
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[48]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ChallengeClaimRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ChallengeClaimRequest) ProtoMessage() {}
+
+func (x *ChallengeClaimRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[48]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ChallengeClaimRequest.ProtoReflect.Descriptor instead.
+func (*ChallengeClaimRequest) Descriptor() ([]byte, []int) {
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{48}
+}
+
+func (x *ChallengeClaimRequest) GetChallengeId() string {
+	if x != nil {
+		return x.ChallengeId
+	}
+	return ""
+}
+
+// Request to search for open challenges to join.
+type ChallengeSearchRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Optional name of challenge to filter by.
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// Optional category of challenge to filter by.
+	Category string `protobuf:"bytes,2,opt,name=category,proto3" json:"category,omitempty"`
+	// Maximum number of results to return.
+	Limit         int64 `protobuf:"varint,3,opt,name=limit,proto3" json:"limit,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ChallengeSearchRequest) Reset() {
+	*x = ChallengeSearchRequest{}
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[49]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ChallengeSearchRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ChallengeSearchRequest) ProtoMessage() {}
+
+func (x *ChallengeSearchRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[49]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ChallengeSearchRequest.ProtoReflect.Descriptor instead.
+func (*ChallengeSearchRequest) Descriptor() ([]byte, []int) {
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{49}
+}
+
+func (x *ChallengeSearchRequest) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *ChallengeSearchRequest) GetCategory() string {
+	if x != nil {
+		return x.Category
+	}
+	return ""
+}
+
+func (x *ChallengeSearchRequest) GetLimit() int64 {
+	if x != nil {
+		return x.Limit
+	}
+	return 0
+}
+
+// Request for the challenge creator to invite additional users to an ongoing challenge.
+type ChallengeInviteRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Challenge id.
+	ChallengeId string `protobuf:"bytes,1,opt,name=challenge_id,json=challengeId,proto3" json:"challenge_id,omitempty"`
+	// Invitees.
+	Invitees      []string `protobuf:"bytes,2,rep,name=invitees,proto3" json:"invitees,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ChallengeInviteRequest) Reset() {
+	*x = ChallengeInviteRequest{}
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[50]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ChallengeInviteRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ChallengeInviteRequest) ProtoMessage() {}
+
+func (x *ChallengeInviteRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[50]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ChallengeInviteRequest.ProtoReflect.Descriptor instead.
+func (*ChallengeInviteRequest) Descriptor() ([]byte, []int) {
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{50}
+}
+
+func (x *ChallengeInviteRequest) GetChallengeId() string {
+	if x != nil {
+		return x.ChallengeId
+	}
+	return ""
+}
+
+func (x *ChallengeInviteRequest) GetInvitees() []string {
+	if x != nil {
+		return x.Invitees
+	}
+	return nil
+}
+
+// Request to submit a score to an active challenge.
+type ChallengeSubmitScoreRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Challenge ID.
+	ChallengeId string `protobuf:"bytes,1,opt,name=challenge_id,json=challengeId,proto3" json:"challenge_id,omitempty"`
+	// Score.
+	Score int64 `protobuf:"varint,2,opt,name=score,proto3" json:"score,omitempty"`
+	// Subscore.
+	Subscore int64 `protobuf:"varint,3,opt,name=subscore,proto3" json:"subscore,omitempty"`
+	// Metadata.
+	Metadata      string `protobuf:"bytes,4,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ChallengeSubmitScoreRequest) Reset() {
+	*x = ChallengeSubmitScoreRequest{}
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[51]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ChallengeSubmitScoreRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ChallengeSubmitScoreRequest) ProtoMessage() {}
+
+func (x *ChallengeSubmitScoreRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[51]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ChallengeSubmitScoreRequest.ProtoReflect.Descriptor instead.
+func (*ChallengeSubmitScoreRequest) Descriptor() ([]byte, []int) {
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{51}
+}
+
+func (x *ChallengeSubmitScoreRequest) GetChallengeId() string {
+	if x != nil {
+		return x.ChallengeId
+	}
+	return ""
+}
+
+func (x *ChallengeSubmitScoreRequest) GetScore() int64 {
+	if x != nil {
+		return x.Score
+	}
+	return 0
+}
+
+func (x *ChallengeSubmitScoreRequest) GetSubscore() int64 {
+	if x != nil {
+		return x.Subscore
+	}
+	return 0
+}
+
+func (x *ChallengeSubmitScoreRequest) GetMetadata() string {
+	if x != nil {
+		return x.Metadata
+	}
+	return ""
+}
+
+// The reward tiers for the challenge.
+type ChallengeRewardTier struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The maximum rank (inclusive).
+	RankMax int64 `protobuf:"varint,1,opt,name=rank_max,json=rankMax,proto3" json:"rank_max,omitempty"`
+	// The minimum rank (inclusive).
+	RankMin int64 `protobuf:"varint,2,opt,name=rank_min,json=rankMin,proto3" json:"rank_min,omitempty"`
+	// The available rewards for this range.
+	AvailableRewards *AvailableRewards `protobuf:"bytes,3,opt,name=available_rewards,json=availableRewards,proto3" json:"available_rewards,omitempty"`
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
+}
+
+func (x *ChallengeRewardTier) Reset() {
+	*x = ChallengeRewardTier{}
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[52]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ChallengeRewardTier) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ChallengeRewardTier) ProtoMessage() {}
+
+func (x *ChallengeRewardTier) ProtoReflect() protoreflect.Message {
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[52]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ChallengeRewardTier.ProtoReflect.Descriptor instead.
+func (*ChallengeRewardTier) Descriptor() ([]byte, []int) {
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{52}
+}
+
+func (x *ChallengeRewardTier) GetRankMax() int64 {
+	if x != nil {
+		return x.RankMax
+	}
+	return 0
+}
+
+func (x *ChallengeRewardTier) GetRankMin() int64 {
+	if x != nil {
+		return x.RankMin
+	}
+	return 0
+}
+
+func (x *ChallengeRewardTier) GetAvailableRewards() *AvailableRewards {
+	if x != nil {
+		return x.AvailableRewards
+	}
+	return nil
+}
+
+// A single participant entry to an event leaderboard.
+type ChallengeScore struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// User ID.
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	// Username.
+	Username string `protobuf:"bytes,2,opt,name=username,proto3" json:"username,omitempty"`
+	// Display name.
+	DisplayName string `protobuf:"bytes,3,opt,name=display_name,json=displayName,proto3" json:"display_name,omitempty"`
+	// Avatar URL.
+	AvatarUrl string `protobuf:"bytes,4,opt,name=avatar_url,json=avatarUrl,proto3" json:"avatar_url,omitempty"`
+	// Time when the user joined the challenge leaderboard.
+	CreateTimeSec int64 `protobuf:"varint,5,opt,name=create_time_sec,json=createTimeSec,proto3" json:"create_time_sec,omitempty"`
+	// Time when the user last submitted a score.
+	UpdateTimeSec int64 `protobuf:"varint,6,opt,name=update_time_sec,json=updateTimeSec,proto3" json:"update_time_sec,omitempty"`
+	// Rank within the event leaderboard.
+	Rank int64 `protobuf:"varint,7,opt,name=rank,proto3" json:"rank,omitempty"`
+	// Score.
+	Score int64 `protobuf:"varint,8,opt,name=score,proto3" json:"score,omitempty"`
+	// Subscore.
+	Subscore int64 `protobuf:"varint,9,opt,name=subscore,proto3" json:"subscore,omitempty"`
+	// Number of score submissions.
+	NumScores int64 `protobuf:"varint,10,opt,name=num_scores,json=numScores,proto3" json:"num_scores,omitempty"`
+	// Metadata.
+	Metadata string `protobuf:"bytes,11,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	// The state of the user participation in the challenge.
+	State         ChallengeState `protobuf:"varint,12,opt,name=state,proto3,enum=pamlogix.ChallengeState" json:"state,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ChallengeScore) Reset() {
+	*x = ChallengeScore{}
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[53]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ChallengeScore) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ChallengeScore) ProtoMessage() {}
+
+func (x *ChallengeScore) ProtoReflect() protoreflect.Message {
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[53]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ChallengeScore.ProtoReflect.Descriptor instead.
+func (*ChallengeScore) Descriptor() ([]byte, []int) {
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{53}
+}
+
+func (x *ChallengeScore) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *ChallengeScore) GetUsername() string {
+	if x != nil {
+		return x.Username
+	}
+	return ""
+}
+
+func (x *ChallengeScore) GetDisplayName() string {
+	if x != nil {
+		return x.DisplayName
+	}
+	return ""
+}
+
+func (x *ChallengeScore) GetAvatarUrl() string {
+	if x != nil {
+		return x.AvatarUrl
+	}
+	return ""
+}
+
+func (x *ChallengeScore) GetCreateTimeSec() int64 {
+	if x != nil {
+		return x.CreateTimeSec
+	}
+	return 0
+}
+
+func (x *ChallengeScore) GetUpdateTimeSec() int64 {
+	if x != nil {
+		return x.UpdateTimeSec
+	}
+	return 0
+}
+
+func (x *ChallengeScore) GetRank() int64 {
+	if x != nil {
+		return x.Rank
+	}
+	return 0
+}
+
+func (x *ChallengeScore) GetScore() int64 {
+	if x != nil {
+		return x.Score
+	}
+	return 0
+}
+
+func (x *ChallengeScore) GetSubscore() int64 {
+	if x != nil {
+		return x.Subscore
+	}
+	return 0
+}
+
+func (x *ChallengeScore) GetNumScores() int64 {
+	if x != nil {
+		return x.NumScores
+	}
+	return 0
+}
+
+func (x *ChallengeScore) GetMetadata() string {
+	if x != nil {
+		return x.Metadata
+	}
+	return ""
+}
+
+func (x *ChallengeScore) GetState() ChallengeState {
+	if x != nil {
+		return x.State
+	}
+	return ChallengeState_CHALLENGE_STATE_NONE
+}
+
+// A challenge leaderboard, which is a collection of participants and their scores.
+type Challenge struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Challenge ID.
+	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	// The name of the challenge. May be an i18n code.
+	Name string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	// A description of the challenge. May be an i18n code.
+	Description string `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
+	// Score ordering.
+	Ascending bool `protobuf:"varint,4,opt,name=ascending,proto3" json:"ascending,omitempty"`
+	// Score submission operator.
+	Operator string `protobuf:"bytes,5,opt,name=operator,proto3" json:"operator,omitempty"`
+	// Time when the event starts.
+	StartTimeSec int64 `protobuf:"varint,6,opt,name=start_time_sec,json=startTimeSec,proto3" json:"start_time_sec,omitempty"`
+	// Claim time, if any.
+	ClaimTimeSec int64 `protobuf:"varint,7,opt,name=claim_time_sec,json=claimTimeSec,proto3" json:"claim_time_sec,omitempty"`
+	// Time when the event ends.
+	EndTimeSec int64 `protobuf:"varint,8,opt,name=end_time_sec,json=endTimeSec,proto3" json:"end_time_sec,omitempty"`
+	// The possible reward tiers for this instance of the challenge.
+	RewardTiers []*ChallengeRewardTier `protobuf:"bytes,9,rep,name=reward_tiers,json=rewardTiers,proto3" json:"reward_tiers,omitempty"`
+	// The available reward and its probabilities.
+	AvailableRewards *AvailableRewards `protobuf:"bytes,10,opt,name=available_rewards,json=availableRewards,proto3" json:"available_rewards,omitempty"` // Available to Claim
+	// Additional metadata properties.
+	AdditionalProperties map[string]string `protobuf:"bytes,11,rep,name=additional_properties,json=additionalProperties,proto3" json:"additional_properties,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	// Current participant count.
+	Size int64 `protobuf:"varint,12,opt,name=size,proto3" json:"size,omitempty"`
+	// Maximum participant count.
+	MaxSize int64 `protobuf:"varint,13,opt,name=max_size,json=maxSize,proto3" json:"max_size,omitempty"`
+	// Maximum number of score submissions per participant.
+	MaxNumScore int64 `protobuf:"varint,14,opt,name=max_num_score,json=maxNumScore,proto3" json:"max_num_score,omitempty"`
+	// Participants and their scores.
+	Scores []*ChallengeScore `protobuf:"bytes,15,rep,name=scores,proto3" json:"scores,omitempty"`
+	// Indicates if the event is still active, and scores can be submitted.
+	IsActive bool `protobuf:"varint,16,opt,name=is_active,json=isActive,proto3" json:"is_active,omitempty"`
+	// The UNIX timestamp for the current server time.
+	CurrentTimeSec int64 `protobuf:"varint,17,opt,name=current_time_sec,json=currentTimeSec,proto3" json:"current_time_sec,omitempty"`
+	// Whether the user can claim a reward.
+	CanClaim bool `protobuf:"varint,19,opt,name=can_claim,json=canClaim,proto3" json:"can_claim,omitempty"`
+	// The state of the user participation in the challenge.
+	State ChallengeState `protobuf:"varint,20,opt,name=state,proto3,enum=pamlogix.ChallengeState" json:"state,omitempty"`
+	// A claimed reward, if any.
+	Reward *Reward `protobuf:"bytes,21,opt,name=reward,proto3" json:"reward,omitempty"`
+	// The category to group the event leaderboard together with others.
+	Category string `protobuf:"bytes,22,opt,name=category,proto3" json:"category,omitempty"`
+	// Whether the challenge is open to participants beyond the initial invitees or not.
+	Open          bool `protobuf:"varint,23,opt,name=open,proto3" json:"open,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Challenge) Reset() {
+	*x = Challenge{}
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[54]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Challenge) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Challenge) ProtoMessage() {}
+
+func (x *Challenge) ProtoReflect() protoreflect.Message {
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[54]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Challenge.ProtoReflect.Descriptor instead.
+func (*Challenge) Descriptor() ([]byte, []int) {
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{54}
+}
+
+func (x *Challenge) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *Challenge) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *Challenge) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+func (x *Challenge) GetAscending() bool {
+	if x != nil {
+		return x.Ascending
+	}
+	return false
+}
+
+func (x *Challenge) GetOperator() string {
+	if x != nil {
+		return x.Operator
+	}
+	return ""
+}
+
+func (x *Challenge) GetStartTimeSec() int64 {
+	if x != nil {
+		return x.StartTimeSec
+	}
+	return 0
+}
+
+func (x *Challenge) GetClaimTimeSec() int64 {
+	if x != nil {
+		return x.ClaimTimeSec
+	}
+	return 0
+}
+
+func (x *Challenge) GetEndTimeSec() int64 {
+	if x != nil {
+		return x.EndTimeSec
+	}
+	return 0
+}
+
+func (x *Challenge) GetRewardTiers() []*ChallengeRewardTier {
+	if x != nil {
+		return x.RewardTiers
+	}
+	return nil
+}
+
+func (x *Challenge) GetAvailableRewards() *AvailableRewards {
+	if x != nil {
+		return x.AvailableRewards
+	}
+	return nil
+}
+
+func (x *Challenge) GetAdditionalProperties() map[string]string {
+	if x != nil {
+		return x.AdditionalProperties
+	}
+	return nil
+}
+
+func (x *Challenge) GetSize() int64 {
+	if x != nil {
+		return x.Size
+	}
+	return 0
+}
+
+func (x *Challenge) GetMaxSize() int64 {
+	if x != nil {
+		return x.MaxSize
+	}
+	return 0
+}
+
+func (x *Challenge) GetMaxNumScore() int64 {
+	if x != nil {
+		return x.MaxNumScore
+	}
+	return 0
+}
+
+func (x *Challenge) GetScores() []*ChallengeScore {
+	if x != nil {
+		return x.Scores
+	}
+	return nil
+}
+
+func (x *Challenge) GetIsActive() bool {
+	if x != nil {
+		return x.IsActive
+	}
+	return false
+}
+
+func (x *Challenge) GetCurrentTimeSec() int64 {
+	if x != nil {
+		return x.CurrentTimeSec
+	}
+	return 0
+}
+
+func (x *Challenge) GetCanClaim() bool {
+	if x != nil {
+		return x.CanClaim
+	}
+	return false
+}
+
+func (x *Challenge) GetState() ChallengeState {
+	if x != nil {
+		return x.State
+	}
+	return ChallengeState_CHALLENGE_STATE_NONE
+}
+
+func (x *Challenge) GetReward() *Reward {
+	if x != nil {
+		return x.Reward
+	}
+	return nil
+}
+
+func (x *Challenge) GetCategory() string {
+	if x != nil {
+		return x.Category
+	}
+	return ""
+}
+
+func (x *Challenge) GetOpen() bool {
+	if x != nil {
+		return x.Open
+	}
+	return false
+}
+
+// Retrieve available challenge leaderboards.
+type ChallengeListRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Optional filter of Event Leaderboard categories to list. If empty does not filter on category.
+	Categories []string `protobuf:"bytes,1,rep,name=categories,proto3" json:"categories,omitempty"`
+	// Whether or not the response should include scores, defaults to false.
+	WithScores    bool `protobuf:"varint,2,opt,name=with_scores,json=withScores,proto3" json:"with_scores,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ChallengeListRequest) Reset() {
+	*x = ChallengeListRequest{}
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[55]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ChallengeListRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ChallengeListRequest) ProtoMessage() {}
+
+func (x *ChallengeListRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[55]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ChallengeListRequest.ProtoReflect.Descriptor instead.
+func (*ChallengeListRequest) Descriptor() ([]byte, []int) {
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{55}
+}
+
+func (x *ChallengeListRequest) GetCategories() []string {
+	if x != nil {
+		return x.Categories
+	}
+	return nil
+}
+
+func (x *ChallengeListRequest) GetWithScores() bool {
+	if x != nil {
+		return x.WithScores
+	}
+	return false
+}
+
+type ChallengeGetRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Challenge leaderboard ID to get, and join if necessary/possible.
+	ChallengeId string `protobuf:"bytes,1,opt,name=challenge_id,json=challengeId,proto3" json:"challenge_id,omitempty"`
+	// Whether or not the response should include scores, defaults to false.
+	WithScores    bool `protobuf:"varint,2,opt,name=with_scores,json=withScores,proto3" json:"with_scores,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ChallengeGetRequest) Reset() {
+	*x = ChallengeGetRequest{}
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[56]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ChallengeGetRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ChallengeGetRequest) ProtoMessage() {}
+
+func (x *ChallengeGetRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[56]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ChallengeGetRequest.ProtoReflect.Descriptor instead.
+func (*ChallengeGetRequest) Descriptor() ([]byte, []int) {
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{56}
+}
+
+func (x *ChallengeGetRequest) GetChallengeId() string {
+	if x != nil {
+		return x.ChallengeId
+	}
+	return ""
+}
+
+func (x *ChallengeGetRequest) GetWithScores() bool {
+	if x != nil {
+		return x.WithScores
+	}
+	return false
+}
+
+// Several challenges the user has access to, resulting from a listing operation.
+type ChallengesList struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Zero or more challenges.
+	Challenges    []*Challenge `protobuf:"bytes,1,rep,name=challenges,proto3" json:"challenges,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ChallengesList) Reset() {
+	*x = ChallengesList{}
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[57]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ChallengesList) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ChallengesList) ProtoMessage() {}
+
+func (x *ChallengesList) ProtoReflect() protoreflect.Message {
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[57]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ChallengesList.ProtoReflect.Descriptor instead.
+func (*ChallengesList) Descriptor() ([]byte, []int) {
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{57}
+}
+
+func (x *ChallengesList) GetChallenges() []*Challenge {
+	if x != nil {
+		return x.Challenges
+	}
+	return nil
+}
+
+// The minimum and maximum number of players that can participate in the challenge.
+type ChallengeMaxMinPlayers struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The minimum number of players that can participate in the challenge.
+	Min int64 `protobuf:"varint,1,opt,name=min,proto3" json:"min,omitempty"`
+	// The maximum number of players that can participate in the challenge.
+	Max           int64 `protobuf:"varint,2,opt,name=max,proto3" json:"max,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ChallengeMaxMinPlayers) Reset() {
+	*x = ChallengeMaxMinPlayers{}
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[58]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ChallengeMaxMinPlayers) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ChallengeMaxMinPlayers) ProtoMessage() {}
+
+func (x *ChallengeMaxMinPlayers) ProtoReflect() protoreflect.Message {
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[58]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ChallengeMaxMinPlayers.ProtoReflect.Descriptor instead.
+func (*ChallengeMaxMinPlayers) Descriptor() ([]byte, []int) {
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{58}
+}
+
+func (x *ChallengeMaxMinPlayers) GetMin() int64 {
+	if x != nil {
+		return x.Min
+	}
+	return 0
+}
+
+func (x *ChallengeMaxMinPlayers) GetMax() int64 {
+	if x != nil {
+		return x.Max
+	}
+	return 0
+}
+
+// The minimum and maximum duration that can be set for the challenge.
+type ChallengeMinMaxDuration struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The minimum duration of challenge.
+	MinSec int64 `protobuf:"varint,1,opt,name=min_sec,json=minSec,proto3" json:"min_sec,omitempty"`
+	// The maximum duration of challenge.
+	MaxSec        int64 `protobuf:"varint,2,opt,name=max_sec,json=maxSec,proto3" json:"max_sec,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ChallengeMinMaxDuration) Reset() {
+	*x = ChallengeMinMaxDuration{}
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[59]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ChallengeMinMaxDuration) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ChallengeMinMaxDuration) ProtoMessage() {}
+
+func (x *ChallengeMinMaxDuration) ProtoReflect() protoreflect.Message {
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[59]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ChallengeMinMaxDuration.ProtoReflect.Descriptor instead.
+func (*ChallengeMinMaxDuration) Descriptor() ([]byte, []int) {
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{59}
+}
+
+func (x *ChallengeMinMaxDuration) GetMinSec() int64 {
+	if x != nil {
+		return x.MinSec
+	}
+	return 0
+}
+
+func (x *ChallengeMinMaxDuration) GetMaxSec() int64 {
+	if x != nil {
+		return x.MaxSec
+	}
+	return 0
+}
+
+// An individually usable challenge template.
+type ChallengeTemplate struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The possible reward tiers for this instance of the challenge.
+	RewardTiers []*ChallengeRewardTier `protobuf:"bytes,1,rep,name=reward_tiers,json=rewardTiers,proto3" json:"reward_tiers,omitempty"`
+	// The min and max players of the challenge.
+	Players *ChallengeMaxMinPlayers `protobuf:"bytes,2,opt,name=players,proto3" json:"players,omitempty"`
+	// The min and max duration that can be set for the challenge.
+	Duration *ChallengeMinMaxDuration `protobuf:"bytes,3,opt,name=duration,proto3" json:"duration,omitempty"`
+	// The maximum amount of delay before the challenge begins for participants.
+	StartDelayMax int64 `protobuf:"varint,4,opt,name=start_delay_max,json=startDelayMax,proto3" json:"start_delay_max,omitempty"`
+	// Whether the challenge is invite-only or not.
+	Open bool `protobuf:"varint,5,opt,name=open,proto3" json:"open,omitempty"`
+	// The maximum number of scores that can be submitted to the challenge.
+	MaxNumScore int64 `protobuf:"varint,6,opt,name=max_num_score,json=maxNumScore,proto3" json:"max_num_score,omitempty"`
+	// The ordering of the challenge scores.
+	Ascending bool `protobuf:"varint,7,opt,name=ascending,proto3" json:"ascending,omitempty"`
+	// The operator of the challenge score submission.
+	Operator string `protobuf:"bytes,8,opt,name=operator,proto3" json:"operator,omitempty"`
+	// Additional metadata properties.
+	AdditionalProperties map[string]string `protobuf:"bytes,9,rep,name=additional_properties,json=additionalProperties,proto3" json:"additional_properties,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	unknownFields        protoimpl.UnknownFields
+	sizeCache            protoimpl.SizeCache
+}
+
+func (x *ChallengeTemplate) Reset() {
+	*x = ChallengeTemplate{}
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[60]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ChallengeTemplate) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ChallengeTemplate) ProtoMessage() {}
+
+func (x *ChallengeTemplate) ProtoReflect() protoreflect.Message {
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[60]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ChallengeTemplate.ProtoReflect.Descriptor instead.
+func (*ChallengeTemplate) Descriptor() ([]byte, []int) {
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{60}
+}
+
+func (x *ChallengeTemplate) GetRewardTiers() []*ChallengeRewardTier {
+	if x != nil {
+		return x.RewardTiers
+	}
+	return nil
+}
+
+func (x *ChallengeTemplate) GetPlayers() *ChallengeMaxMinPlayers {
+	if x != nil {
+		return x.Players
+	}
+	return nil
+}
+
+func (x *ChallengeTemplate) GetDuration() *ChallengeMinMaxDuration {
+	if x != nil {
+		return x.Duration
+	}
+	return nil
+}
+
+func (x *ChallengeTemplate) GetStartDelayMax() int64 {
+	if x != nil {
+		return x.StartDelayMax
+	}
+	return 0
+}
+
+func (x *ChallengeTemplate) GetOpen() bool {
+	if x != nil {
+		return x.Open
+	}
+	return false
+}
+
+func (x *ChallengeTemplate) GetMaxNumScore() int64 {
+	if x != nil {
+		return x.MaxNumScore
+	}
+	return 0
+}
+
+func (x *ChallengeTemplate) GetAscending() bool {
+	if x != nil {
+		return x.Ascending
+	}
+	return false
+}
+
+func (x *ChallengeTemplate) GetOperator() string {
+	if x != nil {
+		return x.Operator
+	}
+	return ""
+}
+
+func (x *ChallengeTemplate) GetAdditionalProperties() map[string]string {
+	if x != nil {
+		return x.AdditionalProperties
+	}
+	return nil
+}
+
+// Get all available challenge templates.
+type ChallengeTemplates struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// All available challenges templates, keyed by a unique identifier.
+	Templates     map[string]*ChallengeTemplate `protobuf:"bytes,1,rep,name=templates,proto3" json:"templates,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"bytes,2,opt,name=value"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ChallengeTemplates) Reset() {
+	*x = ChallengeTemplates{}
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[61]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ChallengeTemplates) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ChallengeTemplates) ProtoMessage() {}
+
+func (x *ChallengeTemplates) ProtoReflect() protoreflect.Message {
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[61]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ChallengeTemplates.ProtoReflect.Descriptor instead.
+func (*ChallengeTemplates) Descriptor() ([]byte, []int) {
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{61}
+}
+
+func (x *ChallengeTemplates) GetTemplates() map[string]*ChallengeTemplate {
+	if x != nil {
+		return x.Templates
+	}
+	return nil
+}
+
 // Retrieve available event leaderboards.
 type EventLeaderboardList struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
@@ -4091,7 +5526,7 @@ type EventLeaderboardList struct {
 
 func (x *EventLeaderboardList) Reset() {
 	*x = EventLeaderboardList{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[45]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[62]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4103,7 +5538,7 @@ func (x *EventLeaderboardList) String() string {
 func (*EventLeaderboardList) ProtoMessage() {}
 
 func (x *EventLeaderboardList) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[45]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[62]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4116,7 +5551,7 @@ func (x *EventLeaderboardList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EventLeaderboardList.ProtoReflect.Descriptor instead.
 func (*EventLeaderboardList) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{45}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{62}
 }
 
 func (x *EventLeaderboardList) GetWithScores() bool {
@@ -4144,7 +5579,7 @@ type EventLeaderboardGet struct {
 
 func (x *EventLeaderboardGet) Reset() {
 	*x = EventLeaderboardGet{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[46]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[63]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4156,7 +5591,7 @@ func (x *EventLeaderboardGet) String() string {
 func (*EventLeaderboardGet) ProtoMessage() {}
 
 func (x *EventLeaderboardGet) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[46]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[63]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4169,7 +5604,7 @@ func (x *EventLeaderboardGet) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EventLeaderboardGet.ProtoReflect.Descriptor instead.
 func (*EventLeaderboardGet) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{46}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{63}
 }
 
 func (x *EventLeaderboardGet) GetId() string {
@@ -4189,14 +5624,16 @@ type EventLeaderboardUpdate struct {
 	// Subscore.
 	Subscore int64 `protobuf:"varint,3,opt,name=subscore,proto3" json:"subscore,omitempty"`
 	// Metadata.
-	Metadata      string `protobuf:"bytes,4,opt,name=metadata,proto3" json:"metadata,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	Metadata string `protobuf:"bytes,4,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	// Update metadata only if score or subscore change.
+	ConditionalMetadataUpdate bool `protobuf:"varint,5,opt,name=conditional_metadata_update,json=conditionalMetadataUpdate,proto3" json:"conditional_metadata_update,omitempty"`
+	unknownFields             protoimpl.UnknownFields
+	sizeCache                 protoimpl.SizeCache
 }
 
 func (x *EventLeaderboardUpdate) Reset() {
 	*x = EventLeaderboardUpdate{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[47]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[64]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4208,7 +5645,7 @@ func (x *EventLeaderboardUpdate) String() string {
 func (*EventLeaderboardUpdate) ProtoMessage() {}
 
 func (x *EventLeaderboardUpdate) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[47]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[64]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4221,7 +5658,7 @@ func (x *EventLeaderboardUpdate) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EventLeaderboardUpdate.ProtoReflect.Descriptor instead.
 func (*EventLeaderboardUpdate) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{47}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{64}
 }
 
 func (x *EventLeaderboardUpdate) GetId() string {
@@ -4252,6 +5689,13 @@ func (x *EventLeaderboardUpdate) GetMetadata() string {
 	return ""
 }
 
+func (x *EventLeaderboardUpdate) GetConditionalMetadataUpdate() bool {
+	if x != nil {
+		return x.ConditionalMetadataUpdate
+	}
+	return false
+}
+
 // Claim the available reward for an event leaderboard by ID.
 type EventLeaderboardClaim struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
@@ -4263,7 +5707,7 @@ type EventLeaderboardClaim struct {
 
 func (x *EventLeaderboardClaim) Reset() {
 	*x = EventLeaderboardClaim{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[48]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[65]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4275,7 +5719,7 @@ func (x *EventLeaderboardClaim) String() string {
 func (*EventLeaderboardClaim) ProtoMessage() {}
 
 func (x *EventLeaderboardClaim) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[48]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[65]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4288,7 +5732,7 @@ func (x *EventLeaderboardClaim) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EventLeaderboardClaim.ProtoReflect.Descriptor instead.
 func (*EventLeaderboardClaim) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{48}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{65}
 }
 
 func (x *EventLeaderboardClaim) GetId() string {
@@ -4309,7 +5753,7 @@ type EventLeaderboardRoll struct {
 
 func (x *EventLeaderboardRoll) Reset() {
 	*x = EventLeaderboardRoll{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[49]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[66]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4321,7 +5765,7 @@ func (x *EventLeaderboardRoll) String() string {
 func (*EventLeaderboardRoll) ProtoMessage() {}
 
 func (x *EventLeaderboardRoll) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[49]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[66]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4334,7 +5778,7 @@ func (x *EventLeaderboardRoll) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EventLeaderboardRoll.ProtoReflect.Descriptor instead.
 func (*EventLeaderboardRoll) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{49}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{66}
 }
 
 func (x *EventLeaderboardRoll) GetId() string {
@@ -4375,7 +5819,7 @@ type EventLeaderboardScore struct {
 
 func (x *EventLeaderboardScore) Reset() {
 	*x = EventLeaderboardScore{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[50]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[67]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4387,7 +5831,7 @@ func (x *EventLeaderboardScore) String() string {
 func (*EventLeaderboardScore) ProtoMessage() {}
 
 func (x *EventLeaderboardScore) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[50]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[67]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4400,7 +5844,7 @@ func (x *EventLeaderboardScore) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EventLeaderboardScore.ProtoReflect.Descriptor instead.
 func (*EventLeaderboardScore) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{50}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{67}
 }
 
 func (x *EventLeaderboardScore) GetId() string {
@@ -4499,7 +5943,7 @@ type EventLeaderboardRewardTier struct {
 
 func (x *EventLeaderboardRewardTier) Reset() {
 	*x = EventLeaderboardRewardTier{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[51]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[68]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4511,7 +5955,7 @@ func (x *EventLeaderboardRewardTier) String() string {
 func (*EventLeaderboardRewardTier) ProtoMessage() {}
 
 func (x *EventLeaderboardRewardTier) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[51]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[68]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4524,7 +5968,7 @@ func (x *EventLeaderboardRewardTier) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EventLeaderboardRewardTier.ProtoReflect.Descriptor instead.
 func (*EventLeaderboardRewardTier) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{51}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{68}
 }
 
 func (x *EventLeaderboardRewardTier) GetName() string {
@@ -4573,7 +6017,7 @@ type EventLeaderboardRewardTiers struct {
 
 func (x *EventLeaderboardRewardTiers) Reset() {
 	*x = EventLeaderboardRewardTiers{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[52]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[69]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4585,7 +6029,7 @@ func (x *EventLeaderboardRewardTiers) String() string {
 func (*EventLeaderboardRewardTiers) ProtoMessage() {}
 
 func (x *EventLeaderboardRewardTiers) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[52]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[69]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4598,7 +6042,7 @@ func (x *EventLeaderboardRewardTiers) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EventLeaderboardRewardTiers.ProtoReflect.Descriptor instead.
 func (*EventLeaderboardRewardTiers) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{52}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{69}
 }
 
 func (x *EventLeaderboardRewardTiers) GetRewardTiers() []*EventLeaderboardRewardTier {
@@ -4623,7 +6067,7 @@ type EventLeaderboardChangeZone struct {
 
 func (x *EventLeaderboardChangeZone) Reset() {
 	*x = EventLeaderboardChangeZone{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[53]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[70]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4635,7 +6079,7 @@ func (x *EventLeaderboardChangeZone) String() string {
 func (*EventLeaderboardChangeZone) ProtoMessage() {}
 
 func (x *EventLeaderboardChangeZone) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[53]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[70]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4648,7 +6092,7 @@ func (x *EventLeaderboardChangeZone) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EventLeaderboardChangeZone.ProtoReflect.Descriptor instead.
 func (*EventLeaderboardChangeZone) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{53}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{70}
 }
 
 func (x *EventLeaderboardChangeZone) GetPromotion() float64 {
@@ -4735,7 +6179,7 @@ type EventLeaderboard struct {
 
 func (x *EventLeaderboard) Reset() {
 	*x = EventLeaderboard{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[54]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[71]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4747,7 +6191,7 @@ func (x *EventLeaderboard) String() string {
 func (*EventLeaderboard) ProtoMessage() {}
 
 func (x *EventLeaderboard) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[54]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[71]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4760,7 +6204,7 @@ func (x *EventLeaderboard) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EventLeaderboard.ProtoReflect.Descriptor instead.
 func (*EventLeaderboard) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{54}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{71}
 }
 
 func (x *EventLeaderboard) GetId() string {
@@ -4963,7 +6407,7 @@ type EventLeaderboards struct {
 
 func (x *EventLeaderboards) Reset() {
 	*x = EventLeaderboards{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[55]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[72]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4975,7 +6419,7 @@ func (x *EventLeaderboards) String() string {
 func (*EventLeaderboards) ProtoMessage() {}
 
 func (x *EventLeaderboards) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[55]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[72]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4988,7 +6432,7 @@ func (x *EventLeaderboards) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EventLeaderboards.ProtoReflect.Descriptor instead.
 func (*EventLeaderboards) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{55}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{72}
 }
 
 func (x *EventLeaderboards) GetEventLeaderboards() []*EventLeaderboard {
@@ -5010,7 +6454,7 @@ type EventLeaderboardDebugFillRequest struct {
 
 func (x *EventLeaderboardDebugFillRequest) Reset() {
 	*x = EventLeaderboardDebugFillRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[56]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[73]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5022,7 +6466,7 @@ func (x *EventLeaderboardDebugFillRequest) String() string {
 func (*EventLeaderboardDebugFillRequest) ProtoMessage() {}
 
 func (x *EventLeaderboardDebugFillRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[56]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[73]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5035,7 +6479,7 @@ func (x *EventLeaderboardDebugFillRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EventLeaderboardDebugFillRequest.ProtoReflect.Descriptor instead.
 func (*EventLeaderboardDebugFillRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{56}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{73}
 }
 
 func (x *EventLeaderboardDebugFillRequest) GetId() string {
@@ -5073,7 +6517,7 @@ type EventLeaderboardDebugRandomScoresRequest struct {
 
 func (x *EventLeaderboardDebugRandomScoresRequest) Reset() {
 	*x = EventLeaderboardDebugRandomScoresRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[57]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[74]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5085,7 +6529,7 @@ func (x *EventLeaderboardDebugRandomScoresRequest) String() string {
 func (*EventLeaderboardDebugRandomScoresRequest) ProtoMessage() {}
 
 func (x *EventLeaderboardDebugRandomScoresRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[57]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[74]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5098,7 +6542,7 @@ func (x *EventLeaderboardDebugRandomScoresRequest) ProtoReflect() protoreflect.M
 
 // Deprecated: Use EventLeaderboardDebugRandomScoresRequest.ProtoReflect.Descriptor instead.
 func (*EventLeaderboardDebugRandomScoresRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{57}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{74}
 }
 
 func (x *EventLeaderboardDebugRandomScoresRequest) GetId() string {
@@ -5158,7 +6602,7 @@ type EconomyDonationContributor struct {
 
 func (x *EconomyDonationContributor) Reset() {
 	*x = EconomyDonationContributor{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[58]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[75]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5170,7 +6614,7 @@ func (x *EconomyDonationContributor) String() string {
 func (*EconomyDonationContributor) ProtoMessage() {}
 
 func (x *EconomyDonationContributor) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[58]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[75]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5183,7 +6627,7 @@ func (x *EconomyDonationContributor) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EconomyDonationContributor.ProtoReflect.Descriptor instead.
 func (*EconomyDonationContributor) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{58}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{75}
 }
 
 func (x *EconomyDonationContributor) GetUserId() string {
@@ -5246,7 +6690,7 @@ type EconomyDonation struct {
 
 func (x *EconomyDonation) Reset() {
 	*x = EconomyDonation{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[59]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[76]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5258,7 +6702,7 @@ func (x *EconomyDonation) String() string {
 func (*EconomyDonation) ProtoMessage() {}
 
 func (x *EconomyDonation) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[59]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[76]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5271,7 +6715,7 @@ func (x *EconomyDonation) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EconomyDonation.ProtoReflect.Descriptor instead.
 func (*EconomyDonation) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{59}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{76}
 }
 
 func (x *EconomyDonation) GetUserId() string {
@@ -5392,7 +6836,7 @@ type EconomyDonationAck struct {
 
 func (x *EconomyDonationAck) Reset() {
 	*x = EconomyDonationAck{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[60]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[77]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5404,7 +6848,7 @@ func (x *EconomyDonationAck) String() string {
 func (*EconomyDonationAck) ProtoMessage() {}
 
 func (x *EconomyDonationAck) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[60]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[77]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5417,7 +6861,7 @@ func (x *EconomyDonationAck) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EconomyDonationAck.ProtoReflect.Descriptor instead.
 func (*EconomyDonationAck) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{60}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{77}
 }
 
 func (x *EconomyDonationAck) GetCreated() bool {
@@ -5445,7 +6889,7 @@ type EconomyDonationsList struct {
 
 func (x *EconomyDonationsList) Reset() {
 	*x = EconomyDonationsList{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[61]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[78]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5457,7 +6901,7 @@ func (x *EconomyDonationsList) String() string {
 func (*EconomyDonationsList) ProtoMessage() {}
 
 func (x *EconomyDonationsList) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[61]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[78]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5470,7 +6914,7 @@ func (x *EconomyDonationsList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EconomyDonationsList.ProtoReflect.Descriptor instead.
 func (*EconomyDonationsList) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{61}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{78}
 }
 
 func (x *EconomyDonationsList) GetDonations() []*EconomyDonation {
@@ -5491,7 +6935,7 @@ type EconomyDonationClaimRequestDetails struct {
 
 func (x *EconomyDonationClaimRequestDetails) Reset() {
 	*x = EconomyDonationClaimRequestDetails{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[62]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[79]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5503,7 +6947,7 @@ func (x *EconomyDonationClaimRequestDetails) String() string {
 func (*EconomyDonationClaimRequestDetails) ProtoMessage() {}
 
 func (x *EconomyDonationClaimRequestDetails) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[62]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[79]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5516,7 +6960,7 @@ func (x *EconomyDonationClaimRequestDetails) ProtoReflect() protoreflect.Message
 
 // Deprecated: Use EconomyDonationClaimRequestDetails.ProtoReflect.Descriptor instead.
 func (*EconomyDonationClaimRequestDetails) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{62}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{79}
 }
 
 func (x *EconomyDonationClaimRequestDetails) GetDonors() map[string]int64 {
@@ -5539,7 +6983,7 @@ type EconomyDonationClaimRequest struct {
 
 func (x *EconomyDonationClaimRequest) Reset() {
 	*x = EconomyDonationClaimRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[63]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[80]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5551,7 +6995,7 @@ func (x *EconomyDonationClaimRequest) String() string {
 func (*EconomyDonationClaimRequest) ProtoMessage() {}
 
 func (x *EconomyDonationClaimRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[63]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[80]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5564,7 +7008,7 @@ func (x *EconomyDonationClaimRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EconomyDonationClaimRequest.ProtoReflect.Descriptor instead.
 func (*EconomyDonationClaimRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{63}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{80}
 }
 
 func (x *EconomyDonationClaimRequest) GetDonationIds() []string {
@@ -5594,7 +7038,7 @@ type EconomyDonationClaimRewards struct {
 
 func (x *EconomyDonationClaimRewards) Reset() {
 	*x = EconomyDonationClaimRewards{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[64]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[81]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5606,7 +7050,7 @@ func (x *EconomyDonationClaimRewards) String() string {
 func (*EconomyDonationClaimRewards) ProtoMessage() {}
 
 func (x *EconomyDonationClaimRewards) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[64]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[81]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5619,7 +7063,7 @@ func (x *EconomyDonationClaimRewards) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EconomyDonationClaimRewards.ProtoReflect.Descriptor instead.
 func (*EconomyDonationClaimRewards) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{64}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{81}
 }
 
 func (x *EconomyDonationClaimRewards) GetDonations() *EconomyDonationsList {
@@ -5649,7 +7093,7 @@ type EconomyDonationGiveRequest struct {
 
 func (x *EconomyDonationGiveRequest) Reset() {
 	*x = EconomyDonationGiveRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[65]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[82]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5661,7 +7105,7 @@ func (x *EconomyDonationGiveRequest) String() string {
 func (*EconomyDonationGiveRequest) ProtoMessage() {}
 
 func (x *EconomyDonationGiveRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[65]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[82]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5674,7 +7118,7 @@ func (x *EconomyDonationGiveRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EconomyDonationGiveRequest.ProtoReflect.Descriptor instead.
 func (*EconomyDonationGiveRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{65}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{82}
 }
 
 func (x *EconomyDonationGiveRequest) GetUserId() string {
@@ -5702,7 +7146,7 @@ type EconomyDonationGetRequest struct {
 
 func (x *EconomyDonationGetRequest) Reset() {
 	*x = EconomyDonationGetRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[66]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[83]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5714,7 +7158,7 @@ func (x *EconomyDonationGetRequest) String() string {
 func (*EconomyDonationGetRequest) ProtoMessage() {}
 
 func (x *EconomyDonationGetRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[66]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[83]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5727,7 +7171,7 @@ func (x *EconomyDonationGetRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EconomyDonationGetRequest.ProtoReflect.Descriptor instead.
 func (*EconomyDonationGetRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{66}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{83}
 }
 
 func (x *EconomyDonationGetRequest) GetIds() []string {
@@ -5748,7 +7192,7 @@ type EconomyDonationRequest struct {
 
 func (x *EconomyDonationRequest) Reset() {
 	*x = EconomyDonationRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[67]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[84]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5760,7 +7204,7 @@ func (x *EconomyDonationRequest) String() string {
 func (*EconomyDonationRequest) ProtoMessage() {}
 
 func (x *EconomyDonationRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[67]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[84]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5773,7 +7217,7 @@ func (x *EconomyDonationRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EconomyDonationRequest.ProtoReflect.Descriptor instead.
 func (*EconomyDonationRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{67}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{84}
 }
 
 func (x *EconomyDonationRequest) GetDonationId() string {
@@ -5794,7 +7238,7 @@ type EconomyDonationsByUserList struct {
 
 func (x *EconomyDonationsByUserList) Reset() {
 	*x = EconomyDonationsByUserList{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[68]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[85]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5806,7 +7250,7 @@ func (x *EconomyDonationsByUserList) String() string {
 func (*EconomyDonationsByUserList) ProtoMessage() {}
 
 func (x *EconomyDonationsByUserList) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[68]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[85]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5819,7 +7263,7 @@ func (x *EconomyDonationsByUserList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EconomyDonationsByUserList.ProtoReflect.Descriptor instead.
 func (*EconomyDonationsByUserList) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{68}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{85}
 }
 
 func (x *EconomyDonationsByUserList) GetUserDonations() map[string]*EconomyDonationsList {
@@ -5842,7 +7286,7 @@ type EconomyListStoreItemCost struct {
 
 func (x *EconomyListStoreItemCost) Reset() {
 	*x = EconomyListStoreItemCost{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[69]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[86]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5854,7 +7298,7 @@ func (x *EconomyListStoreItemCost) String() string {
 func (*EconomyListStoreItemCost) ProtoMessage() {}
 
 func (x *EconomyListStoreItemCost) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[69]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[86]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5867,7 +7311,7 @@ func (x *EconomyListStoreItemCost) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EconomyListStoreItemCost.ProtoReflect.Descriptor instead.
 func (*EconomyListStoreItemCost) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{69}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{86}
 }
 
 func (x *EconomyListStoreItemCost) GetCurrencies() map[string]int64 {
@@ -5909,7 +7353,7 @@ type EconomyListStoreItem struct {
 
 func (x *EconomyListStoreItem) Reset() {
 	*x = EconomyListStoreItem{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[70]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[87]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5921,7 +7365,7 @@ func (x *EconomyListStoreItem) String() string {
 func (*EconomyListStoreItem) ProtoMessage() {}
 
 func (x *EconomyListStoreItem) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[70]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[87]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5934,7 +7378,7 @@ func (x *EconomyListStoreItem) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EconomyListStoreItem.ProtoReflect.Descriptor instead.
 func (*EconomyListStoreItem) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{70}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{87}
 }
 
 func (x *EconomyListStoreItem) GetCategory() string {
@@ -6010,7 +7454,7 @@ type EconomyListPlacement struct {
 
 func (x *EconomyListPlacement) Reset() {
 	*x = EconomyListPlacement{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[71]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[88]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6022,7 +7466,7 @@ func (x *EconomyListPlacement) String() string {
 func (*EconomyListPlacement) ProtoMessage() {}
 
 func (x *EconomyListPlacement) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[71]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[88]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6035,7 +7479,7 @@ func (x *EconomyListPlacement) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EconomyListPlacement.ProtoReflect.Descriptor instead.
 func (*EconomyListPlacement) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{71}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{88}
 }
 
 func (x *EconomyListPlacement) GetId() string {
@@ -6085,7 +7529,7 @@ type EconomyList struct {
 
 func (x *EconomyList) Reset() {
 	*x = EconomyList{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[72]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[89]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6097,7 +7541,7 @@ func (x *EconomyList) String() string {
 func (*EconomyList) ProtoMessage() {}
 
 func (x *EconomyList) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[72]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[89]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6110,7 +7554,7 @@ func (x *EconomyList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EconomyList.ProtoReflect.Descriptor instead.
 func (*EconomyList) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{72}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{89}
 }
 
 func (x *EconomyList) GetStoreItems() []*EconomyListStoreItem {
@@ -6187,7 +7631,7 @@ type InventoryItem struct {
 
 func (x *InventoryItem) Reset() {
 	*x = InventoryItem{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[73]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[90]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6199,7 +7643,7 @@ func (x *InventoryItem) String() string {
 func (*InventoryItem) ProtoMessage() {}
 
 func (x *InventoryItem) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[73]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[90]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6212,7 +7656,7 @@ func (x *InventoryItem) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use InventoryItem.ProtoReflect.Descriptor instead.
 func (*InventoryItem) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{73}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{90}
 }
 
 func (x *InventoryItem) GetId() string {
@@ -6331,7 +7775,7 @@ type InventoryListRequest struct {
 
 func (x *InventoryListRequest) Reset() {
 	*x = InventoryListRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[74]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[91]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6343,7 +7787,7 @@ func (x *InventoryListRequest) String() string {
 func (*InventoryListRequest) ProtoMessage() {}
 
 func (x *InventoryListRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[74]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[91]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6356,7 +7800,7 @@ func (x *InventoryListRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use InventoryListRequest.ProtoReflect.Descriptor instead.
 func (*InventoryListRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{74}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{91}
 }
 
 func (x *InventoryListRequest) GetItemCategory() string {
@@ -6377,7 +7821,7 @@ type InventoryGrantRequest struct {
 
 func (x *InventoryGrantRequest) Reset() {
 	*x = InventoryGrantRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[75]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[92]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6389,7 +7833,7 @@ func (x *InventoryGrantRequest) String() string {
 func (*InventoryGrantRequest) ProtoMessage() {}
 
 func (x *InventoryGrantRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[75]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[92]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6402,7 +7846,7 @@ func (x *InventoryGrantRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use InventoryGrantRequest.ProtoReflect.Descriptor instead.
 func (*InventoryGrantRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{75}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{92}
 }
 
 func (x *InventoryGrantRequest) GetItems() map[string]int64 {
@@ -6425,7 +7869,7 @@ type InventoryUpdateItemProperties struct {
 
 func (x *InventoryUpdateItemProperties) Reset() {
 	*x = InventoryUpdateItemProperties{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[76]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[93]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6437,7 +7881,7 @@ func (x *InventoryUpdateItemProperties) String() string {
 func (*InventoryUpdateItemProperties) ProtoMessage() {}
 
 func (x *InventoryUpdateItemProperties) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[76]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[93]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6450,7 +7894,7 @@ func (x *InventoryUpdateItemProperties) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use InventoryUpdateItemProperties.ProtoReflect.Descriptor instead.
 func (*InventoryUpdateItemProperties) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{76}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{93}
 }
 
 func (x *InventoryUpdateItemProperties) GetStringProperties() map[string]string {
@@ -6478,7 +7922,7 @@ type InventoryUpdateItemsRequest struct {
 
 func (x *InventoryUpdateItemsRequest) Reset() {
 	*x = InventoryUpdateItemsRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[77]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[94]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6490,7 +7934,7 @@ func (x *InventoryUpdateItemsRequest) String() string {
 func (*InventoryUpdateItemsRequest) ProtoMessage() {}
 
 func (x *InventoryUpdateItemsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[77]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[94]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6503,7 +7947,7 @@ func (x *InventoryUpdateItemsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use InventoryUpdateItemsRequest.ProtoReflect.Descriptor instead.
 func (*InventoryUpdateItemsRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{77}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{94}
 }
 
 func (x *InventoryUpdateItemsRequest) GetItemUpdates() map[string]*InventoryUpdateItemProperties {
@@ -6524,7 +7968,7 @@ type Inventory struct {
 
 func (x *Inventory) Reset() {
 	*x = Inventory{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[78]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[95]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6536,7 +7980,7 @@ func (x *Inventory) String() string {
 func (*Inventory) ProtoMessage() {}
 
 func (x *Inventory) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[78]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[95]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6549,7 +7993,7 @@ func (x *Inventory) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Inventory.ProtoReflect.Descriptor instead.
 func (*Inventory) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{78}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{95}
 }
 
 func (x *Inventory) GetItems() map[string]*InventoryItem {
@@ -6574,7 +8018,7 @@ type InventoryConsumeRequest struct {
 
 func (x *InventoryConsumeRequest) Reset() {
 	*x = InventoryConsumeRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[79]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[96]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6586,7 +8030,7 @@ func (x *InventoryConsumeRequest) String() string {
 func (*InventoryConsumeRequest) ProtoMessage() {}
 
 func (x *InventoryConsumeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[79]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[96]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6599,7 +8043,7 @@ func (x *InventoryConsumeRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use InventoryConsumeRequest.ProtoReflect.Descriptor instead.
 func (*InventoryConsumeRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{79}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{96}
 }
 
 func (x *InventoryConsumeRequest) GetItems() map[string]int64 {
@@ -6638,7 +8082,7 @@ type InventoryConsumeRewards struct {
 
 func (x *InventoryConsumeRewards) Reset() {
 	*x = InventoryConsumeRewards{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[80]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[97]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6650,7 +8094,7 @@ func (x *InventoryConsumeRewards) String() string {
 func (*InventoryConsumeRewards) ProtoMessage() {}
 
 func (x *InventoryConsumeRewards) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[80]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[97]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6663,7 +8107,7 @@ func (x *InventoryConsumeRewards) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use InventoryConsumeRewards.ProtoReflect.Descriptor instead.
 func (*InventoryConsumeRewards) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{80}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{97}
 }
 
 func (x *InventoryConsumeRewards) GetInventory() *Inventory {
@@ -6698,7 +8142,7 @@ type InventoryUpdateAck struct {
 
 func (x *InventoryUpdateAck) Reset() {
 	*x = InventoryUpdateAck{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[81]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[98]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6710,7 +8154,7 @@ func (x *InventoryUpdateAck) String() string {
 func (*InventoryUpdateAck) ProtoMessage() {}
 
 func (x *InventoryUpdateAck) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[81]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[98]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6723,7 +8167,7 @@ func (x *InventoryUpdateAck) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use InventoryUpdateAck.ProtoReflect.Descriptor instead.
 func (*InventoryUpdateAck) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{81}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{98}
 }
 
 func (x *InventoryUpdateAck) GetInventory() *Inventory {
@@ -6744,7 +8188,7 @@ type InventoryList struct {
 
 func (x *InventoryList) Reset() {
 	*x = InventoryList{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[82]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[99]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6756,7 +8200,7 @@ func (x *InventoryList) String() string {
 func (*InventoryList) ProtoMessage() {}
 
 func (x *InventoryList) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[82]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[99]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6769,7 +8213,7 @@ func (x *InventoryList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use InventoryList.ProtoReflect.Descriptor instead.
 func (*InventoryList) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{82}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{99}
 }
 
 func (x *InventoryList) GetItems() map[string]*InventoryItem {
@@ -6790,7 +8234,7 @@ type AuctionBidAmount struct {
 
 func (x *AuctionBidAmount) Reset() {
 	*x = AuctionBidAmount{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[83]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[100]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6802,7 +8246,7 @@ func (x *AuctionBidAmount) String() string {
 func (*AuctionBidAmount) ProtoMessage() {}
 
 func (x *AuctionBidAmount) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[83]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[100]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6815,7 +8259,7 @@ func (x *AuctionBidAmount) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuctionBidAmount.ProtoReflect.Descriptor instead.
 func (*AuctionBidAmount) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{83}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{100}
 }
 
 func (x *AuctionBidAmount) GetCurrencies() map[string]int64 {
@@ -6838,7 +8282,7 @@ type AuctionFee struct {
 
 func (x *AuctionFee) Reset() {
 	*x = AuctionFee{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[84]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[101]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6850,7 +8294,7 @@ func (x *AuctionFee) String() string {
 func (*AuctionFee) ProtoMessage() {}
 
 func (x *AuctionFee) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[84]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[101]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6863,7 +8307,7 @@ func (x *AuctionFee) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuctionFee.ProtoReflect.Descriptor instead.
 func (*AuctionFee) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{84}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{101}
 }
 
 func (x *AuctionFee) GetPercentage() float64 {
@@ -6895,7 +8339,7 @@ type AuctionTemplateConditionListingCost struct {
 
 func (x *AuctionTemplateConditionListingCost) Reset() {
 	*x = AuctionTemplateConditionListingCost{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[85]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[102]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6907,7 +8351,7 @@ func (x *AuctionTemplateConditionListingCost) String() string {
 func (*AuctionTemplateConditionListingCost) ProtoMessage() {}
 
 func (x *AuctionTemplateConditionListingCost) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[85]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[102]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6920,7 +8364,7 @@ func (x *AuctionTemplateConditionListingCost) ProtoReflect() protoreflect.Messag
 
 // Deprecated: Use AuctionTemplateConditionListingCost.ProtoReflect.Descriptor instead.
 func (*AuctionTemplateConditionListingCost) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{85}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{102}
 }
 
 func (x *AuctionTemplateConditionListingCost) GetCurrencies() map[string]int64 {
@@ -6957,7 +8401,7 @@ type AuctionTemplateConditionBidIncrement struct {
 
 func (x *AuctionTemplateConditionBidIncrement) Reset() {
 	*x = AuctionTemplateConditionBidIncrement{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[86]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[103]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6969,7 +8413,7 @@ func (x *AuctionTemplateConditionBidIncrement) String() string {
 func (*AuctionTemplateConditionBidIncrement) ProtoMessage() {}
 
 func (x *AuctionTemplateConditionBidIncrement) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[86]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[103]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6982,7 +8426,7 @@ func (x *AuctionTemplateConditionBidIncrement) ProtoReflect() protoreflect.Messa
 
 // Deprecated: Use AuctionTemplateConditionBidIncrement.ProtoReflect.Descriptor instead.
 func (*AuctionTemplateConditionBidIncrement) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{86}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{103}
 }
 
 func (x *AuctionTemplateConditionBidIncrement) GetPercentage() float64 {
@@ -7024,7 +8468,7 @@ type AuctionTemplateCondition struct {
 
 func (x *AuctionTemplateCondition) Reset() {
 	*x = AuctionTemplateCondition{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[87]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[104]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7036,7 +8480,7 @@ func (x *AuctionTemplateCondition) String() string {
 func (*AuctionTemplateCondition) ProtoMessage() {}
 
 func (x *AuctionTemplateCondition) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[87]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[104]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7049,7 +8493,7 @@ func (x *AuctionTemplateCondition) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuctionTemplateCondition.ProtoReflect.Descriptor instead.
 func (*AuctionTemplateCondition) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{87}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{104}
 }
 
 func (x *AuctionTemplateCondition) GetDurationSec() int64 {
@@ -7125,7 +8569,7 @@ type AuctionTemplate struct {
 
 func (x *AuctionTemplate) Reset() {
 	*x = AuctionTemplate{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[88]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[105]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7137,7 +8581,7 @@ func (x *AuctionTemplate) String() string {
 func (*AuctionTemplate) ProtoMessage() {}
 
 func (x *AuctionTemplate) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[88]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[105]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7150,7 +8594,7 @@ func (x *AuctionTemplate) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuctionTemplate.ProtoReflect.Descriptor instead.
 func (*AuctionTemplate) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{88}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{105}
 }
 
 func (x *AuctionTemplate) GetItems() []string {
@@ -7192,7 +8636,7 @@ type AuctionTemplates struct {
 
 func (x *AuctionTemplates) Reset() {
 	*x = AuctionTemplates{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[89]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[106]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7204,7 +8648,7 @@ func (x *AuctionTemplates) String() string {
 func (*AuctionTemplates) ProtoMessage() {}
 
 func (x *AuctionTemplates) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[89]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[106]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7217,7 +8661,7 @@ func (x *AuctionTemplates) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuctionTemplates.ProtoReflect.Descriptor instead.
 func (*AuctionTemplates) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{89}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{106}
 }
 
 func (x *AuctionTemplates) GetTemplates() map[string]*AuctionTemplate {
@@ -7238,7 +8682,7 @@ type AuctionReward struct {
 
 func (x *AuctionReward) Reset() {
 	*x = AuctionReward{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[90]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[107]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7250,7 +8694,7 @@ func (x *AuctionReward) String() string {
 func (*AuctionReward) ProtoMessage() {}
 
 func (x *AuctionReward) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[90]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[107]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7263,7 +8707,7 @@ func (x *AuctionReward) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuctionReward.ProtoReflect.Descriptor instead.
 func (*AuctionReward) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{90}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{107}
 }
 
 func (x *AuctionReward) GetItems() []*InventoryItem {
@@ -7288,7 +8732,7 @@ type AuctionBid struct {
 
 func (x *AuctionBid) Reset() {
 	*x = AuctionBid{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[91]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[108]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7300,7 +8744,7 @@ func (x *AuctionBid) String() string {
 func (*AuctionBid) ProtoMessage() {}
 
 func (x *AuctionBid) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[91]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[108]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7313,7 +8757,7 @@ func (x *AuctionBid) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuctionBid.ProtoReflect.Descriptor instead.
 func (*AuctionBid) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{91}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{108}
 }
 
 func (x *AuctionBid) GetUserId() string {
@@ -7406,7 +8850,7 @@ type Auction struct {
 
 func (x *Auction) Reset() {
 	*x = Auction{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[92]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[109]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7418,7 +8862,7 @@ func (x *Auction) String() string {
 func (*Auction) ProtoMessage() {}
 
 func (x *Auction) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[92]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[109]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7431,7 +8875,7 @@ func (x *Auction) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Auction.ProtoReflect.Descriptor instead.
 func (*Auction) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{92}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{109}
 }
 
 func (x *Auction) GetId() string {
@@ -7671,7 +9115,7 @@ type AuctionNotificationBid struct {
 
 func (x *AuctionNotificationBid) Reset() {
 	*x = AuctionNotificationBid{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[93]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[110]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7683,7 +9127,7 @@ func (x *AuctionNotificationBid) String() string {
 func (*AuctionNotificationBid) ProtoMessage() {}
 
 func (x *AuctionNotificationBid) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[93]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[110]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7696,7 +9140,7 @@ func (x *AuctionNotificationBid) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuctionNotificationBid.ProtoReflect.Descriptor instead.
 func (*AuctionNotificationBid) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{93}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{110}
 }
 
 func (x *AuctionNotificationBid) GetId() string {
@@ -7775,7 +9219,7 @@ type StreamEnvelope struct {
 
 func (x *StreamEnvelope) Reset() {
 	*x = StreamEnvelope{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[94]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[111]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7787,7 +9231,7 @@ func (x *StreamEnvelope) String() string {
 func (*StreamEnvelope) ProtoMessage() {}
 
 func (x *StreamEnvelope) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[94]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[111]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7800,7 +9244,7 @@ func (x *StreamEnvelope) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StreamEnvelope.ProtoReflect.Descriptor instead.
 func (*StreamEnvelope) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{94}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{111}
 }
 
 func (x *StreamEnvelope) GetMessage() isStreamEnvelope_Message {
@@ -7842,7 +9286,7 @@ type AuctionClaimBid struct {
 
 func (x *AuctionClaimBid) Reset() {
 	*x = AuctionClaimBid{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[95]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[112]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7854,7 +9298,7 @@ func (x *AuctionClaimBid) String() string {
 func (*AuctionClaimBid) ProtoMessage() {}
 
 func (x *AuctionClaimBid) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[95]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[112]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7867,7 +9311,7 @@ func (x *AuctionClaimBid) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuctionClaimBid.ProtoReflect.Descriptor instead.
 func (*AuctionClaimBid) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{95}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{112}
 }
 
 func (x *AuctionClaimBid) GetAuction() *Auction {
@@ -7901,7 +9345,7 @@ type AuctionClaimCreated struct {
 
 func (x *AuctionClaimCreated) Reset() {
 	*x = AuctionClaimCreated{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[96]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[113]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7913,7 +9357,7 @@ func (x *AuctionClaimCreated) String() string {
 func (*AuctionClaimCreated) ProtoMessage() {}
 
 func (x *AuctionClaimCreated) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[96]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[113]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7926,7 +9370,7 @@ func (x *AuctionClaimCreated) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuctionClaimCreated.ProtoReflect.Descriptor instead.
 func (*AuctionClaimCreated) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{96}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{113}
 }
 
 func (x *AuctionClaimCreated) GetAuction() *Auction {
@@ -7970,7 +9414,7 @@ type AuctionCancel struct {
 
 func (x *AuctionCancel) Reset() {
 	*x = AuctionCancel{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[97]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[114]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7982,7 +9426,7 @@ func (x *AuctionCancel) String() string {
 func (*AuctionCancel) ProtoMessage() {}
 
 func (x *AuctionCancel) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[97]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[114]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7995,7 +9439,7 @@ func (x *AuctionCancel) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuctionCancel.ProtoReflect.Descriptor instead.
 func (*AuctionCancel) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{97}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{114}
 }
 
 func (x *AuctionCancel) GetAuction() *Auction {
@@ -8025,7 +9469,7 @@ type AuctionList struct {
 
 func (x *AuctionList) Reset() {
 	*x = AuctionList{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[98]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[115]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8037,7 +9481,7 @@ func (x *AuctionList) String() string {
 func (*AuctionList) ProtoMessage() {}
 
 func (x *AuctionList) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[98]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[115]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8050,7 +9494,7 @@ func (x *AuctionList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuctionList.ProtoReflect.Descriptor instead.
 func (*AuctionList) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{98}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{115}
 }
 
 func (x *AuctionList) GetAuctions() []*Auction {
@@ -8084,7 +9528,7 @@ type AuctionListRequest struct {
 
 func (x *AuctionListRequest) Reset() {
 	*x = AuctionListRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[99]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[116]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8096,7 +9540,7 @@ func (x *AuctionListRequest) String() string {
 func (*AuctionListRequest) ProtoMessage() {}
 
 func (x *AuctionListRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[99]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[116]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8109,7 +9553,7 @@ func (x *AuctionListRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuctionListRequest.ProtoReflect.Descriptor instead.
 func (*AuctionListRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{99}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{116}
 }
 
 func (x *AuctionListRequest) GetQuery() string {
@@ -8155,7 +9599,7 @@ type AuctionBidRequest struct {
 
 func (x *AuctionBidRequest) Reset() {
 	*x = AuctionBidRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[100]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[117]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8167,7 +9611,7 @@ func (x *AuctionBidRequest) String() string {
 func (*AuctionBidRequest) ProtoMessage() {}
 
 func (x *AuctionBidRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[100]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[117]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8180,7 +9624,7 @@ func (x *AuctionBidRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuctionBidRequest.ProtoReflect.Descriptor instead.
 func (*AuctionBidRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{100}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{117}
 }
 
 func (x *AuctionBidRequest) GetId() string {
@@ -8215,7 +9659,7 @@ type AuctionClaimBidRequest struct {
 
 func (x *AuctionClaimBidRequest) Reset() {
 	*x = AuctionClaimBidRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[101]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[118]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8227,7 +9671,7 @@ func (x *AuctionClaimBidRequest) String() string {
 func (*AuctionClaimBidRequest) ProtoMessage() {}
 
 func (x *AuctionClaimBidRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[101]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[118]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8240,7 +9684,7 @@ func (x *AuctionClaimBidRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuctionClaimBidRequest.ProtoReflect.Descriptor instead.
 func (*AuctionClaimBidRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{101}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{118}
 }
 
 func (x *AuctionClaimBidRequest) GetId() string {
@@ -8261,7 +9705,7 @@ type AuctionClaimCreatedRequest struct {
 
 func (x *AuctionClaimCreatedRequest) Reset() {
 	*x = AuctionClaimCreatedRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[102]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[119]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8273,7 +9717,7 @@ func (x *AuctionClaimCreatedRequest) String() string {
 func (*AuctionClaimCreatedRequest) ProtoMessage() {}
 
 func (x *AuctionClaimCreatedRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[102]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[119]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8286,7 +9730,7 @@ func (x *AuctionClaimCreatedRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuctionClaimCreatedRequest.ProtoReflect.Descriptor instead.
 func (*AuctionClaimCreatedRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{102}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{119}
 }
 
 func (x *AuctionClaimCreatedRequest) GetId() string {
@@ -8307,7 +9751,7 @@ type AuctionCancelRequest struct {
 
 func (x *AuctionCancelRequest) Reset() {
 	*x = AuctionCancelRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[103]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[120]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8319,7 +9763,7 @@ func (x *AuctionCancelRequest) String() string {
 func (*AuctionCancelRequest) ProtoMessage() {}
 
 func (x *AuctionCancelRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[103]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[120]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8332,7 +9776,7 @@ func (x *AuctionCancelRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuctionCancelRequest.ProtoReflect.Descriptor instead.
 func (*AuctionCancelRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{103}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{120}
 }
 
 func (x *AuctionCancelRequest) GetId() string {
@@ -8359,7 +9803,7 @@ type AuctionCreateRequest struct {
 
 func (x *AuctionCreateRequest) Reset() {
 	*x = AuctionCreateRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[104]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[121]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8371,7 +9815,7 @@ func (x *AuctionCreateRequest) String() string {
 func (*AuctionCreateRequest) ProtoMessage() {}
 
 func (x *AuctionCreateRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[104]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[121]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8384,7 +9828,7 @@ func (x *AuctionCreateRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuctionCreateRequest.ProtoReflect.Descriptor instead.
 func (*AuctionCreateRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{104}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{121}
 }
 
 func (x *AuctionCreateRequest) GetTemplateId() string {
@@ -8428,7 +9872,7 @@ type AuctionListBidsRequest struct {
 
 func (x *AuctionListBidsRequest) Reset() {
 	*x = AuctionListBidsRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[105]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[122]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8440,7 +9884,7 @@ func (x *AuctionListBidsRequest) String() string {
 func (*AuctionListBidsRequest) ProtoMessage() {}
 
 func (x *AuctionListBidsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[105]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[122]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8453,7 +9897,7 @@ func (x *AuctionListBidsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuctionListBidsRequest.ProtoReflect.Descriptor instead.
 func (*AuctionListBidsRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{105}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{122}
 }
 
 func (x *AuctionListBidsRequest) GetLimit() int64 {
@@ -8483,7 +9927,7 @@ type AuctionListCreatedRequest struct {
 
 func (x *AuctionListCreatedRequest) Reset() {
 	*x = AuctionListCreatedRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[106]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[123]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8495,7 +9939,7 @@ func (x *AuctionListCreatedRequest) String() string {
 func (*AuctionListCreatedRequest) ProtoMessage() {}
 
 func (x *AuctionListCreatedRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[106]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[123]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8508,7 +9952,7 @@ func (x *AuctionListCreatedRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuctionListCreatedRequest.ProtoReflect.Descriptor instead.
 func (*AuctionListCreatedRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{106}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{123}
 }
 
 func (x *AuctionListCreatedRequest) GetLimit() int64 {
@@ -8536,7 +9980,7 @@ type AuctionsFollowRequest struct {
 
 func (x *AuctionsFollowRequest) Reset() {
 	*x = AuctionsFollowRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[107]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[124]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8548,7 +9992,7 @@ func (x *AuctionsFollowRequest) String() string {
 func (*AuctionsFollowRequest) ProtoMessage() {}
 
 func (x *AuctionsFollowRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[107]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[124]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8561,7 +10005,7 @@ func (x *AuctionsFollowRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuctionsFollowRequest.ProtoReflect.Descriptor instead.
 func (*AuctionsFollowRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{107}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{124}
 }
 
 func (x *AuctionsFollowRequest) GetIds() []string {
@@ -8582,7 +10026,7 @@ type EconomyListRequest struct {
 
 func (x *EconomyListRequest) Reset() {
 	*x = EconomyListRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[108]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[125]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8594,7 +10038,7 @@ func (x *EconomyListRequest) String() string {
 func (*EconomyListRequest) ProtoMessage() {}
 
 func (x *EconomyListRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[108]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[125]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8607,7 +10051,7 @@ func (x *EconomyListRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EconomyListRequest.ProtoReflect.Descriptor instead.
 func (*EconomyListRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{108}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{125}
 }
 
 func (x *EconomyListRequest) GetStoreType() EconomyStoreType {
@@ -8632,7 +10076,7 @@ type EconomyGrantRequest struct {
 
 func (x *EconomyGrantRequest) Reset() {
 	*x = EconomyGrantRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[109]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[126]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8644,7 +10088,7 @@ func (x *EconomyGrantRequest) String() string {
 func (*EconomyGrantRequest) ProtoMessage() {}
 
 func (x *EconomyGrantRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[109]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[126]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8657,7 +10101,7 @@ func (x *EconomyGrantRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EconomyGrantRequest.ProtoReflect.Descriptor instead.
 func (*EconomyGrantRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{109}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{126}
 }
 
 func (x *EconomyGrantRequest) GetCurrencies() map[string]int64 {
@@ -8696,7 +10140,7 @@ type EconomyPurchaseIntentRequest struct {
 
 func (x *EconomyPurchaseIntentRequest) Reset() {
 	*x = EconomyPurchaseIntentRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[110]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[127]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8708,7 +10152,7 @@ func (x *EconomyPurchaseIntentRequest) String() string {
 func (*EconomyPurchaseIntentRequest) ProtoMessage() {}
 
 func (x *EconomyPurchaseIntentRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[110]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[127]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8721,7 +10165,7 @@ func (x *EconomyPurchaseIntentRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EconomyPurchaseIntentRequest.ProtoReflect.Descriptor instead.
 func (*EconomyPurchaseIntentRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{110}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{127}
 }
 
 func (x *EconomyPurchaseIntentRequest) GetItemId() string {
@@ -8760,7 +10204,7 @@ type EconomyPurchaseRequest struct {
 
 func (x *EconomyPurchaseRequest) Reset() {
 	*x = EconomyPurchaseRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[111]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[128]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8772,7 +10216,7 @@ func (x *EconomyPurchaseRequest) String() string {
 func (*EconomyPurchaseRequest) ProtoMessage() {}
 
 func (x *EconomyPurchaseRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[111]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[128]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8785,7 +10229,7 @@ func (x *EconomyPurchaseRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EconomyPurchaseRequest.ProtoReflect.Descriptor instead.
 func (*EconomyPurchaseRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{111}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{128}
 }
 
 func (x *EconomyPurchaseRequest) GetItemId() string {
@@ -8822,7 +10266,7 @@ type EconomyPurchaseRestoreRequest struct {
 
 func (x *EconomyPurchaseRestoreRequest) Reset() {
 	*x = EconomyPurchaseRestoreRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[112]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[129]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8834,7 +10278,7 @@ func (x *EconomyPurchaseRestoreRequest) String() string {
 func (*EconomyPurchaseRestoreRequest) ProtoMessage() {}
 
 func (x *EconomyPurchaseRestoreRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[112]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[129]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8847,7 +10291,7 @@ func (x *EconomyPurchaseRestoreRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EconomyPurchaseRestoreRequest.ProtoReflect.Descriptor instead.
 func (*EconomyPurchaseRestoreRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{112}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{129}
 }
 
 func (x *EconomyPurchaseRestoreRequest) GetStoreType() EconomyStoreType {
@@ -8879,7 +10323,7 @@ type EconomyPlacementStatusRequest struct {
 
 func (x *EconomyPlacementStatusRequest) Reset() {
 	*x = EconomyPlacementStatusRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[113]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[130]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8891,7 +10335,7 @@ func (x *EconomyPlacementStatusRequest) String() string {
 func (*EconomyPlacementStatusRequest) ProtoMessage() {}
 
 func (x *EconomyPlacementStatusRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[113]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[130]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8904,7 +10348,7 @@ func (x *EconomyPlacementStatusRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EconomyPlacementStatusRequest.ProtoReflect.Descriptor instead.
 func (*EconomyPlacementStatusRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{113}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{130}
 }
 
 func (x *EconomyPlacementStatusRequest) GetRewardId() string {
@@ -8941,7 +10385,7 @@ type EconomyPlacementStartRequest struct {
 
 func (x *EconomyPlacementStartRequest) Reset() {
 	*x = EconomyPlacementStartRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[114]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[131]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8953,7 +10397,7 @@ func (x *EconomyPlacementStartRequest) String() string {
 func (*EconomyPlacementStartRequest) ProtoMessage() {}
 
 func (x *EconomyPlacementStartRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[114]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[131]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8966,7 +10410,7 @@ func (x *EconomyPlacementStartRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EconomyPlacementStartRequest.ProtoReflect.Descriptor instead.
 func (*EconomyPlacementStartRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{114}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{131}
 }
 
 func (x *EconomyPlacementStartRequest) GetPlacementId() string {
@@ -9006,7 +10450,7 @@ type EconomyPlacementStatus struct {
 
 func (x *EconomyPlacementStatus) Reset() {
 	*x = EconomyPlacementStatus{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[115]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[132]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9018,7 +10462,7 @@ func (x *EconomyPlacementStatus) String() string {
 func (*EconomyPlacementStatus) ProtoMessage() {}
 
 func (x *EconomyPlacementStatus) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[115]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[132]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9031,7 +10475,7 @@ func (x *EconomyPlacementStatus) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EconomyPlacementStatus.ProtoReflect.Descriptor instead.
 func (*EconomyPlacementStatus) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{115}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{132}
 }
 
 func (x *EconomyPlacementStatus) GetRewardId() string {
@@ -9105,7 +10549,7 @@ type EconomyUpdateAck struct {
 
 func (x *EconomyUpdateAck) Reset() {
 	*x = EconomyUpdateAck{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[116]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[133]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9117,7 +10561,7 @@ func (x *EconomyUpdateAck) String() string {
 func (*EconomyUpdateAck) ProtoMessage() {}
 
 func (x *EconomyUpdateAck) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[116]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[133]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9130,7 +10574,7 @@ func (x *EconomyUpdateAck) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EconomyUpdateAck.ProtoReflect.Descriptor instead.
 func (*EconomyUpdateAck) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{116}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{133}
 }
 
 func (x *EconomyUpdateAck) GetWallet() map[string]int64 {
@@ -9188,7 +10632,7 @@ type EconomyPurchaseAck struct {
 
 func (x *EconomyPurchaseAck) Reset() {
 	*x = EconomyPurchaseAck{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[117]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[134]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9200,7 +10644,7 @@ func (x *EconomyPurchaseAck) String() string {
 func (*EconomyPurchaseAck) ProtoMessage() {}
 
 func (x *EconomyPurchaseAck) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[117]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[134]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9213,7 +10657,7 @@ func (x *EconomyPurchaseAck) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EconomyPurchaseAck.ProtoReflect.Descriptor instead.
 func (*EconomyPurchaseAck) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{117}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{134}
 }
 
 func (x *EconomyPurchaseAck) GetWallet() map[string]int64 {
@@ -9261,7 +10705,7 @@ type EnergyModifier struct {
 
 func (x *EnergyModifier) Reset() {
 	*x = EnergyModifier{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[118]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[135]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9273,7 +10717,7 @@ func (x *EnergyModifier) String() string {
 func (*EnergyModifier) ProtoMessage() {}
 
 func (x *EnergyModifier) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[118]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[135]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9286,7 +10730,7 @@ func (x *EnergyModifier) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EnergyModifier.ProtoReflect.Descriptor instead.
 func (*EnergyModifier) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{118}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{135}
 }
 
 func (x *EnergyModifier) GetOperator() string {
@@ -9350,7 +10794,7 @@ type Energy struct {
 
 func (x *Energy) Reset() {
 	*x = Energy{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[119]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[136]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9362,7 +10806,7 @@ func (x *Energy) String() string {
 func (*Energy) ProtoMessage() {}
 
 func (x *Energy) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[119]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[136]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9375,7 +10819,7 @@ func (x *Energy) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Energy.ProtoReflect.Descriptor instead.
 func (*Energy) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{119}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{136}
 }
 
 func (x *Energy) GetId() string {
@@ -9473,7 +10917,7 @@ type EnergyList struct {
 
 func (x *EnergyList) Reset() {
 	*x = EnergyList{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[120]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[137]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9485,7 +10929,7 @@ func (x *EnergyList) String() string {
 func (*EnergyList) ProtoMessage() {}
 
 func (x *EnergyList) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[120]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[137]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9498,7 +10942,7 @@ func (x *EnergyList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EnergyList.ProtoReflect.Descriptor instead.
 func (*EnergyList) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{120}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{137}
 }
 
 func (x *EnergyList) GetEnergies() map[string]*Energy {
@@ -9519,7 +10963,7 @@ type EnergySpendRequest struct {
 
 func (x *EnergySpendRequest) Reset() {
 	*x = EnergySpendRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[121]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[138]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9531,7 +10975,7 @@ func (x *EnergySpendRequest) String() string {
 func (*EnergySpendRequest) ProtoMessage() {}
 
 func (x *EnergySpendRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[121]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[138]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9544,7 +10988,7 @@ func (x *EnergySpendRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EnergySpendRequest.ProtoReflect.Descriptor instead.
 func (*EnergySpendRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{121}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{138}
 }
 
 func (x *EnergySpendRequest) GetAmounts() map[string]int32 {
@@ -9567,7 +11011,7 @@ type EnergySpendReward struct {
 
 func (x *EnergySpendReward) Reset() {
 	*x = EnergySpendReward{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[122]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[139]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9579,7 +11023,7 @@ func (x *EnergySpendReward) String() string {
 func (*EnergySpendReward) ProtoMessage() {}
 
 func (x *EnergySpendReward) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[122]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[139]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9592,7 +11036,7 @@ func (x *EnergySpendReward) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EnergySpendReward.ProtoReflect.Descriptor instead.
 func (*EnergySpendReward) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{122}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{139}
 }
 
 func (x *EnergySpendReward) GetEnergies() *EnergyList {
@@ -9620,7 +11064,7 @@ type EnergyGrantRequest struct {
 
 func (x *EnergyGrantRequest) Reset() {
 	*x = EnergyGrantRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[123]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[140]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9632,7 +11076,7 @@ func (x *EnergyGrantRequest) String() string {
 func (*EnergyGrantRequest) ProtoMessage() {}
 
 func (x *EnergyGrantRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[123]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[140]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9645,7 +11089,7 @@ func (x *EnergyGrantRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EnergyGrantRequest.ProtoReflect.Descriptor instead.
 func (*EnergyGrantRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{123}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{140}
 }
 
 func (x *EnergyGrantRequest) GetAmounts() map[string]int32 {
@@ -9676,7 +11120,7 @@ type LeaderboardConfig struct {
 
 func (x *LeaderboardConfig) Reset() {
 	*x = LeaderboardConfig{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[124]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[141]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9688,7 +11132,7 @@ func (x *LeaderboardConfig) String() string {
 func (*LeaderboardConfig) ProtoMessage() {}
 
 func (x *LeaderboardConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[124]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[141]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9701,7 +11145,7 @@ func (x *LeaderboardConfig) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LeaderboardConfig.ProtoReflect.Descriptor instead.
 func (*LeaderboardConfig) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{124}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{141}
 }
 
 func (x *LeaderboardConfig) GetId() string {
@@ -9757,7 +11201,7 @@ type LeaderboardConfigList struct {
 
 func (x *LeaderboardConfigList) Reset() {
 	*x = LeaderboardConfigList{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[125]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[142]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9769,7 +11213,7 @@ func (x *LeaderboardConfigList) String() string {
 func (*LeaderboardConfigList) ProtoMessage() {}
 
 func (x *LeaderboardConfigList) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[125]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[142]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9782,7 +11226,7 @@ func (x *LeaderboardConfigList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LeaderboardConfigList.ProtoReflect.Descriptor instead.
 func (*LeaderboardConfigList) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{125}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{142}
 }
 
 func (x *LeaderboardConfigList) GetLeaderboardConfigs() []*LeaderboardConfig {
@@ -9815,7 +11259,7 @@ type Tutorial struct {
 
 func (x *Tutorial) Reset() {
 	*x = Tutorial{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[126]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[143]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9827,7 +11271,7 @@ func (x *Tutorial) String() string {
 func (*Tutorial) ProtoMessage() {}
 
 func (x *Tutorial) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[126]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[143]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9840,7 +11284,7 @@ func (x *Tutorial) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Tutorial.ProtoReflect.Descriptor instead.
 func (*Tutorial) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{126}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{143}
 }
 
 func (x *Tutorial) GetId() string {
@@ -9903,7 +11347,7 @@ type TutorialList struct {
 
 func (x *TutorialList) Reset() {
 	*x = TutorialList{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[127]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[144]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9915,7 +11359,7 @@ func (x *TutorialList) String() string {
 func (*TutorialList) ProtoMessage() {}
 
 func (x *TutorialList) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[127]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[144]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9928,7 +11372,7 @@ func (x *TutorialList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TutorialList.ProtoReflect.Descriptor instead.
 func (*TutorialList) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{127}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{144}
 }
 
 func (x *TutorialList) GetTutorials() map[string]*Tutorial {
@@ -9949,7 +11393,7 @@ type TutorialAcceptRequest struct {
 
 func (x *TutorialAcceptRequest) Reset() {
 	*x = TutorialAcceptRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[128]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[145]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9961,7 +11405,7 @@ func (x *TutorialAcceptRequest) String() string {
 func (*TutorialAcceptRequest) ProtoMessage() {}
 
 func (x *TutorialAcceptRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[128]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[145]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9974,7 +11418,7 @@ func (x *TutorialAcceptRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TutorialAcceptRequest.ProtoReflect.Descriptor instead.
 func (*TutorialAcceptRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{128}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{145}
 }
 
 func (x *TutorialAcceptRequest) GetId() string {
@@ -9995,7 +11439,7 @@ type TutorialDeclineRequest struct {
 
 func (x *TutorialDeclineRequest) Reset() {
 	*x = TutorialDeclineRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[129]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[146]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10007,7 +11451,7 @@ func (x *TutorialDeclineRequest) String() string {
 func (*TutorialDeclineRequest) ProtoMessage() {}
 
 func (x *TutorialDeclineRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[129]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[146]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10020,7 +11464,7 @@ func (x *TutorialDeclineRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TutorialDeclineRequest.ProtoReflect.Descriptor instead.
 func (*TutorialDeclineRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{129}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{146}
 }
 
 func (x *TutorialDeclineRequest) GetId() string {
@@ -10041,7 +11485,7 @@ type TutorialAbandonRequest struct {
 
 func (x *TutorialAbandonRequest) Reset() {
 	*x = TutorialAbandonRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[130]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[147]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10053,7 +11497,7 @@ func (x *TutorialAbandonRequest) String() string {
 func (*TutorialAbandonRequest) ProtoMessage() {}
 
 func (x *TutorialAbandonRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[130]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[147]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10066,7 +11510,7 @@ func (x *TutorialAbandonRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TutorialAbandonRequest.ProtoReflect.Descriptor instead.
 func (*TutorialAbandonRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{130}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{147}
 }
 
 func (x *TutorialAbandonRequest) GetId() string {
@@ -10089,7 +11533,7 @@ type TutorialUpdateRequest struct {
 
 func (x *TutorialUpdateRequest) Reset() {
 	*x = TutorialUpdateRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[131]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[148]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10101,7 +11545,7 @@ func (x *TutorialUpdateRequest) String() string {
 func (*TutorialUpdateRequest) ProtoMessage() {}
 
 func (x *TutorialUpdateRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[131]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[148]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10114,7 +11558,7 @@ func (x *TutorialUpdateRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TutorialUpdateRequest.ProtoReflect.Descriptor instead.
 func (*TutorialUpdateRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{131}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{148}
 }
 
 func (x *TutorialUpdateRequest) GetId() string {
@@ -10142,7 +11586,7 @@ type TutorialResetRequest struct {
 
 func (x *TutorialResetRequest) Reset() {
 	*x = TutorialResetRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[132]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[149]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10154,7 +11598,7 @@ func (x *TutorialResetRequest) String() string {
 func (*TutorialResetRequest) ProtoMessage() {}
 
 func (x *TutorialResetRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[132]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[149]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10167,7 +11611,7 @@ func (x *TutorialResetRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TutorialResetRequest.ProtoReflect.Descriptor instead.
 func (*TutorialResetRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{132}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{149}
 }
 
 func (x *TutorialResetRequest) GetIds() []string {
@@ -10190,7 +11634,7 @@ type RateAppRequest struct {
 
 func (x *RateAppRequest) Reset() {
 	*x = RateAppRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[133]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[150]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10202,7 +11646,7 @@ func (x *RateAppRequest) String() string {
 func (*RateAppRequest) ProtoMessage() {}
 
 func (x *RateAppRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[133]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[150]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10215,7 +11659,7 @@ func (x *RateAppRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RateAppRequest.ProtoReflect.Descriptor instead.
 func (*RateAppRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{133}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{150}
 }
 
 func (x *RateAppRequest) GetScore() uint32 {
@@ -10267,7 +11711,7 @@ type Team struct {
 
 func (x *Team) Reset() {
 	*x = Team{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[134]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[151]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10279,7 +11723,7 @@ func (x *Team) String() string {
 func (*Team) ProtoMessage() {}
 
 func (x *Team) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[134]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[151]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10292,7 +11736,7 @@ func (x *Team) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Team.ProtoReflect.Descriptor instead.
 func (*Team) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{134}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{151}
 }
 
 func (x *Team) GetId() string {
@@ -10407,7 +11851,7 @@ type TeamCreateRequest struct {
 
 func (x *TeamCreateRequest) Reset() {
 	*x = TeamCreateRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[135]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[152]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10419,7 +11863,7 @@ func (x *TeamCreateRequest) String() string {
 func (*TeamCreateRequest) ProtoMessage() {}
 
 func (x *TeamCreateRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[135]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[152]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10432,7 +11876,7 @@ func (x *TeamCreateRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TeamCreateRequest.ProtoReflect.Descriptor instead.
 func (*TeamCreateRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{135}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{152}
 }
 
 func (x *TeamCreateRequest) GetName() string {
@@ -10492,7 +11936,7 @@ type TeamListRequest struct {
 
 func (x *TeamListRequest) Reset() {
 	*x = TeamListRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[136]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[153]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10504,7 +11948,7 @@ func (x *TeamListRequest) String() string {
 func (*TeamListRequest) ProtoMessage() {}
 
 func (x *TeamListRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[136]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[153]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10517,7 +11961,7 @@ func (x *TeamListRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TeamListRequest.ProtoReflect.Descriptor instead.
 func (*TeamListRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{136}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{153}
 }
 
 func (x *TeamListRequest) GetCursor() string {
@@ -10554,7 +11998,7 @@ type TeamList struct {
 
 func (x *TeamList) Reset() {
 	*x = TeamList{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[137]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[154]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10566,7 +12010,7 @@ func (x *TeamList) String() string {
 func (*TeamList) ProtoMessage() {}
 
 func (x *TeamList) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[137]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[154]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10579,7 +12023,7 @@ func (x *TeamList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TeamList.ProtoReflect.Descriptor instead.
 func (*TeamList) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{137}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{154}
 }
 
 func (x *TeamList) GetTeams() []*Team {
@@ -10611,7 +12055,7 @@ type TeamSearchRequest struct {
 
 func (x *TeamSearchRequest) Reset() {
 	*x = TeamSearchRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[138]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[155]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10623,7 +12067,7 @@ func (x *TeamSearchRequest) String() string {
 func (*TeamSearchRequest) ProtoMessage() {}
 
 func (x *TeamSearchRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[138]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[155]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10636,7 +12080,7 @@ func (x *TeamSearchRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TeamSearchRequest.ProtoReflect.Descriptor instead.
 func (*TeamSearchRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{138}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{155}
 }
 
 func (x *TeamSearchRequest) GetInput() string {
@@ -10673,7 +12117,7 @@ type TeamWriteChatMessageRequest struct {
 
 func (x *TeamWriteChatMessageRequest) Reset() {
 	*x = TeamWriteChatMessageRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[139]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[156]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10685,7 +12129,7 @@ func (x *TeamWriteChatMessageRequest) String() string {
 func (*TeamWriteChatMessageRequest) ProtoMessage() {}
 
 func (x *TeamWriteChatMessageRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[139]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[156]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10698,7 +12142,7 @@ func (x *TeamWriteChatMessageRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TeamWriteChatMessageRequest.ProtoReflect.Descriptor instead.
 func (*TeamWriteChatMessageRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{139}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{156}
 }
 
 func (x *TeamWriteChatMessageRequest) GetId() string {
@@ -10728,7 +12172,7 @@ type UnlockableCost struct {
 
 func (x *UnlockableCost) Reset() {
 	*x = UnlockableCost{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[140]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[157]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10740,7 +12184,7 @@ func (x *UnlockableCost) String() string {
 func (*UnlockableCost) ProtoMessage() {}
 
 func (x *UnlockableCost) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[140]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[157]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10753,7 +12197,7 @@ func (x *UnlockableCost) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UnlockableCost.ProtoReflect.Descriptor instead.
 func (*UnlockableCost) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{140}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{157}
 }
 
 func (x *UnlockableCost) GetItems() map[string]int64 {
@@ -10811,7 +12255,7 @@ type Unlockable struct {
 
 func (x *Unlockable) Reset() {
 	*x = Unlockable{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[141]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[158]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10823,7 +12267,7 @@ func (x *Unlockable) String() string {
 func (*Unlockable) ProtoMessage() {}
 
 func (x *Unlockable) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[141]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[158]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10836,7 +12280,7 @@ func (x *Unlockable) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Unlockable.ProtoReflect.Descriptor instead.
 func (*Unlockable) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{141}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{158}
 }
 
 func (x *Unlockable) GetId() string {
@@ -10964,7 +12408,7 @@ type UnlockableSlotCost struct {
 
 func (x *UnlockableSlotCost) Reset() {
 	*x = UnlockableSlotCost{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[142]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[159]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10976,7 +12420,7 @@ func (x *UnlockableSlotCost) String() string {
 func (*UnlockableSlotCost) ProtoMessage() {}
 
 func (x *UnlockableSlotCost) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[142]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[159]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10989,7 +12433,7 @@ func (x *UnlockableSlotCost) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UnlockableSlotCost.ProtoReflect.Descriptor instead.
 func (*UnlockableSlotCost) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{142}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{159}
 }
 
 func (x *UnlockableSlotCost) GetItems() map[string]int64 {
@@ -11033,7 +12477,7 @@ type UnlockablesList struct {
 
 func (x *UnlockablesList) Reset() {
 	*x = UnlockablesList{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[143]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[160]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11045,7 +12489,7 @@ func (x *UnlockablesList) String() string {
 func (*UnlockablesList) ProtoMessage() {}
 
 func (x *UnlockablesList) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[143]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[160]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11058,7 +12502,7 @@ func (x *UnlockablesList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UnlockablesList.ProtoReflect.Descriptor instead.
 func (*UnlockablesList) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{143}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{160}
 }
 
 func (x *UnlockablesList) GetUnlockables() []*Unlockable {
@@ -11139,7 +12583,7 @@ type UnlockablesReward struct {
 
 func (x *UnlockablesReward) Reset() {
 	*x = UnlockablesReward{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[144]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[161]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11151,7 +12595,7 @@ func (x *UnlockablesReward) String() string {
 func (*UnlockablesReward) ProtoMessage() {}
 
 func (x *UnlockablesReward) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[144]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[161]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11164,7 +12608,7 @@ func (x *UnlockablesReward) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UnlockablesReward.ProtoReflect.Descriptor instead.
 func (*UnlockablesReward) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{144}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{161}
 }
 
 func (x *UnlockablesReward) GetUnlockables() *UnlockablesList {
@@ -11199,7 +12643,7 @@ type UnlockablesRequest struct {
 
 func (x *UnlockablesRequest) Reset() {
 	*x = UnlockablesRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[145]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[162]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11211,7 +12655,7 @@ func (x *UnlockablesRequest) String() string {
 func (*UnlockablesRequest) ProtoMessage() {}
 
 func (x *UnlockablesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[145]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[162]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11224,7 +12668,7 @@ func (x *UnlockablesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UnlockablesRequest.ProtoReflect.Descriptor instead.
 func (*UnlockablesRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{145}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{162}
 }
 
 func (x *UnlockablesRequest) GetInstanceId() string {
@@ -11245,7 +12689,7 @@ type UnlockablesQueueAddRequest struct {
 
 func (x *UnlockablesQueueAddRequest) Reset() {
 	*x = UnlockablesQueueAddRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[146]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[163]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11257,7 +12701,7 @@ func (x *UnlockablesQueueAddRequest) String() string {
 func (*UnlockablesQueueAddRequest) ProtoMessage() {}
 
 func (x *UnlockablesQueueAddRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[146]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[163]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11270,7 +12714,7 @@ func (x *UnlockablesQueueAddRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UnlockablesQueueAddRequest.ProtoReflect.Descriptor instead.
 func (*UnlockablesQueueAddRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{146}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{163}
 }
 
 func (x *UnlockablesQueueAddRequest) GetInstanceIds() []string {
@@ -11291,7 +12735,7 @@ type UnlockablesQueueRemoveRequest struct {
 
 func (x *UnlockablesQueueRemoveRequest) Reset() {
 	*x = UnlockablesQueueRemoveRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[147]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[164]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11303,7 +12747,7 @@ func (x *UnlockablesQueueRemoveRequest) String() string {
 func (*UnlockablesQueueRemoveRequest) ProtoMessage() {}
 
 func (x *UnlockablesQueueRemoveRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[147]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[164]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11316,7 +12760,7 @@ func (x *UnlockablesQueueRemoveRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UnlockablesQueueRemoveRequest.ProtoReflect.Descriptor instead.
 func (*UnlockablesQueueRemoveRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{147}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{164}
 }
 
 func (x *UnlockablesQueueRemoveRequest) GetInstanceIds() []string {
@@ -11337,7 +12781,7 @@ type UnlockablesQueueSetRequest struct {
 
 func (x *UnlockablesQueueSetRequest) Reset() {
 	*x = UnlockablesQueueSetRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[148]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[165]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11349,7 +12793,7 @@ func (x *UnlockablesQueueSetRequest) String() string {
 func (*UnlockablesQueueSetRequest) ProtoMessage() {}
 
 func (x *UnlockablesQueueSetRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[148]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[165]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11362,7 +12806,7 @@ func (x *UnlockablesQueueSetRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UnlockablesQueueSetRequest.ProtoReflect.Descriptor instead.
 func (*UnlockablesQueueSetRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{148}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{165}
 }
 
 func (x *UnlockablesQueueSetRequest) GetInstanceIds() []string {
@@ -11413,7 +12857,7 @@ type SubAchievement struct {
 
 func (x *SubAchievement) Reset() {
 	*x = SubAchievement{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[149]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[166]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11425,7 +12869,7 @@ func (x *SubAchievement) String() string {
 func (*SubAchievement) ProtoMessage() {}
 
 func (x *SubAchievement) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[149]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[166]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11438,7 +12882,7 @@ func (x *SubAchievement) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SubAchievement.ProtoReflect.Descriptor instead.
 func (*SubAchievement) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{149}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{166}
 }
 
 func (x *SubAchievement) GetCategory() string {
@@ -11608,7 +13052,7 @@ type Achievement struct {
 
 func (x *Achievement) Reset() {
 	*x = Achievement{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[150]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[167]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11620,7 +13064,7 @@ func (x *Achievement) String() string {
 func (*Achievement) ProtoMessage() {}
 
 func (x *Achievement) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[150]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[167]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11633,7 +13077,7 @@ func (x *Achievement) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Achievement.ProtoReflect.Descriptor instead.
 func (*Achievement) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{150}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{167}
 }
 
 func (x *Achievement) GetCategory() string {
@@ -11810,7 +13254,7 @@ type AchievementList struct {
 
 func (x *AchievementList) Reset() {
 	*x = AchievementList{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[151]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[168]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11822,7 +13266,7 @@ func (x *AchievementList) String() string {
 func (*AchievementList) ProtoMessage() {}
 
 func (x *AchievementList) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[151]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[168]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11835,7 +13279,7 @@ func (x *AchievementList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AchievementList.ProtoReflect.Descriptor instead.
 func (*AchievementList) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{151}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{168}
 }
 
 func (x *AchievementList) GetAchievements() map[string]*Achievement {
@@ -11865,7 +13309,7 @@ type AchievementsClaimRequest struct {
 
 func (x *AchievementsClaimRequest) Reset() {
 	*x = AchievementsClaimRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[152]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[169]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11877,7 +13321,7 @@ func (x *AchievementsClaimRequest) String() string {
 func (*AchievementsClaimRequest) ProtoMessage() {}
 
 func (x *AchievementsClaimRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[152]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[169]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11890,7 +13334,7 @@ func (x *AchievementsClaimRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AchievementsClaimRequest.ProtoReflect.Descriptor instead.
 func (*AchievementsClaimRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{152}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{169}
 }
 
 func (x *AchievementsClaimRequest) GetIds() []string {
@@ -11916,7 +13360,7 @@ type AchievementsGetRequest struct {
 
 func (x *AchievementsGetRequest) Reset() {
 	*x = AchievementsGetRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[153]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[170]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11928,7 +13372,7 @@ func (x *AchievementsGetRequest) String() string {
 func (*AchievementsGetRequest) ProtoMessage() {}
 
 func (x *AchievementsGetRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[153]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[170]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11941,7 +13385,7 @@ func (x *AchievementsGetRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AchievementsGetRequest.ProtoReflect.Descriptor instead.
 func (*AchievementsGetRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{153}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{170}
 }
 
 // A response when an achievements update is acknowledged by the server.
@@ -11957,7 +13401,7 @@ type AchievementsUpdateAck struct {
 
 func (x *AchievementsUpdateAck) Reset() {
 	*x = AchievementsUpdateAck{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[154]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[171]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11969,7 +13413,7 @@ func (x *AchievementsUpdateAck) String() string {
 func (*AchievementsUpdateAck) ProtoMessage() {}
 
 func (x *AchievementsUpdateAck) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[154]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[171]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11982,7 +13426,7 @@ func (x *AchievementsUpdateAck) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AchievementsUpdateAck.ProtoReflect.Descriptor instead.
 func (*AchievementsUpdateAck) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{154}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{171}
 }
 
 func (x *AchievementsUpdateAck) GetAchievements() map[string]*Achievement {
@@ -12014,7 +13458,7 @@ type AchievementsUpdateRequest struct {
 
 func (x *AchievementsUpdateRequest) Reset() {
 	*x = AchievementsUpdateRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[155]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[172]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -12026,7 +13470,7 @@ func (x *AchievementsUpdateRequest) String() string {
 func (*AchievementsUpdateRequest) ProtoMessage() {}
 
 func (x *AchievementsUpdateRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[155]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[172]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -12039,7 +13483,7 @@ func (x *AchievementsUpdateRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AchievementsUpdateRequest.ProtoReflect.Descriptor instead.
 func (*AchievementsUpdateRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{155}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{172}
 }
 
 func (x *AchievementsUpdateRequest) GetIds() []string {
@@ -12078,7 +13522,7 @@ type StreakAvailableReward struct {
 
 func (x *StreakAvailableReward) Reset() {
 	*x = StreakAvailableReward{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[156]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[173]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -12090,7 +13534,7 @@ func (x *StreakAvailableReward) String() string {
 func (*StreakAvailableReward) ProtoMessage() {}
 
 func (x *StreakAvailableReward) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[156]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[173]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -12103,7 +13547,7 @@ func (x *StreakAvailableReward) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StreakAvailableReward.ProtoReflect.Descriptor instead.
 func (*StreakAvailableReward) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{156}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{173}
 }
 
 func (x *StreakAvailableReward) GetCountMin() int64 {
@@ -12144,7 +13588,7 @@ type StreakReward struct {
 
 func (x *StreakReward) Reset() {
 	*x = StreakReward{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[157]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[174]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -12156,7 +13600,7 @@ func (x *StreakReward) String() string {
 func (*StreakReward) ProtoMessage() {}
 
 func (x *StreakReward) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[157]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[174]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -12169,7 +13613,7 @@ func (x *StreakReward) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StreakReward.ProtoReflect.Descriptor instead.
 func (*StreakReward) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{157}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{174}
 }
 
 func (x *StreakReward) GetCountMin() int64 {
@@ -12255,7 +13699,7 @@ type Streak struct {
 
 func (x *Streak) Reset() {
 	*x = Streak{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[158]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[175]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -12267,7 +13711,7 @@ func (x *Streak) String() string {
 func (*Streak) ProtoMessage() {}
 
 func (x *Streak) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[158]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[175]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -12280,7 +13724,7 @@ func (x *Streak) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Streak.ProtoReflect.Descriptor instead.
 func (*Streak) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{158}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{175}
 }
 
 func (x *Streak) GetId() string {
@@ -12455,7 +13899,7 @@ type StreaksList struct {
 
 func (x *StreaksList) Reset() {
 	*x = StreaksList{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[159]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[176]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -12467,7 +13911,7 @@ func (x *StreaksList) String() string {
 func (*StreaksList) ProtoMessage() {}
 
 func (x *StreaksList) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[159]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[176]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -12480,7 +13924,7 @@ func (x *StreaksList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StreaksList.ProtoReflect.Descriptor instead.
 func (*StreaksList) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{159}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{176}
 }
 
 func (x *StreaksList) GetStreaks() map[string]*Streak {
@@ -12501,7 +13945,7 @@ type StreaksUpdateRequest struct {
 
 func (x *StreaksUpdateRequest) Reset() {
 	*x = StreaksUpdateRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[160]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[177]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -12513,7 +13957,7 @@ func (x *StreaksUpdateRequest) String() string {
 func (*StreaksUpdateRequest) ProtoMessage() {}
 
 func (x *StreaksUpdateRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[160]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[177]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -12526,7 +13970,7 @@ func (x *StreaksUpdateRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StreaksUpdateRequest.ProtoReflect.Descriptor instead.
 func (*StreaksUpdateRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{160}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{177}
 }
 
 func (x *StreaksUpdateRequest) GetUpdates() map[string]int64 {
@@ -12547,7 +13991,7 @@ type StreaksClaimRequest struct {
 
 func (x *StreaksClaimRequest) Reset() {
 	*x = StreaksClaimRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[161]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[178]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -12559,7 +14003,7 @@ func (x *StreaksClaimRequest) String() string {
 func (*StreaksClaimRequest) ProtoMessage() {}
 
 func (x *StreaksClaimRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[161]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[178]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -12572,7 +14016,7 @@ func (x *StreaksClaimRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StreaksClaimRequest.ProtoReflect.Descriptor instead.
 func (*StreaksClaimRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{161}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{178}
 }
 
 func (x *StreaksClaimRequest) GetIds() []string {
@@ -12593,7 +14037,7 @@ type StreaksResetRequest struct {
 
 func (x *StreaksResetRequest) Reset() {
 	*x = StreaksResetRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[162]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[179]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -12605,7 +14049,7 @@ func (x *StreaksResetRequest) String() string {
 func (*StreaksResetRequest) ProtoMessage() {}
 
 func (x *StreaksResetRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[162]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[179]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -12618,7 +14062,7 @@ func (x *StreaksResetRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StreaksResetRequest.ProtoReflect.Descriptor instead.
 func (*StreaksResetRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{162}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{179}
 }
 
 func (x *StreaksResetRequest) GetIds() []string {
@@ -12645,7 +14089,7 @@ type SyncInventoryItem struct {
 
 func (x *SyncInventoryItem) Reset() {
 	*x = SyncInventoryItem{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[163]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[180]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -12657,7 +14101,7 @@ func (x *SyncInventoryItem) String() string {
 func (*SyncInventoryItem) ProtoMessage() {}
 
 func (x *SyncInventoryItem) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[163]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[180]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -12670,7 +14114,7 @@ func (x *SyncInventoryItem) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SyncInventoryItem.ProtoReflect.Descriptor instead.
 func (*SyncInventoryItem) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{163}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{180}
 }
 
 func (x *SyncInventoryItem) GetItemId() string {
@@ -12712,7 +14156,7 @@ type SyncInventory struct {
 
 func (x *SyncInventory) Reset() {
 	*x = SyncInventory{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[164]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[181]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -12724,7 +14168,7 @@ func (x *SyncInventory) String() string {
 func (*SyncInventory) ProtoMessage() {}
 
 func (x *SyncInventory) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[164]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[181]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -12737,7 +14181,7 @@ func (x *SyncInventory) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SyncInventory.ProtoReflect.Descriptor instead.
 func (*SyncInventory) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{164}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{181}
 }
 
 func (x *SyncInventory) GetItems() map[string]*SyncInventoryItem {
@@ -12760,7 +14204,7 @@ type SyncEconomy struct {
 
 func (x *SyncEconomy) Reset() {
 	*x = SyncEconomy{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[165]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[182]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -12772,7 +14216,7 @@ func (x *SyncEconomy) String() string {
 func (*SyncEconomy) ProtoMessage() {}
 
 func (x *SyncEconomy) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[165]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[182]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -12785,7 +14229,7 @@ func (x *SyncEconomy) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SyncEconomy.ProtoReflect.Descriptor instead.
 func (*SyncEconomy) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{165}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{182}
 }
 
 func (x *SyncEconomy) GetCurrencies() map[string]int64 {
@@ -12821,7 +14265,7 @@ type SyncAchievementsUpdate struct {
 
 func (x *SyncAchievementsUpdate) Reset() {
 	*x = SyncAchievementsUpdate{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[166]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[183]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -12833,7 +14277,7 @@ func (x *SyncAchievementsUpdate) String() string {
 func (*SyncAchievementsUpdate) ProtoMessage() {}
 
 func (x *SyncAchievementsUpdate) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[166]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[183]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -12846,7 +14290,7 @@ func (x *SyncAchievementsUpdate) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SyncAchievementsUpdate.ProtoReflect.Descriptor instead.
 func (*SyncAchievementsUpdate) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{166}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{183}
 }
 
 func (x *SyncAchievementsUpdate) GetCount() int64 {
@@ -12895,7 +14339,7 @@ type SyncAchievements struct {
 
 func (x *SyncAchievements) Reset() {
 	*x = SyncAchievements{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[167]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[184]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -12907,7 +14351,7 @@ func (x *SyncAchievements) String() string {
 func (*SyncAchievements) ProtoMessage() {}
 
 func (x *SyncAchievements) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[167]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[184]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -12920,7 +14364,7 @@ func (x *SyncAchievements) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SyncAchievements.ProtoReflect.Descriptor instead.
 func (*SyncAchievements) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{167}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{184}
 }
 
 func (x *SyncAchievements) GetAchievements() map[string]*SyncAchievementsUpdate {
@@ -12943,7 +14387,7 @@ type SyncEnergyState struct {
 
 func (x *SyncEnergyState) Reset() {
 	*x = SyncEnergyState{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[168]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[185]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -12955,7 +14399,7 @@ func (x *SyncEnergyState) String() string {
 func (*SyncEnergyState) ProtoMessage() {}
 
 func (x *SyncEnergyState) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[168]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[185]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -12968,7 +14412,7 @@ func (x *SyncEnergyState) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SyncEnergyState.ProtoReflect.Descriptor instead.
 func (*SyncEnergyState) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{168}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{185}
 }
 
 func (x *SyncEnergyState) GetCount() int64 {
@@ -12998,7 +14442,7 @@ type SyncEnergy struct {
 
 func (x *SyncEnergy) Reset() {
 	*x = SyncEnergy{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[169]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[186]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -13010,7 +14454,7 @@ func (x *SyncEnergy) String() string {
 func (*SyncEnergy) ProtoMessage() {}
 
 func (x *SyncEnergy) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[169]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[186]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -13023,7 +14467,7 @@ func (x *SyncEnergy) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SyncEnergy.ProtoReflect.Descriptor instead.
 func (*SyncEnergy) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{169}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{186}
 }
 
 func (x *SyncEnergy) GetEnergies() map[string]*SyncEnergyState {
@@ -13055,7 +14499,7 @@ type SyncEventLeaderboardUpdate struct {
 
 func (x *SyncEventLeaderboardUpdate) Reset() {
 	*x = SyncEventLeaderboardUpdate{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[170]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[187]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -13067,7 +14511,7 @@ func (x *SyncEventLeaderboardUpdate) String() string {
 func (*SyncEventLeaderboardUpdate) ProtoMessage() {}
 
 func (x *SyncEventLeaderboardUpdate) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[170]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[187]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -13080,7 +14524,7 @@ func (x *SyncEventLeaderboardUpdate) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SyncEventLeaderboardUpdate.ProtoReflect.Descriptor instead.
 func (*SyncEventLeaderboardUpdate) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{170}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{187}
 }
 
 func (x *SyncEventLeaderboardUpdate) GetScore() int64 {
@@ -13115,7 +14559,7 @@ type SyncEventLeaderboards struct {
 
 func (x *SyncEventLeaderboards) Reset() {
 	*x = SyncEventLeaderboards{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[171]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[188]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -13127,7 +14571,7 @@ func (x *SyncEventLeaderboards) String() string {
 func (*SyncEventLeaderboards) ProtoMessage() {}
 
 func (x *SyncEventLeaderboards) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[171]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[188]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -13140,7 +14584,7 @@ func (x *SyncEventLeaderboards) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SyncEventLeaderboards.ProtoReflect.Descriptor instead.
 func (*SyncEventLeaderboards) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{171}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{188}
 }
 
 func (x *SyncEventLeaderboards) GetEventLeaderboards() map[string]*SyncEventLeaderboardUpdate {
@@ -13167,7 +14611,7 @@ type SyncProgressionUpdate struct {
 
 func (x *SyncProgressionUpdate) Reset() {
 	*x = SyncProgressionUpdate{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[172]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[189]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -13179,7 +14623,7 @@ func (x *SyncProgressionUpdate) String() string {
 func (*SyncProgressionUpdate) ProtoMessage() {}
 
 func (x *SyncProgressionUpdate) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[172]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[189]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -13192,7 +14636,7 @@ func (x *SyncProgressionUpdate) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SyncProgressionUpdate.ProtoReflect.Descriptor instead.
 func (*SyncProgressionUpdate) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{172}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{189}
 }
 
 func (x *SyncProgressionUpdate) GetCounts() map[string]int64 {
@@ -13234,7 +14678,7 @@ type SyncProgressions struct {
 
 func (x *SyncProgressions) Reset() {
 	*x = SyncProgressions{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[173]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[190]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -13246,7 +14690,7 @@ func (x *SyncProgressions) String() string {
 func (*SyncProgressions) ProtoMessage() {}
 
 func (x *SyncProgressions) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[173]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[190]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -13259,7 +14703,7 @@ func (x *SyncProgressions) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SyncProgressions.ProtoReflect.Descriptor instead.
 func (*SyncProgressions) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{173}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{190}
 }
 
 func (x *SyncProgressions) GetProgressions() map[string]*SyncProgressionUpdate {
@@ -13286,7 +14730,7 @@ type SyncTutorials struct {
 
 func (x *SyncTutorials) Reset() {
 	*x = SyncTutorials{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[174]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[191]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -13298,7 +14742,7 @@ func (x *SyncTutorials) String() string {
 func (*SyncTutorials) ProtoMessage() {}
 
 func (x *SyncTutorials) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[174]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[191]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -13311,7 +14755,7 @@ func (x *SyncTutorials) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SyncTutorials.ProtoReflect.Descriptor instead.
 func (*SyncTutorials) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{174}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{191}
 }
 
 func (x *SyncTutorials) GetAccepts() []string {
@@ -13359,7 +14803,7 @@ type SyncUnlockableUpdate struct {
 
 func (x *SyncUnlockableUpdate) Reset() {
 	*x = SyncUnlockableUpdate{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[175]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[192]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -13371,7 +14815,7 @@ func (x *SyncUnlockableUpdate) String() string {
 func (*SyncUnlockableUpdate) ProtoMessage() {}
 
 func (x *SyncUnlockableUpdate) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[175]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[192]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -13384,7 +14828,7 @@ func (x *SyncUnlockableUpdate) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SyncUnlockableUpdate.ProtoReflect.Descriptor instead.
 func (*SyncUnlockableUpdate) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{175}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{192}
 }
 
 func (x *SyncUnlockableUpdate) GetUnlockableId() string {
@@ -13428,7 +14872,7 @@ type SyncUnlockables struct {
 
 func (x *SyncUnlockables) Reset() {
 	*x = SyncUnlockables{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[176]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[193]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -13440,7 +14884,7 @@ func (x *SyncUnlockables) String() string {
 func (*SyncUnlockables) ProtoMessage() {}
 
 func (x *SyncUnlockables) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[176]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[193]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -13453,7 +14897,7 @@ func (x *SyncUnlockables) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SyncUnlockables.ProtoReflect.Descriptor instead.
 func (*SyncUnlockables) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{176}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{193}
 }
 
 func (x *SyncUnlockables) GetRemoves() []string {
@@ -13493,7 +14937,7 @@ type SyncStreakUpdate struct {
 
 func (x *SyncStreakUpdate) Reset() {
 	*x = SyncStreakUpdate{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[177]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[194]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -13505,7 +14949,7 @@ func (x *SyncStreakUpdate) String() string {
 func (*SyncStreakUpdate) ProtoMessage() {}
 
 func (x *SyncStreakUpdate) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[177]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[194]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -13518,7 +14962,7 @@ func (x *SyncStreakUpdate) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SyncStreakUpdate.ProtoReflect.Descriptor instead.
 func (*SyncStreakUpdate) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{177}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{194}
 }
 
 func (x *SyncStreakUpdate) GetCount() int64 {
@@ -13583,7 +15027,7 @@ type SyncStreaks struct {
 
 func (x *SyncStreaks) Reset() {
 	*x = SyncStreaks{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[178]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[195]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -13595,7 +15039,7 @@ func (x *SyncStreaks) String() string {
 func (*SyncStreaks) ProtoMessage() {}
 
 func (x *SyncStreaks) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[178]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[195]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -13608,7 +15052,7 @@ func (x *SyncStreaks) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SyncStreaks.ProtoReflect.Descriptor instead.
 func (*SyncStreaks) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{178}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{195}
 }
 
 func (x *SyncStreaks) GetResets() []string {
@@ -13654,7 +15098,7 @@ type SyncRequest struct {
 
 func (x *SyncRequest) Reset() {
 	*x = SyncRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[179]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[196]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -13666,7 +15110,7 @@ func (x *SyncRequest) String() string {
 func (*SyncRequest) ProtoMessage() {}
 
 func (x *SyncRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[179]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[196]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -13679,7 +15123,7 @@ func (x *SyncRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SyncRequest.ProtoReflect.Descriptor instead.
 func (*SyncRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{179}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{196}
 }
 
 func (x *SyncRequest) GetInventory() *SyncInventory {
@@ -13786,7 +15230,7 @@ type SyncResponse struct {
 
 func (x *SyncResponse) Reset() {
 	*x = SyncResponse{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[180]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[197]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -13798,7 +15242,7 @@ func (x *SyncResponse) String() string {
 func (*SyncResponse) ProtoMessage() {}
 
 func (x *SyncResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[180]
+	mi := &file_pamlogix_pamlogix_proto_msgTypes[197]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -13811,7 +15255,7 @@ func (x *SyncResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SyncResponse.ProtoReflect.Descriptor instead.
 func (*SyncResponse) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{180}
+	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{197}
 }
 
 func (x *SyncResponse) GetWallet() map[string]int64 {
@@ -14292,7 +15736,125 @@ const file_pamlogix_pamlogix_proto_rawDesc = "" +
 	"\x1cIncentiveRecipientGetRequest\x12\x12\n" +
 	"\x04code\x18\x01 \x01(\tR\x04code\"4\n" +
 	"\x1eIncentiveRecipientClaimRequest\x12\x12\n" +
-	"\x04code\x18\x01 \x01(\tR\x04code\"W\n" +
+	"\x04code\x18\x01 \x01(\tR\x04code\"\xd0\x02\n" +
+	"\x16ChallengeCreateRequest\x12\x1f\n" +
+	"\vtemplate_id\x18\x01 \x01(\tR\n" +
+	"templateId\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12 \n" +
+	"\vdescription\x18\x03 \x01(\tR\vdescription\x12\x1a\n" +
+	"\binvitees\x18\x04 \x03(\tR\binvitees\x12\x12\n" +
+	"\x04open\x18\x05 \x01(\bR\x04open\x12\x1d\n" +
+	"\n" +
+	"max_scores\x18\x06 \x01(\x03R\tmaxScores\x12&\n" +
+	"\x0fstart_delay_sec\x18\a \x01(\x03R\rstartDelaySec\x12!\n" +
+	"\fduration_sec\x18\b \x01(\x03R\vdurationSec\x12)\n" +
+	"\x10max_participants\x18\t \x01(\x03R\x0fmaxParticipants\x12\x1a\n" +
+	"\bcategory\x18\n" +
+	" \x01(\tR\bcategory\"9\n" +
+	"\x14ChallengeJoinRequest\x12!\n" +
+	"\fchallenge_id\x18\x01 \x01(\tR\vchallengeId\":\n" +
+	"\x15ChallengeLeaveRequest\x12!\n" +
+	"\fchallenge_id\x18\x01 \x01(\tR\vchallengeId\":\n" +
+	"\x15ChallengeClaimRequest\x12!\n" +
+	"\fchallenge_id\x18\x01 \x01(\tR\vchallengeId\"^\n" +
+	"\x16ChallengeSearchRequest\x12\x12\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\x12\x1a\n" +
+	"\bcategory\x18\x02 \x01(\tR\bcategory\x12\x14\n" +
+	"\x05limit\x18\x03 \x01(\x03R\x05limit\"W\n" +
+	"\x16ChallengeInviteRequest\x12!\n" +
+	"\fchallenge_id\x18\x01 \x01(\tR\vchallengeId\x12\x1a\n" +
+	"\binvitees\x18\x02 \x03(\tR\binvitees\"\x8e\x01\n" +
+	"\x1bChallengeSubmitScoreRequest\x12!\n" +
+	"\fchallenge_id\x18\x01 \x01(\tR\vchallengeId\x12\x14\n" +
+	"\x05score\x18\x02 \x01(\x03R\x05score\x12\x1a\n" +
+	"\bsubscore\x18\x03 \x01(\x03R\bsubscore\x12\x1a\n" +
+	"\bmetadata\x18\x04 \x01(\tR\bmetadata\"\x94\x01\n" +
+	"\x13ChallengeRewardTier\x12\x19\n" +
+	"\brank_max\x18\x01 \x01(\x03R\arankMax\x12\x19\n" +
+	"\brank_min\x18\x02 \x01(\x03R\arankMin\x12G\n" +
+	"\x11available_rewards\x18\x03 \x01(\v2\x1a.pamlogix.AvailableRewardsR\x10availableRewards\"\xff\x02\n" +
+	"\x0eChallengeScore\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1a\n" +
+	"\busername\x18\x02 \x01(\tR\busername\x12!\n" +
+	"\fdisplay_name\x18\x03 \x01(\tR\vdisplayName\x12\x1d\n" +
+	"\n" +
+	"avatar_url\x18\x04 \x01(\tR\tavatarUrl\x12&\n" +
+	"\x0fcreate_time_sec\x18\x05 \x01(\x03R\rcreateTimeSec\x12&\n" +
+	"\x0fupdate_time_sec\x18\x06 \x01(\x03R\rupdateTimeSec\x12\x12\n" +
+	"\x04rank\x18\a \x01(\x03R\x04rank\x12\x14\n" +
+	"\x05score\x18\b \x01(\x03R\x05score\x12\x1a\n" +
+	"\bsubscore\x18\t \x01(\x03R\bsubscore\x12\x1d\n" +
+	"\n" +
+	"num_scores\x18\n" +
+	" \x01(\x03R\tnumScores\x12\x1a\n" +
+	"\bmetadata\x18\v \x01(\tR\bmetadata\x12.\n" +
+	"\x05state\x18\f \x01(\x0e2\x18.pamlogix.ChallengeStateR\x05state\"\xa4\a\n" +
+	"\tChallenge\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12 \n" +
+	"\vdescription\x18\x03 \x01(\tR\vdescription\x12\x1c\n" +
+	"\tascending\x18\x04 \x01(\bR\tascending\x12\x1a\n" +
+	"\boperator\x18\x05 \x01(\tR\boperator\x12$\n" +
+	"\x0estart_time_sec\x18\x06 \x01(\x03R\fstartTimeSec\x12$\n" +
+	"\x0eclaim_time_sec\x18\a \x01(\x03R\fclaimTimeSec\x12 \n" +
+	"\fend_time_sec\x18\b \x01(\x03R\n" +
+	"endTimeSec\x12@\n" +
+	"\freward_tiers\x18\t \x03(\v2\x1d.pamlogix.ChallengeRewardTierR\vrewardTiers\x12G\n" +
+	"\x11available_rewards\x18\n" +
+	" \x01(\v2\x1a.pamlogix.AvailableRewardsR\x10availableRewards\x12b\n" +
+	"\x15additional_properties\x18\v \x03(\v2-.pamlogix.Challenge.AdditionalPropertiesEntryR\x14additionalProperties\x12\x12\n" +
+	"\x04size\x18\f \x01(\x03R\x04size\x12\x19\n" +
+	"\bmax_size\x18\r \x01(\x03R\amaxSize\x12\"\n" +
+	"\rmax_num_score\x18\x0e \x01(\x03R\vmaxNumScore\x120\n" +
+	"\x06scores\x18\x0f \x03(\v2\x18.pamlogix.ChallengeScoreR\x06scores\x12\x1b\n" +
+	"\tis_active\x18\x10 \x01(\bR\bisActive\x12(\n" +
+	"\x10current_time_sec\x18\x11 \x01(\x03R\x0ecurrentTimeSec\x12\x1b\n" +
+	"\tcan_claim\x18\x13 \x01(\bR\bcanClaim\x12.\n" +
+	"\x05state\x18\x14 \x01(\x0e2\x18.pamlogix.ChallengeStateR\x05state\x12(\n" +
+	"\x06reward\x18\x15 \x01(\v2\x10.pamlogix.RewardR\x06reward\x12\x1a\n" +
+	"\bcategory\x18\x16 \x01(\tR\bcategory\x12\x12\n" +
+	"\x04open\x18\x17 \x01(\bR\x04open\x1aG\n" +
+	"\x19AdditionalPropertiesEntry\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"W\n" +
+	"\x14ChallengeListRequest\x12\x1e\n" +
+	"\n" +
+	"categories\x18\x01 \x03(\tR\n" +
+	"categories\x12\x1f\n" +
+	"\vwith_scores\x18\x02 \x01(\bR\n" +
+	"withScores\"Y\n" +
+	"\x13ChallengeGetRequest\x12!\n" +
+	"\fchallenge_id\x18\x01 \x01(\tR\vchallengeId\x12\x1f\n" +
+	"\vwith_scores\x18\x02 \x01(\bR\n" +
+	"withScores\"E\n" +
+	"\x0eChallengesList\x123\n" +
+	"\n" +
+	"challenges\x18\x01 \x03(\v2\x13.pamlogix.ChallengeR\n" +
+	"challenges\"<\n" +
+	"\x16ChallengeMaxMinPlayers\x12\x10\n" +
+	"\x03min\x18\x01 \x01(\x03R\x03min\x12\x10\n" +
+	"\x03max\x18\x02 \x01(\x03R\x03max\"K\n" +
+	"\x17ChallengeMinMaxDuration\x12\x17\n" +
+	"\amin_sec\x18\x01 \x01(\x03R\x06minSec\x12\x17\n" +
+	"\amax_sec\x18\x02 \x01(\x03R\x06maxSec\"\x9f\x04\n" +
+	"\x11ChallengeTemplate\x12@\n" +
+	"\freward_tiers\x18\x01 \x03(\v2\x1d.pamlogix.ChallengeRewardTierR\vrewardTiers\x12:\n" +
+	"\aplayers\x18\x02 \x01(\v2 .pamlogix.ChallengeMaxMinPlayersR\aplayers\x12=\n" +
+	"\bduration\x18\x03 \x01(\v2!.pamlogix.ChallengeMinMaxDurationR\bduration\x12&\n" +
+	"\x0fstart_delay_max\x18\x04 \x01(\x03R\rstartDelayMax\x12\x12\n" +
+	"\x04open\x18\x05 \x01(\bR\x04open\x12\"\n" +
+	"\rmax_num_score\x18\x06 \x01(\x03R\vmaxNumScore\x12\x1c\n" +
+	"\tascending\x18\a \x01(\bR\tascending\x12\x1a\n" +
+	"\boperator\x18\b \x01(\tR\boperator\x12j\n" +
+	"\x15additional_properties\x18\t \x03(\v25.pamlogix.ChallengeTemplate.AdditionalPropertiesEntryR\x14additionalProperties\x1aG\n" +
+	"\x19AdditionalPropertiesEntry\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
+	"\x05value\x18\x02 \x01(\tR\x05value:\x028\x01\"\xba\x01\n" +
+	"\x12ChallengeTemplates\x12I\n" +
+	"\ttemplates\x18\x01 \x03(\v2+.pamlogix.ChallengeTemplates.TemplatesEntryR\ttemplates\x1aY\n" +
+	"\x0eTemplatesEntry\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x121\n" +
+	"\x05value\x18\x02 \x01(\v2\x1b.pamlogix.ChallengeTemplateR\x05value:\x028\x01\"W\n" +
 	"\x14EventLeaderboardList\x12\x1f\n" +
 	"\vwith_scores\x18\x01 \x01(\bR\n" +
 	"withScores\x12\x1e\n" +
@@ -14300,12 +15862,13 @@ const file_pamlogix_pamlogix_proto_rawDesc = "" +
 	"categories\x18\x02 \x03(\tR\n" +
 	"categories\"%\n" +
 	"\x13EventLeaderboardGet\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\"v\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\"\xb6\x01\n" +
 	"\x16EventLeaderboardUpdate\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x14\n" +
 	"\x05score\x18\x02 \x01(\x03R\x05score\x12\x1a\n" +
 	"\bsubscore\x18\x03 \x01(\x03R\bsubscore\x12\x1a\n" +
-	"\bmetadata\x18\x04 \x01(\tR\bmetadata\"'\n" +
+	"\bmetadata\x18\x04 \x01(\tR\bmetadata\x12>\n" +
+	"\x1bconditional_metadata_update\x18\x05 \x01(\bR\x19conditionalMetadataUpdate\"'\n" +
 	"\x15EventLeaderboardClaim\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\"&\n" +
 	"\x14EventLeaderboardRoll\x12\x0e\n" +
@@ -15264,7 +16827,7 @@ const file_pamlogix_pamlogix_proto_rawDesc = "" +
 	"\astreaks\x18\f \x01(\v2\x15.pamlogix.StreaksListR\astreaks\x1a9\n" +
 	"\vWalletEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\x03R\x05value:\x028\x01*\xc0,\n" +
+	"\x05value\x18\x02 \x01(\x03R\x05value:\x028\x01*\xe61\n" +
 	"\x05RpcId\x12\x16\n" +
 	"\x12RPC_ID_UNSPECIFIED\x10\x00\x12B\n" +
 	"\x15RPC_ID_INVENTORY_LIST\x10\x01\x1a'\xc2>\x14InventoryListRequest\xca>\rInventoryList\x12L\n" +
@@ -15346,7 +16909,17 @@ const file_pamlogix_pamlogix_proto_rawDesc = "" +
 	"\x13RPC_ID_STREAKS_LIST\x10K\x1a\x11\xc2>\x00\xca>\vStreaksList\x12@\n" +
 	"\x15RPC_ID_STREAKS_UPDATE\x10L\x1a%\xc2>\x14StreaksUpdateRequest\xca>\vStreaksList\x12>\n" +
 	"\x14RPC_ID_STREAKS_CLAIM\x10M\x1a$\xc2>\x13StreaksClaimRequest\xca>\vStreaksList\x12>\n" +
-	"\x14RPC_ID_STREAKS_RESET\x10N\x1a$\xc2>\x13StreaksResetRequest\xca>\vStreaksList\x12%\n" +
+	"\x14RPC_ID_STREAKS_RESET\x10N\x1a$\xc2>\x13StreaksResetRequest\xca>\vStreaksList\x12=\n" +
+	"\x1fRPC_ID_CHALLENGES_GET_TEMPLATES\x10Q\x1a\x18\xc2>\x00\xca>\x12ChallengeTemplates\x12<\n" +
+	"\x14RPC_ID_CHALLENGE_GET\x10R\x1a\"\xc2>\x13ChallengeGetRequest\xca>\tChallenge\x12C\n" +
+	"\x15RPC_ID_CHALLENGE_LIST\x10S\x1a(\xc2>\x14ChallengeListRequest\xca>\x0eChallengesList\x12B\n" +
+	"\x17RPC_ID_CHALLENGE_CREATE\x10T\x1a%\xc2>\x16ChallengeCreateRequest\xca>\tChallenge\x12>\n" +
+	"\x15RPC_ID_CHALLENGE_JOIN\x10U\x1a#\xc2>\x14ChallengeJoinRequest\xca>\tChallenge\x12@\n" +
+	"\x16RPC_ID_CHALLENGE_LEAVE\x10V\x1a$\xc2>\x15ChallengeLeaveRequest\xca>\tChallenge\x12M\n" +
+	"\x1dRPC_ID_CHALLENGE_SUBMIT_SCORE\x10W\x1a*\xc2>\x1bChallengeSubmitScoreRequest\xca>\tChallenge\x12@\n" +
+	"\x16RPC_ID_CHALLENGE_CLAIM\x10X\x1a$\xc2>\x15ChallengeClaimRequest\xca>\tChallenge\x12G\n" +
+	"\x17RPC_ID_CHALLENGE_SEARCH\x10Y\x1a*\xc2>\x16ChallengeSearchRequest\xca>\x0eChallengesList\x12B\n" +
+	"\x17RPC_ID_CHALLENGE_INVITE\x10Z\x1a%\xc2>\x16ChallengeInviteRequest\xca>\tChallenge\x12%\n" +
 	" RPC_ID_ECONOMY_PLACEMENT_SUCCESS\x10\xe9\a\x12\"\n" +
 	"\x1dRPC_ID_ECONOMY_PLACEMENT_FAIL\x10\xea\a\x12'\n" +
 	"\"RPC_ID_STORAGE_PERSONALIZER_UPLOAD\x10\xeb\a*\xb6\x01\n" +
@@ -15379,7 +16952,14 @@ const file_pamlogix_pamlogix_proto_rawDesc = "" +
 	"\x1aECONOMY_STORE_TYPE_DISCORD\x10\x04*J\n" +
 	"\rIncentiveType\x12\x1e\n" +
 	"\x1aINCENTIVE_TYPE_UNSPECIFIED\x10\x00\x12\x19\n" +
-	"\x15INCENTIVE_TYPE_INVITE\x10\x01*\xbe\x01\n" +
+	"\x15INCENTIVE_TYPE_INVITE\x10\x01*\xb8\x01\n" +
+	"\x0eChallengeState\x12\x18\n" +
+	"\x14CHALLENGE_STATE_NONE\x10\x00\x12\x1b\n" +
+	"\x17CHALLENGE_STATE_INVITED\x10\x01\x12\x1a\n" +
+	"\x16CHALLENGE_STATE_JOINED\x10\x02\x12\x1b\n" +
+	"\x17CHALLENGE_STATE_CLAIMED\x10\x03\x12\x1c\n" +
+	"\x18CHALLENGE_STATE_DECLINED\x10\x04\x12\x18\n" +
+	"\x14CHALLENGE_STATE_LEFT\x10\x05*\xbe\x01\n" +
 	"\rTutorialState\x12\x17\n" +
 	"\x13TUTORIAL_STATE_NONE\x10\x00\x12\x1b\n" +
 	"\x17TUTORIAL_STATE_ACCEPTED\x10\x01\x12\x1b\n" +
@@ -15402,8 +16982,8 @@ func file_pamlogix_pamlogix_proto_rawDescGZIP() []byte {
 	return file_pamlogix_pamlogix_proto_rawDescData
 }
 
-var file_pamlogix_pamlogix_proto_enumTypes = make([]protoimpl.EnumInfo, 8)
-var file_pamlogix_pamlogix_proto_msgTypes = make([]protoimpl.MessageInfo, 285)
+var file_pamlogix_pamlogix_proto_enumTypes = make([]protoimpl.EnumInfo, 9)
+var file_pamlogix_pamlogix_proto_msgTypes = make([]protoimpl.MessageInfo, 305)
 var file_pamlogix_pamlogix_proto_goTypes = []any{
 	(RpcId)(0),                                       // 0: pamlogix.RpcId
 	(RpcSocketId)(0),                                 // 1: pamlogix.RpcSocketId
@@ -15412,602 +16992,638 @@ var file_pamlogix_pamlogix_proto_goTypes = []any{
 	(StatUpdateOperator)(0),                          // 4: pamlogix.StatUpdateOperator
 	(EconomyStoreType)(0),                            // 5: pamlogix.EconomyStoreType
 	(IncentiveType)(0),                               // 6: pamlogix.IncentiveType
-	(TutorialState)(0),                               // 7: pamlogix.TutorialState
-	(*ProgressionCost)(nil),                          // 8: pamlogix.ProgressionCost
-	(*ProgressionPreconditions)(nil),                 // 9: pamlogix.ProgressionPreconditions
-	(*ProgressionPreconditionsBlock)(nil),            // 10: pamlogix.ProgressionPreconditionsBlock
-	(*Progression)(nil),                              // 11: pamlogix.Progression
-	(*ProgressionDelta)(nil),                         // 12: pamlogix.ProgressionDelta
-	(*ProgressionList)(nil),                          // 13: pamlogix.ProgressionList
-	(*ProgressionGetRequest)(nil),                    // 14: pamlogix.ProgressionGetRequest
-	(*ProgressionPurchaseRequest)(nil),               // 15: pamlogix.ProgressionPurchaseRequest
-	(*ProgressionUpdateRequest)(nil),                 // 16: pamlogix.ProgressionUpdateRequest
-	(*ProgressionResetRequest)(nil),                  // 17: pamlogix.ProgressionResetRequest
-	(*StatUpdate)(nil),                               // 18: pamlogix.StatUpdate
-	(*StatUpdateRequest)(nil),                        // 19: pamlogix.StatUpdateRequest
-	(*Stat)(nil),                                     // 20: pamlogix.Stat
-	(*StatList)(nil),                                 // 21: pamlogix.StatList
-	(*ChannelMessageAck)(nil),                        // 22: pamlogix.ChannelMessageAck
-	(*DevicePrefsRequest)(nil),                       // 23: pamlogix.DevicePrefsRequest
-	(*RewardInventoryItem)(nil),                      // 24: pamlogix.RewardInventoryItem
-	(*RewardEnergyModifier)(nil),                     // 25: pamlogix.RewardEnergyModifier
-	(*RewardModifier)(nil),                           // 26: pamlogix.RewardModifier
-	(*ActiveRewardModifier)(nil),                     // 27: pamlogix.ActiveRewardModifier
-	(*Reward)(nil),                                   // 28: pamlogix.Reward
-	(*RewardList)(nil),                               // 29: pamlogix.RewardList
-	(*RewardRangeInt32)(nil),                         // 30: pamlogix.RewardRangeInt32
-	(*RewardRangeInt64)(nil),                         // 31: pamlogix.RewardRangeInt64
-	(*RewardRangeUInt64)(nil),                        // 32: pamlogix.RewardRangeUInt64
-	(*RewardRangeDouble)(nil),                        // 33: pamlogix.RewardRangeDouble
-	(*AvailableRewardsStringPropertyOption)(nil),     // 34: pamlogix.AvailableRewardsStringPropertyOption
-	(*AvailableRewardsStringProperty)(nil),           // 35: pamlogix.AvailableRewardsStringProperty
-	(*AvailableRewardsItem)(nil),                     // 36: pamlogix.AvailableRewardsItem
-	(*AvailableRewardsItemSet)(nil),                  // 37: pamlogix.AvailableRewardsItemSet
-	(*AvailableRewardsCurrency)(nil),                 // 38: pamlogix.AvailableRewardsCurrency
-	(*AvailableRewardsEnergy)(nil),                   // 39: pamlogix.AvailableRewardsEnergy
-	(*AvailableRewardsEnergyModifier)(nil),           // 40: pamlogix.AvailableRewardsEnergyModifier
-	(*AvailableRewardsRewardModifier)(nil),           // 41: pamlogix.AvailableRewardsRewardModifier
-	(*AvailableRewardsContents)(nil),                 // 42: pamlogix.AvailableRewardsContents
-	(*AvailableRewards)(nil),                         // 43: pamlogix.AvailableRewards
-	(*IncentiveClaim)(nil),                           // 44: pamlogix.IncentiveClaim
-	(*Incentive)(nil),                                // 45: pamlogix.Incentive
-	(*IncentiveList)(nil),                            // 46: pamlogix.IncentiveList
-	(*IncentiveInfo)(nil),                            // 47: pamlogix.IncentiveInfo
-	(*IncentiveSenderCreateRequest)(nil),             // 48: pamlogix.IncentiveSenderCreateRequest
-	(*IncentiveSenderDeleteRequest)(nil),             // 49: pamlogix.IncentiveSenderDeleteRequest
-	(*IncentiveSenderClaimRequest)(nil),              // 50: pamlogix.IncentiveSenderClaimRequest
-	(*IncentiveRecipientGetRequest)(nil),             // 51: pamlogix.IncentiveRecipientGetRequest
-	(*IncentiveRecipientClaimRequest)(nil),           // 52: pamlogix.IncentiveRecipientClaimRequest
-	(*EventLeaderboardList)(nil),                     // 53: pamlogix.EventLeaderboardList
-	(*EventLeaderboardGet)(nil),                      // 54: pamlogix.EventLeaderboardGet
-	(*EventLeaderboardUpdate)(nil),                   // 55: pamlogix.EventLeaderboardUpdate
-	(*EventLeaderboardClaim)(nil),                    // 56: pamlogix.EventLeaderboardClaim
-	(*EventLeaderboardRoll)(nil),                     // 57: pamlogix.EventLeaderboardRoll
-	(*EventLeaderboardScore)(nil),                    // 58: pamlogix.EventLeaderboardScore
-	(*EventLeaderboardRewardTier)(nil),               // 59: pamlogix.EventLeaderboardRewardTier
-	(*EventLeaderboardRewardTiers)(nil),              // 60: pamlogix.EventLeaderboardRewardTiers
-	(*EventLeaderboardChangeZone)(nil),               // 61: pamlogix.EventLeaderboardChangeZone
-	(*EventLeaderboard)(nil),                         // 62: pamlogix.EventLeaderboard
-	(*EventLeaderboards)(nil),                        // 63: pamlogix.EventLeaderboards
-	(*EventLeaderboardDebugFillRequest)(nil),         // 64: pamlogix.EventLeaderboardDebugFillRequest
-	(*EventLeaderboardDebugRandomScoresRequest)(nil), // 65: pamlogix.EventLeaderboardDebugRandomScoresRequest
-	(*EconomyDonationContributor)(nil),               // 66: pamlogix.EconomyDonationContributor
-	(*EconomyDonation)(nil),                          // 67: pamlogix.EconomyDonation
-	(*EconomyDonationAck)(nil),                       // 68: pamlogix.EconomyDonationAck
-	(*EconomyDonationsList)(nil),                     // 69: pamlogix.EconomyDonationsList
-	(*EconomyDonationClaimRequestDetails)(nil),       // 70: pamlogix.EconomyDonationClaimRequestDetails
-	(*EconomyDonationClaimRequest)(nil),              // 71: pamlogix.EconomyDonationClaimRequest
-	(*EconomyDonationClaimRewards)(nil),              // 72: pamlogix.EconomyDonationClaimRewards
-	(*EconomyDonationGiveRequest)(nil),               // 73: pamlogix.EconomyDonationGiveRequest
-	(*EconomyDonationGetRequest)(nil),                // 74: pamlogix.EconomyDonationGetRequest
-	(*EconomyDonationRequest)(nil),                   // 75: pamlogix.EconomyDonationRequest
-	(*EconomyDonationsByUserList)(nil),               // 76: pamlogix.EconomyDonationsByUserList
-	(*EconomyListStoreItemCost)(nil),                 // 77: pamlogix.EconomyListStoreItemCost
-	(*EconomyListStoreItem)(nil),                     // 78: pamlogix.EconomyListStoreItem
-	(*EconomyListPlacement)(nil),                     // 79: pamlogix.EconomyListPlacement
-	(*EconomyList)(nil),                              // 80: pamlogix.EconomyList
-	(*InventoryItem)(nil),                            // 81: pamlogix.InventoryItem
-	(*InventoryListRequest)(nil),                     // 82: pamlogix.InventoryListRequest
-	(*InventoryGrantRequest)(nil),                    // 83: pamlogix.InventoryGrantRequest
-	(*InventoryUpdateItemProperties)(nil),            // 84: pamlogix.InventoryUpdateItemProperties
-	(*InventoryUpdateItemsRequest)(nil),              // 85: pamlogix.InventoryUpdateItemsRequest
-	(*Inventory)(nil),                                // 86: pamlogix.Inventory
-	(*InventoryConsumeRequest)(nil),                  // 87: pamlogix.InventoryConsumeRequest
-	(*InventoryConsumeRewards)(nil),                  // 88: pamlogix.InventoryConsumeRewards
-	(*InventoryUpdateAck)(nil),                       // 89: pamlogix.InventoryUpdateAck
-	(*InventoryList)(nil),                            // 90: pamlogix.InventoryList
-	(*AuctionBidAmount)(nil),                         // 91: pamlogix.AuctionBidAmount
-	(*AuctionFee)(nil),                               // 92: pamlogix.AuctionFee
-	(*AuctionTemplateConditionListingCost)(nil),      // 93: pamlogix.AuctionTemplateConditionListingCost
-	(*AuctionTemplateConditionBidIncrement)(nil),     // 94: pamlogix.AuctionTemplateConditionBidIncrement
-	(*AuctionTemplateCondition)(nil),                 // 95: pamlogix.AuctionTemplateCondition
-	(*AuctionTemplate)(nil),                          // 96: pamlogix.AuctionTemplate
-	(*AuctionTemplates)(nil),                         // 97: pamlogix.AuctionTemplates
-	(*AuctionReward)(nil),                            // 98: pamlogix.AuctionReward
-	(*AuctionBid)(nil),                               // 99: pamlogix.AuctionBid
-	(*Auction)(nil),                                  // 100: pamlogix.Auction
-	(*AuctionNotificationBid)(nil),                   // 101: pamlogix.AuctionNotificationBid
-	(*StreamEnvelope)(nil),                           // 102: pamlogix.StreamEnvelope
-	(*AuctionClaimBid)(nil),                          // 103: pamlogix.AuctionClaimBid
-	(*AuctionClaimCreated)(nil),                      // 104: pamlogix.AuctionClaimCreated
-	(*AuctionCancel)(nil),                            // 105: pamlogix.AuctionCancel
-	(*AuctionList)(nil),                              // 106: pamlogix.AuctionList
-	(*AuctionListRequest)(nil),                       // 107: pamlogix.AuctionListRequest
-	(*AuctionBidRequest)(nil),                        // 108: pamlogix.AuctionBidRequest
-	(*AuctionClaimBidRequest)(nil),                   // 109: pamlogix.AuctionClaimBidRequest
-	(*AuctionClaimCreatedRequest)(nil),               // 110: pamlogix.AuctionClaimCreatedRequest
-	(*AuctionCancelRequest)(nil),                     // 111: pamlogix.AuctionCancelRequest
-	(*AuctionCreateRequest)(nil),                     // 112: pamlogix.AuctionCreateRequest
-	(*AuctionListBidsRequest)(nil),                   // 113: pamlogix.AuctionListBidsRequest
-	(*AuctionListCreatedRequest)(nil),                // 114: pamlogix.AuctionListCreatedRequest
-	(*AuctionsFollowRequest)(nil),                    // 115: pamlogix.AuctionsFollowRequest
-	(*EconomyListRequest)(nil),                       // 116: pamlogix.EconomyListRequest
-	(*EconomyGrantRequest)(nil),                      // 117: pamlogix.EconomyGrantRequest
-	(*EconomyPurchaseIntentRequest)(nil),             // 118: pamlogix.EconomyPurchaseIntentRequest
-	(*EconomyPurchaseRequest)(nil),                   // 119: pamlogix.EconomyPurchaseRequest
-	(*EconomyPurchaseRestoreRequest)(nil),            // 120: pamlogix.EconomyPurchaseRestoreRequest
-	(*EconomyPlacementStatusRequest)(nil),            // 121: pamlogix.EconomyPlacementStatusRequest
-	(*EconomyPlacementStartRequest)(nil),             // 122: pamlogix.EconomyPlacementStartRequest
-	(*EconomyPlacementStatus)(nil),                   // 123: pamlogix.EconomyPlacementStatus
-	(*EconomyUpdateAck)(nil),                         // 124: pamlogix.EconomyUpdateAck
-	(*EconomyPurchaseAck)(nil),                       // 125: pamlogix.EconomyPurchaseAck
-	(*EnergyModifier)(nil),                           // 126: pamlogix.EnergyModifier
-	(*Energy)(nil),                                   // 127: pamlogix.Energy
-	(*EnergyList)(nil),                               // 128: pamlogix.EnergyList
-	(*EnergySpendRequest)(nil),                       // 129: pamlogix.EnergySpendRequest
-	(*EnergySpendReward)(nil),                        // 130: pamlogix.EnergySpendReward
-	(*EnergyGrantRequest)(nil),                       // 131: pamlogix.EnergyGrantRequest
-	(*LeaderboardConfig)(nil),                        // 132: pamlogix.LeaderboardConfig
-	(*LeaderboardConfigList)(nil),                    // 133: pamlogix.LeaderboardConfigList
-	(*Tutorial)(nil),                                 // 134: pamlogix.Tutorial
-	(*TutorialList)(nil),                             // 135: pamlogix.TutorialList
-	(*TutorialAcceptRequest)(nil),                    // 136: pamlogix.TutorialAcceptRequest
-	(*TutorialDeclineRequest)(nil),                   // 137: pamlogix.TutorialDeclineRequest
-	(*TutorialAbandonRequest)(nil),                   // 138: pamlogix.TutorialAbandonRequest
-	(*TutorialUpdateRequest)(nil),                    // 139: pamlogix.TutorialUpdateRequest
-	(*TutorialResetRequest)(nil),                     // 140: pamlogix.TutorialResetRequest
-	(*RateAppRequest)(nil),                           // 141: pamlogix.RateAppRequest
-	(*Team)(nil),                                     // 142: pamlogix.Team
-	(*TeamCreateRequest)(nil),                        // 143: pamlogix.TeamCreateRequest
-	(*TeamListRequest)(nil),                          // 144: pamlogix.TeamListRequest
-	(*TeamList)(nil),                                 // 145: pamlogix.TeamList
-	(*TeamSearchRequest)(nil),                        // 146: pamlogix.TeamSearchRequest
-	(*TeamWriteChatMessageRequest)(nil),              // 147: pamlogix.TeamWriteChatMessageRequest
-	(*UnlockableCost)(nil),                           // 148: pamlogix.UnlockableCost
-	(*Unlockable)(nil),                               // 149: pamlogix.Unlockable
-	(*UnlockableSlotCost)(nil),                       // 150: pamlogix.UnlockableSlotCost
-	(*UnlockablesList)(nil),                          // 151: pamlogix.UnlockablesList
-	(*UnlockablesReward)(nil),                        // 152: pamlogix.UnlockablesReward
-	(*UnlockablesRequest)(nil),                       // 153: pamlogix.UnlockablesRequest
-	(*UnlockablesQueueAddRequest)(nil),               // 154: pamlogix.UnlockablesQueueAddRequest
-	(*UnlockablesQueueRemoveRequest)(nil),            // 155: pamlogix.UnlockablesQueueRemoveRequest
-	(*UnlockablesQueueSetRequest)(nil),               // 156: pamlogix.UnlockablesQueueSetRequest
-	(*SubAchievement)(nil),                           // 157: pamlogix.SubAchievement
-	(*Achievement)(nil),                              // 158: pamlogix.Achievement
-	(*AchievementList)(nil),                          // 159: pamlogix.AchievementList
-	(*AchievementsClaimRequest)(nil),                 // 160: pamlogix.AchievementsClaimRequest
-	(*AchievementsGetRequest)(nil),                   // 161: pamlogix.AchievementsGetRequest
-	(*AchievementsUpdateAck)(nil),                    // 162: pamlogix.AchievementsUpdateAck
-	(*AchievementsUpdateRequest)(nil),                // 163: pamlogix.AchievementsUpdateRequest
-	(*StreakAvailableReward)(nil),                    // 164: pamlogix.StreakAvailableReward
-	(*StreakReward)(nil),                             // 165: pamlogix.StreakReward
-	(*Streak)(nil),                                   // 166: pamlogix.Streak
-	(*StreaksList)(nil),                              // 167: pamlogix.StreaksList
-	(*StreaksUpdateRequest)(nil),                     // 168: pamlogix.StreaksUpdateRequest
-	(*StreaksClaimRequest)(nil),                      // 169: pamlogix.StreaksClaimRequest
-	(*StreaksResetRequest)(nil),                      // 170: pamlogix.StreaksResetRequest
-	(*SyncInventoryItem)(nil),                        // 171: pamlogix.SyncInventoryItem
-	(*SyncInventory)(nil),                            // 172: pamlogix.SyncInventory
-	(*SyncEconomy)(nil),                              // 173: pamlogix.SyncEconomy
-	(*SyncAchievementsUpdate)(nil),                   // 174: pamlogix.SyncAchievementsUpdate
-	(*SyncAchievements)(nil),                         // 175: pamlogix.SyncAchievements
-	(*SyncEnergyState)(nil),                          // 176: pamlogix.SyncEnergyState
-	(*SyncEnergy)(nil),                               // 177: pamlogix.SyncEnergy
-	(*SyncEventLeaderboardUpdate)(nil),               // 178: pamlogix.SyncEventLeaderboardUpdate
-	(*SyncEventLeaderboards)(nil),                    // 179: pamlogix.SyncEventLeaderboards
-	(*SyncProgressionUpdate)(nil),                    // 180: pamlogix.SyncProgressionUpdate
-	(*SyncProgressions)(nil),                         // 181: pamlogix.SyncProgressions
-	(*SyncTutorials)(nil),                            // 182: pamlogix.SyncTutorials
-	(*SyncUnlockableUpdate)(nil),                     // 183: pamlogix.SyncUnlockableUpdate
-	(*SyncUnlockables)(nil),                          // 184: pamlogix.SyncUnlockables
-	(*SyncStreakUpdate)(nil),                         // 185: pamlogix.SyncStreakUpdate
-	(*SyncStreaks)(nil),                              // 186: pamlogix.SyncStreaks
-	(*SyncRequest)(nil),                              // 187: pamlogix.SyncRequest
-	(*SyncResponse)(nil),                             // 188: pamlogix.SyncResponse
-	nil,                                              // 189: pamlogix.ProgressionCost.ItemsEntry
-	nil,                                              // 190: pamlogix.ProgressionCost.CurrenciesEntry
-	nil,                                              // 191: pamlogix.ProgressionPreconditions.CountsEntry
-	nil,                                              // 192: pamlogix.ProgressionPreconditions.ItemsMinEntry
-	nil,                                              // 193: pamlogix.ProgressionPreconditions.ItemsMaxEntry
-	nil,                                              // 194: pamlogix.ProgressionPreconditions.StatsMinEntry
-	nil,                                              // 195: pamlogix.ProgressionPreconditions.StatsMaxEntry
-	nil,                                              // 196: pamlogix.ProgressionPreconditions.EnergyMinEntry
-	nil,                                              // 197: pamlogix.ProgressionPreconditions.EnergyMaxEntry
-	nil,                                              // 198: pamlogix.ProgressionPreconditions.CurrencyMinEntry
-	nil,                                              // 199: pamlogix.ProgressionPreconditions.CurrencyMaxEntry
-	nil,                                              // 200: pamlogix.Progression.CountsEntry
-	nil,                                              // 201: pamlogix.Progression.AdditionalPropertiesEntry
-	nil,                                              // 202: pamlogix.ProgressionDelta.CountsEntry
-	nil,                                              // 203: pamlogix.ProgressionList.ProgressionsEntry
-	nil,                                              // 204: pamlogix.ProgressionList.DeltasEntry
-	nil,                                              // 205: pamlogix.ProgressionGetRequest.ProgressionsEntry
-	nil,                                              // 206: pamlogix.ProgressionUpdateRequest.CountsEntry
-	nil,                                              // 207: pamlogix.StatList.PublicEntry
-	nil,                                              // 208: pamlogix.StatList.PrivateEntry
-	nil,                                              // 209: pamlogix.DevicePrefsRequest.PreferencesEntry
-	nil,                                              // 210: pamlogix.RewardInventoryItem.StringPropertiesEntry
-	nil,                                              // 211: pamlogix.RewardInventoryItem.NumericPropertiesEntry
-	nil,                                              // 212: pamlogix.Reward.ItemsEntry
-	nil,                                              // 213: pamlogix.Reward.CurrenciesEntry
-	nil,                                              // 214: pamlogix.Reward.EnergiesEntry
-	nil,                                              // 215: pamlogix.Reward.ItemInstancesEntry
-	nil,                                              // 216: pamlogix.AvailableRewardsStringProperty.OptionsEntry
-	nil,                                              // 217: pamlogix.AvailableRewardsItem.NumericPropertiesEntry
-	nil,                                              // 218: pamlogix.AvailableRewardsItem.StringPropertiesEntry
-	nil,                                              // 219: pamlogix.AvailableRewardsContents.ItemsEntry
-	nil,                                              // 220: pamlogix.AvailableRewardsContents.CurrenciesEntry
-	nil,                                              // 221: pamlogix.AvailableRewardsContents.EnergiesEntry
-	nil,                                              // 222: pamlogix.Incentive.ClaimsEntry
-	nil,                                              // 223: pamlogix.EventLeaderboard.RewardTiersEntry
-	nil,                                              // 224: pamlogix.EventLeaderboard.ChangeZonesEntry
-	nil,                                              // 225: pamlogix.EventLeaderboard.AdditionalPropertiesEntry
-	nil,                                              // 226: pamlogix.EconomyDonation.AdditionalPropertiesEntry
-	nil,                                              // 227: pamlogix.EconomyDonationClaimRequestDetails.DonorsEntry
-	nil,                                              // 228: pamlogix.EconomyDonationClaimRequest.DonationsEntry
-	nil,                                              // 229: pamlogix.EconomyDonationClaimRewards.ClaimedRewardsEntry
-	nil,                                              // 230: pamlogix.EconomyDonationsByUserList.UserDonationsEntry
-	nil,                                              // 231: pamlogix.EconomyListStoreItemCost.CurrenciesEntry
-	nil,                                              // 232: pamlogix.EconomyListStoreItem.AdditionalPropertiesEntry
-	nil,                                              // 233: pamlogix.EconomyListPlacement.AdditionalPropertiesEntry
-	nil,                                              // 234: pamlogix.EconomyList.DonationsEntry
-	nil,                                              // 235: pamlogix.InventoryItem.StringPropertiesEntry
-	nil,                                              // 236: pamlogix.InventoryItem.NumericPropertiesEntry
-	nil,                                              // 237: pamlogix.InventoryGrantRequest.ItemsEntry
-	nil,                                              // 238: pamlogix.InventoryUpdateItemProperties.StringPropertiesEntry
-	nil,                                              // 239: pamlogix.InventoryUpdateItemProperties.NumericPropertiesEntry
-	nil,                                              // 240: pamlogix.InventoryUpdateItemsRequest.ItemUpdatesEntry
-	nil,                                              // 241: pamlogix.Inventory.ItemsEntry
-	nil,                                              // 242: pamlogix.InventoryConsumeRequest.ItemsEntry
-	nil,                                              // 243: pamlogix.InventoryConsumeRequest.InstancesEntry
-	nil,                                              // 244: pamlogix.InventoryConsumeRewards.RewardsEntry
-	nil,                                              // 245: pamlogix.InventoryConsumeRewards.InstanceRewardsEntry
-	nil,                                              // 246: pamlogix.InventoryList.ItemsEntry
-	nil,                                              // 247: pamlogix.AuctionBidAmount.CurrenciesEntry
-	nil,                                              // 248: pamlogix.AuctionTemplateConditionListingCost.CurrenciesEntry
-	nil,                                              // 249: pamlogix.AuctionTemplateConditionListingCost.ItemsEntry
-	nil,                                              // 250: pamlogix.AuctionTemplateConditionListingCost.EnergiesEntry
-	nil,                                              // 251: pamlogix.AuctionTemplate.ConditionsEntry
-	nil,                                              // 252: pamlogix.AuctionTemplates.TemplatesEntry
-	nil,                                              // 253: pamlogix.EconomyGrantRequest.CurrenciesEntry
-	nil,                                              // 254: pamlogix.EconomyGrantRequest.ItemsEntry
-	nil,                                              // 255: pamlogix.EconomyPlacementStartRequest.MetadataEntry
-	nil,                                              // 256: pamlogix.EconomyPlacementStatus.MetadataEntry
-	nil,                                              // 257: pamlogix.EconomyUpdateAck.WalletEntry
-	nil,                                              // 258: pamlogix.EconomyPurchaseAck.WalletEntry
-	nil,                                              // 259: pamlogix.Energy.AdditionalPropertiesEntry
-	nil,                                              // 260: pamlogix.EnergyList.EnergiesEntry
-	nil,                                              // 261: pamlogix.EnergySpendRequest.AmountsEntry
-	nil,                                              // 262: pamlogix.EnergyGrantRequest.AmountsEntry
-	nil,                                              // 263: pamlogix.Tutorial.AdditionalPropertiesEntry
-	nil,                                              // 264: pamlogix.TutorialList.TutorialsEntry
-	nil,                                              // 265: pamlogix.UnlockableCost.ItemsEntry
-	nil,                                              // 266: pamlogix.UnlockableCost.CurrenciesEntry
-	nil,                                              // 267: pamlogix.Unlockable.AdditionalPropertiesEntry
-	nil,                                              // 268: pamlogix.UnlockableSlotCost.ItemsEntry
-	nil,                                              // 269: pamlogix.UnlockableSlotCost.CurrenciesEntry
-	nil,                                              // 270: pamlogix.SubAchievement.AdditionalPropertiesEntry
-	nil,                                              // 271: pamlogix.Achievement.SubAchievementsEntry
-	nil,                                              // 272: pamlogix.Achievement.AdditionalPropertiesEntry
-	nil,                                              // 273: pamlogix.AchievementList.AchievementsEntry
-	nil,                                              // 274: pamlogix.AchievementList.RepeatAchievementsEntry
-	nil,                                              // 275: pamlogix.AchievementsUpdateAck.AchievementsEntry
-	nil,                                              // 276: pamlogix.AchievementsUpdateAck.RepeatAchievementsEntry
-	nil,                                              // 277: pamlogix.AchievementsUpdateRequest.AchievementsEntry
-	nil,                                              // 278: pamlogix.StreaksList.StreaksEntry
-	nil,                                              // 279: pamlogix.StreaksUpdateRequest.UpdatesEntry
-	nil,                                              // 280: pamlogix.SyncInventoryItem.StringPropertiesEntry
-	nil,                                              // 281: pamlogix.SyncInventoryItem.NumericPropertiesEntry
-	nil,                                              // 282: pamlogix.SyncInventory.ItemsEntry
-	nil,                                              // 283: pamlogix.SyncEconomy.CurrenciesEntry
-	nil,                                              // 284: pamlogix.SyncAchievements.AchievementsEntry
-	nil,                                              // 285: pamlogix.SyncEnergy.EnergiesEntry
-	nil,                                              // 286: pamlogix.SyncEventLeaderboards.EventLeaderboardsEntry
-	nil,                                              // 287: pamlogix.SyncProgressionUpdate.CountsEntry
-	nil,                                              // 288: pamlogix.SyncProgressions.ProgressionsEntry
-	nil,                                              // 289: pamlogix.SyncTutorials.UpdatesEntry
-	nil,                                              // 290: pamlogix.SyncUnlockables.UpdatesEntry
-	nil,                                              // 291: pamlogix.SyncStreaks.UpdatesEntry
-	nil,                                              // 292: pamlogix.SyncResponse.WalletEntry
-	(*structpb.Struct)(nil),                          // 293: google.protobuf.Struct
-	(*wrapperspb.Int32Value)(nil),                    // 294: google.protobuf.Int32Value
-	(*descriptorpb.EnumValueOptions)(nil),            // 295: google.protobuf.EnumValueOptions
+	(ChallengeState)(0),                              // 7: pamlogix.ChallengeState
+	(TutorialState)(0),                               // 8: pamlogix.TutorialState
+	(*ProgressionCost)(nil),                          // 9: pamlogix.ProgressionCost
+	(*ProgressionPreconditions)(nil),                 // 10: pamlogix.ProgressionPreconditions
+	(*ProgressionPreconditionsBlock)(nil),            // 11: pamlogix.ProgressionPreconditionsBlock
+	(*Progression)(nil),                              // 12: pamlogix.Progression
+	(*ProgressionDelta)(nil),                         // 13: pamlogix.ProgressionDelta
+	(*ProgressionList)(nil),                          // 14: pamlogix.ProgressionList
+	(*ProgressionGetRequest)(nil),                    // 15: pamlogix.ProgressionGetRequest
+	(*ProgressionPurchaseRequest)(nil),               // 16: pamlogix.ProgressionPurchaseRequest
+	(*ProgressionUpdateRequest)(nil),                 // 17: pamlogix.ProgressionUpdateRequest
+	(*ProgressionResetRequest)(nil),                  // 18: pamlogix.ProgressionResetRequest
+	(*StatUpdate)(nil),                               // 19: pamlogix.StatUpdate
+	(*StatUpdateRequest)(nil),                        // 20: pamlogix.StatUpdateRequest
+	(*Stat)(nil),                                     // 21: pamlogix.Stat
+	(*StatList)(nil),                                 // 22: pamlogix.StatList
+	(*ChannelMessageAck)(nil),                        // 23: pamlogix.ChannelMessageAck
+	(*DevicePrefsRequest)(nil),                       // 24: pamlogix.DevicePrefsRequest
+	(*RewardInventoryItem)(nil),                      // 25: pamlogix.RewardInventoryItem
+	(*RewardEnergyModifier)(nil),                     // 26: pamlogix.RewardEnergyModifier
+	(*RewardModifier)(nil),                           // 27: pamlogix.RewardModifier
+	(*ActiveRewardModifier)(nil),                     // 28: pamlogix.ActiveRewardModifier
+	(*Reward)(nil),                                   // 29: pamlogix.Reward
+	(*RewardList)(nil),                               // 30: pamlogix.RewardList
+	(*RewardRangeInt32)(nil),                         // 31: pamlogix.RewardRangeInt32
+	(*RewardRangeInt64)(nil),                         // 32: pamlogix.RewardRangeInt64
+	(*RewardRangeUInt64)(nil),                        // 33: pamlogix.RewardRangeUInt64
+	(*RewardRangeDouble)(nil),                        // 34: pamlogix.RewardRangeDouble
+	(*AvailableRewardsStringPropertyOption)(nil),     // 35: pamlogix.AvailableRewardsStringPropertyOption
+	(*AvailableRewardsStringProperty)(nil),           // 36: pamlogix.AvailableRewardsStringProperty
+	(*AvailableRewardsItem)(nil),                     // 37: pamlogix.AvailableRewardsItem
+	(*AvailableRewardsItemSet)(nil),                  // 38: pamlogix.AvailableRewardsItemSet
+	(*AvailableRewardsCurrency)(nil),                 // 39: pamlogix.AvailableRewardsCurrency
+	(*AvailableRewardsEnergy)(nil),                   // 40: pamlogix.AvailableRewardsEnergy
+	(*AvailableRewardsEnergyModifier)(nil),           // 41: pamlogix.AvailableRewardsEnergyModifier
+	(*AvailableRewardsRewardModifier)(nil),           // 42: pamlogix.AvailableRewardsRewardModifier
+	(*AvailableRewardsContents)(nil),                 // 43: pamlogix.AvailableRewardsContents
+	(*AvailableRewards)(nil),                         // 44: pamlogix.AvailableRewards
+	(*IncentiveClaim)(nil),                           // 45: pamlogix.IncentiveClaim
+	(*Incentive)(nil),                                // 46: pamlogix.Incentive
+	(*IncentiveList)(nil),                            // 47: pamlogix.IncentiveList
+	(*IncentiveInfo)(nil),                            // 48: pamlogix.IncentiveInfo
+	(*IncentiveSenderCreateRequest)(nil),             // 49: pamlogix.IncentiveSenderCreateRequest
+	(*IncentiveSenderDeleteRequest)(nil),             // 50: pamlogix.IncentiveSenderDeleteRequest
+	(*IncentiveSenderClaimRequest)(nil),              // 51: pamlogix.IncentiveSenderClaimRequest
+	(*IncentiveRecipientGetRequest)(nil),             // 52: pamlogix.IncentiveRecipientGetRequest
+	(*IncentiveRecipientClaimRequest)(nil),           // 53: pamlogix.IncentiveRecipientClaimRequest
+	(*ChallengeCreateRequest)(nil),                   // 54: pamlogix.ChallengeCreateRequest
+	(*ChallengeJoinRequest)(nil),                     // 55: pamlogix.ChallengeJoinRequest
+	(*ChallengeLeaveRequest)(nil),                    // 56: pamlogix.ChallengeLeaveRequest
+	(*ChallengeClaimRequest)(nil),                    // 57: pamlogix.ChallengeClaimRequest
+	(*ChallengeSearchRequest)(nil),                   // 58: pamlogix.ChallengeSearchRequest
+	(*ChallengeInviteRequest)(nil),                   // 59: pamlogix.ChallengeInviteRequest
+	(*ChallengeSubmitScoreRequest)(nil),              // 60: pamlogix.ChallengeSubmitScoreRequest
+	(*ChallengeRewardTier)(nil),                      // 61: pamlogix.ChallengeRewardTier
+	(*ChallengeScore)(nil),                           // 62: pamlogix.ChallengeScore
+	(*Challenge)(nil),                                // 63: pamlogix.Challenge
+	(*ChallengeListRequest)(nil),                     // 64: pamlogix.ChallengeListRequest
+	(*ChallengeGetRequest)(nil),                      // 65: pamlogix.ChallengeGetRequest
+	(*ChallengesList)(nil),                           // 66: pamlogix.ChallengesList
+	(*ChallengeMaxMinPlayers)(nil),                   // 67: pamlogix.ChallengeMaxMinPlayers
+	(*ChallengeMinMaxDuration)(nil),                  // 68: pamlogix.ChallengeMinMaxDuration
+	(*ChallengeTemplate)(nil),                        // 69: pamlogix.ChallengeTemplate
+	(*ChallengeTemplates)(nil),                       // 70: pamlogix.ChallengeTemplates
+	(*EventLeaderboardList)(nil),                     // 71: pamlogix.EventLeaderboardList
+	(*EventLeaderboardGet)(nil),                      // 72: pamlogix.EventLeaderboardGet
+	(*EventLeaderboardUpdate)(nil),                   // 73: pamlogix.EventLeaderboardUpdate
+	(*EventLeaderboardClaim)(nil),                    // 74: pamlogix.EventLeaderboardClaim
+	(*EventLeaderboardRoll)(nil),                     // 75: pamlogix.EventLeaderboardRoll
+	(*EventLeaderboardScore)(nil),                    // 76: pamlogix.EventLeaderboardScore
+	(*EventLeaderboardRewardTier)(nil),               // 77: pamlogix.EventLeaderboardRewardTier
+	(*EventLeaderboardRewardTiers)(nil),              // 78: pamlogix.EventLeaderboardRewardTiers
+	(*EventLeaderboardChangeZone)(nil),               // 79: pamlogix.EventLeaderboardChangeZone
+	(*EventLeaderboard)(nil),                         // 80: pamlogix.EventLeaderboard
+	(*EventLeaderboards)(nil),                        // 81: pamlogix.EventLeaderboards
+	(*EventLeaderboardDebugFillRequest)(nil),         // 82: pamlogix.EventLeaderboardDebugFillRequest
+	(*EventLeaderboardDebugRandomScoresRequest)(nil), // 83: pamlogix.EventLeaderboardDebugRandomScoresRequest
+	(*EconomyDonationContributor)(nil),               // 84: pamlogix.EconomyDonationContributor
+	(*EconomyDonation)(nil),                          // 85: pamlogix.EconomyDonation
+	(*EconomyDonationAck)(nil),                       // 86: pamlogix.EconomyDonationAck
+	(*EconomyDonationsList)(nil),                     // 87: pamlogix.EconomyDonationsList
+	(*EconomyDonationClaimRequestDetails)(nil),       // 88: pamlogix.EconomyDonationClaimRequestDetails
+	(*EconomyDonationClaimRequest)(nil),              // 89: pamlogix.EconomyDonationClaimRequest
+	(*EconomyDonationClaimRewards)(nil),              // 90: pamlogix.EconomyDonationClaimRewards
+	(*EconomyDonationGiveRequest)(nil),               // 91: pamlogix.EconomyDonationGiveRequest
+	(*EconomyDonationGetRequest)(nil),                // 92: pamlogix.EconomyDonationGetRequest
+	(*EconomyDonationRequest)(nil),                   // 93: pamlogix.EconomyDonationRequest
+	(*EconomyDonationsByUserList)(nil),               // 94: pamlogix.EconomyDonationsByUserList
+	(*EconomyListStoreItemCost)(nil),                 // 95: pamlogix.EconomyListStoreItemCost
+	(*EconomyListStoreItem)(nil),                     // 96: pamlogix.EconomyListStoreItem
+	(*EconomyListPlacement)(nil),                     // 97: pamlogix.EconomyListPlacement
+	(*EconomyList)(nil),                              // 98: pamlogix.EconomyList
+	(*InventoryItem)(nil),                            // 99: pamlogix.InventoryItem
+	(*InventoryListRequest)(nil),                     // 100: pamlogix.InventoryListRequest
+	(*InventoryGrantRequest)(nil),                    // 101: pamlogix.InventoryGrantRequest
+	(*InventoryUpdateItemProperties)(nil),            // 102: pamlogix.InventoryUpdateItemProperties
+	(*InventoryUpdateItemsRequest)(nil),              // 103: pamlogix.InventoryUpdateItemsRequest
+	(*Inventory)(nil),                                // 104: pamlogix.Inventory
+	(*InventoryConsumeRequest)(nil),                  // 105: pamlogix.InventoryConsumeRequest
+	(*InventoryConsumeRewards)(nil),                  // 106: pamlogix.InventoryConsumeRewards
+	(*InventoryUpdateAck)(nil),                       // 107: pamlogix.InventoryUpdateAck
+	(*InventoryList)(nil),                            // 108: pamlogix.InventoryList
+	(*AuctionBidAmount)(nil),                         // 109: pamlogix.AuctionBidAmount
+	(*AuctionFee)(nil),                               // 110: pamlogix.AuctionFee
+	(*AuctionTemplateConditionListingCost)(nil),      // 111: pamlogix.AuctionTemplateConditionListingCost
+	(*AuctionTemplateConditionBidIncrement)(nil),     // 112: pamlogix.AuctionTemplateConditionBidIncrement
+	(*AuctionTemplateCondition)(nil),                 // 113: pamlogix.AuctionTemplateCondition
+	(*AuctionTemplate)(nil),                          // 114: pamlogix.AuctionTemplate
+	(*AuctionTemplates)(nil),                         // 115: pamlogix.AuctionTemplates
+	(*AuctionReward)(nil),                            // 116: pamlogix.AuctionReward
+	(*AuctionBid)(nil),                               // 117: pamlogix.AuctionBid
+	(*Auction)(nil),                                  // 118: pamlogix.Auction
+	(*AuctionNotificationBid)(nil),                   // 119: pamlogix.AuctionNotificationBid
+	(*StreamEnvelope)(nil),                           // 120: pamlogix.StreamEnvelope
+	(*AuctionClaimBid)(nil),                          // 121: pamlogix.AuctionClaimBid
+	(*AuctionClaimCreated)(nil),                      // 122: pamlogix.AuctionClaimCreated
+	(*AuctionCancel)(nil),                            // 123: pamlogix.AuctionCancel
+	(*AuctionList)(nil),                              // 124: pamlogix.AuctionList
+	(*AuctionListRequest)(nil),                       // 125: pamlogix.AuctionListRequest
+	(*AuctionBidRequest)(nil),                        // 126: pamlogix.AuctionBidRequest
+	(*AuctionClaimBidRequest)(nil),                   // 127: pamlogix.AuctionClaimBidRequest
+	(*AuctionClaimCreatedRequest)(nil),               // 128: pamlogix.AuctionClaimCreatedRequest
+	(*AuctionCancelRequest)(nil),                     // 129: pamlogix.AuctionCancelRequest
+	(*AuctionCreateRequest)(nil),                     // 130: pamlogix.AuctionCreateRequest
+	(*AuctionListBidsRequest)(nil),                   // 131: pamlogix.AuctionListBidsRequest
+	(*AuctionListCreatedRequest)(nil),                // 132: pamlogix.AuctionListCreatedRequest
+	(*AuctionsFollowRequest)(nil),                    // 133: pamlogix.AuctionsFollowRequest
+	(*EconomyListRequest)(nil),                       // 134: pamlogix.EconomyListRequest
+	(*EconomyGrantRequest)(nil),                      // 135: pamlogix.EconomyGrantRequest
+	(*EconomyPurchaseIntentRequest)(nil),             // 136: pamlogix.EconomyPurchaseIntentRequest
+	(*EconomyPurchaseRequest)(nil),                   // 137: pamlogix.EconomyPurchaseRequest
+	(*EconomyPurchaseRestoreRequest)(nil),            // 138: pamlogix.EconomyPurchaseRestoreRequest
+	(*EconomyPlacementStatusRequest)(nil),            // 139: pamlogix.EconomyPlacementStatusRequest
+	(*EconomyPlacementStartRequest)(nil),             // 140: pamlogix.EconomyPlacementStartRequest
+	(*EconomyPlacementStatus)(nil),                   // 141: pamlogix.EconomyPlacementStatus
+	(*EconomyUpdateAck)(nil),                         // 142: pamlogix.EconomyUpdateAck
+	(*EconomyPurchaseAck)(nil),                       // 143: pamlogix.EconomyPurchaseAck
+	(*EnergyModifier)(nil),                           // 144: pamlogix.EnergyModifier
+	(*Energy)(nil),                                   // 145: pamlogix.Energy
+	(*EnergyList)(nil),                               // 146: pamlogix.EnergyList
+	(*EnergySpendRequest)(nil),                       // 147: pamlogix.EnergySpendRequest
+	(*EnergySpendReward)(nil),                        // 148: pamlogix.EnergySpendReward
+	(*EnergyGrantRequest)(nil),                       // 149: pamlogix.EnergyGrantRequest
+	(*LeaderboardConfig)(nil),                        // 150: pamlogix.LeaderboardConfig
+	(*LeaderboardConfigList)(nil),                    // 151: pamlogix.LeaderboardConfigList
+	(*Tutorial)(nil),                                 // 152: pamlogix.Tutorial
+	(*TutorialList)(nil),                             // 153: pamlogix.TutorialList
+	(*TutorialAcceptRequest)(nil),                    // 154: pamlogix.TutorialAcceptRequest
+	(*TutorialDeclineRequest)(nil),                   // 155: pamlogix.TutorialDeclineRequest
+	(*TutorialAbandonRequest)(nil),                   // 156: pamlogix.TutorialAbandonRequest
+	(*TutorialUpdateRequest)(nil),                    // 157: pamlogix.TutorialUpdateRequest
+	(*TutorialResetRequest)(nil),                     // 158: pamlogix.TutorialResetRequest
+	(*RateAppRequest)(nil),                           // 159: pamlogix.RateAppRequest
+	(*Team)(nil),                                     // 160: pamlogix.Team
+	(*TeamCreateRequest)(nil),                        // 161: pamlogix.TeamCreateRequest
+	(*TeamListRequest)(nil),                          // 162: pamlogix.TeamListRequest
+	(*TeamList)(nil),                                 // 163: pamlogix.TeamList
+	(*TeamSearchRequest)(nil),                        // 164: pamlogix.TeamSearchRequest
+	(*TeamWriteChatMessageRequest)(nil),              // 165: pamlogix.TeamWriteChatMessageRequest
+	(*UnlockableCost)(nil),                           // 166: pamlogix.UnlockableCost
+	(*Unlockable)(nil),                               // 167: pamlogix.Unlockable
+	(*UnlockableSlotCost)(nil),                       // 168: pamlogix.UnlockableSlotCost
+	(*UnlockablesList)(nil),                          // 169: pamlogix.UnlockablesList
+	(*UnlockablesReward)(nil),                        // 170: pamlogix.UnlockablesReward
+	(*UnlockablesRequest)(nil),                       // 171: pamlogix.UnlockablesRequest
+	(*UnlockablesQueueAddRequest)(nil),               // 172: pamlogix.UnlockablesQueueAddRequest
+	(*UnlockablesQueueRemoveRequest)(nil),            // 173: pamlogix.UnlockablesQueueRemoveRequest
+	(*UnlockablesQueueSetRequest)(nil),               // 174: pamlogix.UnlockablesQueueSetRequest
+	(*SubAchievement)(nil),                           // 175: pamlogix.SubAchievement
+	(*Achievement)(nil),                              // 176: pamlogix.Achievement
+	(*AchievementList)(nil),                          // 177: pamlogix.AchievementList
+	(*AchievementsClaimRequest)(nil),                 // 178: pamlogix.AchievementsClaimRequest
+	(*AchievementsGetRequest)(nil),                   // 179: pamlogix.AchievementsGetRequest
+	(*AchievementsUpdateAck)(nil),                    // 180: pamlogix.AchievementsUpdateAck
+	(*AchievementsUpdateRequest)(nil),                // 181: pamlogix.AchievementsUpdateRequest
+	(*StreakAvailableReward)(nil),                    // 182: pamlogix.StreakAvailableReward
+	(*StreakReward)(nil),                             // 183: pamlogix.StreakReward
+	(*Streak)(nil),                                   // 184: pamlogix.Streak
+	(*StreaksList)(nil),                              // 185: pamlogix.StreaksList
+	(*StreaksUpdateRequest)(nil),                     // 186: pamlogix.StreaksUpdateRequest
+	(*StreaksClaimRequest)(nil),                      // 187: pamlogix.StreaksClaimRequest
+	(*StreaksResetRequest)(nil),                      // 188: pamlogix.StreaksResetRequest
+	(*SyncInventoryItem)(nil),                        // 189: pamlogix.SyncInventoryItem
+	(*SyncInventory)(nil),                            // 190: pamlogix.SyncInventory
+	(*SyncEconomy)(nil),                              // 191: pamlogix.SyncEconomy
+	(*SyncAchievementsUpdate)(nil),                   // 192: pamlogix.SyncAchievementsUpdate
+	(*SyncAchievements)(nil),                         // 193: pamlogix.SyncAchievements
+	(*SyncEnergyState)(nil),                          // 194: pamlogix.SyncEnergyState
+	(*SyncEnergy)(nil),                               // 195: pamlogix.SyncEnergy
+	(*SyncEventLeaderboardUpdate)(nil),               // 196: pamlogix.SyncEventLeaderboardUpdate
+	(*SyncEventLeaderboards)(nil),                    // 197: pamlogix.SyncEventLeaderboards
+	(*SyncProgressionUpdate)(nil),                    // 198: pamlogix.SyncProgressionUpdate
+	(*SyncProgressions)(nil),                         // 199: pamlogix.SyncProgressions
+	(*SyncTutorials)(nil),                            // 200: pamlogix.SyncTutorials
+	(*SyncUnlockableUpdate)(nil),                     // 201: pamlogix.SyncUnlockableUpdate
+	(*SyncUnlockables)(nil),                          // 202: pamlogix.SyncUnlockables
+	(*SyncStreakUpdate)(nil),                         // 203: pamlogix.SyncStreakUpdate
+	(*SyncStreaks)(nil),                              // 204: pamlogix.SyncStreaks
+	(*SyncRequest)(nil),                              // 205: pamlogix.SyncRequest
+	(*SyncResponse)(nil),                             // 206: pamlogix.SyncResponse
+	nil,                                              // 207: pamlogix.ProgressionCost.ItemsEntry
+	nil,                                              // 208: pamlogix.ProgressionCost.CurrenciesEntry
+	nil,                                              // 209: pamlogix.ProgressionPreconditions.CountsEntry
+	nil,                                              // 210: pamlogix.ProgressionPreconditions.ItemsMinEntry
+	nil,                                              // 211: pamlogix.ProgressionPreconditions.ItemsMaxEntry
+	nil,                                              // 212: pamlogix.ProgressionPreconditions.StatsMinEntry
+	nil,                                              // 213: pamlogix.ProgressionPreconditions.StatsMaxEntry
+	nil,                                              // 214: pamlogix.ProgressionPreconditions.EnergyMinEntry
+	nil,                                              // 215: pamlogix.ProgressionPreconditions.EnergyMaxEntry
+	nil,                                              // 216: pamlogix.ProgressionPreconditions.CurrencyMinEntry
+	nil,                                              // 217: pamlogix.ProgressionPreconditions.CurrencyMaxEntry
+	nil,                                              // 218: pamlogix.Progression.CountsEntry
+	nil,                                              // 219: pamlogix.Progression.AdditionalPropertiesEntry
+	nil,                                              // 220: pamlogix.ProgressionDelta.CountsEntry
+	nil,                                              // 221: pamlogix.ProgressionList.ProgressionsEntry
+	nil,                                              // 222: pamlogix.ProgressionList.DeltasEntry
+	nil,                                              // 223: pamlogix.ProgressionGetRequest.ProgressionsEntry
+	nil,                                              // 224: pamlogix.ProgressionUpdateRequest.CountsEntry
+	nil,                                              // 225: pamlogix.StatList.PublicEntry
+	nil,                                              // 226: pamlogix.StatList.PrivateEntry
+	nil,                                              // 227: pamlogix.DevicePrefsRequest.PreferencesEntry
+	nil,                                              // 228: pamlogix.RewardInventoryItem.StringPropertiesEntry
+	nil,                                              // 229: pamlogix.RewardInventoryItem.NumericPropertiesEntry
+	nil,                                              // 230: pamlogix.Reward.ItemsEntry
+	nil,                                              // 231: pamlogix.Reward.CurrenciesEntry
+	nil,                                              // 232: pamlogix.Reward.EnergiesEntry
+	nil,                                              // 233: pamlogix.Reward.ItemInstancesEntry
+	nil,                                              // 234: pamlogix.AvailableRewardsStringProperty.OptionsEntry
+	nil,                                              // 235: pamlogix.AvailableRewardsItem.NumericPropertiesEntry
+	nil,                                              // 236: pamlogix.AvailableRewardsItem.StringPropertiesEntry
+	nil,                                              // 237: pamlogix.AvailableRewardsContents.ItemsEntry
+	nil,                                              // 238: pamlogix.AvailableRewardsContents.CurrenciesEntry
+	nil,                                              // 239: pamlogix.AvailableRewardsContents.EnergiesEntry
+	nil,                                              // 240: pamlogix.Incentive.ClaimsEntry
+	nil,                                              // 241: pamlogix.Challenge.AdditionalPropertiesEntry
+	nil,                                              // 242: pamlogix.ChallengeTemplate.AdditionalPropertiesEntry
+	nil,                                              // 243: pamlogix.ChallengeTemplates.TemplatesEntry
+	nil,                                              // 244: pamlogix.EventLeaderboard.RewardTiersEntry
+	nil,                                              // 245: pamlogix.EventLeaderboard.ChangeZonesEntry
+	nil,                                              // 246: pamlogix.EventLeaderboard.AdditionalPropertiesEntry
+	nil,                                              // 247: pamlogix.EconomyDonation.AdditionalPropertiesEntry
+	nil,                                              // 248: pamlogix.EconomyDonationClaimRequestDetails.DonorsEntry
+	nil,                                              // 249: pamlogix.EconomyDonationClaimRequest.DonationsEntry
+	nil,                                              // 250: pamlogix.EconomyDonationClaimRewards.ClaimedRewardsEntry
+	nil,                                              // 251: pamlogix.EconomyDonationsByUserList.UserDonationsEntry
+	nil,                                              // 252: pamlogix.EconomyListStoreItemCost.CurrenciesEntry
+	nil,                                              // 253: pamlogix.EconomyListStoreItem.AdditionalPropertiesEntry
+	nil,                                              // 254: pamlogix.EconomyListPlacement.AdditionalPropertiesEntry
+	nil,                                              // 255: pamlogix.EconomyList.DonationsEntry
+	nil,                                              // 256: pamlogix.InventoryItem.StringPropertiesEntry
+	nil,                                              // 257: pamlogix.InventoryItem.NumericPropertiesEntry
+	nil,                                              // 258: pamlogix.InventoryGrantRequest.ItemsEntry
+	nil,                                              // 259: pamlogix.InventoryUpdateItemProperties.StringPropertiesEntry
+	nil,                                              // 260: pamlogix.InventoryUpdateItemProperties.NumericPropertiesEntry
+	nil,                                              // 261: pamlogix.InventoryUpdateItemsRequest.ItemUpdatesEntry
+	nil,                                              // 262: pamlogix.Inventory.ItemsEntry
+	nil,                                              // 263: pamlogix.InventoryConsumeRequest.ItemsEntry
+	nil,                                              // 264: pamlogix.InventoryConsumeRequest.InstancesEntry
+	nil,                                              // 265: pamlogix.InventoryConsumeRewards.RewardsEntry
+	nil,                                              // 266: pamlogix.InventoryConsumeRewards.InstanceRewardsEntry
+	nil,                                              // 267: pamlogix.InventoryList.ItemsEntry
+	nil,                                              // 268: pamlogix.AuctionBidAmount.CurrenciesEntry
+	nil,                                              // 269: pamlogix.AuctionTemplateConditionListingCost.CurrenciesEntry
+	nil,                                              // 270: pamlogix.AuctionTemplateConditionListingCost.ItemsEntry
+	nil,                                              // 271: pamlogix.AuctionTemplateConditionListingCost.EnergiesEntry
+	nil,                                              // 272: pamlogix.AuctionTemplate.ConditionsEntry
+	nil,                                              // 273: pamlogix.AuctionTemplates.TemplatesEntry
+	nil,                                              // 274: pamlogix.EconomyGrantRequest.CurrenciesEntry
+	nil,                                              // 275: pamlogix.EconomyGrantRequest.ItemsEntry
+	nil,                                              // 276: pamlogix.EconomyPlacementStartRequest.MetadataEntry
+	nil,                                              // 277: pamlogix.EconomyPlacementStatus.MetadataEntry
+	nil,                                              // 278: pamlogix.EconomyUpdateAck.WalletEntry
+	nil,                                              // 279: pamlogix.EconomyPurchaseAck.WalletEntry
+	nil,                                              // 280: pamlogix.Energy.AdditionalPropertiesEntry
+	nil,                                              // 281: pamlogix.EnergyList.EnergiesEntry
+	nil,                                              // 282: pamlogix.EnergySpendRequest.AmountsEntry
+	nil,                                              // 283: pamlogix.EnergyGrantRequest.AmountsEntry
+	nil,                                              // 284: pamlogix.Tutorial.AdditionalPropertiesEntry
+	nil,                                              // 285: pamlogix.TutorialList.TutorialsEntry
+	nil,                                              // 286: pamlogix.UnlockableCost.ItemsEntry
+	nil,                                              // 287: pamlogix.UnlockableCost.CurrenciesEntry
+	nil,                                              // 288: pamlogix.Unlockable.AdditionalPropertiesEntry
+	nil,                                              // 289: pamlogix.UnlockableSlotCost.ItemsEntry
+	nil,                                              // 290: pamlogix.UnlockableSlotCost.CurrenciesEntry
+	nil,                                              // 291: pamlogix.SubAchievement.AdditionalPropertiesEntry
+	nil,                                              // 292: pamlogix.Achievement.SubAchievementsEntry
+	nil,                                              // 293: pamlogix.Achievement.AdditionalPropertiesEntry
+	nil,                                              // 294: pamlogix.AchievementList.AchievementsEntry
+	nil,                                              // 295: pamlogix.AchievementList.RepeatAchievementsEntry
+	nil,                                              // 296: pamlogix.AchievementsUpdateAck.AchievementsEntry
+	nil,                                              // 297: pamlogix.AchievementsUpdateAck.RepeatAchievementsEntry
+	nil,                                              // 298: pamlogix.AchievementsUpdateRequest.AchievementsEntry
+	nil,                                              // 299: pamlogix.StreaksList.StreaksEntry
+	nil,                                              // 300: pamlogix.StreaksUpdateRequest.UpdatesEntry
+	nil,                                              // 301: pamlogix.SyncInventoryItem.StringPropertiesEntry
+	nil,                                              // 302: pamlogix.SyncInventoryItem.NumericPropertiesEntry
+	nil,                                              // 303: pamlogix.SyncInventory.ItemsEntry
+	nil,                                              // 304: pamlogix.SyncEconomy.CurrenciesEntry
+	nil,                                              // 305: pamlogix.SyncAchievements.AchievementsEntry
+	nil,                                              // 306: pamlogix.SyncEnergy.EnergiesEntry
+	nil,                                              // 307: pamlogix.SyncEventLeaderboards.EventLeaderboardsEntry
+	nil,                                              // 308: pamlogix.SyncProgressionUpdate.CountsEntry
+	nil,                                              // 309: pamlogix.SyncProgressions.ProgressionsEntry
+	nil,                                              // 310: pamlogix.SyncTutorials.UpdatesEntry
+	nil,                                              // 311: pamlogix.SyncUnlockables.UpdatesEntry
+	nil,                                              // 312: pamlogix.SyncStreaks.UpdatesEntry
+	nil,                                              // 313: pamlogix.SyncResponse.WalletEntry
+	(*structpb.Struct)(nil),                          // 314: google.protobuf.Struct
+	(*wrapperspb.Int32Value)(nil),                    // 315: google.protobuf.Int32Value
+	(*descriptorpb.EnumValueOptions)(nil),            // 316: google.protobuf.EnumValueOptions
 }
 var file_pamlogix_pamlogix_proto_depIdxs = []int32{
-	189, // 0: pamlogix.ProgressionCost.items:type_name -> pamlogix.ProgressionCost.ItemsEntry
-	190, // 1: pamlogix.ProgressionCost.currencies:type_name -> pamlogix.ProgressionCost.CurrenciesEntry
-	191, // 2: pamlogix.ProgressionPreconditions.counts:type_name -> pamlogix.ProgressionPreconditions.CountsEntry
-	8,   // 3: pamlogix.ProgressionPreconditions.cost:type_name -> pamlogix.ProgressionCost
-	192, // 4: pamlogix.ProgressionPreconditions.items_min:type_name -> pamlogix.ProgressionPreconditions.ItemsMinEntry
-	193, // 5: pamlogix.ProgressionPreconditions.items_max:type_name -> pamlogix.ProgressionPreconditions.ItemsMaxEntry
-	194, // 6: pamlogix.ProgressionPreconditions.stats_min:type_name -> pamlogix.ProgressionPreconditions.StatsMinEntry
-	195, // 7: pamlogix.ProgressionPreconditions.stats_max:type_name -> pamlogix.ProgressionPreconditions.StatsMaxEntry
-	196, // 8: pamlogix.ProgressionPreconditions.energy_min:type_name -> pamlogix.ProgressionPreconditions.EnergyMinEntry
-	197, // 9: pamlogix.ProgressionPreconditions.energy_max:type_name -> pamlogix.ProgressionPreconditions.EnergyMaxEntry
-	198, // 10: pamlogix.ProgressionPreconditions.currency_min:type_name -> pamlogix.ProgressionPreconditions.CurrencyMinEntry
-	199, // 11: pamlogix.ProgressionPreconditions.currency_max:type_name -> pamlogix.ProgressionPreconditions.CurrencyMaxEntry
-	9,   // 12: pamlogix.ProgressionPreconditionsBlock.direct:type_name -> pamlogix.ProgressionPreconditions
+	207, // 0: pamlogix.ProgressionCost.items:type_name -> pamlogix.ProgressionCost.ItemsEntry
+	208, // 1: pamlogix.ProgressionCost.currencies:type_name -> pamlogix.ProgressionCost.CurrenciesEntry
+	209, // 2: pamlogix.ProgressionPreconditions.counts:type_name -> pamlogix.ProgressionPreconditions.CountsEntry
+	9,   // 3: pamlogix.ProgressionPreconditions.cost:type_name -> pamlogix.ProgressionCost
+	210, // 4: pamlogix.ProgressionPreconditions.items_min:type_name -> pamlogix.ProgressionPreconditions.ItemsMinEntry
+	211, // 5: pamlogix.ProgressionPreconditions.items_max:type_name -> pamlogix.ProgressionPreconditions.ItemsMaxEntry
+	212, // 6: pamlogix.ProgressionPreconditions.stats_min:type_name -> pamlogix.ProgressionPreconditions.StatsMinEntry
+	213, // 7: pamlogix.ProgressionPreconditions.stats_max:type_name -> pamlogix.ProgressionPreconditions.StatsMaxEntry
+	214, // 8: pamlogix.ProgressionPreconditions.energy_min:type_name -> pamlogix.ProgressionPreconditions.EnergyMinEntry
+	215, // 9: pamlogix.ProgressionPreconditions.energy_max:type_name -> pamlogix.ProgressionPreconditions.EnergyMaxEntry
+	216, // 10: pamlogix.ProgressionPreconditions.currency_min:type_name -> pamlogix.ProgressionPreconditions.CurrencyMinEntry
+	217, // 11: pamlogix.ProgressionPreconditions.currency_max:type_name -> pamlogix.ProgressionPreconditions.CurrencyMaxEntry
+	10,  // 12: pamlogix.ProgressionPreconditionsBlock.direct:type_name -> pamlogix.ProgressionPreconditions
 	2,   // 13: pamlogix.ProgressionPreconditionsBlock.operator:type_name -> pamlogix.ProgressionPreconditionsOperator
-	10,  // 14: pamlogix.ProgressionPreconditionsBlock.nested:type_name -> pamlogix.ProgressionPreconditionsBlock
-	200, // 15: pamlogix.Progression.counts:type_name -> pamlogix.Progression.CountsEntry
-	201, // 16: pamlogix.Progression.additional_properties:type_name -> pamlogix.Progression.AdditionalPropertiesEntry
-	10,  // 17: pamlogix.Progression.preconditions:type_name -> pamlogix.ProgressionPreconditionsBlock
-	10,  // 18: pamlogix.Progression.unmet_preconditions:type_name -> pamlogix.ProgressionPreconditionsBlock
+	11,  // 14: pamlogix.ProgressionPreconditionsBlock.nested:type_name -> pamlogix.ProgressionPreconditionsBlock
+	218, // 15: pamlogix.Progression.counts:type_name -> pamlogix.Progression.CountsEntry
+	219, // 16: pamlogix.Progression.additional_properties:type_name -> pamlogix.Progression.AdditionalPropertiesEntry
+	11,  // 17: pamlogix.Progression.preconditions:type_name -> pamlogix.ProgressionPreconditionsBlock
+	11,  // 18: pamlogix.Progression.unmet_preconditions:type_name -> pamlogix.ProgressionPreconditionsBlock
 	3,   // 19: pamlogix.ProgressionDelta.state:type_name -> pamlogix.ProgressionDeltaState
-	202, // 20: pamlogix.ProgressionDelta.counts:type_name -> pamlogix.ProgressionDelta.CountsEntry
-	10,  // 21: pamlogix.ProgressionDelta.preconditions:type_name -> pamlogix.ProgressionPreconditionsBlock
-	203, // 22: pamlogix.ProgressionList.progressions:type_name -> pamlogix.ProgressionList.ProgressionsEntry
-	204, // 23: pamlogix.ProgressionList.deltas:type_name -> pamlogix.ProgressionList.DeltasEntry
-	205, // 24: pamlogix.ProgressionGetRequest.progressions:type_name -> pamlogix.ProgressionGetRequest.ProgressionsEntry
-	206, // 25: pamlogix.ProgressionUpdateRequest.counts:type_name -> pamlogix.ProgressionUpdateRequest.CountsEntry
+	220, // 20: pamlogix.ProgressionDelta.counts:type_name -> pamlogix.ProgressionDelta.CountsEntry
+	11,  // 21: pamlogix.ProgressionDelta.preconditions:type_name -> pamlogix.ProgressionPreconditionsBlock
+	221, // 22: pamlogix.ProgressionList.progressions:type_name -> pamlogix.ProgressionList.ProgressionsEntry
+	222, // 23: pamlogix.ProgressionList.deltas:type_name -> pamlogix.ProgressionList.DeltasEntry
+	223, // 24: pamlogix.ProgressionGetRequest.progressions:type_name -> pamlogix.ProgressionGetRequest.ProgressionsEntry
+	224, // 25: pamlogix.ProgressionUpdateRequest.counts:type_name -> pamlogix.ProgressionUpdateRequest.CountsEntry
 	4,   // 26: pamlogix.StatUpdate.operator:type_name -> pamlogix.StatUpdateOperator
-	18,  // 27: pamlogix.StatUpdateRequest.public:type_name -> pamlogix.StatUpdate
-	18,  // 28: pamlogix.StatUpdateRequest.private:type_name -> pamlogix.StatUpdate
-	293, // 29: pamlogix.Stat.additional_properties:type_name -> google.protobuf.Struct
-	207, // 30: pamlogix.StatList.public:type_name -> pamlogix.StatList.PublicEntry
-	208, // 31: pamlogix.StatList.private:type_name -> pamlogix.StatList.PrivateEntry
-	209, // 32: pamlogix.DevicePrefsRequest.preferences:type_name -> pamlogix.DevicePrefsRequest.PreferencesEntry
-	210, // 33: pamlogix.RewardInventoryItem.string_properties:type_name -> pamlogix.RewardInventoryItem.StringPropertiesEntry
-	211, // 34: pamlogix.RewardInventoryItem.numeric_properties:type_name -> pamlogix.RewardInventoryItem.NumericPropertiesEntry
-	212, // 35: pamlogix.Reward.items:type_name -> pamlogix.Reward.ItemsEntry
-	213, // 36: pamlogix.Reward.currencies:type_name -> pamlogix.Reward.CurrenciesEntry
-	214, // 37: pamlogix.Reward.energies:type_name -> pamlogix.Reward.EnergiesEntry
-	25,  // 38: pamlogix.Reward.energy_modifiers:type_name -> pamlogix.RewardEnergyModifier
-	26,  // 39: pamlogix.Reward.reward_modifiers:type_name -> pamlogix.RewardModifier
-	215, // 40: pamlogix.Reward.item_instances:type_name -> pamlogix.Reward.ItemInstancesEntry
-	28,  // 41: pamlogix.RewardList.rewards:type_name -> pamlogix.Reward
-	216, // 42: pamlogix.AvailableRewardsStringProperty.options:type_name -> pamlogix.AvailableRewardsStringProperty.OptionsEntry
-	31,  // 43: pamlogix.AvailableRewardsItem.count:type_name -> pamlogix.RewardRangeInt64
-	217, // 44: pamlogix.AvailableRewardsItem.numeric_properties:type_name -> pamlogix.AvailableRewardsItem.NumericPropertiesEntry
-	218, // 45: pamlogix.AvailableRewardsItem.string_properties:type_name -> pamlogix.AvailableRewardsItem.StringPropertiesEntry
-	31,  // 46: pamlogix.AvailableRewardsItemSet.count:type_name -> pamlogix.RewardRangeInt64
-	31,  // 47: pamlogix.AvailableRewardsCurrency.count:type_name -> pamlogix.RewardRangeInt64
-	30,  // 48: pamlogix.AvailableRewardsEnergy.count:type_name -> pamlogix.RewardRangeInt32
-	31,  // 49: pamlogix.AvailableRewardsEnergyModifier.value:type_name -> pamlogix.RewardRangeInt64
-	32,  // 50: pamlogix.AvailableRewardsEnergyModifier.duration_sec:type_name -> pamlogix.RewardRangeUInt64
-	31,  // 51: pamlogix.AvailableRewardsRewardModifier.value:type_name -> pamlogix.RewardRangeInt64
-	32,  // 52: pamlogix.AvailableRewardsRewardModifier.duration_sec:type_name -> pamlogix.RewardRangeUInt64
-	219, // 53: pamlogix.AvailableRewardsContents.items:type_name -> pamlogix.AvailableRewardsContents.ItemsEntry
-	37,  // 54: pamlogix.AvailableRewardsContents.item_sets:type_name -> pamlogix.AvailableRewardsItemSet
-	220, // 55: pamlogix.AvailableRewardsContents.currencies:type_name -> pamlogix.AvailableRewardsContents.CurrenciesEntry
-	221, // 56: pamlogix.AvailableRewardsContents.energies:type_name -> pamlogix.AvailableRewardsContents.EnergiesEntry
-	40,  // 57: pamlogix.AvailableRewardsContents.energy_modifiers:type_name -> pamlogix.AvailableRewardsEnergyModifier
-	41,  // 58: pamlogix.AvailableRewardsContents.reward_modifiers:type_name -> pamlogix.AvailableRewardsRewardModifier
-	42,  // 59: pamlogix.AvailableRewards.guaranteed:type_name -> pamlogix.AvailableRewardsContents
-	42,  // 60: pamlogix.AvailableRewards.weighted:type_name -> pamlogix.AvailableRewardsContents
-	28,  // 61: pamlogix.IncentiveClaim.reward:type_name -> pamlogix.Reward
+	19,  // 27: pamlogix.StatUpdateRequest.public:type_name -> pamlogix.StatUpdate
+	19,  // 28: pamlogix.StatUpdateRequest.private:type_name -> pamlogix.StatUpdate
+	314, // 29: pamlogix.Stat.additional_properties:type_name -> google.protobuf.Struct
+	225, // 30: pamlogix.StatList.public:type_name -> pamlogix.StatList.PublicEntry
+	226, // 31: pamlogix.StatList.private:type_name -> pamlogix.StatList.PrivateEntry
+	227, // 32: pamlogix.DevicePrefsRequest.preferences:type_name -> pamlogix.DevicePrefsRequest.PreferencesEntry
+	228, // 33: pamlogix.RewardInventoryItem.string_properties:type_name -> pamlogix.RewardInventoryItem.StringPropertiesEntry
+	229, // 34: pamlogix.RewardInventoryItem.numeric_properties:type_name -> pamlogix.RewardInventoryItem.NumericPropertiesEntry
+	230, // 35: pamlogix.Reward.items:type_name -> pamlogix.Reward.ItemsEntry
+	231, // 36: pamlogix.Reward.currencies:type_name -> pamlogix.Reward.CurrenciesEntry
+	232, // 37: pamlogix.Reward.energies:type_name -> pamlogix.Reward.EnergiesEntry
+	26,  // 38: pamlogix.Reward.energy_modifiers:type_name -> pamlogix.RewardEnergyModifier
+	27,  // 39: pamlogix.Reward.reward_modifiers:type_name -> pamlogix.RewardModifier
+	233, // 40: pamlogix.Reward.item_instances:type_name -> pamlogix.Reward.ItemInstancesEntry
+	29,  // 41: pamlogix.RewardList.rewards:type_name -> pamlogix.Reward
+	234, // 42: pamlogix.AvailableRewardsStringProperty.options:type_name -> pamlogix.AvailableRewardsStringProperty.OptionsEntry
+	32,  // 43: pamlogix.AvailableRewardsItem.count:type_name -> pamlogix.RewardRangeInt64
+	235, // 44: pamlogix.AvailableRewardsItem.numeric_properties:type_name -> pamlogix.AvailableRewardsItem.NumericPropertiesEntry
+	236, // 45: pamlogix.AvailableRewardsItem.string_properties:type_name -> pamlogix.AvailableRewardsItem.StringPropertiesEntry
+	32,  // 46: pamlogix.AvailableRewardsItemSet.count:type_name -> pamlogix.RewardRangeInt64
+	32,  // 47: pamlogix.AvailableRewardsCurrency.count:type_name -> pamlogix.RewardRangeInt64
+	31,  // 48: pamlogix.AvailableRewardsEnergy.count:type_name -> pamlogix.RewardRangeInt32
+	32,  // 49: pamlogix.AvailableRewardsEnergyModifier.value:type_name -> pamlogix.RewardRangeInt64
+	33,  // 50: pamlogix.AvailableRewardsEnergyModifier.duration_sec:type_name -> pamlogix.RewardRangeUInt64
+	32,  // 51: pamlogix.AvailableRewardsRewardModifier.value:type_name -> pamlogix.RewardRangeInt64
+	33,  // 52: pamlogix.AvailableRewardsRewardModifier.duration_sec:type_name -> pamlogix.RewardRangeUInt64
+	237, // 53: pamlogix.AvailableRewardsContents.items:type_name -> pamlogix.AvailableRewardsContents.ItemsEntry
+	38,  // 54: pamlogix.AvailableRewardsContents.item_sets:type_name -> pamlogix.AvailableRewardsItemSet
+	238, // 55: pamlogix.AvailableRewardsContents.currencies:type_name -> pamlogix.AvailableRewardsContents.CurrenciesEntry
+	239, // 56: pamlogix.AvailableRewardsContents.energies:type_name -> pamlogix.AvailableRewardsContents.EnergiesEntry
+	41,  // 57: pamlogix.AvailableRewardsContents.energy_modifiers:type_name -> pamlogix.AvailableRewardsEnergyModifier
+	42,  // 58: pamlogix.AvailableRewardsContents.reward_modifiers:type_name -> pamlogix.AvailableRewardsRewardModifier
+	43,  // 59: pamlogix.AvailableRewards.guaranteed:type_name -> pamlogix.AvailableRewardsContents
+	43,  // 60: pamlogix.AvailableRewards.weighted:type_name -> pamlogix.AvailableRewardsContents
+	29,  // 61: pamlogix.IncentiveClaim.reward:type_name -> pamlogix.Reward
 	6,   // 62: pamlogix.Incentive.type:type_name -> pamlogix.IncentiveType
-	43,  // 63: pamlogix.Incentive.recipient_rewards:type_name -> pamlogix.AvailableRewards
-	43,  // 64: pamlogix.Incentive.sender_rewards:type_name -> pamlogix.AvailableRewards
-	28,  // 65: pamlogix.Incentive.rewards:type_name -> pamlogix.Reward
-	222, // 66: pamlogix.Incentive.claims:type_name -> pamlogix.Incentive.ClaimsEntry
-	293, // 67: pamlogix.Incentive.additional_properties:type_name -> google.protobuf.Struct
-	45,  // 68: pamlogix.IncentiveList.incentives:type_name -> pamlogix.Incentive
+	44,  // 63: pamlogix.Incentive.recipient_rewards:type_name -> pamlogix.AvailableRewards
+	44,  // 64: pamlogix.Incentive.sender_rewards:type_name -> pamlogix.AvailableRewards
+	29,  // 65: pamlogix.Incentive.rewards:type_name -> pamlogix.Reward
+	240, // 66: pamlogix.Incentive.claims:type_name -> pamlogix.Incentive.ClaimsEntry
+	314, // 67: pamlogix.Incentive.additional_properties:type_name -> google.protobuf.Struct
+	46,  // 68: pamlogix.IncentiveList.incentives:type_name -> pamlogix.Incentive
 	6,   // 69: pamlogix.IncentiveInfo.type:type_name -> pamlogix.IncentiveType
-	43,  // 70: pamlogix.IncentiveInfo.available_rewards:type_name -> pamlogix.AvailableRewards
-	28,  // 71: pamlogix.IncentiveInfo.reward:type_name -> pamlogix.Reward
-	43,  // 72: pamlogix.EventLeaderboardRewardTier.available_rewards:type_name -> pamlogix.AvailableRewards
-	59,  // 73: pamlogix.EventLeaderboardRewardTiers.reward_tiers:type_name -> pamlogix.EventLeaderboardRewardTier
-	43,  // 74: pamlogix.EventLeaderboard.available_rewards:type_name -> pamlogix.AvailableRewards
-	223, // 75: pamlogix.EventLeaderboard.reward_tiers:type_name -> pamlogix.EventLeaderboard.RewardTiersEntry
-	224, // 76: pamlogix.EventLeaderboard.change_zones:type_name -> pamlogix.EventLeaderboard.ChangeZonesEntry
-	28,  // 77: pamlogix.EventLeaderboard.reward:type_name -> pamlogix.Reward
-	225, // 78: pamlogix.EventLeaderboard.additional_properties:type_name -> pamlogix.EventLeaderboard.AdditionalPropertiesEntry
-	58,  // 79: pamlogix.EventLeaderboard.scores:type_name -> pamlogix.EventLeaderboardScore
-	293, // 80: pamlogix.EventLeaderboard.matchmaker_properties:type_name -> google.protobuf.Struct
-	62,  // 81: pamlogix.EventLeaderboards.event_leaderboards:type_name -> pamlogix.EventLeaderboard
-	294, // 82: pamlogix.EventLeaderboardDebugRandomScoresRequest.operator:type_name -> google.protobuf.Int32Value
-	43,  // 83: pamlogix.EconomyDonation.recipient_available_rewards:type_name -> pamlogix.AvailableRewards
-	66,  // 84: pamlogix.EconomyDonation.contributors:type_name -> pamlogix.EconomyDonationContributor
-	43,  // 85: pamlogix.EconomyDonation.contributor_available_rewards:type_name -> pamlogix.AvailableRewards
-	28,  // 86: pamlogix.EconomyDonation.recipient_rewards:type_name -> pamlogix.Reward
-	226, // 87: pamlogix.EconomyDonation.additional_properties:type_name -> pamlogix.EconomyDonation.AdditionalPropertiesEntry
-	67,  // 88: pamlogix.EconomyDonationAck.donation:type_name -> pamlogix.EconomyDonation
-	67,  // 89: pamlogix.EconomyDonationsList.donations:type_name -> pamlogix.EconomyDonation
-	227, // 90: pamlogix.EconomyDonationClaimRequestDetails.donors:type_name -> pamlogix.EconomyDonationClaimRequestDetails.DonorsEntry
-	228, // 91: pamlogix.EconomyDonationClaimRequest.donations:type_name -> pamlogix.EconomyDonationClaimRequest.DonationsEntry
-	69,  // 92: pamlogix.EconomyDonationClaimRewards.donations:type_name -> pamlogix.EconomyDonationsList
-	229, // 93: pamlogix.EconomyDonationClaimRewards.claimed_rewards:type_name -> pamlogix.EconomyDonationClaimRewards.ClaimedRewardsEntry
-	230, // 94: pamlogix.EconomyDonationsByUserList.user_donations:type_name -> pamlogix.EconomyDonationsByUserList.UserDonationsEntry
-	231, // 95: pamlogix.EconomyListStoreItemCost.currencies:type_name -> pamlogix.EconomyListStoreItemCost.CurrenciesEntry
-	77,  // 96: pamlogix.EconomyListStoreItem.cost:type_name -> pamlogix.EconomyListStoreItemCost
-	43,  // 97: pamlogix.EconomyListStoreItem.available_rewards:type_name -> pamlogix.AvailableRewards
-	232, // 98: pamlogix.EconomyListStoreItem.additional_properties:type_name -> pamlogix.EconomyListStoreItem.AdditionalPropertiesEntry
-	28,  // 99: pamlogix.EconomyListPlacement.reward:type_name -> pamlogix.Reward
-	43,  // 100: pamlogix.EconomyListPlacement.available_rewards:type_name -> pamlogix.AvailableRewards
-	233, // 101: pamlogix.EconomyListPlacement.additional_properties:type_name -> pamlogix.EconomyListPlacement.AdditionalPropertiesEntry
-	78,  // 102: pamlogix.EconomyList.store_items:type_name -> pamlogix.EconomyListStoreItem
-	79,  // 103: pamlogix.EconomyList.placements:type_name -> pamlogix.EconomyListPlacement
-	234, // 104: pamlogix.EconomyList.donations:type_name -> pamlogix.EconomyList.DonationsEntry
-	27,  // 105: pamlogix.EconomyList.active_reward_modifiers:type_name -> pamlogix.ActiveRewardModifier
-	43,  // 106: pamlogix.InventoryItem.consume_available_rewards:type_name -> pamlogix.AvailableRewards
-	235, // 107: pamlogix.InventoryItem.string_properties:type_name -> pamlogix.InventoryItem.StringPropertiesEntry
-	236, // 108: pamlogix.InventoryItem.numeric_properties:type_name -> pamlogix.InventoryItem.NumericPropertiesEntry
-	237, // 109: pamlogix.InventoryGrantRequest.items:type_name -> pamlogix.InventoryGrantRequest.ItemsEntry
-	238, // 110: pamlogix.InventoryUpdateItemProperties.string_properties:type_name -> pamlogix.InventoryUpdateItemProperties.StringPropertiesEntry
-	239, // 111: pamlogix.InventoryUpdateItemProperties.numeric_properties:type_name -> pamlogix.InventoryUpdateItemProperties.NumericPropertiesEntry
-	240, // 112: pamlogix.InventoryUpdateItemsRequest.item_updates:type_name -> pamlogix.InventoryUpdateItemsRequest.ItemUpdatesEntry
-	241, // 113: pamlogix.Inventory.items:type_name -> pamlogix.Inventory.ItemsEntry
-	242, // 114: pamlogix.InventoryConsumeRequest.items:type_name -> pamlogix.InventoryConsumeRequest.ItemsEntry
-	243, // 115: pamlogix.InventoryConsumeRequest.instances:type_name -> pamlogix.InventoryConsumeRequest.InstancesEntry
-	86,  // 116: pamlogix.InventoryConsumeRewards.inventory:type_name -> pamlogix.Inventory
-	244, // 117: pamlogix.InventoryConsumeRewards.rewards:type_name -> pamlogix.InventoryConsumeRewards.RewardsEntry
-	245, // 118: pamlogix.InventoryConsumeRewards.instance_rewards:type_name -> pamlogix.InventoryConsumeRewards.InstanceRewardsEntry
-	86,  // 119: pamlogix.InventoryUpdateAck.inventory:type_name -> pamlogix.Inventory
-	246, // 120: pamlogix.InventoryList.items:type_name -> pamlogix.InventoryList.ItemsEntry
-	247, // 121: pamlogix.AuctionBidAmount.currencies:type_name -> pamlogix.AuctionBidAmount.CurrenciesEntry
-	91,  // 122: pamlogix.AuctionFee.fixed:type_name -> pamlogix.AuctionBidAmount
-	248, // 123: pamlogix.AuctionTemplateConditionListingCost.currencies:type_name -> pamlogix.AuctionTemplateConditionListingCost.CurrenciesEntry
-	249, // 124: pamlogix.AuctionTemplateConditionListingCost.items:type_name -> pamlogix.AuctionTemplateConditionListingCost.ItemsEntry
-	250, // 125: pamlogix.AuctionTemplateConditionListingCost.energies:type_name -> pamlogix.AuctionTemplateConditionListingCost.EnergiesEntry
-	91,  // 126: pamlogix.AuctionTemplateConditionBidIncrement.fixed:type_name -> pamlogix.AuctionBidAmount
-	93,  // 127: pamlogix.AuctionTemplateCondition.listing_cost:type_name -> pamlogix.AuctionTemplateConditionListingCost
-	91,  // 128: pamlogix.AuctionTemplateCondition.bid_start:type_name -> pamlogix.AuctionBidAmount
-	94,  // 129: pamlogix.AuctionTemplateCondition.bid_increment:type_name -> pamlogix.AuctionTemplateConditionBidIncrement
-	92,  // 130: pamlogix.AuctionTemplateCondition.fee:type_name -> pamlogix.AuctionFee
-	251, // 131: pamlogix.AuctionTemplate.conditions:type_name -> pamlogix.AuctionTemplate.ConditionsEntry
-	252, // 132: pamlogix.AuctionTemplates.templates:type_name -> pamlogix.AuctionTemplates.TemplatesEntry
-	81,  // 133: pamlogix.AuctionReward.items:type_name -> pamlogix.InventoryItem
-	91,  // 134: pamlogix.AuctionBid.bid:type_name -> pamlogix.AuctionBidAmount
-	98,  // 135: pamlogix.Auction.reward:type_name -> pamlogix.AuctionReward
-	92,  // 136: pamlogix.Auction.fee:type_name -> pamlogix.AuctionFee
-	99,  // 137: pamlogix.Auction.bid:type_name -> pamlogix.AuctionBid
-	91,  // 138: pamlogix.Auction.bid_next:type_name -> pamlogix.AuctionBidAmount
-	99,  // 139: pamlogix.Auction.bid_first:type_name -> pamlogix.AuctionBid
-	99,  // 140: pamlogix.Auction.bid_history:type_name -> pamlogix.AuctionBid
-	99,  // 141: pamlogix.AuctionNotificationBid.bid:type_name -> pamlogix.AuctionBid
-	91,  // 142: pamlogix.AuctionNotificationBid.bid_next:type_name -> pamlogix.AuctionBidAmount
-	101, // 143: pamlogix.StreamEnvelope.auction_bid:type_name -> pamlogix.AuctionNotificationBid
-	100, // 144: pamlogix.AuctionClaimBid.auction:type_name -> pamlogix.Auction
-	98,  // 145: pamlogix.AuctionClaimBid.reward:type_name -> pamlogix.AuctionReward
-	100, // 146: pamlogix.AuctionClaimCreated.auction:type_name -> pamlogix.Auction
-	91,  // 147: pamlogix.AuctionClaimCreated.reward:type_name -> pamlogix.AuctionBidAmount
-	91,  // 148: pamlogix.AuctionClaimCreated.fee:type_name -> pamlogix.AuctionBidAmount
-	81,  // 149: pamlogix.AuctionClaimCreated.returned_items:type_name -> pamlogix.InventoryItem
-	100, // 150: pamlogix.AuctionCancel.auction:type_name -> pamlogix.Auction
-	98,  // 151: pamlogix.AuctionCancel.reward:type_name -> pamlogix.AuctionReward
-	100, // 152: pamlogix.AuctionList.auctions:type_name -> pamlogix.Auction
-	91,  // 153: pamlogix.AuctionBidRequest.bid:type_name -> pamlogix.AuctionBidAmount
-	5,   // 154: pamlogix.EconomyListRequest.store_type:type_name -> pamlogix.EconomyStoreType
-	253, // 155: pamlogix.EconomyGrantRequest.currencies:type_name -> pamlogix.EconomyGrantRequest.CurrenciesEntry
-	26,  // 156: pamlogix.EconomyGrantRequest.reward_modifiers:type_name -> pamlogix.RewardModifier
-	254, // 157: pamlogix.EconomyGrantRequest.items:type_name -> pamlogix.EconomyGrantRequest.ItemsEntry
-	5,   // 158: pamlogix.EconomyPurchaseIntentRequest.store_type:type_name -> pamlogix.EconomyStoreType
-	5,   // 159: pamlogix.EconomyPurchaseRequest.store_type:type_name -> pamlogix.EconomyStoreType
-	5,   // 160: pamlogix.EconomyPurchaseRestoreRequest.store_type:type_name -> pamlogix.EconomyStoreType
-	255, // 161: pamlogix.EconomyPlacementStartRequest.metadata:type_name -> pamlogix.EconomyPlacementStartRequest.MetadataEntry
-	28,  // 162: pamlogix.EconomyPlacementStatus.reward:type_name -> pamlogix.Reward
-	256, // 163: pamlogix.EconomyPlacementStatus.metadata:type_name -> pamlogix.EconomyPlacementStatus.MetadataEntry
-	257, // 164: pamlogix.EconomyUpdateAck.wallet:type_name -> pamlogix.EconomyUpdateAck.WalletEntry
-	86,  // 165: pamlogix.EconomyUpdateAck.inventory:type_name -> pamlogix.Inventory
-	28,  // 166: pamlogix.EconomyUpdateAck.reward:type_name -> pamlogix.Reward
-	27,  // 167: pamlogix.EconomyUpdateAck.active_reward_modifiers:type_name -> pamlogix.ActiveRewardModifier
-	258, // 168: pamlogix.EconomyPurchaseAck.wallet:type_name -> pamlogix.EconomyPurchaseAck.WalletEntry
-	86,  // 169: pamlogix.EconomyPurchaseAck.inventory:type_name -> pamlogix.Inventory
-	28,  // 170: pamlogix.EconomyPurchaseAck.reward:type_name -> pamlogix.Reward
-	126, // 171: pamlogix.Energy.modifiers:type_name -> pamlogix.EnergyModifier
-	43,  // 172: pamlogix.Energy.available_rewards:type_name -> pamlogix.AvailableRewards
-	259, // 173: pamlogix.Energy.additional_properties:type_name -> pamlogix.Energy.AdditionalPropertiesEntry
-	260, // 174: pamlogix.EnergyList.energies:type_name -> pamlogix.EnergyList.EnergiesEntry
-	261, // 175: pamlogix.EnergySpendRequest.amounts:type_name -> pamlogix.EnergySpendRequest.AmountsEntry
-	128, // 176: pamlogix.EnergySpendReward.energies:type_name -> pamlogix.EnergyList
-	28,  // 177: pamlogix.EnergySpendReward.reward:type_name -> pamlogix.Reward
-	262, // 178: pamlogix.EnergyGrantRequest.amounts:type_name -> pamlogix.EnergyGrantRequest.AmountsEntry
-	132, // 179: pamlogix.LeaderboardConfigList.leaderboard_configs:type_name -> pamlogix.LeaderboardConfig
-	7,   // 180: pamlogix.Tutorial.state:type_name -> pamlogix.TutorialState
-	263, // 181: pamlogix.Tutorial.additional_properties:type_name -> pamlogix.Tutorial.AdditionalPropertiesEntry
-	264, // 182: pamlogix.TutorialList.tutorials:type_name -> pamlogix.TutorialList.TutorialsEntry
-	142, // 183: pamlogix.TeamList.teams:type_name -> pamlogix.Team
-	265, // 184: pamlogix.UnlockableCost.items:type_name -> pamlogix.UnlockableCost.ItemsEntry
-	266, // 185: pamlogix.UnlockableCost.currencies:type_name -> pamlogix.UnlockableCost.CurrenciesEntry
-	148, // 186: pamlogix.Unlockable.start_cost:type_name -> pamlogix.UnlockableCost
-	148, // 187: pamlogix.Unlockable.cost:type_name -> pamlogix.UnlockableCost
-	28,  // 188: pamlogix.Unlockable.reward:type_name -> pamlogix.Reward
-	43,  // 189: pamlogix.Unlockable.available_rewards:type_name -> pamlogix.AvailableRewards
-	267, // 190: pamlogix.Unlockable.additional_properties:type_name -> pamlogix.Unlockable.AdditionalPropertiesEntry
-	268, // 191: pamlogix.UnlockableSlotCost.items:type_name -> pamlogix.UnlockableSlotCost.ItemsEntry
-	269, // 192: pamlogix.UnlockableSlotCost.currencies:type_name -> pamlogix.UnlockableSlotCost.CurrenciesEntry
-	149, // 193: pamlogix.UnlockablesList.unlockables:type_name -> pamlogix.Unlockable
-	149, // 194: pamlogix.UnlockablesList.overflow:type_name -> pamlogix.Unlockable
-	150, // 195: pamlogix.UnlockablesList.slot_cost:type_name -> pamlogix.UnlockableSlotCost
-	151, // 196: pamlogix.UnlockablesReward.unlockables:type_name -> pamlogix.UnlockablesList
-	28,  // 197: pamlogix.UnlockablesReward.reward:type_name -> pamlogix.Reward
-	43,  // 198: pamlogix.UnlockablesReward.available_rewards:type_name -> pamlogix.AvailableRewards
-	28,  // 199: pamlogix.SubAchievement.reward:type_name -> pamlogix.Reward
-	43,  // 200: pamlogix.SubAchievement.available_rewards:type_name -> pamlogix.AvailableRewards
-	270, // 201: pamlogix.SubAchievement.additional_properties:type_name -> pamlogix.SubAchievement.AdditionalPropertiesEntry
-	43,  // 202: pamlogix.Achievement.available_rewards:type_name -> pamlogix.AvailableRewards
-	28,  // 203: pamlogix.Achievement.reward:type_name -> pamlogix.Reward
-	43,  // 204: pamlogix.Achievement.available_total_reward:type_name -> pamlogix.AvailableRewards
-	28,  // 205: pamlogix.Achievement.total_reward:type_name -> pamlogix.Reward
-	271, // 206: pamlogix.Achievement.sub_achievements:type_name -> pamlogix.Achievement.SubAchievementsEntry
-	272, // 207: pamlogix.Achievement.additional_properties:type_name -> pamlogix.Achievement.AdditionalPropertiesEntry
-	273, // 208: pamlogix.AchievementList.achievements:type_name -> pamlogix.AchievementList.AchievementsEntry
-	274, // 209: pamlogix.AchievementList.repeat_achievements:type_name -> pamlogix.AchievementList.RepeatAchievementsEntry
-	275, // 210: pamlogix.AchievementsUpdateAck.achievements:type_name -> pamlogix.AchievementsUpdateAck.AchievementsEntry
-	276, // 211: pamlogix.AchievementsUpdateAck.repeat_achievements:type_name -> pamlogix.AchievementsUpdateAck.RepeatAchievementsEntry
-	277, // 212: pamlogix.AchievementsUpdateRequest.achievements:type_name -> pamlogix.AchievementsUpdateRequest.AchievementsEntry
-	43,  // 213: pamlogix.StreakAvailableReward.reward:type_name -> pamlogix.AvailableRewards
-	28,  // 214: pamlogix.StreakReward.reward:type_name -> pamlogix.Reward
-	164, // 215: pamlogix.Streak.rewards:type_name -> pamlogix.StreakAvailableReward
-	164, // 216: pamlogix.Streak.available_rewards:type_name -> pamlogix.StreakAvailableReward
-	165, // 217: pamlogix.Streak.claimed_rewards:type_name -> pamlogix.StreakReward
-	278, // 218: pamlogix.StreaksList.streaks:type_name -> pamlogix.StreaksList.StreaksEntry
-	279, // 219: pamlogix.StreaksUpdateRequest.updates:type_name -> pamlogix.StreaksUpdateRequest.UpdatesEntry
-	280, // 220: pamlogix.SyncInventoryItem.string_properties:type_name -> pamlogix.SyncInventoryItem.StringPropertiesEntry
-	281, // 221: pamlogix.SyncInventoryItem.numeric_properties:type_name -> pamlogix.SyncInventoryItem.NumericPropertiesEntry
-	282, // 222: pamlogix.SyncInventory.items:type_name -> pamlogix.SyncInventory.ItemsEntry
-	283, // 223: pamlogix.SyncEconomy.currencies:type_name -> pamlogix.SyncEconomy.CurrenciesEntry
-	27,  // 224: pamlogix.SyncEconomy.modifiers:type_name -> pamlogix.ActiveRewardModifier
-	284, // 225: pamlogix.SyncAchievements.achievements:type_name -> pamlogix.SyncAchievements.AchievementsEntry
-	285, // 226: pamlogix.SyncEnergy.energies:type_name -> pamlogix.SyncEnergy.EnergiesEntry
-	126, // 227: pamlogix.SyncEnergy.modifiers:type_name -> pamlogix.EnergyModifier
-	286, // 228: pamlogix.SyncEventLeaderboards.event_leaderboards:type_name -> pamlogix.SyncEventLeaderboards.EventLeaderboardsEntry
-	287, // 229: pamlogix.SyncProgressionUpdate.counts:type_name -> pamlogix.SyncProgressionUpdate.CountsEntry
-	8,   // 230: pamlogix.SyncProgressionUpdate.cost:type_name -> pamlogix.ProgressionCost
-	288, // 231: pamlogix.SyncProgressions.progressions:type_name -> pamlogix.SyncProgressions.ProgressionsEntry
-	289, // 232: pamlogix.SyncTutorials.updates:type_name -> pamlogix.SyncTutorials.UpdatesEntry
-	290, // 233: pamlogix.SyncUnlockables.updates:type_name -> pamlogix.SyncUnlockables.UpdatesEntry
-	165, // 234: pamlogix.SyncStreakUpdate.claimed_rewards:type_name -> pamlogix.StreakReward
-	291, // 235: pamlogix.SyncStreaks.updates:type_name -> pamlogix.SyncStreaks.UpdatesEntry
-	172, // 236: pamlogix.SyncRequest.inventory:type_name -> pamlogix.SyncInventory
-	173, // 237: pamlogix.SyncRequest.economy:type_name -> pamlogix.SyncEconomy
-	175, // 238: pamlogix.SyncRequest.achievements:type_name -> pamlogix.SyncAchievements
-	177, // 239: pamlogix.SyncRequest.energy:type_name -> pamlogix.SyncEnergy
-	179, // 240: pamlogix.SyncRequest.event_leaderboards:type_name -> pamlogix.SyncEventLeaderboards
-	181, // 241: pamlogix.SyncRequest.progressions:type_name -> pamlogix.SyncProgressions
-	19,  // 242: pamlogix.SyncRequest.stats:type_name -> pamlogix.StatUpdateRequest
-	182, // 243: pamlogix.SyncRequest.tutorials:type_name -> pamlogix.SyncTutorials
-	184, // 244: pamlogix.SyncRequest.unlockables:type_name -> pamlogix.SyncUnlockables
-	186, // 245: pamlogix.SyncRequest.streaks:type_name -> pamlogix.SyncStreaks
-	292, // 246: pamlogix.SyncResponse.wallet:type_name -> pamlogix.SyncResponse.WalletEntry
-	86,  // 247: pamlogix.SyncResponse.inventory:type_name -> pamlogix.Inventory
-	159, // 248: pamlogix.SyncResponse.achievements:type_name -> pamlogix.AchievementList
-	128, // 249: pamlogix.SyncResponse.energy:type_name -> pamlogix.EnergyList
-	62,  // 250: pamlogix.SyncResponse.event_leaderboards:type_name -> pamlogix.EventLeaderboard
-	13,  // 251: pamlogix.SyncResponse.progressions:type_name -> pamlogix.ProgressionList
-	21,  // 252: pamlogix.SyncResponse.stats:type_name -> pamlogix.StatList
-	135, // 253: pamlogix.SyncResponse.tutorials:type_name -> pamlogix.TutorialList
-	151, // 254: pamlogix.SyncResponse.unlockables:type_name -> pamlogix.UnlockablesList
-	27,  // 255: pamlogix.SyncResponse.active_reward_modifiers:type_name -> pamlogix.ActiveRewardModifier
-	167, // 256: pamlogix.SyncResponse.streaks:type_name -> pamlogix.StreaksList
-	11,  // 257: pamlogix.ProgressionList.ProgressionsEntry.value:type_name -> pamlogix.Progression
-	12,  // 258: pamlogix.ProgressionList.DeltasEntry.value:type_name -> pamlogix.ProgressionDelta
-	11,  // 259: pamlogix.ProgressionGetRequest.ProgressionsEntry.value:type_name -> pamlogix.Progression
-	20,  // 260: pamlogix.StatList.PublicEntry.value:type_name -> pamlogix.Stat
-	20,  // 261: pamlogix.StatList.PrivateEntry.value:type_name -> pamlogix.Stat
-	24,  // 262: pamlogix.Reward.ItemInstancesEntry.value:type_name -> pamlogix.RewardInventoryItem
-	34,  // 263: pamlogix.AvailableRewardsStringProperty.OptionsEntry.value:type_name -> pamlogix.AvailableRewardsStringPropertyOption
-	33,  // 264: pamlogix.AvailableRewardsItem.NumericPropertiesEntry.value:type_name -> pamlogix.RewardRangeDouble
-	35,  // 265: pamlogix.AvailableRewardsItem.StringPropertiesEntry.value:type_name -> pamlogix.AvailableRewardsStringProperty
-	36,  // 266: pamlogix.AvailableRewardsContents.ItemsEntry.value:type_name -> pamlogix.AvailableRewardsItem
-	38,  // 267: pamlogix.AvailableRewardsContents.CurrenciesEntry.value:type_name -> pamlogix.AvailableRewardsCurrency
-	39,  // 268: pamlogix.AvailableRewardsContents.EnergiesEntry.value:type_name -> pamlogix.AvailableRewardsEnergy
-	44,  // 269: pamlogix.Incentive.ClaimsEntry.value:type_name -> pamlogix.IncentiveClaim
-	60,  // 270: pamlogix.EventLeaderboard.RewardTiersEntry.value:type_name -> pamlogix.EventLeaderboardRewardTiers
-	61,  // 271: pamlogix.EventLeaderboard.ChangeZonesEntry.value:type_name -> pamlogix.EventLeaderboardChangeZone
-	70,  // 272: pamlogix.EconomyDonationClaimRequest.DonationsEntry.value:type_name -> pamlogix.EconomyDonationClaimRequestDetails
-	29,  // 273: pamlogix.EconomyDonationClaimRewards.ClaimedRewardsEntry.value:type_name -> pamlogix.RewardList
-	69,  // 274: pamlogix.EconomyDonationsByUserList.UserDonationsEntry.value:type_name -> pamlogix.EconomyDonationsList
-	67,  // 275: pamlogix.EconomyList.DonationsEntry.value:type_name -> pamlogix.EconomyDonation
-	84,  // 276: pamlogix.InventoryUpdateItemsRequest.ItemUpdatesEntry.value:type_name -> pamlogix.InventoryUpdateItemProperties
-	81,  // 277: pamlogix.Inventory.ItemsEntry.value:type_name -> pamlogix.InventoryItem
-	29,  // 278: pamlogix.InventoryConsumeRewards.RewardsEntry.value:type_name -> pamlogix.RewardList
-	29,  // 279: pamlogix.InventoryConsumeRewards.InstanceRewardsEntry.value:type_name -> pamlogix.RewardList
-	81,  // 280: pamlogix.InventoryList.ItemsEntry.value:type_name -> pamlogix.InventoryItem
-	95,  // 281: pamlogix.AuctionTemplate.ConditionsEntry.value:type_name -> pamlogix.AuctionTemplateCondition
-	96,  // 282: pamlogix.AuctionTemplates.TemplatesEntry.value:type_name -> pamlogix.AuctionTemplate
-	127, // 283: pamlogix.EnergyList.EnergiesEntry.value:type_name -> pamlogix.Energy
-	134, // 284: pamlogix.TutorialList.TutorialsEntry.value:type_name -> pamlogix.Tutorial
-	157, // 285: pamlogix.Achievement.SubAchievementsEntry.value:type_name -> pamlogix.SubAchievement
-	158, // 286: pamlogix.AchievementList.AchievementsEntry.value:type_name -> pamlogix.Achievement
-	158, // 287: pamlogix.AchievementList.RepeatAchievementsEntry.value:type_name -> pamlogix.Achievement
-	158, // 288: pamlogix.AchievementsUpdateAck.AchievementsEntry.value:type_name -> pamlogix.Achievement
-	158, // 289: pamlogix.AchievementsUpdateAck.RepeatAchievementsEntry.value:type_name -> pamlogix.Achievement
-	166, // 290: pamlogix.StreaksList.StreaksEntry.value:type_name -> pamlogix.Streak
-	171, // 291: pamlogix.SyncInventory.ItemsEntry.value:type_name -> pamlogix.SyncInventoryItem
-	174, // 292: pamlogix.SyncAchievements.AchievementsEntry.value:type_name -> pamlogix.SyncAchievementsUpdate
-	176, // 293: pamlogix.SyncEnergy.EnergiesEntry.value:type_name -> pamlogix.SyncEnergyState
-	178, // 294: pamlogix.SyncEventLeaderboards.EventLeaderboardsEntry.value:type_name -> pamlogix.SyncEventLeaderboardUpdate
-	180, // 295: pamlogix.SyncProgressions.ProgressionsEntry.value:type_name -> pamlogix.SyncProgressionUpdate
-	183, // 296: pamlogix.SyncUnlockables.UpdatesEntry.value:type_name -> pamlogix.SyncUnlockableUpdate
-	185, // 297: pamlogix.SyncStreaks.UpdatesEntry.value:type_name -> pamlogix.SyncStreakUpdate
-	295, // 298: pamlogix.input:extendee -> google.protobuf.EnumValueOptions
-	295, // 299: pamlogix.output:extendee -> google.protobuf.EnumValueOptions
-	300, // [300:300] is the sub-list for method output_type
-	300, // [300:300] is the sub-list for method input_type
-	300, // [300:300] is the sub-list for extension type_name
-	298, // [298:300] is the sub-list for extension extendee
-	0,   // [0:298] is the sub-list for field type_name
+	44,  // 70: pamlogix.IncentiveInfo.available_rewards:type_name -> pamlogix.AvailableRewards
+	29,  // 71: pamlogix.IncentiveInfo.reward:type_name -> pamlogix.Reward
+	44,  // 72: pamlogix.ChallengeRewardTier.available_rewards:type_name -> pamlogix.AvailableRewards
+	7,   // 73: pamlogix.ChallengeScore.state:type_name -> pamlogix.ChallengeState
+	61,  // 74: pamlogix.Challenge.reward_tiers:type_name -> pamlogix.ChallengeRewardTier
+	44,  // 75: pamlogix.Challenge.available_rewards:type_name -> pamlogix.AvailableRewards
+	241, // 76: pamlogix.Challenge.additional_properties:type_name -> pamlogix.Challenge.AdditionalPropertiesEntry
+	62,  // 77: pamlogix.Challenge.scores:type_name -> pamlogix.ChallengeScore
+	7,   // 78: pamlogix.Challenge.state:type_name -> pamlogix.ChallengeState
+	29,  // 79: pamlogix.Challenge.reward:type_name -> pamlogix.Reward
+	63,  // 80: pamlogix.ChallengesList.challenges:type_name -> pamlogix.Challenge
+	61,  // 81: pamlogix.ChallengeTemplate.reward_tiers:type_name -> pamlogix.ChallengeRewardTier
+	67,  // 82: pamlogix.ChallengeTemplate.players:type_name -> pamlogix.ChallengeMaxMinPlayers
+	68,  // 83: pamlogix.ChallengeTemplate.duration:type_name -> pamlogix.ChallengeMinMaxDuration
+	242, // 84: pamlogix.ChallengeTemplate.additional_properties:type_name -> pamlogix.ChallengeTemplate.AdditionalPropertiesEntry
+	243, // 85: pamlogix.ChallengeTemplates.templates:type_name -> pamlogix.ChallengeTemplates.TemplatesEntry
+	44,  // 86: pamlogix.EventLeaderboardRewardTier.available_rewards:type_name -> pamlogix.AvailableRewards
+	77,  // 87: pamlogix.EventLeaderboardRewardTiers.reward_tiers:type_name -> pamlogix.EventLeaderboardRewardTier
+	44,  // 88: pamlogix.EventLeaderboard.available_rewards:type_name -> pamlogix.AvailableRewards
+	244, // 89: pamlogix.EventLeaderboard.reward_tiers:type_name -> pamlogix.EventLeaderboard.RewardTiersEntry
+	245, // 90: pamlogix.EventLeaderboard.change_zones:type_name -> pamlogix.EventLeaderboard.ChangeZonesEntry
+	29,  // 91: pamlogix.EventLeaderboard.reward:type_name -> pamlogix.Reward
+	246, // 92: pamlogix.EventLeaderboard.additional_properties:type_name -> pamlogix.EventLeaderboard.AdditionalPropertiesEntry
+	76,  // 93: pamlogix.EventLeaderboard.scores:type_name -> pamlogix.EventLeaderboardScore
+	314, // 94: pamlogix.EventLeaderboard.matchmaker_properties:type_name -> google.protobuf.Struct
+	80,  // 95: pamlogix.EventLeaderboards.event_leaderboards:type_name -> pamlogix.EventLeaderboard
+	315, // 96: pamlogix.EventLeaderboardDebugRandomScoresRequest.operator:type_name -> google.protobuf.Int32Value
+	44,  // 97: pamlogix.EconomyDonation.recipient_available_rewards:type_name -> pamlogix.AvailableRewards
+	84,  // 98: pamlogix.EconomyDonation.contributors:type_name -> pamlogix.EconomyDonationContributor
+	44,  // 99: pamlogix.EconomyDonation.contributor_available_rewards:type_name -> pamlogix.AvailableRewards
+	29,  // 100: pamlogix.EconomyDonation.recipient_rewards:type_name -> pamlogix.Reward
+	247, // 101: pamlogix.EconomyDonation.additional_properties:type_name -> pamlogix.EconomyDonation.AdditionalPropertiesEntry
+	85,  // 102: pamlogix.EconomyDonationAck.donation:type_name -> pamlogix.EconomyDonation
+	85,  // 103: pamlogix.EconomyDonationsList.donations:type_name -> pamlogix.EconomyDonation
+	248, // 104: pamlogix.EconomyDonationClaimRequestDetails.donors:type_name -> pamlogix.EconomyDonationClaimRequestDetails.DonorsEntry
+	249, // 105: pamlogix.EconomyDonationClaimRequest.donations:type_name -> pamlogix.EconomyDonationClaimRequest.DonationsEntry
+	87,  // 106: pamlogix.EconomyDonationClaimRewards.donations:type_name -> pamlogix.EconomyDonationsList
+	250, // 107: pamlogix.EconomyDonationClaimRewards.claimed_rewards:type_name -> pamlogix.EconomyDonationClaimRewards.ClaimedRewardsEntry
+	251, // 108: pamlogix.EconomyDonationsByUserList.user_donations:type_name -> pamlogix.EconomyDonationsByUserList.UserDonationsEntry
+	252, // 109: pamlogix.EconomyListStoreItemCost.currencies:type_name -> pamlogix.EconomyListStoreItemCost.CurrenciesEntry
+	95,  // 110: pamlogix.EconomyListStoreItem.cost:type_name -> pamlogix.EconomyListStoreItemCost
+	44,  // 111: pamlogix.EconomyListStoreItem.available_rewards:type_name -> pamlogix.AvailableRewards
+	253, // 112: pamlogix.EconomyListStoreItem.additional_properties:type_name -> pamlogix.EconomyListStoreItem.AdditionalPropertiesEntry
+	29,  // 113: pamlogix.EconomyListPlacement.reward:type_name -> pamlogix.Reward
+	44,  // 114: pamlogix.EconomyListPlacement.available_rewards:type_name -> pamlogix.AvailableRewards
+	254, // 115: pamlogix.EconomyListPlacement.additional_properties:type_name -> pamlogix.EconomyListPlacement.AdditionalPropertiesEntry
+	96,  // 116: pamlogix.EconomyList.store_items:type_name -> pamlogix.EconomyListStoreItem
+	97,  // 117: pamlogix.EconomyList.placements:type_name -> pamlogix.EconomyListPlacement
+	255, // 118: pamlogix.EconomyList.donations:type_name -> pamlogix.EconomyList.DonationsEntry
+	28,  // 119: pamlogix.EconomyList.active_reward_modifiers:type_name -> pamlogix.ActiveRewardModifier
+	44,  // 120: pamlogix.InventoryItem.consume_available_rewards:type_name -> pamlogix.AvailableRewards
+	256, // 121: pamlogix.InventoryItem.string_properties:type_name -> pamlogix.InventoryItem.StringPropertiesEntry
+	257, // 122: pamlogix.InventoryItem.numeric_properties:type_name -> pamlogix.InventoryItem.NumericPropertiesEntry
+	258, // 123: pamlogix.InventoryGrantRequest.items:type_name -> pamlogix.InventoryGrantRequest.ItemsEntry
+	259, // 124: pamlogix.InventoryUpdateItemProperties.string_properties:type_name -> pamlogix.InventoryUpdateItemProperties.StringPropertiesEntry
+	260, // 125: pamlogix.InventoryUpdateItemProperties.numeric_properties:type_name -> pamlogix.InventoryUpdateItemProperties.NumericPropertiesEntry
+	261, // 126: pamlogix.InventoryUpdateItemsRequest.item_updates:type_name -> pamlogix.InventoryUpdateItemsRequest.ItemUpdatesEntry
+	262, // 127: pamlogix.Inventory.items:type_name -> pamlogix.Inventory.ItemsEntry
+	263, // 128: pamlogix.InventoryConsumeRequest.items:type_name -> pamlogix.InventoryConsumeRequest.ItemsEntry
+	264, // 129: pamlogix.InventoryConsumeRequest.instances:type_name -> pamlogix.InventoryConsumeRequest.InstancesEntry
+	104, // 130: pamlogix.InventoryConsumeRewards.inventory:type_name -> pamlogix.Inventory
+	265, // 131: pamlogix.InventoryConsumeRewards.rewards:type_name -> pamlogix.InventoryConsumeRewards.RewardsEntry
+	266, // 132: pamlogix.InventoryConsumeRewards.instance_rewards:type_name -> pamlogix.InventoryConsumeRewards.InstanceRewardsEntry
+	104, // 133: pamlogix.InventoryUpdateAck.inventory:type_name -> pamlogix.Inventory
+	267, // 134: pamlogix.InventoryList.items:type_name -> pamlogix.InventoryList.ItemsEntry
+	268, // 135: pamlogix.AuctionBidAmount.currencies:type_name -> pamlogix.AuctionBidAmount.CurrenciesEntry
+	109, // 136: pamlogix.AuctionFee.fixed:type_name -> pamlogix.AuctionBidAmount
+	269, // 137: pamlogix.AuctionTemplateConditionListingCost.currencies:type_name -> pamlogix.AuctionTemplateConditionListingCost.CurrenciesEntry
+	270, // 138: pamlogix.AuctionTemplateConditionListingCost.items:type_name -> pamlogix.AuctionTemplateConditionListingCost.ItemsEntry
+	271, // 139: pamlogix.AuctionTemplateConditionListingCost.energies:type_name -> pamlogix.AuctionTemplateConditionListingCost.EnergiesEntry
+	109, // 140: pamlogix.AuctionTemplateConditionBidIncrement.fixed:type_name -> pamlogix.AuctionBidAmount
+	111, // 141: pamlogix.AuctionTemplateCondition.listing_cost:type_name -> pamlogix.AuctionTemplateConditionListingCost
+	109, // 142: pamlogix.AuctionTemplateCondition.bid_start:type_name -> pamlogix.AuctionBidAmount
+	112, // 143: pamlogix.AuctionTemplateCondition.bid_increment:type_name -> pamlogix.AuctionTemplateConditionBidIncrement
+	110, // 144: pamlogix.AuctionTemplateCondition.fee:type_name -> pamlogix.AuctionFee
+	272, // 145: pamlogix.AuctionTemplate.conditions:type_name -> pamlogix.AuctionTemplate.ConditionsEntry
+	273, // 146: pamlogix.AuctionTemplates.templates:type_name -> pamlogix.AuctionTemplates.TemplatesEntry
+	99,  // 147: pamlogix.AuctionReward.items:type_name -> pamlogix.InventoryItem
+	109, // 148: pamlogix.AuctionBid.bid:type_name -> pamlogix.AuctionBidAmount
+	116, // 149: pamlogix.Auction.reward:type_name -> pamlogix.AuctionReward
+	110, // 150: pamlogix.Auction.fee:type_name -> pamlogix.AuctionFee
+	117, // 151: pamlogix.Auction.bid:type_name -> pamlogix.AuctionBid
+	109, // 152: pamlogix.Auction.bid_next:type_name -> pamlogix.AuctionBidAmount
+	117, // 153: pamlogix.Auction.bid_first:type_name -> pamlogix.AuctionBid
+	117, // 154: pamlogix.Auction.bid_history:type_name -> pamlogix.AuctionBid
+	117, // 155: pamlogix.AuctionNotificationBid.bid:type_name -> pamlogix.AuctionBid
+	109, // 156: pamlogix.AuctionNotificationBid.bid_next:type_name -> pamlogix.AuctionBidAmount
+	119, // 157: pamlogix.StreamEnvelope.auction_bid:type_name -> pamlogix.AuctionNotificationBid
+	118, // 158: pamlogix.AuctionClaimBid.auction:type_name -> pamlogix.Auction
+	116, // 159: pamlogix.AuctionClaimBid.reward:type_name -> pamlogix.AuctionReward
+	118, // 160: pamlogix.AuctionClaimCreated.auction:type_name -> pamlogix.Auction
+	109, // 161: pamlogix.AuctionClaimCreated.reward:type_name -> pamlogix.AuctionBidAmount
+	109, // 162: pamlogix.AuctionClaimCreated.fee:type_name -> pamlogix.AuctionBidAmount
+	99,  // 163: pamlogix.AuctionClaimCreated.returned_items:type_name -> pamlogix.InventoryItem
+	118, // 164: pamlogix.AuctionCancel.auction:type_name -> pamlogix.Auction
+	116, // 165: pamlogix.AuctionCancel.reward:type_name -> pamlogix.AuctionReward
+	118, // 166: pamlogix.AuctionList.auctions:type_name -> pamlogix.Auction
+	109, // 167: pamlogix.AuctionBidRequest.bid:type_name -> pamlogix.AuctionBidAmount
+	5,   // 168: pamlogix.EconomyListRequest.store_type:type_name -> pamlogix.EconomyStoreType
+	274, // 169: pamlogix.EconomyGrantRequest.currencies:type_name -> pamlogix.EconomyGrantRequest.CurrenciesEntry
+	27,  // 170: pamlogix.EconomyGrantRequest.reward_modifiers:type_name -> pamlogix.RewardModifier
+	275, // 171: pamlogix.EconomyGrantRequest.items:type_name -> pamlogix.EconomyGrantRequest.ItemsEntry
+	5,   // 172: pamlogix.EconomyPurchaseIntentRequest.store_type:type_name -> pamlogix.EconomyStoreType
+	5,   // 173: pamlogix.EconomyPurchaseRequest.store_type:type_name -> pamlogix.EconomyStoreType
+	5,   // 174: pamlogix.EconomyPurchaseRestoreRequest.store_type:type_name -> pamlogix.EconomyStoreType
+	276, // 175: pamlogix.EconomyPlacementStartRequest.metadata:type_name -> pamlogix.EconomyPlacementStartRequest.MetadataEntry
+	29,  // 176: pamlogix.EconomyPlacementStatus.reward:type_name -> pamlogix.Reward
+	277, // 177: pamlogix.EconomyPlacementStatus.metadata:type_name -> pamlogix.EconomyPlacementStatus.MetadataEntry
+	278, // 178: pamlogix.EconomyUpdateAck.wallet:type_name -> pamlogix.EconomyUpdateAck.WalletEntry
+	104, // 179: pamlogix.EconomyUpdateAck.inventory:type_name -> pamlogix.Inventory
+	29,  // 180: pamlogix.EconomyUpdateAck.reward:type_name -> pamlogix.Reward
+	28,  // 181: pamlogix.EconomyUpdateAck.active_reward_modifiers:type_name -> pamlogix.ActiveRewardModifier
+	279, // 182: pamlogix.EconomyPurchaseAck.wallet:type_name -> pamlogix.EconomyPurchaseAck.WalletEntry
+	104, // 183: pamlogix.EconomyPurchaseAck.inventory:type_name -> pamlogix.Inventory
+	29,  // 184: pamlogix.EconomyPurchaseAck.reward:type_name -> pamlogix.Reward
+	144, // 185: pamlogix.Energy.modifiers:type_name -> pamlogix.EnergyModifier
+	44,  // 186: pamlogix.Energy.available_rewards:type_name -> pamlogix.AvailableRewards
+	280, // 187: pamlogix.Energy.additional_properties:type_name -> pamlogix.Energy.AdditionalPropertiesEntry
+	281, // 188: pamlogix.EnergyList.energies:type_name -> pamlogix.EnergyList.EnergiesEntry
+	282, // 189: pamlogix.EnergySpendRequest.amounts:type_name -> pamlogix.EnergySpendRequest.AmountsEntry
+	146, // 190: pamlogix.EnergySpendReward.energies:type_name -> pamlogix.EnergyList
+	29,  // 191: pamlogix.EnergySpendReward.reward:type_name -> pamlogix.Reward
+	283, // 192: pamlogix.EnergyGrantRequest.amounts:type_name -> pamlogix.EnergyGrantRequest.AmountsEntry
+	150, // 193: pamlogix.LeaderboardConfigList.leaderboard_configs:type_name -> pamlogix.LeaderboardConfig
+	8,   // 194: pamlogix.Tutorial.state:type_name -> pamlogix.TutorialState
+	284, // 195: pamlogix.Tutorial.additional_properties:type_name -> pamlogix.Tutorial.AdditionalPropertiesEntry
+	285, // 196: pamlogix.TutorialList.tutorials:type_name -> pamlogix.TutorialList.TutorialsEntry
+	160, // 197: pamlogix.TeamList.teams:type_name -> pamlogix.Team
+	286, // 198: pamlogix.UnlockableCost.items:type_name -> pamlogix.UnlockableCost.ItemsEntry
+	287, // 199: pamlogix.UnlockableCost.currencies:type_name -> pamlogix.UnlockableCost.CurrenciesEntry
+	166, // 200: pamlogix.Unlockable.start_cost:type_name -> pamlogix.UnlockableCost
+	166, // 201: pamlogix.Unlockable.cost:type_name -> pamlogix.UnlockableCost
+	29,  // 202: pamlogix.Unlockable.reward:type_name -> pamlogix.Reward
+	44,  // 203: pamlogix.Unlockable.available_rewards:type_name -> pamlogix.AvailableRewards
+	288, // 204: pamlogix.Unlockable.additional_properties:type_name -> pamlogix.Unlockable.AdditionalPropertiesEntry
+	289, // 205: pamlogix.UnlockableSlotCost.items:type_name -> pamlogix.UnlockableSlotCost.ItemsEntry
+	290, // 206: pamlogix.UnlockableSlotCost.currencies:type_name -> pamlogix.UnlockableSlotCost.CurrenciesEntry
+	167, // 207: pamlogix.UnlockablesList.unlockables:type_name -> pamlogix.Unlockable
+	167, // 208: pamlogix.UnlockablesList.overflow:type_name -> pamlogix.Unlockable
+	168, // 209: pamlogix.UnlockablesList.slot_cost:type_name -> pamlogix.UnlockableSlotCost
+	169, // 210: pamlogix.UnlockablesReward.unlockables:type_name -> pamlogix.UnlockablesList
+	29,  // 211: pamlogix.UnlockablesReward.reward:type_name -> pamlogix.Reward
+	44,  // 212: pamlogix.UnlockablesReward.available_rewards:type_name -> pamlogix.AvailableRewards
+	29,  // 213: pamlogix.SubAchievement.reward:type_name -> pamlogix.Reward
+	44,  // 214: pamlogix.SubAchievement.available_rewards:type_name -> pamlogix.AvailableRewards
+	291, // 215: pamlogix.SubAchievement.additional_properties:type_name -> pamlogix.SubAchievement.AdditionalPropertiesEntry
+	44,  // 216: pamlogix.Achievement.available_rewards:type_name -> pamlogix.AvailableRewards
+	29,  // 217: pamlogix.Achievement.reward:type_name -> pamlogix.Reward
+	44,  // 218: pamlogix.Achievement.available_total_reward:type_name -> pamlogix.AvailableRewards
+	29,  // 219: pamlogix.Achievement.total_reward:type_name -> pamlogix.Reward
+	292, // 220: pamlogix.Achievement.sub_achievements:type_name -> pamlogix.Achievement.SubAchievementsEntry
+	293, // 221: pamlogix.Achievement.additional_properties:type_name -> pamlogix.Achievement.AdditionalPropertiesEntry
+	294, // 222: pamlogix.AchievementList.achievements:type_name -> pamlogix.AchievementList.AchievementsEntry
+	295, // 223: pamlogix.AchievementList.repeat_achievements:type_name -> pamlogix.AchievementList.RepeatAchievementsEntry
+	296, // 224: pamlogix.AchievementsUpdateAck.achievements:type_name -> pamlogix.AchievementsUpdateAck.AchievementsEntry
+	297, // 225: pamlogix.AchievementsUpdateAck.repeat_achievements:type_name -> pamlogix.AchievementsUpdateAck.RepeatAchievementsEntry
+	298, // 226: pamlogix.AchievementsUpdateRequest.achievements:type_name -> pamlogix.AchievementsUpdateRequest.AchievementsEntry
+	44,  // 227: pamlogix.StreakAvailableReward.reward:type_name -> pamlogix.AvailableRewards
+	29,  // 228: pamlogix.StreakReward.reward:type_name -> pamlogix.Reward
+	182, // 229: pamlogix.Streak.rewards:type_name -> pamlogix.StreakAvailableReward
+	182, // 230: pamlogix.Streak.available_rewards:type_name -> pamlogix.StreakAvailableReward
+	183, // 231: pamlogix.Streak.claimed_rewards:type_name -> pamlogix.StreakReward
+	299, // 232: pamlogix.StreaksList.streaks:type_name -> pamlogix.StreaksList.StreaksEntry
+	300, // 233: pamlogix.StreaksUpdateRequest.updates:type_name -> pamlogix.StreaksUpdateRequest.UpdatesEntry
+	301, // 234: pamlogix.SyncInventoryItem.string_properties:type_name -> pamlogix.SyncInventoryItem.StringPropertiesEntry
+	302, // 235: pamlogix.SyncInventoryItem.numeric_properties:type_name -> pamlogix.SyncInventoryItem.NumericPropertiesEntry
+	303, // 236: pamlogix.SyncInventory.items:type_name -> pamlogix.SyncInventory.ItemsEntry
+	304, // 237: pamlogix.SyncEconomy.currencies:type_name -> pamlogix.SyncEconomy.CurrenciesEntry
+	28,  // 238: pamlogix.SyncEconomy.modifiers:type_name -> pamlogix.ActiveRewardModifier
+	305, // 239: pamlogix.SyncAchievements.achievements:type_name -> pamlogix.SyncAchievements.AchievementsEntry
+	306, // 240: pamlogix.SyncEnergy.energies:type_name -> pamlogix.SyncEnergy.EnergiesEntry
+	144, // 241: pamlogix.SyncEnergy.modifiers:type_name -> pamlogix.EnergyModifier
+	307, // 242: pamlogix.SyncEventLeaderboards.event_leaderboards:type_name -> pamlogix.SyncEventLeaderboards.EventLeaderboardsEntry
+	308, // 243: pamlogix.SyncProgressionUpdate.counts:type_name -> pamlogix.SyncProgressionUpdate.CountsEntry
+	9,   // 244: pamlogix.SyncProgressionUpdate.cost:type_name -> pamlogix.ProgressionCost
+	309, // 245: pamlogix.SyncProgressions.progressions:type_name -> pamlogix.SyncProgressions.ProgressionsEntry
+	310, // 246: pamlogix.SyncTutorials.updates:type_name -> pamlogix.SyncTutorials.UpdatesEntry
+	311, // 247: pamlogix.SyncUnlockables.updates:type_name -> pamlogix.SyncUnlockables.UpdatesEntry
+	183, // 248: pamlogix.SyncStreakUpdate.claimed_rewards:type_name -> pamlogix.StreakReward
+	312, // 249: pamlogix.SyncStreaks.updates:type_name -> pamlogix.SyncStreaks.UpdatesEntry
+	190, // 250: pamlogix.SyncRequest.inventory:type_name -> pamlogix.SyncInventory
+	191, // 251: pamlogix.SyncRequest.economy:type_name -> pamlogix.SyncEconomy
+	193, // 252: pamlogix.SyncRequest.achievements:type_name -> pamlogix.SyncAchievements
+	195, // 253: pamlogix.SyncRequest.energy:type_name -> pamlogix.SyncEnergy
+	197, // 254: pamlogix.SyncRequest.event_leaderboards:type_name -> pamlogix.SyncEventLeaderboards
+	199, // 255: pamlogix.SyncRequest.progressions:type_name -> pamlogix.SyncProgressions
+	20,  // 256: pamlogix.SyncRequest.stats:type_name -> pamlogix.StatUpdateRequest
+	200, // 257: pamlogix.SyncRequest.tutorials:type_name -> pamlogix.SyncTutorials
+	202, // 258: pamlogix.SyncRequest.unlockables:type_name -> pamlogix.SyncUnlockables
+	204, // 259: pamlogix.SyncRequest.streaks:type_name -> pamlogix.SyncStreaks
+	313, // 260: pamlogix.SyncResponse.wallet:type_name -> pamlogix.SyncResponse.WalletEntry
+	104, // 261: pamlogix.SyncResponse.inventory:type_name -> pamlogix.Inventory
+	177, // 262: pamlogix.SyncResponse.achievements:type_name -> pamlogix.AchievementList
+	146, // 263: pamlogix.SyncResponse.energy:type_name -> pamlogix.EnergyList
+	80,  // 264: pamlogix.SyncResponse.event_leaderboards:type_name -> pamlogix.EventLeaderboard
+	14,  // 265: pamlogix.SyncResponse.progressions:type_name -> pamlogix.ProgressionList
+	22,  // 266: pamlogix.SyncResponse.stats:type_name -> pamlogix.StatList
+	153, // 267: pamlogix.SyncResponse.tutorials:type_name -> pamlogix.TutorialList
+	169, // 268: pamlogix.SyncResponse.unlockables:type_name -> pamlogix.UnlockablesList
+	28,  // 269: pamlogix.SyncResponse.active_reward_modifiers:type_name -> pamlogix.ActiveRewardModifier
+	185, // 270: pamlogix.SyncResponse.streaks:type_name -> pamlogix.StreaksList
+	12,  // 271: pamlogix.ProgressionList.ProgressionsEntry.value:type_name -> pamlogix.Progression
+	13,  // 272: pamlogix.ProgressionList.DeltasEntry.value:type_name -> pamlogix.ProgressionDelta
+	12,  // 273: pamlogix.ProgressionGetRequest.ProgressionsEntry.value:type_name -> pamlogix.Progression
+	21,  // 274: pamlogix.StatList.PublicEntry.value:type_name -> pamlogix.Stat
+	21,  // 275: pamlogix.StatList.PrivateEntry.value:type_name -> pamlogix.Stat
+	25,  // 276: pamlogix.Reward.ItemInstancesEntry.value:type_name -> pamlogix.RewardInventoryItem
+	35,  // 277: pamlogix.AvailableRewardsStringProperty.OptionsEntry.value:type_name -> pamlogix.AvailableRewardsStringPropertyOption
+	34,  // 278: pamlogix.AvailableRewardsItem.NumericPropertiesEntry.value:type_name -> pamlogix.RewardRangeDouble
+	36,  // 279: pamlogix.AvailableRewardsItem.StringPropertiesEntry.value:type_name -> pamlogix.AvailableRewardsStringProperty
+	37,  // 280: pamlogix.AvailableRewardsContents.ItemsEntry.value:type_name -> pamlogix.AvailableRewardsItem
+	39,  // 281: pamlogix.AvailableRewardsContents.CurrenciesEntry.value:type_name -> pamlogix.AvailableRewardsCurrency
+	40,  // 282: pamlogix.AvailableRewardsContents.EnergiesEntry.value:type_name -> pamlogix.AvailableRewardsEnergy
+	45,  // 283: pamlogix.Incentive.ClaimsEntry.value:type_name -> pamlogix.IncentiveClaim
+	69,  // 284: pamlogix.ChallengeTemplates.TemplatesEntry.value:type_name -> pamlogix.ChallengeTemplate
+	78,  // 285: pamlogix.EventLeaderboard.RewardTiersEntry.value:type_name -> pamlogix.EventLeaderboardRewardTiers
+	79,  // 286: pamlogix.EventLeaderboard.ChangeZonesEntry.value:type_name -> pamlogix.EventLeaderboardChangeZone
+	88,  // 287: pamlogix.EconomyDonationClaimRequest.DonationsEntry.value:type_name -> pamlogix.EconomyDonationClaimRequestDetails
+	30,  // 288: pamlogix.EconomyDonationClaimRewards.ClaimedRewardsEntry.value:type_name -> pamlogix.RewardList
+	87,  // 289: pamlogix.EconomyDonationsByUserList.UserDonationsEntry.value:type_name -> pamlogix.EconomyDonationsList
+	85,  // 290: pamlogix.EconomyList.DonationsEntry.value:type_name -> pamlogix.EconomyDonation
+	102, // 291: pamlogix.InventoryUpdateItemsRequest.ItemUpdatesEntry.value:type_name -> pamlogix.InventoryUpdateItemProperties
+	99,  // 292: pamlogix.Inventory.ItemsEntry.value:type_name -> pamlogix.InventoryItem
+	30,  // 293: pamlogix.InventoryConsumeRewards.RewardsEntry.value:type_name -> pamlogix.RewardList
+	30,  // 294: pamlogix.InventoryConsumeRewards.InstanceRewardsEntry.value:type_name -> pamlogix.RewardList
+	99,  // 295: pamlogix.InventoryList.ItemsEntry.value:type_name -> pamlogix.InventoryItem
+	113, // 296: pamlogix.AuctionTemplate.ConditionsEntry.value:type_name -> pamlogix.AuctionTemplateCondition
+	114, // 297: pamlogix.AuctionTemplates.TemplatesEntry.value:type_name -> pamlogix.AuctionTemplate
+	145, // 298: pamlogix.EnergyList.EnergiesEntry.value:type_name -> pamlogix.Energy
+	152, // 299: pamlogix.TutorialList.TutorialsEntry.value:type_name -> pamlogix.Tutorial
+	175, // 300: pamlogix.Achievement.SubAchievementsEntry.value:type_name -> pamlogix.SubAchievement
+	176, // 301: pamlogix.AchievementList.AchievementsEntry.value:type_name -> pamlogix.Achievement
+	176, // 302: pamlogix.AchievementList.RepeatAchievementsEntry.value:type_name -> pamlogix.Achievement
+	176, // 303: pamlogix.AchievementsUpdateAck.AchievementsEntry.value:type_name -> pamlogix.Achievement
+	176, // 304: pamlogix.AchievementsUpdateAck.RepeatAchievementsEntry.value:type_name -> pamlogix.Achievement
+	184, // 305: pamlogix.StreaksList.StreaksEntry.value:type_name -> pamlogix.Streak
+	189, // 306: pamlogix.SyncInventory.ItemsEntry.value:type_name -> pamlogix.SyncInventoryItem
+	192, // 307: pamlogix.SyncAchievements.AchievementsEntry.value:type_name -> pamlogix.SyncAchievementsUpdate
+	194, // 308: pamlogix.SyncEnergy.EnergiesEntry.value:type_name -> pamlogix.SyncEnergyState
+	196, // 309: pamlogix.SyncEventLeaderboards.EventLeaderboardsEntry.value:type_name -> pamlogix.SyncEventLeaderboardUpdate
+	198, // 310: pamlogix.SyncProgressions.ProgressionsEntry.value:type_name -> pamlogix.SyncProgressionUpdate
+	201, // 311: pamlogix.SyncUnlockables.UpdatesEntry.value:type_name -> pamlogix.SyncUnlockableUpdate
+	203, // 312: pamlogix.SyncStreaks.UpdatesEntry.value:type_name -> pamlogix.SyncStreakUpdate
+	316, // 313: pamlogix.input:extendee -> google.protobuf.EnumValueOptions
+	316, // 314: pamlogix.output:extendee -> google.protobuf.EnumValueOptions
+	315, // [315:315] is the sub-list for method output_type
+	315, // [315:315] is the sub-list for method input_type
+	315, // [315:315] is the sub-list for extension type_name
+	313, // [313:315] is the sub-list for extension extendee
+	0,   // [0:313] is the sub-list for field type_name
 }
 
 func init() { file_pamlogix_pamlogix_proto_init() }
@@ -16015,7 +17631,7 @@ func file_pamlogix_pamlogix_proto_init() {
 	if File_pamlogix_pamlogix_proto != nil {
 		return
 	}
-	file_pamlogix_pamlogix_proto_msgTypes[94].OneofWrappers = []any{
+	file_pamlogix_pamlogix_proto_msgTypes[111].OneofWrappers = []any{
 		(*StreamEnvelope_AuctionBid)(nil),
 	}
 	type x struct{}
@@ -16023,8 +17639,8 @@ func file_pamlogix_pamlogix_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_pamlogix_pamlogix_proto_rawDesc), len(file_pamlogix_pamlogix_proto_rawDesc)),
-			NumEnums:      8,
-			NumMessages:   285,
+			NumEnums:      9,
+			NumMessages:   305,
 			NumExtensions: 2,
 			NumServices:   0,
 		},

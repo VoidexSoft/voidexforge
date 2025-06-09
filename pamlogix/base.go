@@ -84,6 +84,7 @@ type Pamlogix interface {
 	GetIncentivesSystem() IncentivesSystem
 	GetAuctionsSystem() AuctionsSystem
 	GetStreaksSystem() StreaksSystem
+	GetChallengesSystem() ChallengesSystem
 }
 
 // The SystemType identifies each of the gameplay systems.
@@ -106,6 +107,7 @@ const (
 	SystemTypeIncentives
 	SystemTypeAuctions
 	SystemTypeStreaks
+	SystemTypeChallenges
 )
 
 // OnReward is a function which can be used by each gameplay system to provide an override reward.
@@ -301,6 +303,15 @@ func WithAuctionsSystem(configFile string, register bool) SystemConfig {
 func WithStreaksSystem(configFile string, register bool) SystemConfig {
 	return &systemConfig{
 		systemType: SystemTypeStreaks,
+		configFile: configFile,
+		register:   register,
+	}
+}
+
+// WithChallengesSystem configures a ChallengesSystem type and optionally registers its RPCs with the game server.
+func WithChallengesSystem(configFile string, register bool) SystemConfig {
+	return &systemConfig{
+		systemType: SystemTypeChallenges,
 		configFile: configFile,
 		register:   register,
 	}
