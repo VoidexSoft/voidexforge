@@ -2,14 +2,15 @@ package pamlogix
 
 import (
 	"context"
+	"database/sql"
 	"encoding/json"
 
 	"github.com/heroiclabs/nakama-common/runtime"
 )
 
 // rpcEventLeaderboardsList handles the list event leaderboards RPC
-func rpcEventLeaderboardsList(pamlogix Pamlogix) func(context.Context, runtime.Logger, runtime.NakamaModule, string) (string, error) {
-	return func(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, payload string) (string, error) {
+func rpcEventLeaderboardsList(pamlogix Pamlogix) func(context.Context, runtime.Logger, *sql.DB, runtime.NakamaModule, string) (string, error) {
+	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		userID, ok := ctx.Value(runtime.RUNTIME_CTX_USER_ID).(string)
 		if !ok {
 			return "", ErrNoSessionUser
@@ -52,8 +53,8 @@ func rpcEventLeaderboardsList(pamlogix Pamlogix) func(context.Context, runtime.L
 }
 
 // rpcEventLeaderboardsGet handles the get event leaderboard RPC
-func rpcEventLeaderboardsGet(pamlogix Pamlogix) func(context.Context, runtime.Logger, runtime.NakamaModule, string) (string, error) {
-	return func(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, payload string) (string, error) {
+func rpcEventLeaderboardsGet(pamlogix Pamlogix) func(context.Context, runtime.Logger, *sql.DB, runtime.NakamaModule, string) (string, error) {
+	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		userID, ok := ctx.Value(runtime.RUNTIME_CTX_USER_ID).(string)
 		if !ok {
 			return "", ErrNoSessionUser
@@ -93,8 +94,8 @@ func rpcEventLeaderboardsGet(pamlogix Pamlogix) func(context.Context, runtime.Lo
 }
 
 // rpcEventLeaderboardsUpdate handles the update event leaderboard RPC
-func rpcEventLeaderboardsUpdate(pamlogix Pamlogix) func(context.Context, runtime.Logger, runtime.NakamaModule, string) (string, error) {
-	return func(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, payload string) (string, error) {
+func rpcEventLeaderboardsUpdate(pamlogix Pamlogix) func(context.Context, runtime.Logger, *sql.DB, runtime.NakamaModule, string) (string, error) {
+	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		userID, ok := ctx.Value(runtime.RUNTIME_CTX_USER_ID).(string)
 		if !ok {
 			return "", ErrNoSessionUser
@@ -131,7 +132,7 @@ func rpcEventLeaderboardsUpdate(pamlogix Pamlogix) func(context.Context, runtime
 		}
 
 		// Update event leaderboard
-		eventLeaderboard, err := eventLeaderboardsSystem.UpdateEventLeaderboard(ctx, logger, nk, userID, username, req.Id, req.Score, req.Subscore, metadata)
+		eventLeaderboard, err := eventLeaderboardsSystem.UpdateEventLeaderboard(ctx, logger, db, nk, userID, username, req.Id, req.Score, req.Subscore, metadata, false)
 		if err != nil {
 			logger.Error("Failed to update event leaderboard: %v", err)
 			return "", err
@@ -148,8 +149,8 @@ func rpcEventLeaderboardsUpdate(pamlogix Pamlogix) func(context.Context, runtime
 }
 
 // rpcEventLeaderboardsClaim handles the claim event leaderboard RPC
-func rpcEventLeaderboardsClaim(pamlogix Pamlogix) func(context.Context, runtime.Logger, runtime.NakamaModule, string) (string, error) {
-	return func(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, payload string) (string, error) {
+func rpcEventLeaderboardsClaim(pamlogix Pamlogix) func(context.Context, runtime.Logger, *sql.DB, runtime.NakamaModule, string) (string, error) {
+	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		userID, ok := ctx.Value(runtime.RUNTIME_CTX_USER_ID).(string)
 		if !ok {
 			return "", ErrNoSessionUser
@@ -189,8 +190,8 @@ func rpcEventLeaderboardsClaim(pamlogix Pamlogix) func(context.Context, runtime.
 }
 
 // rpcEventLeaderboardsRoll handles the roll event leaderboard RPC
-func rpcEventLeaderboardsRoll(pamlogix Pamlogix) func(context.Context, runtime.Logger, runtime.NakamaModule, string) (string, error) {
-	return func(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, payload string) (string, error) {
+func rpcEventLeaderboardsRoll(pamlogix Pamlogix) func(context.Context, runtime.Logger, *sql.DB, runtime.NakamaModule, string) (string, error) {
+	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		userID, ok := ctx.Value(runtime.RUNTIME_CTX_USER_ID).(string)
 		if !ok {
 			return "", ErrNoSessionUser
@@ -230,8 +231,8 @@ func rpcEventLeaderboardsRoll(pamlogix Pamlogix) func(context.Context, runtime.L
 }
 
 // rpcEventLeaderboardsDebugFill handles the debug fill event leaderboard RPC
-func rpcEventLeaderboardsDebugFill(pamlogix Pamlogix) func(context.Context, runtime.Logger, runtime.NakamaModule, string) (string, error) {
-	return func(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, payload string) (string, error) {
+func rpcEventLeaderboardsDebugFill(pamlogix Pamlogix) func(context.Context, runtime.Logger, *sql.DB, runtime.NakamaModule, string) (string, error) {
+	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		userID, ok := ctx.Value(runtime.RUNTIME_CTX_USER_ID).(string)
 		if !ok {
 			return "", ErrNoSessionUser
@@ -271,8 +272,8 @@ func rpcEventLeaderboardsDebugFill(pamlogix Pamlogix) func(context.Context, runt
 }
 
 // rpcEventLeaderboardsDebugRandomScores handles the debug random scores event leaderboard RPC
-func rpcEventLeaderboardsDebugRandomScores(pamlogix Pamlogix) func(context.Context, runtime.Logger, runtime.NakamaModule, string) (string, error) {
-	return func(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, payload string) (string, error) {
+func rpcEventLeaderboardsDebugRandomScores(pamlogix Pamlogix) func(context.Context, runtime.Logger, *sql.DB, runtime.NakamaModule, string) (string, error) {
+	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		userID, ok := ctx.Value(runtime.RUNTIME_CTX_USER_ID).(string)
 		if !ok {
 			return "", ErrNoSessionUser

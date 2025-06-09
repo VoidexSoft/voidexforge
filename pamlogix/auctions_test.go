@@ -144,6 +144,11 @@ func (m *MockPamlogix) GetStreaksSystem() StreaksSystem {
 	return args.Get(0).(StreaksSystem)
 }
 
+func (m *MockPamlogix) GetChallengesSystem() ChallengesSystem {
+	args := m.Called()
+	return args.Get(0).(ChallengesSystem)
+}
+
 func TestAuctionItemSetValidation(t *testing.T) {
 	// Create inventory config with item sets
 	inventoryConfig := &InventoryConfig{

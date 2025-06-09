@@ -361,6 +361,29 @@ func (p *pamlogixImpl) registerSystemRpcs(initializer runtime.Initializer, syste
 		if err := initializer.RegisterRpc(RpcId_RPC_ID_ECONOMY_PLACEMENT_FAIL.String(), rpcEconomyPlacementFail(p)); err != nil {
 			return err
 		}
+	case SystemTypeEventLeaderboards:
+		// Register EventLeaderboards system RPCs
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_EVENT_LEADERBOARD_LIST.String(), rpcEventLeaderboardsList(p)); err != nil {
+			return err
+		}
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_EVENT_LEADERBOARD_GET.String(), rpcEventLeaderboardsGet(p)); err != nil {
+			return err
+		}
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_EVENT_LEADERBOARD_UPDATE.String(), rpcEventLeaderboardsUpdate(p)); err != nil {
+			return err
+		}
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_EVENT_LEADERBOARD_CLAIM.String(), rpcEventLeaderboardsClaim(p)); err != nil {
+			return err
+		}
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_EVENT_LEADERBOARD_ROLL.String(), rpcEventLeaderboardsRoll(p)); err != nil {
+			return err
+		}
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_EVENT_LEADERBOARD_DEBUG_FILL.String(), rpcEventLeaderboardsDebugFill(p)); err != nil {
+			return err
+		}
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_EVENT_LEADERBOARD_DEBUG_RANDOM_SCORES.String(), rpcEventLeaderboardsDebugRandomScores(p)); err != nil {
+			return err
+		}
 
 	case SystemTypeEnergy:
 		if err := initializer.RegisterRpc(RpcId_RPC_ID_ENERGY_GET.String(), rpcEnergyGet(p)); err != nil {

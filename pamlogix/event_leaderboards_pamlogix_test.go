@@ -373,7 +373,7 @@ func TestUpdateEventLeaderboard_TargetScoreAchievement(t *testing.T) {
 	nk.On("LeaderboardRecordsList", ctx, mock.AnythingOfType("string"), mock.Anything, 100, "", int64(0)).Return(
 		[]*api.LeaderboardRecord{record}, []*api.LeaderboardRecord{}, "", "", nil)
 
-	eventLeaderboard, err := system.UpdateEventLeaderboard(ctx, logger, nk, userID, "testuser", "test_event", 1000, 0, nil)
+	eventLeaderboard, err := system.UpdateEventLeaderboard(ctx, logger, nil, nk, userID, "testuser", "test_event", 1000, 0, nil, false)
 	require.NoError(t, err)
 	assert.NotNil(t, eventLeaderboard)
 

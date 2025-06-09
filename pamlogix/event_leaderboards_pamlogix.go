@@ -2,6 +2,7 @@ package pamlogix
 
 import (
 	"context"
+	"database/sql"
 	"encoding/json"
 	"fmt"
 	"math/rand"
@@ -139,7 +140,7 @@ func (e *NakamaEventLeaderboardsSystem) ListEventLeaderboard(ctx context.Context
 }
 
 // GetEventLeaderboard returns a specified event leaderboard's cohort for the user.
-func (e *NakamaEventLeaderboardsSystem) GetEventLeaderboard(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID, eventLeaderboardID string) (*EventLeaderboard, error) {
+func (e *NakamaEventLeaderboardsSystem) GetEventLeaderboard(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, userID, eventLeaderboardID string) (*EventLeaderboard, error) {
 	config, exists := e.config.EventLeaderboards[eventLeaderboardID]
 	if !exists {
 		return nil, ErrBadInput
@@ -164,7 +165,7 @@ func (e *NakamaEventLeaderboardsSystem) GetEventLeaderboard(ctx context.Context,
 }
 
 // RollEventLeaderboard places the user into a new cohort for the specified event leaderboard if possible.
-func (e *NakamaEventLeaderboardsSystem) RollEventLeaderboard(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID, eventLeaderboardID string, tier *int, matchmakerProperties map[string]interface{}) (*EventLeaderboard, error) {
+func (e *NakamaEventLeaderboardsSystem) RollEventLeaderboard(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, userID, eventLeaderboardID string, tier *int, matchmakerProperties map[string]interface{}) (*EventLeaderboard, error) {
 	config, exists := e.config.EventLeaderboards[eventLeaderboardID]
 	if !exists {
 		return nil, ErrBadInput
@@ -291,7 +292,8 @@ func (e *NakamaEventLeaderboardsSystem) RollEventLeaderboard(ctx context.Context
 }
 
 // UpdateEventLeaderboard updates the user's score in the specified event leaderboard, and returns the user's updated cohort information.
-func (e *NakamaEventLeaderboardsSystem) UpdateEventLeaderboard(ctx context.Context, logger runtime.Logger, nk runtime.NakamaModule, userID, username, eventLeaderboardID string, score, subscore int64, metadata map[string]interface{}) (*EventLeaderboard, error) {
+func (e *NakamaEventLeaderboardsSystem) UpdateEventLeaderboard(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, userID, username, eventLeaderboardID string, score, subscore int64, metadata map[string]interface{}, conditionalMetadataUpdate bool) (*EventLeaderboard, error) {
+	//TODO: check to create table for event leaderboards if needed
 	config, exists := e.config.EventLeaderboards[eventLeaderboardID]
 	if !exists {
 		return nil, ErrBadInput
@@ -320,8 +322,87 @@ func (e *NakamaEventLeaderboardsSystem) UpdateEventLeaderboard(ctx context.Conte
 	// Get backing leaderboard ID
 	backingID := e.getBackingLeaderboardID(eventLeaderboardID, userEventState.CohortID)
 
+	// Handle metadata update logic
+	finalMetadata := metadata
+
+	//TODO: check this logic
+	// If metadata is nil, preserve existing metadata (exclude metadata from update)
+	if metadata == nil {
+		// Get existing record to preserve current metadata
+		existingRecords, _, _, _, err := nk.LeaderboardRecordsList(ctx, backingID, []string{userID}, 1, "", 0)
+		if err != nil {
+			logger.Error("Failed to get existing leaderboard record for metadata preservation: %v", err)
+			return nil, ErrInternal
+		}
+
+		if len(existingRecords) > 0 {
+			existingRecord := existingRecords[0]
+			// Parse existing metadata from string to map[string]interface{}
+			if existingRecord.Metadata != "" {
+				var existingMeta map[string]interface{}
+				if err := json.Unmarshal([]byte(existingRecord.Metadata), &existingMeta); err != nil {
+					logger.Error("Failed to unmarshal existing metadata for preservation: %v", err)
+					// Use empty metadata as fallback
+					finalMetadata = make(map[string]interface{})
+				} else {
+					finalMetadata = existingMeta
+				}
+			} else {
+				finalMetadata = make(map[string]interface{})
+			}
+		} else {
+			// No existing record, use empty metadata
+			finalMetadata = make(map[string]interface{})
+		}
+		logger.Debug("Metadata excluded from update: preserving existing metadata for user %s in event %s", userID, eventLeaderboardID)
+	} else if conditionalMetadataUpdate {
+		// Get existing record to check current metadata
+		existingRecords, _, _, _, err := nk.LeaderboardRecordsList(ctx, backingID, []string{userID}, 1, "", 0)
+		if err != nil {
+			logger.Error("Failed to get existing leaderboard record for conditional update: %v", err)
+			return nil, ErrInternal
+		}
+
+		if len(existingRecords) > 0 {
+			existingRecord := existingRecords[0]
+			// Only update metadata if the new score is better than the existing score
+			shouldUpdateMetadata := false
+
+			if config.Ascending {
+				// For ascending leaderboards, lower scores are better
+				shouldUpdateMetadata = score < existingRecord.Score ||
+					(score == existingRecord.Score && subscore < existingRecord.Subscore)
+			} else {
+				// For descending leaderboards, higher scores are better
+				shouldUpdateMetadata = score > existingRecord.Score ||
+					(score == existingRecord.Score && subscore > existingRecord.Subscore)
+			}
+
+			if !shouldUpdateMetadata {
+				// Keep existing metadata if score is not better
+				// Parse existing metadata from string to map[string]interface{}
+				if existingRecord.Metadata != "" {
+					var existingMeta map[string]interface{}
+					if err := json.Unmarshal([]byte(existingRecord.Metadata), &existingMeta); err != nil {
+						logger.Error("Failed to unmarshal existing metadata for conditional update: %v", err)
+						// Use provided metadata as fallback
+						finalMetadata = metadata
+					} else {
+						finalMetadata = existingMeta
+					}
+				} else {
+					finalMetadata = make(map[string]interface{})
+				}
+				logger.Debug("Conditional metadata update: keeping existing metadata for user %s in event %s (score not improved)", userID, eventLeaderboardID)
+			} else {
+				logger.Debug("Conditional metadata update: updating metadata for user %s in event %s (score improved)", userID, eventLeaderboardID)
+			}
+		}
+		// If no existing record, use the provided metadata as is
+	}
+
 	// Submit score to backing leaderboard
-	_, err = nk.LeaderboardRecordWrite(ctx, backingID, userID, username, score, subscore, metadata, nil)
+	_, err = nk.LeaderboardRecordWrite(ctx, backingID, userID, username, score, subscore, finalMetadata, nil)
 	if err != nil {
 		logger.Error("Failed to write leaderboard record: %v", err)
 		return nil, ErrInternal
