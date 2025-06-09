@@ -3,12 +3,12 @@ package pamlogix
 import (
 	"context"
 	"database/sql"
+	"encoding/json"
 
 	"github.com/heroiclabs/nakama-common/runtime"
-	"google.golang.org/protobuf/proto"
 )
 
-func rpcEnergyGet(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+func rpcEnergyGet_Json(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		energySystem := p.GetEnergySystem()
 		if energySystem == nil {
@@ -25,13 +25,13 @@ func rpcEnergyGet(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logg
 			return "", err
 		}
 
-		// Convert to protobuf EnergyList
+		// Convert to JSON EnergyList
 		response := &EnergyList{
 			Energies: energies,
 		}
 
-		// Marshal response to protobuf
-		data, err := proto.Marshal(response)
+		// Marshal response to JSON
+		data, err := json.Marshal(response)
 		if err != nil {
 			logger.Error("Failed to marshal energies: %v", err)
 			return "", runtime.NewError("failed to marshal energies", INTERNAL_ERROR_CODE) // INTERNAL
@@ -41,7 +41,7 @@ func rpcEnergyGet(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logg
 	}
 }
 
-func rpcEnergySpend(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+func rpcEnergySpend_Json(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		energySystem := p.GetEnergySystem()
 		if energySystem == nil {
@@ -55,7 +55,7 @@ func rpcEnergySpend(p *pamlogixImpl) func(ctx context.Context, logger runtime.Lo
 
 		// Parse the input request
 		request := &EnergySpendRequest{}
-		if err := proto.Unmarshal([]byte(payload), request); err != nil {
+		if err := json.Unmarshal([]byte(payload), request); err != nil {
 			logger.Error("Failed to unmarshal EnergySpendRequest: %v", err)
 			return "", runtime.NewError("failed to unmarshal energy spend request", INTERNAL_ERROR_CODE) // INTERNAL
 		}
@@ -74,8 +74,8 @@ func rpcEnergySpend(p *pamlogixImpl) func(ctx context.Context, logger runtime.Lo
 			Reward: reward,
 		}
 
-		// Marshal response to protobuf
-		data, err := proto.Marshal(response)
+		// Marshal response to JSON
+		data, err := json.Marshal(response)
 		if err != nil {
 			logger.Error("Failed to marshal energy response: %v", err)
 			return "", runtime.NewError("failed to marshal energy response", INTERNAL_ERROR_CODE) // INTERNAL
@@ -85,7 +85,7 @@ func rpcEnergySpend(p *pamlogixImpl) func(ctx context.Context, logger runtime.Lo
 	}
 }
 
-func rpcEnergyGrant(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
+func rpcEnergyGrant_Json(p *pamlogixImpl) func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 	return func(ctx context.Context, logger runtime.Logger, db *sql.DB, nk runtime.NakamaModule, payload string) (string, error) {
 		energySystem := p.GetEnergySystem()
 		if energySystem == nil {
@@ -99,7 +99,7 @@ func rpcEnergyGrant(p *pamlogixImpl) func(ctx context.Context, logger runtime.Lo
 
 		// Parse the input request
 		request := &EnergyGrantRequest{}
-		if err := proto.Unmarshal([]byte(payload), request); err != nil {
+		if err := json.Unmarshal([]byte(payload), request); err != nil {
 			logger.Error("Failed to unmarshal EnergyGrantRequest: %v", err)
 			return "", runtime.NewError("failed to unmarshal energy grant request", INTERNAL_ERROR_CODE) // INTERNAL
 		}
@@ -116,7 +116,7 @@ func rpcEnergyGrant(p *pamlogixImpl) func(ctx context.Context, logger runtime.Lo
 		}
 
 		// Marshal the response
-		data, err := proto.Marshal(response)
+		data, err := json.Marshal(response)
 		if err != nil {
 			logger.Error("Failed to marshal energies: %v", err)
 			return "", runtime.NewError("failed to marshal energies", INTERNAL_ERROR_CODE) // INTERNAL

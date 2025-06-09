@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.6
 // 	protoc        v5.29.3
-// source: pamlogix/pamlogix.proto
+// source: pamlogix.proto
 
 // The request and response objects for Pamlogix.
 
@@ -413,11 +413,11 @@ func (x RpcId) String() string {
 }
 
 func (RpcId) Descriptor() protoreflect.EnumDescriptor {
-	return file_pamlogix_pamlogix_proto_enumTypes[0].Descriptor()
+	return file_pamlogix_proto_enumTypes[0].Descriptor()
 }
 
 func (RpcId) Type() protoreflect.EnumType {
-	return &file_pamlogix_pamlogix_proto_enumTypes[0]
+	return &file_pamlogix_proto_enumTypes[0]
 }
 
 func (x RpcId) Number() protoreflect.EnumNumber {
@@ -426,7 +426,7 @@ func (x RpcId) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use RpcId.Descriptor instead.
 func (RpcId) EnumDescriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{0}
+	return file_pamlogix_proto_rawDescGZIP(), []int{0}
 }
 
 type RpcSocketId int32
@@ -464,11 +464,11 @@ func (x RpcSocketId) String() string {
 }
 
 func (RpcSocketId) Descriptor() protoreflect.EnumDescriptor {
-	return file_pamlogix_pamlogix_proto_enumTypes[1].Descriptor()
+	return file_pamlogix_proto_enumTypes[1].Descriptor()
 }
 
 func (RpcSocketId) Type() protoreflect.EnumType {
-	return &file_pamlogix_pamlogix_proto_enumTypes[1]
+	return &file_pamlogix_proto_enumTypes[1]
 }
 
 func (x RpcSocketId) Number() protoreflect.EnumNumber {
@@ -477,7 +477,7 @@ func (x RpcSocketId) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use RpcSocketId.Descriptor instead.
 func (RpcSocketId) EnumDescriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{1}
+	return file_pamlogix_proto_rawDescGZIP(), []int{1}
 }
 
 type ProgressionPreconditionsOperator int32
@@ -524,11 +524,11 @@ func (x ProgressionPreconditionsOperator) String() string {
 }
 
 func (ProgressionPreconditionsOperator) Descriptor() protoreflect.EnumDescriptor {
-	return file_pamlogix_pamlogix_proto_enumTypes[2].Descriptor()
+	return file_pamlogix_proto_enumTypes[2].Descriptor()
 }
 
 func (ProgressionPreconditionsOperator) Type() protoreflect.EnumType {
-	return &file_pamlogix_pamlogix_proto_enumTypes[2]
+	return &file_pamlogix_proto_enumTypes[2]
 }
 
 func (x ProgressionPreconditionsOperator) Number() protoreflect.EnumNumber {
@@ -537,7 +537,7 @@ func (x ProgressionPreconditionsOperator) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use ProgressionPreconditionsOperator.Descriptor instead.
 func (ProgressionPreconditionsOperator) EnumDescriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{2}
+	return file_pamlogix_proto_rawDescGZIP(), []int{2}
 }
 
 type ProgressionDeltaState int32
@@ -580,11 +580,11 @@ func (x ProgressionDeltaState) String() string {
 }
 
 func (ProgressionDeltaState) Descriptor() protoreflect.EnumDescriptor {
-	return file_pamlogix_pamlogix_proto_enumTypes[3].Descriptor()
+	return file_pamlogix_proto_enumTypes[3].Descriptor()
 }
 
 func (ProgressionDeltaState) Type() protoreflect.EnumType {
-	return &file_pamlogix_pamlogix_proto_enumTypes[3]
+	return &file_pamlogix_proto_enumTypes[3]
 }
 
 func (x ProgressionDeltaState) Number() protoreflect.EnumNumber {
@@ -593,7 +593,7 @@ func (x ProgressionDeltaState) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use ProgressionDeltaState.Descriptor instead.
 func (ProgressionDeltaState) EnumDescriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{3}
+	return file_pamlogix_proto_rawDescGZIP(), []int{3}
 }
 
 // Indicate how a stats update should be handled.
@@ -641,11 +641,11 @@ func (x StatUpdateOperator) String() string {
 }
 
 func (StatUpdateOperator) Descriptor() protoreflect.EnumDescriptor {
-	return file_pamlogix_pamlogix_proto_enumTypes[4].Descriptor()
+	return file_pamlogix_proto_enumTypes[4].Descriptor()
 }
 
 func (StatUpdateOperator) Type() protoreflect.EnumType {
-	return &file_pamlogix_pamlogix_proto_enumTypes[4]
+	return &file_pamlogix_proto_enumTypes[4]
 }
 
 func (x StatUpdateOperator) Number() protoreflect.EnumNumber {
@@ -654,7 +654,7 @@ func (x StatUpdateOperator) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use StatUpdateOperator.Descriptor instead.
 func (StatUpdateOperator) EnumDescriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{4}
+	return file_pamlogix_proto_rawDescGZIP(), []int{4}
 }
 
 // The store types supported by the Economy system.
@@ -702,11 +702,11 @@ func (x EconomyStoreType) String() string {
 }
 
 func (EconomyStoreType) Descriptor() protoreflect.EnumDescriptor {
-	return file_pamlogix_pamlogix_proto_enumTypes[5].Descriptor()
+	return file_pamlogix_proto_enumTypes[5].Descriptor()
 }
 
 func (EconomyStoreType) Type() protoreflect.EnumType {
-	return &file_pamlogix_pamlogix_proto_enumTypes[5]
+	return &file_pamlogix_proto_enumTypes[5]
 }
 
 func (x EconomyStoreType) Number() protoreflect.EnumNumber {
@@ -715,7 +715,7 @@ func (x EconomyStoreType) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use EconomyStoreType.Descriptor instead.
 func (EconomyStoreType) EnumDescriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{5}
+	return file_pamlogix_proto_rawDescGZIP(), []int{5}
 }
 
 // Types of incentives.
@@ -751,11 +751,11 @@ func (x IncentiveType) String() string {
 }
 
 func (IncentiveType) Descriptor() protoreflect.EnumDescriptor {
-	return file_pamlogix_pamlogix_proto_enumTypes[6].Descriptor()
+	return file_pamlogix_proto_enumTypes[6].Descriptor()
 }
 
 func (IncentiveType) Type() protoreflect.EnumType {
-	return &file_pamlogix_pamlogix_proto_enumTypes[6]
+	return &file_pamlogix_proto_enumTypes[6]
 }
 
 func (x IncentiveType) Number() protoreflect.EnumNumber {
@@ -764,7 +764,7 @@ func (x IncentiveType) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use IncentiveType.Descriptor instead.
 func (IncentiveType) EnumDescriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{6}
+	return file_pamlogix_proto_rawDescGZIP(), []int{6}
 }
 
 // The state of a user's participation in a challenge.
@@ -816,11 +816,11 @@ func (x ChallengeState) String() string {
 }
 
 func (ChallengeState) Descriptor() protoreflect.EnumDescriptor {
-	return file_pamlogix_pamlogix_proto_enumTypes[7].Descriptor()
+	return file_pamlogix_proto_enumTypes[7].Descriptor()
 }
 
 func (ChallengeState) Type() protoreflect.EnumType {
-	return &file_pamlogix_pamlogix_proto_enumTypes[7]
+	return &file_pamlogix_proto_enumTypes[7]
 }
 
 func (x ChallengeState) Number() protoreflect.EnumNumber {
@@ -829,7 +829,7 @@ func (x ChallengeState) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use ChallengeState.Descriptor instead.
 func (ChallengeState) EnumDescriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{7}
+	return file_pamlogix_proto_rawDescGZIP(), []int{7}
 }
 
 // The states of a Tutorial.
@@ -881,11 +881,11 @@ func (x TutorialState) String() string {
 }
 
 func (TutorialState) Descriptor() protoreflect.EnumDescriptor {
-	return file_pamlogix_pamlogix_proto_enumTypes[8].Descriptor()
+	return file_pamlogix_proto_enumTypes[8].Descriptor()
 }
 
 func (TutorialState) Type() protoreflect.EnumType {
-	return &file_pamlogix_pamlogix_proto_enumTypes[8]
+	return &file_pamlogix_proto_enumTypes[8]
 }
 
 func (x TutorialState) Number() protoreflect.EnumNumber {
@@ -894,7 +894,7 @@ func (x TutorialState) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use TutorialState.Descriptor instead.
 func (TutorialState) EnumDescriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{8}
+	return file_pamlogix_proto_rawDescGZIP(), []int{8}
 }
 
 // The cost(s) associated with permanently unlocking a progression.
@@ -910,7 +910,7 @@ type ProgressionCost struct {
 
 func (x *ProgressionCost) Reset() {
 	*x = ProgressionCost{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[0]
+	mi := &file_pamlogix_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -922,7 +922,7 @@ func (x *ProgressionCost) String() string {
 func (*ProgressionCost) ProtoMessage() {}
 
 func (x *ProgressionCost) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[0]
+	mi := &file_pamlogix_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -935,7 +935,7 @@ func (x *ProgressionCost) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ProgressionCost.ProtoReflect.Descriptor instead.
 func (*ProgressionCost) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{0}
+	return file_pamlogix_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *ProgressionCost) GetItems() map[string]int64 {
@@ -985,7 +985,7 @@ type ProgressionPreconditions struct {
 
 func (x *ProgressionPreconditions) Reset() {
 	*x = ProgressionPreconditions{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[1]
+	mi := &file_pamlogix_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -997,7 +997,7 @@ func (x *ProgressionPreconditions) String() string {
 func (*ProgressionPreconditions) ProtoMessage() {}
 
 func (x *ProgressionPreconditions) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[1]
+	mi := &file_pamlogix_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1010,7 +1010,7 @@ func (x *ProgressionPreconditions) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ProgressionPreconditions.ProtoReflect.Descriptor instead.
 func (*ProgressionPreconditions) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{1}
+	return file_pamlogix_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *ProgressionPreconditions) GetCounts() map[string]int64 {
@@ -1112,7 +1112,7 @@ type ProgressionPreconditionsBlock struct {
 
 func (x *ProgressionPreconditionsBlock) Reset() {
 	*x = ProgressionPreconditionsBlock{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[2]
+	mi := &file_pamlogix_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1124,7 +1124,7 @@ func (x *ProgressionPreconditionsBlock) String() string {
 func (*ProgressionPreconditionsBlock) ProtoMessage() {}
 
 func (x *ProgressionPreconditionsBlock) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[2]
+	mi := &file_pamlogix_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1137,7 +1137,7 @@ func (x *ProgressionPreconditionsBlock) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ProgressionPreconditionsBlock.ProtoReflect.Descriptor instead.
 func (*ProgressionPreconditionsBlock) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{2}
+	return file_pamlogix_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *ProgressionPreconditionsBlock) GetDirect() *ProgressionPreconditions {
@@ -1188,7 +1188,7 @@ type Progression struct {
 
 func (x *Progression) Reset() {
 	*x = Progression{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[3]
+	mi := &file_pamlogix_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1200,7 +1200,7 @@ func (x *Progression) String() string {
 func (*Progression) ProtoMessage() {}
 
 func (x *Progression) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[3]
+	mi := &file_pamlogix_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1213,7 +1213,7 @@ func (x *Progression) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Progression.ProtoReflect.Descriptor instead.
 func (*Progression) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{3}
+	return file_pamlogix_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *Progression) GetId() string {
@@ -1296,7 +1296,7 @@ type ProgressionDelta struct {
 
 func (x *ProgressionDelta) Reset() {
 	*x = ProgressionDelta{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[4]
+	mi := &file_pamlogix_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1308,7 +1308,7 @@ func (x *ProgressionDelta) String() string {
 func (*ProgressionDelta) ProtoMessage() {}
 
 func (x *ProgressionDelta) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[4]
+	mi := &file_pamlogix_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1321,7 +1321,7 @@ func (x *ProgressionDelta) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ProgressionDelta.ProtoReflect.Descriptor instead.
 func (*ProgressionDelta) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{4}
+	return file_pamlogix_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *ProgressionDelta) GetId() string {
@@ -1365,7 +1365,7 @@ type ProgressionList struct {
 
 func (x *ProgressionList) Reset() {
 	*x = ProgressionList{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[5]
+	mi := &file_pamlogix_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1377,7 +1377,7 @@ func (x *ProgressionList) String() string {
 func (*ProgressionList) ProtoMessage() {}
 
 func (x *ProgressionList) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[5]
+	mi := &file_pamlogix_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1390,7 +1390,7 @@ func (x *ProgressionList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ProgressionList.ProtoReflect.Descriptor instead.
 func (*ProgressionList) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{5}
+	return file_pamlogix_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *ProgressionList) GetProgressions() map[string]*Progression {
@@ -1418,7 +1418,7 @@ type ProgressionGetRequest struct {
 
 func (x *ProgressionGetRequest) Reset() {
 	*x = ProgressionGetRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[6]
+	mi := &file_pamlogix_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1430,7 +1430,7 @@ func (x *ProgressionGetRequest) String() string {
 func (*ProgressionGetRequest) ProtoMessage() {}
 
 func (x *ProgressionGetRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[6]
+	mi := &file_pamlogix_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1443,7 +1443,7 @@ func (x *ProgressionGetRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ProgressionGetRequest.ProtoReflect.Descriptor instead.
 func (*ProgressionGetRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{6}
+	return file_pamlogix_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *ProgressionGetRequest) GetProgressions() map[string]*Progression {
@@ -1464,7 +1464,7 @@ type ProgressionPurchaseRequest struct {
 
 func (x *ProgressionPurchaseRequest) Reset() {
 	*x = ProgressionPurchaseRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[7]
+	mi := &file_pamlogix_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1476,7 +1476,7 @@ func (x *ProgressionPurchaseRequest) String() string {
 func (*ProgressionPurchaseRequest) ProtoMessage() {}
 
 func (x *ProgressionPurchaseRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[7]
+	mi := &file_pamlogix_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1489,7 +1489,7 @@ func (x *ProgressionPurchaseRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ProgressionPurchaseRequest.ProtoReflect.Descriptor instead.
 func (*ProgressionPurchaseRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{7}
+	return file_pamlogix_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *ProgressionPurchaseRequest) GetId() string {
@@ -1512,7 +1512,7 @@ type ProgressionUpdateRequest struct {
 
 func (x *ProgressionUpdateRequest) Reset() {
 	*x = ProgressionUpdateRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[8]
+	mi := &file_pamlogix_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1524,7 +1524,7 @@ func (x *ProgressionUpdateRequest) String() string {
 func (*ProgressionUpdateRequest) ProtoMessage() {}
 
 func (x *ProgressionUpdateRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[8]
+	mi := &file_pamlogix_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1537,7 +1537,7 @@ func (x *ProgressionUpdateRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ProgressionUpdateRequest.ProtoReflect.Descriptor instead.
 func (*ProgressionUpdateRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{8}
+	return file_pamlogix_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *ProgressionUpdateRequest) GetId() string {
@@ -1565,7 +1565,7 @@ type ProgressionResetRequest struct {
 
 func (x *ProgressionResetRequest) Reset() {
 	*x = ProgressionResetRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[9]
+	mi := &file_pamlogix_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1577,7 +1577,7 @@ func (x *ProgressionResetRequest) String() string {
 func (*ProgressionResetRequest) ProtoMessage() {}
 
 func (x *ProgressionResetRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[9]
+	mi := &file_pamlogix_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1590,7 +1590,7 @@ func (x *ProgressionResetRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ProgressionResetRequest.ProtoReflect.Descriptor instead.
 func (*ProgressionResetRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{9}
+	return file_pamlogix_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *ProgressionResetRequest) GetIds() []string {
@@ -1615,7 +1615,7 @@ type StatUpdate struct {
 
 func (x *StatUpdate) Reset() {
 	*x = StatUpdate{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[10]
+	mi := &file_pamlogix_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1627,7 +1627,7 @@ func (x *StatUpdate) String() string {
 func (*StatUpdate) ProtoMessage() {}
 
 func (x *StatUpdate) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[10]
+	mi := &file_pamlogix_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1640,7 +1640,7 @@ func (x *StatUpdate) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StatUpdate.ProtoReflect.Descriptor instead.
 func (*StatUpdate) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{10}
+	return file_pamlogix_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *StatUpdate) GetName() string {
@@ -1677,7 +1677,7 @@ type StatUpdateRequest struct {
 
 func (x *StatUpdateRequest) Reset() {
 	*x = StatUpdateRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[11]
+	mi := &file_pamlogix_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1689,7 +1689,7 @@ func (x *StatUpdateRequest) String() string {
 func (*StatUpdateRequest) ProtoMessage() {}
 
 func (x *StatUpdateRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[11]
+	mi := &file_pamlogix_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1702,7 +1702,7 @@ func (x *StatUpdateRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StatUpdateRequest.ProtoReflect.Descriptor instead.
 func (*StatUpdateRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{11}
+	return file_pamlogix_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *StatUpdateRequest) GetPublic() []*StatUpdate {
@@ -1750,7 +1750,7 @@ type Stat struct {
 
 func (x *Stat) Reset() {
 	*x = Stat{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[12]
+	mi := &file_pamlogix_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1762,7 +1762,7 @@ func (x *Stat) String() string {
 func (*Stat) ProtoMessage() {}
 
 func (x *Stat) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[12]
+	mi := &file_pamlogix_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1775,7 +1775,7 @@ func (x *Stat) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Stat.ProtoReflect.Descriptor instead.
 func (*Stat) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{12}
+	return file_pamlogix_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *Stat) GetName() string {
@@ -1868,7 +1868,7 @@ type StatList struct {
 
 func (x *StatList) Reset() {
 	*x = StatList{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[13]
+	mi := &file_pamlogix_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1880,7 +1880,7 @@ func (x *StatList) String() string {
 func (*StatList) ProtoMessage() {}
 
 func (x *StatList) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[13]
+	mi := &file_pamlogix_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1893,7 +1893,7 @@ func (x *StatList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StatList.ProtoReflect.Descriptor instead.
 func (*StatList) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{13}
+	return file_pamlogix_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *StatList) GetPublic() map[string]*Stat {
@@ -1941,7 +1941,7 @@ type ChannelMessageAck struct {
 
 func (x *ChannelMessageAck) Reset() {
 	*x = ChannelMessageAck{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[14]
+	mi := &file_pamlogix_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1953,7 +1953,7 @@ func (x *ChannelMessageAck) String() string {
 func (*ChannelMessageAck) ProtoMessage() {}
 
 func (x *ChannelMessageAck) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[14]
+	mi := &file_pamlogix_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1966,7 +1966,7 @@ func (x *ChannelMessageAck) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ChannelMessageAck.ProtoReflect.Descriptor instead.
 func (*ChannelMessageAck) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{14}
+	return file_pamlogix_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *ChannelMessageAck) GetChannelId() string {
@@ -2063,7 +2063,7 @@ type DevicePrefsRequest struct {
 
 func (x *DevicePrefsRequest) Reset() {
 	*x = DevicePrefsRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[15]
+	mi := &file_pamlogix_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2075,7 +2075,7 @@ func (x *DevicePrefsRequest) String() string {
 func (*DevicePrefsRequest) ProtoMessage() {}
 
 func (x *DevicePrefsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[15]
+	mi := &file_pamlogix_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2088,7 +2088,7 @@ func (x *DevicePrefsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DevicePrefsRequest.ProtoReflect.Descriptor instead.
 func (*DevicePrefsRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{15}
+	return file_pamlogix_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *DevicePrefsRequest) GetDeviceId() string {
@@ -2138,7 +2138,7 @@ type RewardInventoryItem struct {
 
 func (x *RewardInventoryItem) Reset() {
 	*x = RewardInventoryItem{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[16]
+	mi := &file_pamlogix_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2150,7 +2150,7 @@ func (x *RewardInventoryItem) String() string {
 func (*RewardInventoryItem) ProtoMessage() {}
 
 func (x *RewardInventoryItem) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[16]
+	mi := &file_pamlogix_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2163,7 +2163,7 @@ func (x *RewardInventoryItem) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RewardInventoryItem.ProtoReflect.Descriptor instead.
 func (*RewardInventoryItem) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{16}
+	return file_pamlogix_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *RewardInventoryItem) GetId() string {
@@ -2220,7 +2220,7 @@ type RewardEnergyModifier struct {
 
 func (x *RewardEnergyModifier) Reset() {
 	*x = RewardEnergyModifier{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[17]
+	mi := &file_pamlogix_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2232,7 +2232,7 @@ func (x *RewardEnergyModifier) String() string {
 func (*RewardEnergyModifier) ProtoMessage() {}
 
 func (x *RewardEnergyModifier) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[17]
+	mi := &file_pamlogix_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2245,7 +2245,7 @@ func (x *RewardEnergyModifier) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RewardEnergyModifier.ProtoReflect.Descriptor instead.
 func (*RewardEnergyModifier) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{17}
+	return file_pamlogix_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *RewardEnergyModifier) GetId() string {
@@ -2302,7 +2302,7 @@ type RewardModifier struct {
 
 func (x *RewardModifier) Reset() {
 	*x = RewardModifier{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[18]
+	mi := &file_pamlogix_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2314,7 +2314,7 @@ func (x *RewardModifier) String() string {
 func (*RewardModifier) ProtoMessage() {}
 
 func (x *RewardModifier) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[18]
+	mi := &file_pamlogix_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2327,7 +2327,7 @@ func (x *RewardModifier) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RewardModifier.ProtoReflect.Descriptor instead.
 func (*RewardModifier) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{18}
+	return file_pamlogix_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *RewardModifier) GetId() string {
@@ -2386,7 +2386,7 @@ type ActiveRewardModifier struct {
 
 func (x *ActiveRewardModifier) Reset() {
 	*x = ActiveRewardModifier{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[19]
+	mi := &file_pamlogix_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2398,7 +2398,7 @@ func (x *ActiveRewardModifier) String() string {
 func (*ActiveRewardModifier) ProtoMessage() {}
 
 func (x *ActiveRewardModifier) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[19]
+	mi := &file_pamlogix_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2411,7 +2411,7 @@ func (x *ActiveRewardModifier) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ActiveRewardModifier.ProtoReflect.Descriptor instead.
 func (*ActiveRewardModifier) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{19}
+	return file_pamlogix_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *ActiveRewardModifier) GetId() string {
@@ -2479,7 +2479,7 @@ type Reward struct {
 
 func (x *Reward) Reset() {
 	*x = Reward{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[20]
+	mi := &file_pamlogix_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2491,7 +2491,7 @@ func (x *Reward) String() string {
 func (*Reward) ProtoMessage() {}
 
 func (x *Reward) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[20]
+	mi := &file_pamlogix_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2504,7 +2504,7 @@ func (x *Reward) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Reward.ProtoReflect.Descriptor instead.
 func (*Reward) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{20}
+	return file_pamlogix_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *Reward) GetItems() map[string]int64 {
@@ -2567,7 +2567,7 @@ type RewardList struct {
 
 func (x *RewardList) Reset() {
 	*x = RewardList{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[21]
+	mi := &file_pamlogix_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2579,7 +2579,7 @@ func (x *RewardList) String() string {
 func (*RewardList) ProtoMessage() {}
 
 func (x *RewardList) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[21]
+	mi := &file_pamlogix_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2592,7 +2592,7 @@ func (x *RewardList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RewardList.ProtoReflect.Descriptor instead.
 func (*RewardList) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{21}
+	return file_pamlogix_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *RewardList) GetRewards() []*Reward {
@@ -2617,7 +2617,7 @@ type RewardRangeInt32 struct {
 
 func (x *RewardRangeInt32) Reset() {
 	*x = RewardRangeInt32{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[22]
+	mi := &file_pamlogix_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2629,7 +2629,7 @@ func (x *RewardRangeInt32) String() string {
 func (*RewardRangeInt32) ProtoMessage() {}
 
 func (x *RewardRangeInt32) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[22]
+	mi := &file_pamlogix_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2642,7 +2642,7 @@ func (x *RewardRangeInt32) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RewardRangeInt32.ProtoReflect.Descriptor instead.
 func (*RewardRangeInt32) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{22}
+	return file_pamlogix_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *RewardRangeInt32) GetMin() int32 {
@@ -2681,7 +2681,7 @@ type RewardRangeInt64 struct {
 
 func (x *RewardRangeInt64) Reset() {
 	*x = RewardRangeInt64{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[23]
+	mi := &file_pamlogix_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2693,7 +2693,7 @@ func (x *RewardRangeInt64) String() string {
 func (*RewardRangeInt64) ProtoMessage() {}
 
 func (x *RewardRangeInt64) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[23]
+	mi := &file_pamlogix_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2706,7 +2706,7 @@ func (x *RewardRangeInt64) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RewardRangeInt64.ProtoReflect.Descriptor instead.
 func (*RewardRangeInt64) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{23}
+	return file_pamlogix_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *RewardRangeInt64) GetMin() int64 {
@@ -2745,7 +2745,7 @@ type RewardRangeUInt64 struct {
 
 func (x *RewardRangeUInt64) Reset() {
 	*x = RewardRangeUInt64{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[24]
+	mi := &file_pamlogix_proto_msgTypes[24]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2757,7 +2757,7 @@ func (x *RewardRangeUInt64) String() string {
 func (*RewardRangeUInt64) ProtoMessage() {}
 
 func (x *RewardRangeUInt64) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[24]
+	mi := &file_pamlogix_proto_msgTypes[24]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2770,7 +2770,7 @@ func (x *RewardRangeUInt64) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RewardRangeUInt64.ProtoReflect.Descriptor instead.
 func (*RewardRangeUInt64) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{24}
+	return file_pamlogix_proto_rawDescGZIP(), []int{24}
 }
 
 func (x *RewardRangeUInt64) GetMin() uint64 {
@@ -2809,7 +2809,7 @@ type RewardRangeDouble struct {
 
 func (x *RewardRangeDouble) Reset() {
 	*x = RewardRangeDouble{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[25]
+	mi := &file_pamlogix_proto_msgTypes[25]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2821,7 +2821,7 @@ func (x *RewardRangeDouble) String() string {
 func (*RewardRangeDouble) ProtoMessage() {}
 
 func (x *RewardRangeDouble) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[25]
+	mi := &file_pamlogix_proto_msgTypes[25]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2834,7 +2834,7 @@ func (x *RewardRangeDouble) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RewardRangeDouble.ProtoReflect.Descriptor instead.
 func (*RewardRangeDouble) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{25}
+	return file_pamlogix_proto_rawDescGZIP(), []int{25}
 }
 
 func (x *RewardRangeDouble) GetMin() float64 {
@@ -2869,7 +2869,7 @@ type AvailableRewardsStringPropertyOption struct {
 
 func (x *AvailableRewardsStringPropertyOption) Reset() {
 	*x = AvailableRewardsStringPropertyOption{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[26]
+	mi := &file_pamlogix_proto_msgTypes[26]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2881,7 +2881,7 @@ func (x *AvailableRewardsStringPropertyOption) String() string {
 func (*AvailableRewardsStringPropertyOption) ProtoMessage() {}
 
 func (x *AvailableRewardsStringPropertyOption) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[26]
+	mi := &file_pamlogix_proto_msgTypes[26]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2894,7 +2894,7 @@ func (x *AvailableRewardsStringPropertyOption) ProtoReflect() protoreflect.Messa
 
 // Deprecated: Use AvailableRewardsStringPropertyOption.ProtoReflect.Descriptor instead.
 func (*AvailableRewardsStringPropertyOption) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{26}
+	return file_pamlogix_proto_rawDescGZIP(), []int{26}
 }
 
 func (x *AvailableRewardsStringPropertyOption) GetWeight() int64 {
@@ -2917,7 +2917,7 @@ type AvailableRewardsStringProperty struct {
 
 func (x *AvailableRewardsStringProperty) Reset() {
 	*x = AvailableRewardsStringProperty{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[27]
+	mi := &file_pamlogix_proto_msgTypes[27]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2929,7 +2929,7 @@ func (x *AvailableRewardsStringProperty) String() string {
 func (*AvailableRewardsStringProperty) ProtoMessage() {}
 
 func (x *AvailableRewardsStringProperty) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[27]
+	mi := &file_pamlogix_proto_msgTypes[27]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2942,7 +2942,7 @@ func (x *AvailableRewardsStringProperty) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AvailableRewardsStringProperty.ProtoReflect.Descriptor instead.
 func (*AvailableRewardsStringProperty) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{27}
+	return file_pamlogix_proto_rawDescGZIP(), []int{27}
 }
 
 func (x *AvailableRewardsStringProperty) GetOptions() map[string]*AvailableRewardsStringPropertyOption {
@@ -2974,7 +2974,7 @@ type AvailableRewardsItem struct {
 
 func (x *AvailableRewardsItem) Reset() {
 	*x = AvailableRewardsItem{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[28]
+	mi := &file_pamlogix_proto_msgTypes[28]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2986,7 +2986,7 @@ func (x *AvailableRewardsItem) String() string {
 func (*AvailableRewardsItem) ProtoMessage() {}
 
 func (x *AvailableRewardsItem) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[28]
+	mi := &file_pamlogix_proto_msgTypes[28]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2999,7 +2999,7 @@ func (x *AvailableRewardsItem) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AvailableRewardsItem.ProtoReflect.Descriptor instead.
 func (*AvailableRewardsItem) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{28}
+	return file_pamlogix_proto_rawDescGZIP(), []int{28}
 }
 
 func (x *AvailableRewardsItem) GetCount() *RewardRangeInt64 {
@@ -3038,7 +3038,7 @@ type AvailableRewardsItemSet struct {
 
 func (x *AvailableRewardsItemSet) Reset() {
 	*x = AvailableRewardsItemSet{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[29]
+	mi := &file_pamlogix_proto_msgTypes[29]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3050,7 +3050,7 @@ func (x *AvailableRewardsItemSet) String() string {
 func (*AvailableRewardsItemSet) ProtoMessage() {}
 
 func (x *AvailableRewardsItemSet) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[29]
+	mi := &file_pamlogix_proto_msgTypes[29]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3063,7 +3063,7 @@ func (x *AvailableRewardsItemSet) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AvailableRewardsItemSet.ProtoReflect.Descriptor instead.
 func (*AvailableRewardsItemSet) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{29}
+	return file_pamlogix_proto_rawDescGZIP(), []int{29}
 }
 
 func (x *AvailableRewardsItemSet) GetCount() *RewardRangeInt64 {
@@ -3098,7 +3098,7 @@ type AvailableRewardsCurrency struct {
 
 func (x *AvailableRewardsCurrency) Reset() {
 	*x = AvailableRewardsCurrency{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[30]
+	mi := &file_pamlogix_proto_msgTypes[30]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3110,7 +3110,7 @@ func (x *AvailableRewardsCurrency) String() string {
 func (*AvailableRewardsCurrency) ProtoMessage() {}
 
 func (x *AvailableRewardsCurrency) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[30]
+	mi := &file_pamlogix_proto_msgTypes[30]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3123,7 +3123,7 @@ func (x *AvailableRewardsCurrency) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AvailableRewardsCurrency.ProtoReflect.Descriptor instead.
 func (*AvailableRewardsCurrency) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{30}
+	return file_pamlogix_proto_rawDescGZIP(), []int{30}
 }
 
 func (x *AvailableRewardsCurrency) GetCount() *RewardRangeInt64 {
@@ -3144,7 +3144,7 @@ type AvailableRewardsEnergy struct {
 
 func (x *AvailableRewardsEnergy) Reset() {
 	*x = AvailableRewardsEnergy{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[31]
+	mi := &file_pamlogix_proto_msgTypes[31]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3156,7 +3156,7 @@ func (x *AvailableRewardsEnergy) String() string {
 func (*AvailableRewardsEnergy) ProtoMessage() {}
 
 func (x *AvailableRewardsEnergy) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[31]
+	mi := &file_pamlogix_proto_msgTypes[31]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3169,7 +3169,7 @@ func (x *AvailableRewardsEnergy) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AvailableRewardsEnergy.ProtoReflect.Descriptor instead.
 func (*AvailableRewardsEnergy) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{31}
+	return file_pamlogix_proto_rawDescGZIP(), []int{31}
 }
 
 func (x *AvailableRewardsEnergy) GetCount() *RewardRangeInt32 {
@@ -3196,7 +3196,7 @@ type AvailableRewardsEnergyModifier struct {
 
 func (x *AvailableRewardsEnergyModifier) Reset() {
 	*x = AvailableRewardsEnergyModifier{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[32]
+	mi := &file_pamlogix_proto_msgTypes[32]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3208,7 +3208,7 @@ func (x *AvailableRewardsEnergyModifier) String() string {
 func (*AvailableRewardsEnergyModifier) ProtoMessage() {}
 
 func (x *AvailableRewardsEnergyModifier) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[32]
+	mi := &file_pamlogix_proto_msgTypes[32]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3221,7 +3221,7 @@ func (x *AvailableRewardsEnergyModifier) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AvailableRewardsEnergyModifier.ProtoReflect.Descriptor instead.
 func (*AvailableRewardsEnergyModifier) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{32}
+	return file_pamlogix_proto_rawDescGZIP(), []int{32}
 }
 
 func (x *AvailableRewardsEnergyModifier) GetId() string {
@@ -3271,7 +3271,7 @@ type AvailableRewardsRewardModifier struct {
 
 func (x *AvailableRewardsRewardModifier) Reset() {
 	*x = AvailableRewardsRewardModifier{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[33]
+	mi := &file_pamlogix_proto_msgTypes[33]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3283,7 +3283,7 @@ func (x *AvailableRewardsRewardModifier) String() string {
 func (*AvailableRewardsRewardModifier) ProtoMessage() {}
 
 func (x *AvailableRewardsRewardModifier) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[33]
+	mi := &file_pamlogix_proto_msgTypes[33]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3296,7 +3296,7 @@ func (x *AvailableRewardsRewardModifier) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AvailableRewardsRewardModifier.ProtoReflect.Descriptor instead.
 func (*AvailableRewardsRewardModifier) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{33}
+	return file_pamlogix_proto_rawDescGZIP(), []int{33}
 }
 
 func (x *AvailableRewardsRewardModifier) GetId() string {
@@ -3357,7 +3357,7 @@ type AvailableRewardsContents struct {
 
 func (x *AvailableRewardsContents) Reset() {
 	*x = AvailableRewardsContents{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[34]
+	mi := &file_pamlogix_proto_msgTypes[34]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3369,7 +3369,7 @@ func (x *AvailableRewardsContents) String() string {
 func (*AvailableRewardsContents) ProtoMessage() {}
 
 func (x *AvailableRewardsContents) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[34]
+	mi := &file_pamlogix_proto_msgTypes[34]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3382,7 +3382,7 @@ func (x *AvailableRewardsContents) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AvailableRewardsContents.ProtoReflect.Descriptor instead.
 func (*AvailableRewardsContents) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{34}
+	return file_pamlogix_proto_rawDescGZIP(), []int{34}
 }
 
 func (x *AvailableRewardsContents) GetItems() map[string]*AvailableRewardsItem {
@@ -3454,7 +3454,7 @@ type AvailableRewards struct {
 
 func (x *AvailableRewards) Reset() {
 	*x = AvailableRewards{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[35]
+	mi := &file_pamlogix_proto_msgTypes[35]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3466,7 +3466,7 @@ func (x *AvailableRewards) String() string {
 func (*AvailableRewards) ProtoMessage() {}
 
 func (x *AvailableRewards) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[35]
+	mi := &file_pamlogix_proto_msgTypes[35]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3479,7 +3479,7 @@ func (x *AvailableRewards) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AvailableRewards.ProtoReflect.Descriptor instead.
 func (*AvailableRewards) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{35}
+	return file_pamlogix_proto_rawDescGZIP(), []int{35}
 }
 
 func (x *AvailableRewards) GetGuaranteed() *AvailableRewardsContents {
@@ -3530,7 +3530,7 @@ type IncentiveClaim struct {
 
 func (x *IncentiveClaim) Reset() {
 	*x = IncentiveClaim{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[36]
+	mi := &file_pamlogix_proto_msgTypes[36]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3542,7 +3542,7 @@ func (x *IncentiveClaim) String() string {
 func (*IncentiveClaim) ProtoMessage() {}
 
 func (x *IncentiveClaim) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[36]
+	mi := &file_pamlogix_proto_msgTypes[36]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3555,7 +3555,7 @@ func (x *IncentiveClaim) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use IncentiveClaim.ProtoReflect.Descriptor instead.
 func (*IncentiveClaim) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{36}
+	return file_pamlogix_proto_rawDescGZIP(), []int{36}
 }
 
 func (x *IncentiveClaim) GetReward() *Reward {
@@ -3611,7 +3611,7 @@ type Incentive struct {
 
 func (x *Incentive) Reset() {
 	*x = Incentive{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[37]
+	mi := &file_pamlogix_proto_msgTypes[37]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3623,7 +3623,7 @@ func (x *Incentive) String() string {
 func (*Incentive) ProtoMessage() {}
 
 func (x *Incentive) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[37]
+	mi := &file_pamlogix_proto_msgTypes[37]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3636,7 +3636,7 @@ func (x *Incentive) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Incentive.ProtoReflect.Descriptor instead.
 func (*Incentive) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{37}
+	return file_pamlogix_proto_rawDescGZIP(), []int{37}
 }
 
 func (x *Incentive) GetId() string {
@@ -3755,7 +3755,7 @@ type IncentiveList struct {
 
 func (x *IncentiveList) Reset() {
 	*x = IncentiveList{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[38]
+	mi := &file_pamlogix_proto_msgTypes[38]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3767,7 +3767,7 @@ func (x *IncentiveList) String() string {
 func (*IncentiveList) ProtoMessage() {}
 
 func (x *IncentiveList) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[38]
+	mi := &file_pamlogix_proto_msgTypes[38]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3780,7 +3780,7 @@ func (x *IncentiveList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use IncentiveList.ProtoReflect.Descriptor instead.
 func (*IncentiveList) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{38}
+	return file_pamlogix_proto_rawDescGZIP(), []int{38}
 }
 
 func (x *IncentiveList) GetIncentives() []*Incentive {
@@ -3825,7 +3825,7 @@ type IncentiveInfo struct {
 
 func (x *IncentiveInfo) Reset() {
 	*x = IncentiveInfo{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[39]
+	mi := &file_pamlogix_proto_msgTypes[39]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3837,7 +3837,7 @@ func (x *IncentiveInfo) String() string {
 func (*IncentiveInfo) ProtoMessage() {}
 
 func (x *IncentiveInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[39]
+	mi := &file_pamlogix_proto_msgTypes[39]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3850,7 +3850,7 @@ func (x *IncentiveInfo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use IncentiveInfo.ProtoReflect.Descriptor instead.
 func (*IncentiveInfo) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{39}
+	return file_pamlogix_proto_rawDescGZIP(), []int{39}
 }
 
 func (x *IncentiveInfo) GetId() string {
@@ -3955,7 +3955,7 @@ type IncentiveSenderCreateRequest struct {
 
 func (x *IncentiveSenderCreateRequest) Reset() {
 	*x = IncentiveSenderCreateRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[40]
+	mi := &file_pamlogix_proto_msgTypes[40]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3967,7 +3967,7 @@ func (x *IncentiveSenderCreateRequest) String() string {
 func (*IncentiveSenderCreateRequest) ProtoMessage() {}
 
 func (x *IncentiveSenderCreateRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[40]
+	mi := &file_pamlogix_proto_msgTypes[40]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3980,7 +3980,7 @@ func (x *IncentiveSenderCreateRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use IncentiveSenderCreateRequest.ProtoReflect.Descriptor instead.
 func (*IncentiveSenderCreateRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{40}
+	return file_pamlogix_proto_rawDescGZIP(), []int{40}
 }
 
 func (x *IncentiveSenderCreateRequest) GetId() string {
@@ -4001,7 +4001,7 @@ type IncentiveSenderDeleteRequest struct {
 
 func (x *IncentiveSenderDeleteRequest) Reset() {
 	*x = IncentiveSenderDeleteRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[41]
+	mi := &file_pamlogix_proto_msgTypes[41]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4013,7 +4013,7 @@ func (x *IncentiveSenderDeleteRequest) String() string {
 func (*IncentiveSenderDeleteRequest) ProtoMessage() {}
 
 func (x *IncentiveSenderDeleteRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[41]
+	mi := &file_pamlogix_proto_msgTypes[41]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4026,7 +4026,7 @@ func (x *IncentiveSenderDeleteRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use IncentiveSenderDeleteRequest.ProtoReflect.Descriptor instead.
 func (*IncentiveSenderDeleteRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{41}
+	return file_pamlogix_proto_rawDescGZIP(), []int{41}
 }
 
 func (x *IncentiveSenderDeleteRequest) GetCode() string {
@@ -4049,7 +4049,7 @@ type IncentiveSenderClaimRequest struct {
 
 func (x *IncentiveSenderClaimRequest) Reset() {
 	*x = IncentiveSenderClaimRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[42]
+	mi := &file_pamlogix_proto_msgTypes[42]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4061,7 +4061,7 @@ func (x *IncentiveSenderClaimRequest) String() string {
 func (*IncentiveSenderClaimRequest) ProtoMessage() {}
 
 func (x *IncentiveSenderClaimRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[42]
+	mi := &file_pamlogix_proto_msgTypes[42]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4074,7 +4074,7 @@ func (x *IncentiveSenderClaimRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use IncentiveSenderClaimRequest.ProtoReflect.Descriptor instead.
 func (*IncentiveSenderClaimRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{42}
+	return file_pamlogix_proto_rawDescGZIP(), []int{42}
 }
 
 func (x *IncentiveSenderClaimRequest) GetCode() string {
@@ -4102,7 +4102,7 @@ type IncentiveRecipientGetRequest struct {
 
 func (x *IncentiveRecipientGetRequest) Reset() {
 	*x = IncentiveRecipientGetRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[43]
+	mi := &file_pamlogix_proto_msgTypes[43]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4114,7 +4114,7 @@ func (x *IncentiveRecipientGetRequest) String() string {
 func (*IncentiveRecipientGetRequest) ProtoMessage() {}
 
 func (x *IncentiveRecipientGetRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[43]
+	mi := &file_pamlogix_proto_msgTypes[43]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4127,7 +4127,7 @@ func (x *IncentiveRecipientGetRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use IncentiveRecipientGetRequest.ProtoReflect.Descriptor instead.
 func (*IncentiveRecipientGetRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{43}
+	return file_pamlogix_proto_rawDescGZIP(), []int{43}
 }
 
 func (x *IncentiveRecipientGetRequest) GetCode() string {
@@ -4148,7 +4148,7 @@ type IncentiveRecipientClaimRequest struct {
 
 func (x *IncentiveRecipientClaimRequest) Reset() {
 	*x = IncentiveRecipientClaimRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[44]
+	mi := &file_pamlogix_proto_msgTypes[44]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4160,7 +4160,7 @@ func (x *IncentiveRecipientClaimRequest) String() string {
 func (*IncentiveRecipientClaimRequest) ProtoMessage() {}
 
 func (x *IncentiveRecipientClaimRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[44]
+	mi := &file_pamlogix_proto_msgTypes[44]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4173,7 +4173,7 @@ func (x *IncentiveRecipientClaimRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use IncentiveRecipientClaimRequest.ProtoReflect.Descriptor instead.
 func (*IncentiveRecipientClaimRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{44}
+	return file_pamlogix_proto_rawDescGZIP(), []int{44}
 }
 
 func (x *IncentiveRecipientClaimRequest) GetCode() string {
@@ -4212,7 +4212,7 @@ type ChallengeCreateRequest struct {
 
 func (x *ChallengeCreateRequest) Reset() {
 	*x = ChallengeCreateRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[45]
+	mi := &file_pamlogix_proto_msgTypes[45]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4224,7 +4224,7 @@ func (x *ChallengeCreateRequest) String() string {
 func (*ChallengeCreateRequest) ProtoMessage() {}
 
 func (x *ChallengeCreateRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[45]
+	mi := &file_pamlogix_proto_msgTypes[45]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4237,7 +4237,7 @@ func (x *ChallengeCreateRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ChallengeCreateRequest.ProtoReflect.Descriptor instead.
 func (*ChallengeCreateRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{45}
+	return file_pamlogix_proto_rawDescGZIP(), []int{45}
 }
 
 func (x *ChallengeCreateRequest) GetTemplateId() string {
@@ -4321,7 +4321,7 @@ type ChallengeJoinRequest struct {
 
 func (x *ChallengeJoinRequest) Reset() {
 	*x = ChallengeJoinRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[46]
+	mi := &file_pamlogix_proto_msgTypes[46]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4333,7 +4333,7 @@ func (x *ChallengeJoinRequest) String() string {
 func (*ChallengeJoinRequest) ProtoMessage() {}
 
 func (x *ChallengeJoinRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[46]
+	mi := &file_pamlogix_proto_msgTypes[46]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4346,7 +4346,7 @@ func (x *ChallengeJoinRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ChallengeJoinRequest.ProtoReflect.Descriptor instead.
 func (*ChallengeJoinRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{46}
+	return file_pamlogix_proto_rawDescGZIP(), []int{46}
 }
 
 func (x *ChallengeJoinRequest) GetChallengeId() string {
@@ -4367,7 +4367,7 @@ type ChallengeLeaveRequest struct {
 
 func (x *ChallengeLeaveRequest) Reset() {
 	*x = ChallengeLeaveRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[47]
+	mi := &file_pamlogix_proto_msgTypes[47]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4379,7 +4379,7 @@ func (x *ChallengeLeaveRequest) String() string {
 func (*ChallengeLeaveRequest) ProtoMessage() {}
 
 func (x *ChallengeLeaveRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[47]
+	mi := &file_pamlogix_proto_msgTypes[47]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4392,7 +4392,7 @@ func (x *ChallengeLeaveRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ChallengeLeaveRequest.ProtoReflect.Descriptor instead.
 func (*ChallengeLeaveRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{47}
+	return file_pamlogix_proto_rawDescGZIP(), []int{47}
 }
 
 func (x *ChallengeLeaveRequest) GetChallengeId() string {
@@ -4413,7 +4413,7 @@ type ChallengeClaimRequest struct {
 
 func (x *ChallengeClaimRequest) Reset() {
 	*x = ChallengeClaimRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[48]
+	mi := &file_pamlogix_proto_msgTypes[48]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4425,7 +4425,7 @@ func (x *ChallengeClaimRequest) String() string {
 func (*ChallengeClaimRequest) ProtoMessage() {}
 
 func (x *ChallengeClaimRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[48]
+	mi := &file_pamlogix_proto_msgTypes[48]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4438,7 +4438,7 @@ func (x *ChallengeClaimRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ChallengeClaimRequest.ProtoReflect.Descriptor instead.
 func (*ChallengeClaimRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{48}
+	return file_pamlogix_proto_rawDescGZIP(), []int{48}
 }
 
 func (x *ChallengeClaimRequest) GetChallengeId() string {
@@ -4463,7 +4463,7 @@ type ChallengeSearchRequest struct {
 
 func (x *ChallengeSearchRequest) Reset() {
 	*x = ChallengeSearchRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[49]
+	mi := &file_pamlogix_proto_msgTypes[49]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4475,7 +4475,7 @@ func (x *ChallengeSearchRequest) String() string {
 func (*ChallengeSearchRequest) ProtoMessage() {}
 
 func (x *ChallengeSearchRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[49]
+	mi := &file_pamlogix_proto_msgTypes[49]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4488,7 +4488,7 @@ func (x *ChallengeSearchRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ChallengeSearchRequest.ProtoReflect.Descriptor instead.
 func (*ChallengeSearchRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{49}
+	return file_pamlogix_proto_rawDescGZIP(), []int{49}
 }
 
 func (x *ChallengeSearchRequest) GetName() string {
@@ -4525,7 +4525,7 @@ type ChallengeInviteRequest struct {
 
 func (x *ChallengeInviteRequest) Reset() {
 	*x = ChallengeInviteRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[50]
+	mi := &file_pamlogix_proto_msgTypes[50]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4537,7 +4537,7 @@ func (x *ChallengeInviteRequest) String() string {
 func (*ChallengeInviteRequest) ProtoMessage() {}
 
 func (x *ChallengeInviteRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[50]
+	mi := &file_pamlogix_proto_msgTypes[50]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4550,7 +4550,7 @@ func (x *ChallengeInviteRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ChallengeInviteRequest.ProtoReflect.Descriptor instead.
 func (*ChallengeInviteRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{50}
+	return file_pamlogix_proto_rawDescGZIP(), []int{50}
 }
 
 func (x *ChallengeInviteRequest) GetChallengeId() string {
@@ -4584,7 +4584,7 @@ type ChallengeSubmitScoreRequest struct {
 
 func (x *ChallengeSubmitScoreRequest) Reset() {
 	*x = ChallengeSubmitScoreRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[51]
+	mi := &file_pamlogix_proto_msgTypes[51]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4596,7 +4596,7 @@ func (x *ChallengeSubmitScoreRequest) String() string {
 func (*ChallengeSubmitScoreRequest) ProtoMessage() {}
 
 func (x *ChallengeSubmitScoreRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[51]
+	mi := &file_pamlogix_proto_msgTypes[51]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4609,7 +4609,7 @@ func (x *ChallengeSubmitScoreRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ChallengeSubmitScoreRequest.ProtoReflect.Descriptor instead.
 func (*ChallengeSubmitScoreRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{51}
+	return file_pamlogix_proto_rawDescGZIP(), []int{51}
 }
 
 func (x *ChallengeSubmitScoreRequest) GetChallengeId() string {
@@ -4655,7 +4655,7 @@ type ChallengeRewardTier struct {
 
 func (x *ChallengeRewardTier) Reset() {
 	*x = ChallengeRewardTier{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[52]
+	mi := &file_pamlogix_proto_msgTypes[52]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4667,7 +4667,7 @@ func (x *ChallengeRewardTier) String() string {
 func (*ChallengeRewardTier) ProtoMessage() {}
 
 func (x *ChallengeRewardTier) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[52]
+	mi := &file_pamlogix_proto_msgTypes[52]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4680,7 +4680,7 @@ func (x *ChallengeRewardTier) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ChallengeRewardTier.ProtoReflect.Descriptor instead.
 func (*ChallengeRewardTier) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{52}
+	return file_pamlogix_proto_rawDescGZIP(), []int{52}
 }
 
 func (x *ChallengeRewardTier) GetRankMax() int64 {
@@ -4737,7 +4737,7 @@ type ChallengeScore struct {
 
 func (x *ChallengeScore) Reset() {
 	*x = ChallengeScore{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[53]
+	mi := &file_pamlogix_proto_msgTypes[53]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4749,7 +4749,7 @@ func (x *ChallengeScore) String() string {
 func (*ChallengeScore) ProtoMessage() {}
 
 func (x *ChallengeScore) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[53]
+	mi := &file_pamlogix_proto_msgTypes[53]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4762,7 +4762,7 @@ func (x *ChallengeScore) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ChallengeScore.ProtoReflect.Descriptor instead.
 func (*ChallengeScore) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{53}
+	return file_pamlogix_proto_rawDescGZIP(), []int{53}
 }
 
 func (x *ChallengeScore) GetId() string {
@@ -4902,7 +4902,7 @@ type Challenge struct {
 
 func (x *Challenge) Reset() {
 	*x = Challenge{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[54]
+	mi := &file_pamlogix_proto_msgTypes[54]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -4914,7 +4914,7 @@ func (x *Challenge) String() string {
 func (*Challenge) ProtoMessage() {}
 
 func (x *Challenge) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[54]
+	mi := &file_pamlogix_proto_msgTypes[54]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -4927,7 +4927,7 @@ func (x *Challenge) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Challenge.ProtoReflect.Descriptor instead.
 func (*Challenge) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{54}
+	return file_pamlogix_proto_rawDescGZIP(), []int{54}
 }
 
 func (x *Challenge) GetId() string {
@@ -5097,7 +5097,7 @@ type ChallengeListRequest struct {
 
 func (x *ChallengeListRequest) Reset() {
 	*x = ChallengeListRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[55]
+	mi := &file_pamlogix_proto_msgTypes[55]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5109,7 +5109,7 @@ func (x *ChallengeListRequest) String() string {
 func (*ChallengeListRequest) ProtoMessage() {}
 
 func (x *ChallengeListRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[55]
+	mi := &file_pamlogix_proto_msgTypes[55]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5122,7 +5122,7 @@ func (x *ChallengeListRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ChallengeListRequest.ProtoReflect.Descriptor instead.
 func (*ChallengeListRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{55}
+	return file_pamlogix_proto_rawDescGZIP(), []int{55}
 }
 
 func (x *ChallengeListRequest) GetCategories() []string {
@@ -5151,7 +5151,7 @@ type ChallengeGetRequest struct {
 
 func (x *ChallengeGetRequest) Reset() {
 	*x = ChallengeGetRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[56]
+	mi := &file_pamlogix_proto_msgTypes[56]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5163,7 +5163,7 @@ func (x *ChallengeGetRequest) String() string {
 func (*ChallengeGetRequest) ProtoMessage() {}
 
 func (x *ChallengeGetRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[56]
+	mi := &file_pamlogix_proto_msgTypes[56]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5176,7 +5176,7 @@ func (x *ChallengeGetRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ChallengeGetRequest.ProtoReflect.Descriptor instead.
 func (*ChallengeGetRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{56}
+	return file_pamlogix_proto_rawDescGZIP(), []int{56}
 }
 
 func (x *ChallengeGetRequest) GetChallengeId() string {
@@ -5204,7 +5204,7 @@ type ChallengesList struct {
 
 func (x *ChallengesList) Reset() {
 	*x = ChallengesList{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[57]
+	mi := &file_pamlogix_proto_msgTypes[57]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5216,7 +5216,7 @@ func (x *ChallengesList) String() string {
 func (*ChallengesList) ProtoMessage() {}
 
 func (x *ChallengesList) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[57]
+	mi := &file_pamlogix_proto_msgTypes[57]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5229,7 +5229,7 @@ func (x *ChallengesList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ChallengesList.ProtoReflect.Descriptor instead.
 func (*ChallengesList) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{57}
+	return file_pamlogix_proto_rawDescGZIP(), []int{57}
 }
 
 func (x *ChallengesList) GetChallenges() []*Challenge {
@@ -5252,7 +5252,7 @@ type ChallengeMaxMinPlayers struct {
 
 func (x *ChallengeMaxMinPlayers) Reset() {
 	*x = ChallengeMaxMinPlayers{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[58]
+	mi := &file_pamlogix_proto_msgTypes[58]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5264,7 +5264,7 @@ func (x *ChallengeMaxMinPlayers) String() string {
 func (*ChallengeMaxMinPlayers) ProtoMessage() {}
 
 func (x *ChallengeMaxMinPlayers) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[58]
+	mi := &file_pamlogix_proto_msgTypes[58]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5277,7 +5277,7 @@ func (x *ChallengeMaxMinPlayers) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ChallengeMaxMinPlayers.ProtoReflect.Descriptor instead.
 func (*ChallengeMaxMinPlayers) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{58}
+	return file_pamlogix_proto_rawDescGZIP(), []int{58}
 }
 
 func (x *ChallengeMaxMinPlayers) GetMin() int64 {
@@ -5307,7 +5307,7 @@ type ChallengeMinMaxDuration struct {
 
 func (x *ChallengeMinMaxDuration) Reset() {
 	*x = ChallengeMinMaxDuration{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[59]
+	mi := &file_pamlogix_proto_msgTypes[59]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5319,7 +5319,7 @@ func (x *ChallengeMinMaxDuration) String() string {
 func (*ChallengeMinMaxDuration) ProtoMessage() {}
 
 func (x *ChallengeMinMaxDuration) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[59]
+	mi := &file_pamlogix_proto_msgTypes[59]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5332,7 +5332,7 @@ func (x *ChallengeMinMaxDuration) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ChallengeMinMaxDuration.ProtoReflect.Descriptor instead.
 func (*ChallengeMinMaxDuration) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{59}
+	return file_pamlogix_proto_rawDescGZIP(), []int{59}
 }
 
 func (x *ChallengeMinMaxDuration) GetMinSec() int64 {
@@ -5376,7 +5376,7 @@ type ChallengeTemplate struct {
 
 func (x *ChallengeTemplate) Reset() {
 	*x = ChallengeTemplate{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[60]
+	mi := &file_pamlogix_proto_msgTypes[60]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5388,7 +5388,7 @@ func (x *ChallengeTemplate) String() string {
 func (*ChallengeTemplate) ProtoMessage() {}
 
 func (x *ChallengeTemplate) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[60]
+	mi := &file_pamlogix_proto_msgTypes[60]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5401,7 +5401,7 @@ func (x *ChallengeTemplate) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ChallengeTemplate.ProtoReflect.Descriptor instead.
 func (*ChallengeTemplate) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{60}
+	return file_pamlogix_proto_rawDescGZIP(), []int{60}
 }
 
 func (x *ChallengeTemplate) GetRewardTiers() []*ChallengeRewardTier {
@@ -5478,7 +5478,7 @@ type ChallengeTemplates struct {
 
 func (x *ChallengeTemplates) Reset() {
 	*x = ChallengeTemplates{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[61]
+	mi := &file_pamlogix_proto_msgTypes[61]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5490,7 +5490,7 @@ func (x *ChallengeTemplates) String() string {
 func (*ChallengeTemplates) ProtoMessage() {}
 
 func (x *ChallengeTemplates) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[61]
+	mi := &file_pamlogix_proto_msgTypes[61]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5503,7 +5503,7 @@ func (x *ChallengeTemplates) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ChallengeTemplates.ProtoReflect.Descriptor instead.
 func (*ChallengeTemplates) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{61}
+	return file_pamlogix_proto_rawDescGZIP(), []int{61}
 }
 
 func (x *ChallengeTemplates) GetTemplates() map[string]*ChallengeTemplate {
@@ -5526,7 +5526,7 @@ type EventLeaderboardList struct {
 
 func (x *EventLeaderboardList) Reset() {
 	*x = EventLeaderboardList{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[62]
+	mi := &file_pamlogix_proto_msgTypes[62]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5538,7 +5538,7 @@ func (x *EventLeaderboardList) String() string {
 func (*EventLeaderboardList) ProtoMessage() {}
 
 func (x *EventLeaderboardList) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[62]
+	mi := &file_pamlogix_proto_msgTypes[62]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5551,7 +5551,7 @@ func (x *EventLeaderboardList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EventLeaderboardList.ProtoReflect.Descriptor instead.
 func (*EventLeaderboardList) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{62}
+	return file_pamlogix_proto_rawDescGZIP(), []int{62}
 }
 
 func (x *EventLeaderboardList) GetWithScores() bool {
@@ -5579,7 +5579,7 @@ type EventLeaderboardGet struct {
 
 func (x *EventLeaderboardGet) Reset() {
 	*x = EventLeaderboardGet{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[63]
+	mi := &file_pamlogix_proto_msgTypes[63]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5591,7 +5591,7 @@ func (x *EventLeaderboardGet) String() string {
 func (*EventLeaderboardGet) ProtoMessage() {}
 
 func (x *EventLeaderboardGet) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[63]
+	mi := &file_pamlogix_proto_msgTypes[63]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5604,7 +5604,7 @@ func (x *EventLeaderboardGet) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EventLeaderboardGet.ProtoReflect.Descriptor instead.
 func (*EventLeaderboardGet) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{63}
+	return file_pamlogix_proto_rawDescGZIP(), []int{63}
 }
 
 func (x *EventLeaderboardGet) GetId() string {
@@ -5633,7 +5633,7 @@ type EventLeaderboardUpdate struct {
 
 func (x *EventLeaderboardUpdate) Reset() {
 	*x = EventLeaderboardUpdate{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[64]
+	mi := &file_pamlogix_proto_msgTypes[64]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5645,7 +5645,7 @@ func (x *EventLeaderboardUpdate) String() string {
 func (*EventLeaderboardUpdate) ProtoMessage() {}
 
 func (x *EventLeaderboardUpdate) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[64]
+	mi := &file_pamlogix_proto_msgTypes[64]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5658,7 +5658,7 @@ func (x *EventLeaderboardUpdate) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EventLeaderboardUpdate.ProtoReflect.Descriptor instead.
 func (*EventLeaderboardUpdate) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{64}
+	return file_pamlogix_proto_rawDescGZIP(), []int{64}
 }
 
 func (x *EventLeaderboardUpdate) GetId() string {
@@ -5707,7 +5707,7 @@ type EventLeaderboardClaim struct {
 
 func (x *EventLeaderboardClaim) Reset() {
 	*x = EventLeaderboardClaim{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[65]
+	mi := &file_pamlogix_proto_msgTypes[65]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5719,7 +5719,7 @@ func (x *EventLeaderboardClaim) String() string {
 func (*EventLeaderboardClaim) ProtoMessage() {}
 
 func (x *EventLeaderboardClaim) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[65]
+	mi := &file_pamlogix_proto_msgTypes[65]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5732,7 +5732,7 @@ func (x *EventLeaderboardClaim) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EventLeaderboardClaim.ProtoReflect.Descriptor instead.
 func (*EventLeaderboardClaim) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{65}
+	return file_pamlogix_proto_rawDescGZIP(), []int{65}
 }
 
 func (x *EventLeaderboardClaim) GetId() string {
@@ -5753,7 +5753,7 @@ type EventLeaderboardRoll struct {
 
 func (x *EventLeaderboardRoll) Reset() {
 	*x = EventLeaderboardRoll{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[66]
+	mi := &file_pamlogix_proto_msgTypes[66]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5765,7 +5765,7 @@ func (x *EventLeaderboardRoll) String() string {
 func (*EventLeaderboardRoll) ProtoMessage() {}
 
 func (x *EventLeaderboardRoll) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[66]
+	mi := &file_pamlogix_proto_msgTypes[66]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5778,7 +5778,7 @@ func (x *EventLeaderboardRoll) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EventLeaderboardRoll.ProtoReflect.Descriptor instead.
 func (*EventLeaderboardRoll) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{66}
+	return file_pamlogix_proto_rawDescGZIP(), []int{66}
 }
 
 func (x *EventLeaderboardRoll) GetId() string {
@@ -5819,7 +5819,7 @@ type EventLeaderboardScore struct {
 
 func (x *EventLeaderboardScore) Reset() {
 	*x = EventLeaderboardScore{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[67]
+	mi := &file_pamlogix_proto_msgTypes[67]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5831,7 +5831,7 @@ func (x *EventLeaderboardScore) String() string {
 func (*EventLeaderboardScore) ProtoMessage() {}
 
 func (x *EventLeaderboardScore) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[67]
+	mi := &file_pamlogix_proto_msgTypes[67]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5844,7 +5844,7 @@ func (x *EventLeaderboardScore) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EventLeaderboardScore.ProtoReflect.Descriptor instead.
 func (*EventLeaderboardScore) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{67}
+	return file_pamlogix_proto_rawDescGZIP(), []int{67}
 }
 
 func (x *EventLeaderboardScore) GetId() string {
@@ -5943,7 +5943,7 @@ type EventLeaderboardRewardTier struct {
 
 func (x *EventLeaderboardRewardTier) Reset() {
 	*x = EventLeaderboardRewardTier{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[68]
+	mi := &file_pamlogix_proto_msgTypes[68]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -5955,7 +5955,7 @@ func (x *EventLeaderboardRewardTier) String() string {
 func (*EventLeaderboardRewardTier) ProtoMessage() {}
 
 func (x *EventLeaderboardRewardTier) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[68]
+	mi := &file_pamlogix_proto_msgTypes[68]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -5968,7 +5968,7 @@ func (x *EventLeaderboardRewardTier) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EventLeaderboardRewardTier.ProtoReflect.Descriptor instead.
 func (*EventLeaderboardRewardTier) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{68}
+	return file_pamlogix_proto_rawDescGZIP(), []int{68}
 }
 
 func (x *EventLeaderboardRewardTier) GetName() string {
@@ -6017,7 +6017,7 @@ type EventLeaderboardRewardTiers struct {
 
 func (x *EventLeaderboardRewardTiers) Reset() {
 	*x = EventLeaderboardRewardTiers{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[69]
+	mi := &file_pamlogix_proto_msgTypes[69]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6029,7 +6029,7 @@ func (x *EventLeaderboardRewardTiers) String() string {
 func (*EventLeaderboardRewardTiers) ProtoMessage() {}
 
 func (x *EventLeaderboardRewardTiers) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[69]
+	mi := &file_pamlogix_proto_msgTypes[69]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6042,7 +6042,7 @@ func (x *EventLeaderboardRewardTiers) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EventLeaderboardRewardTiers.ProtoReflect.Descriptor instead.
 func (*EventLeaderboardRewardTiers) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{69}
+	return file_pamlogix_proto_rawDescGZIP(), []int{69}
 }
 
 func (x *EventLeaderboardRewardTiers) GetRewardTiers() []*EventLeaderboardRewardTier {
@@ -6067,7 +6067,7 @@ type EventLeaderboardChangeZone struct {
 
 func (x *EventLeaderboardChangeZone) Reset() {
 	*x = EventLeaderboardChangeZone{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[70]
+	mi := &file_pamlogix_proto_msgTypes[70]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6079,7 +6079,7 @@ func (x *EventLeaderboardChangeZone) String() string {
 func (*EventLeaderboardChangeZone) ProtoMessage() {}
 
 func (x *EventLeaderboardChangeZone) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[70]
+	mi := &file_pamlogix_proto_msgTypes[70]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6092,7 +6092,7 @@ func (x *EventLeaderboardChangeZone) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EventLeaderboardChangeZone.ProtoReflect.Descriptor instead.
 func (*EventLeaderboardChangeZone) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{70}
+	return file_pamlogix_proto_rawDescGZIP(), []int{70}
 }
 
 func (x *EventLeaderboardChangeZone) GetPromotion() float64 {
@@ -6179,7 +6179,7 @@ type EventLeaderboard struct {
 
 func (x *EventLeaderboard) Reset() {
 	*x = EventLeaderboard{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[71]
+	mi := &file_pamlogix_proto_msgTypes[71]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6191,7 +6191,7 @@ func (x *EventLeaderboard) String() string {
 func (*EventLeaderboard) ProtoMessage() {}
 
 func (x *EventLeaderboard) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[71]
+	mi := &file_pamlogix_proto_msgTypes[71]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6204,7 +6204,7 @@ func (x *EventLeaderboard) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EventLeaderboard.ProtoReflect.Descriptor instead.
 func (*EventLeaderboard) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{71}
+	return file_pamlogix_proto_rawDescGZIP(), []int{71}
 }
 
 func (x *EventLeaderboard) GetId() string {
@@ -6407,7 +6407,7 @@ type EventLeaderboards struct {
 
 func (x *EventLeaderboards) Reset() {
 	*x = EventLeaderboards{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[72]
+	mi := &file_pamlogix_proto_msgTypes[72]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6419,7 +6419,7 @@ func (x *EventLeaderboards) String() string {
 func (*EventLeaderboards) ProtoMessage() {}
 
 func (x *EventLeaderboards) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[72]
+	mi := &file_pamlogix_proto_msgTypes[72]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6432,7 +6432,7 @@ func (x *EventLeaderboards) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EventLeaderboards.ProtoReflect.Descriptor instead.
 func (*EventLeaderboards) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{72}
+	return file_pamlogix_proto_rawDescGZIP(), []int{72}
 }
 
 func (x *EventLeaderboards) GetEventLeaderboards() []*EventLeaderboard {
@@ -6454,7 +6454,7 @@ type EventLeaderboardDebugFillRequest struct {
 
 func (x *EventLeaderboardDebugFillRequest) Reset() {
 	*x = EventLeaderboardDebugFillRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[73]
+	mi := &file_pamlogix_proto_msgTypes[73]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6466,7 +6466,7 @@ func (x *EventLeaderboardDebugFillRequest) String() string {
 func (*EventLeaderboardDebugFillRequest) ProtoMessage() {}
 
 func (x *EventLeaderboardDebugFillRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[73]
+	mi := &file_pamlogix_proto_msgTypes[73]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6479,7 +6479,7 @@ func (x *EventLeaderboardDebugFillRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EventLeaderboardDebugFillRequest.ProtoReflect.Descriptor instead.
 func (*EventLeaderboardDebugFillRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{73}
+	return file_pamlogix_proto_rawDescGZIP(), []int{73}
 }
 
 func (x *EventLeaderboardDebugFillRequest) GetId() string {
@@ -6517,7 +6517,7 @@ type EventLeaderboardDebugRandomScoresRequest struct {
 
 func (x *EventLeaderboardDebugRandomScoresRequest) Reset() {
 	*x = EventLeaderboardDebugRandomScoresRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[74]
+	mi := &file_pamlogix_proto_msgTypes[74]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6529,7 +6529,7 @@ func (x *EventLeaderboardDebugRandomScoresRequest) String() string {
 func (*EventLeaderboardDebugRandomScoresRequest) ProtoMessage() {}
 
 func (x *EventLeaderboardDebugRandomScoresRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[74]
+	mi := &file_pamlogix_proto_msgTypes[74]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6542,7 +6542,7 @@ func (x *EventLeaderboardDebugRandomScoresRequest) ProtoReflect() protoreflect.M
 
 // Deprecated: Use EventLeaderboardDebugRandomScoresRequest.ProtoReflect.Descriptor instead.
 func (*EventLeaderboardDebugRandomScoresRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{74}
+	return file_pamlogix_proto_rawDescGZIP(), []int{74}
 }
 
 func (x *EventLeaderboardDebugRandomScoresRequest) GetId() string {
@@ -6602,7 +6602,7 @@ type EconomyDonationContributor struct {
 
 func (x *EconomyDonationContributor) Reset() {
 	*x = EconomyDonationContributor{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[75]
+	mi := &file_pamlogix_proto_msgTypes[75]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6614,7 +6614,7 @@ func (x *EconomyDonationContributor) String() string {
 func (*EconomyDonationContributor) ProtoMessage() {}
 
 func (x *EconomyDonationContributor) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[75]
+	mi := &file_pamlogix_proto_msgTypes[75]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6627,7 +6627,7 @@ func (x *EconomyDonationContributor) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EconomyDonationContributor.ProtoReflect.Descriptor instead.
 func (*EconomyDonationContributor) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{75}
+	return file_pamlogix_proto_rawDescGZIP(), []int{75}
 }
 
 func (x *EconomyDonationContributor) GetUserId() string {
@@ -6690,7 +6690,7 @@ type EconomyDonation struct {
 
 func (x *EconomyDonation) Reset() {
 	*x = EconomyDonation{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[76]
+	mi := &file_pamlogix_proto_msgTypes[76]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6702,7 +6702,7 @@ func (x *EconomyDonation) String() string {
 func (*EconomyDonation) ProtoMessage() {}
 
 func (x *EconomyDonation) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[76]
+	mi := &file_pamlogix_proto_msgTypes[76]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6715,7 +6715,7 @@ func (x *EconomyDonation) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EconomyDonation.ProtoReflect.Descriptor instead.
 func (*EconomyDonation) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{76}
+	return file_pamlogix_proto_rawDescGZIP(), []int{76}
 }
 
 func (x *EconomyDonation) GetUserId() string {
@@ -6836,7 +6836,7 @@ type EconomyDonationAck struct {
 
 func (x *EconomyDonationAck) Reset() {
 	*x = EconomyDonationAck{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[77]
+	mi := &file_pamlogix_proto_msgTypes[77]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6848,7 +6848,7 @@ func (x *EconomyDonationAck) String() string {
 func (*EconomyDonationAck) ProtoMessage() {}
 
 func (x *EconomyDonationAck) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[77]
+	mi := &file_pamlogix_proto_msgTypes[77]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6861,7 +6861,7 @@ func (x *EconomyDonationAck) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EconomyDonationAck.ProtoReflect.Descriptor instead.
 func (*EconomyDonationAck) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{77}
+	return file_pamlogix_proto_rawDescGZIP(), []int{77}
 }
 
 func (x *EconomyDonationAck) GetCreated() bool {
@@ -6889,7 +6889,7 @@ type EconomyDonationsList struct {
 
 func (x *EconomyDonationsList) Reset() {
 	*x = EconomyDonationsList{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[78]
+	mi := &file_pamlogix_proto_msgTypes[78]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6901,7 +6901,7 @@ func (x *EconomyDonationsList) String() string {
 func (*EconomyDonationsList) ProtoMessage() {}
 
 func (x *EconomyDonationsList) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[78]
+	mi := &file_pamlogix_proto_msgTypes[78]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6914,7 +6914,7 @@ func (x *EconomyDonationsList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EconomyDonationsList.ProtoReflect.Descriptor instead.
 func (*EconomyDonationsList) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{78}
+	return file_pamlogix_proto_rawDescGZIP(), []int{78}
 }
 
 func (x *EconomyDonationsList) GetDonations() []*EconomyDonation {
@@ -6935,7 +6935,7 @@ type EconomyDonationClaimRequestDetails struct {
 
 func (x *EconomyDonationClaimRequestDetails) Reset() {
 	*x = EconomyDonationClaimRequestDetails{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[79]
+	mi := &file_pamlogix_proto_msgTypes[79]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6947,7 +6947,7 @@ func (x *EconomyDonationClaimRequestDetails) String() string {
 func (*EconomyDonationClaimRequestDetails) ProtoMessage() {}
 
 func (x *EconomyDonationClaimRequestDetails) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[79]
+	mi := &file_pamlogix_proto_msgTypes[79]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -6960,7 +6960,7 @@ func (x *EconomyDonationClaimRequestDetails) ProtoReflect() protoreflect.Message
 
 // Deprecated: Use EconomyDonationClaimRequestDetails.ProtoReflect.Descriptor instead.
 func (*EconomyDonationClaimRequestDetails) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{79}
+	return file_pamlogix_proto_rawDescGZIP(), []int{79}
 }
 
 func (x *EconomyDonationClaimRequestDetails) GetDonors() map[string]int64 {
@@ -6983,7 +6983,7 @@ type EconomyDonationClaimRequest struct {
 
 func (x *EconomyDonationClaimRequest) Reset() {
 	*x = EconomyDonationClaimRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[80]
+	mi := &file_pamlogix_proto_msgTypes[80]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -6995,7 +6995,7 @@ func (x *EconomyDonationClaimRequest) String() string {
 func (*EconomyDonationClaimRequest) ProtoMessage() {}
 
 func (x *EconomyDonationClaimRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[80]
+	mi := &file_pamlogix_proto_msgTypes[80]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7008,7 +7008,7 @@ func (x *EconomyDonationClaimRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EconomyDonationClaimRequest.ProtoReflect.Descriptor instead.
 func (*EconomyDonationClaimRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{80}
+	return file_pamlogix_proto_rawDescGZIP(), []int{80}
 }
 
 func (x *EconomyDonationClaimRequest) GetDonationIds() []string {
@@ -7038,7 +7038,7 @@ type EconomyDonationClaimRewards struct {
 
 func (x *EconomyDonationClaimRewards) Reset() {
 	*x = EconomyDonationClaimRewards{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[81]
+	mi := &file_pamlogix_proto_msgTypes[81]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7050,7 +7050,7 @@ func (x *EconomyDonationClaimRewards) String() string {
 func (*EconomyDonationClaimRewards) ProtoMessage() {}
 
 func (x *EconomyDonationClaimRewards) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[81]
+	mi := &file_pamlogix_proto_msgTypes[81]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7063,7 +7063,7 @@ func (x *EconomyDonationClaimRewards) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EconomyDonationClaimRewards.ProtoReflect.Descriptor instead.
 func (*EconomyDonationClaimRewards) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{81}
+	return file_pamlogix_proto_rawDescGZIP(), []int{81}
 }
 
 func (x *EconomyDonationClaimRewards) GetDonations() *EconomyDonationsList {
@@ -7093,7 +7093,7 @@ type EconomyDonationGiveRequest struct {
 
 func (x *EconomyDonationGiveRequest) Reset() {
 	*x = EconomyDonationGiveRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[82]
+	mi := &file_pamlogix_proto_msgTypes[82]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7105,7 +7105,7 @@ func (x *EconomyDonationGiveRequest) String() string {
 func (*EconomyDonationGiveRequest) ProtoMessage() {}
 
 func (x *EconomyDonationGiveRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[82]
+	mi := &file_pamlogix_proto_msgTypes[82]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7118,7 +7118,7 @@ func (x *EconomyDonationGiveRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EconomyDonationGiveRequest.ProtoReflect.Descriptor instead.
 func (*EconomyDonationGiveRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{82}
+	return file_pamlogix_proto_rawDescGZIP(), []int{82}
 }
 
 func (x *EconomyDonationGiveRequest) GetUserId() string {
@@ -7146,7 +7146,7 @@ type EconomyDonationGetRequest struct {
 
 func (x *EconomyDonationGetRequest) Reset() {
 	*x = EconomyDonationGetRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[83]
+	mi := &file_pamlogix_proto_msgTypes[83]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7158,7 +7158,7 @@ func (x *EconomyDonationGetRequest) String() string {
 func (*EconomyDonationGetRequest) ProtoMessage() {}
 
 func (x *EconomyDonationGetRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[83]
+	mi := &file_pamlogix_proto_msgTypes[83]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7171,7 +7171,7 @@ func (x *EconomyDonationGetRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EconomyDonationGetRequest.ProtoReflect.Descriptor instead.
 func (*EconomyDonationGetRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{83}
+	return file_pamlogix_proto_rawDescGZIP(), []int{83}
 }
 
 func (x *EconomyDonationGetRequest) GetIds() []string {
@@ -7192,7 +7192,7 @@ type EconomyDonationRequest struct {
 
 func (x *EconomyDonationRequest) Reset() {
 	*x = EconomyDonationRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[84]
+	mi := &file_pamlogix_proto_msgTypes[84]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7204,7 +7204,7 @@ func (x *EconomyDonationRequest) String() string {
 func (*EconomyDonationRequest) ProtoMessage() {}
 
 func (x *EconomyDonationRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[84]
+	mi := &file_pamlogix_proto_msgTypes[84]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7217,7 +7217,7 @@ func (x *EconomyDonationRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EconomyDonationRequest.ProtoReflect.Descriptor instead.
 func (*EconomyDonationRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{84}
+	return file_pamlogix_proto_rawDescGZIP(), []int{84}
 }
 
 func (x *EconomyDonationRequest) GetDonationId() string {
@@ -7238,7 +7238,7 @@ type EconomyDonationsByUserList struct {
 
 func (x *EconomyDonationsByUserList) Reset() {
 	*x = EconomyDonationsByUserList{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[85]
+	mi := &file_pamlogix_proto_msgTypes[85]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7250,7 +7250,7 @@ func (x *EconomyDonationsByUserList) String() string {
 func (*EconomyDonationsByUserList) ProtoMessage() {}
 
 func (x *EconomyDonationsByUserList) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[85]
+	mi := &file_pamlogix_proto_msgTypes[85]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7263,7 +7263,7 @@ func (x *EconomyDonationsByUserList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EconomyDonationsByUserList.ProtoReflect.Descriptor instead.
 func (*EconomyDonationsByUserList) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{85}
+	return file_pamlogix_proto_rawDescGZIP(), []int{85}
 }
 
 func (x *EconomyDonationsByUserList) GetUserDonations() map[string]*EconomyDonationsList {
@@ -7286,7 +7286,7 @@ type EconomyListStoreItemCost struct {
 
 func (x *EconomyListStoreItemCost) Reset() {
 	*x = EconomyListStoreItemCost{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[86]
+	mi := &file_pamlogix_proto_msgTypes[86]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7298,7 +7298,7 @@ func (x *EconomyListStoreItemCost) String() string {
 func (*EconomyListStoreItemCost) ProtoMessage() {}
 
 func (x *EconomyListStoreItemCost) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[86]
+	mi := &file_pamlogix_proto_msgTypes[86]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7311,7 +7311,7 @@ func (x *EconomyListStoreItemCost) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EconomyListStoreItemCost.ProtoReflect.Descriptor instead.
 func (*EconomyListStoreItemCost) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{86}
+	return file_pamlogix_proto_rawDescGZIP(), []int{86}
 }
 
 func (x *EconomyListStoreItemCost) GetCurrencies() map[string]int64 {
@@ -7353,7 +7353,7 @@ type EconomyListStoreItem struct {
 
 func (x *EconomyListStoreItem) Reset() {
 	*x = EconomyListStoreItem{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[87]
+	mi := &file_pamlogix_proto_msgTypes[87]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7365,7 +7365,7 @@ func (x *EconomyListStoreItem) String() string {
 func (*EconomyListStoreItem) ProtoMessage() {}
 
 func (x *EconomyListStoreItem) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[87]
+	mi := &file_pamlogix_proto_msgTypes[87]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7378,7 +7378,7 @@ func (x *EconomyListStoreItem) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EconomyListStoreItem.ProtoReflect.Descriptor instead.
 func (*EconomyListStoreItem) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{87}
+	return file_pamlogix_proto_rawDescGZIP(), []int{87}
 }
 
 func (x *EconomyListStoreItem) GetCategory() string {
@@ -7454,7 +7454,7 @@ type EconomyListPlacement struct {
 
 func (x *EconomyListPlacement) Reset() {
 	*x = EconomyListPlacement{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[88]
+	mi := &file_pamlogix_proto_msgTypes[88]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7466,7 +7466,7 @@ func (x *EconomyListPlacement) String() string {
 func (*EconomyListPlacement) ProtoMessage() {}
 
 func (x *EconomyListPlacement) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[88]
+	mi := &file_pamlogix_proto_msgTypes[88]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7479,7 +7479,7 @@ func (x *EconomyListPlacement) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EconomyListPlacement.ProtoReflect.Descriptor instead.
 func (*EconomyListPlacement) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{88}
+	return file_pamlogix_proto_rawDescGZIP(), []int{88}
 }
 
 func (x *EconomyListPlacement) GetId() string {
@@ -7529,7 +7529,7 @@ type EconomyList struct {
 
 func (x *EconomyList) Reset() {
 	*x = EconomyList{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[89]
+	mi := &file_pamlogix_proto_msgTypes[89]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7541,7 +7541,7 @@ func (x *EconomyList) String() string {
 func (*EconomyList) ProtoMessage() {}
 
 func (x *EconomyList) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[89]
+	mi := &file_pamlogix_proto_msgTypes[89]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7554,7 +7554,7 @@ func (x *EconomyList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EconomyList.ProtoReflect.Descriptor instead.
 func (*EconomyList) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{89}
+	return file_pamlogix_proto_rawDescGZIP(), []int{89}
 }
 
 func (x *EconomyList) GetStoreItems() []*EconomyListStoreItem {
@@ -7631,7 +7631,7 @@ type InventoryItem struct {
 
 func (x *InventoryItem) Reset() {
 	*x = InventoryItem{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[90]
+	mi := &file_pamlogix_proto_msgTypes[90]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7643,7 +7643,7 @@ func (x *InventoryItem) String() string {
 func (*InventoryItem) ProtoMessage() {}
 
 func (x *InventoryItem) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[90]
+	mi := &file_pamlogix_proto_msgTypes[90]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7656,7 +7656,7 @@ func (x *InventoryItem) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use InventoryItem.ProtoReflect.Descriptor instead.
 func (*InventoryItem) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{90}
+	return file_pamlogix_proto_rawDescGZIP(), []int{90}
 }
 
 func (x *InventoryItem) GetId() string {
@@ -7775,7 +7775,7 @@ type InventoryListRequest struct {
 
 func (x *InventoryListRequest) Reset() {
 	*x = InventoryListRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[91]
+	mi := &file_pamlogix_proto_msgTypes[91]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7787,7 +7787,7 @@ func (x *InventoryListRequest) String() string {
 func (*InventoryListRequest) ProtoMessage() {}
 
 func (x *InventoryListRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[91]
+	mi := &file_pamlogix_proto_msgTypes[91]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7800,7 +7800,7 @@ func (x *InventoryListRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use InventoryListRequest.ProtoReflect.Descriptor instead.
 func (*InventoryListRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{91}
+	return file_pamlogix_proto_rawDescGZIP(), []int{91}
 }
 
 func (x *InventoryListRequest) GetItemCategory() string {
@@ -7821,7 +7821,7 @@ type InventoryGrantRequest struct {
 
 func (x *InventoryGrantRequest) Reset() {
 	*x = InventoryGrantRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[92]
+	mi := &file_pamlogix_proto_msgTypes[92]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7833,7 +7833,7 @@ func (x *InventoryGrantRequest) String() string {
 func (*InventoryGrantRequest) ProtoMessage() {}
 
 func (x *InventoryGrantRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[92]
+	mi := &file_pamlogix_proto_msgTypes[92]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7846,7 +7846,7 @@ func (x *InventoryGrantRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use InventoryGrantRequest.ProtoReflect.Descriptor instead.
 func (*InventoryGrantRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{92}
+	return file_pamlogix_proto_rawDescGZIP(), []int{92}
 }
 
 func (x *InventoryGrantRequest) GetItems() map[string]int64 {
@@ -7869,7 +7869,7 @@ type InventoryUpdateItemProperties struct {
 
 func (x *InventoryUpdateItemProperties) Reset() {
 	*x = InventoryUpdateItemProperties{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[93]
+	mi := &file_pamlogix_proto_msgTypes[93]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7881,7 +7881,7 @@ func (x *InventoryUpdateItemProperties) String() string {
 func (*InventoryUpdateItemProperties) ProtoMessage() {}
 
 func (x *InventoryUpdateItemProperties) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[93]
+	mi := &file_pamlogix_proto_msgTypes[93]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7894,7 +7894,7 @@ func (x *InventoryUpdateItemProperties) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use InventoryUpdateItemProperties.ProtoReflect.Descriptor instead.
 func (*InventoryUpdateItemProperties) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{93}
+	return file_pamlogix_proto_rawDescGZIP(), []int{93}
 }
 
 func (x *InventoryUpdateItemProperties) GetStringProperties() map[string]string {
@@ -7922,7 +7922,7 @@ type InventoryUpdateItemsRequest struct {
 
 func (x *InventoryUpdateItemsRequest) Reset() {
 	*x = InventoryUpdateItemsRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[94]
+	mi := &file_pamlogix_proto_msgTypes[94]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7934,7 +7934,7 @@ func (x *InventoryUpdateItemsRequest) String() string {
 func (*InventoryUpdateItemsRequest) ProtoMessage() {}
 
 func (x *InventoryUpdateItemsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[94]
+	mi := &file_pamlogix_proto_msgTypes[94]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7947,7 +7947,7 @@ func (x *InventoryUpdateItemsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use InventoryUpdateItemsRequest.ProtoReflect.Descriptor instead.
 func (*InventoryUpdateItemsRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{94}
+	return file_pamlogix_proto_rawDescGZIP(), []int{94}
 }
 
 func (x *InventoryUpdateItemsRequest) GetItemUpdates() map[string]*InventoryUpdateItemProperties {
@@ -7968,7 +7968,7 @@ type Inventory struct {
 
 func (x *Inventory) Reset() {
 	*x = Inventory{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[95]
+	mi := &file_pamlogix_proto_msgTypes[95]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -7980,7 +7980,7 @@ func (x *Inventory) String() string {
 func (*Inventory) ProtoMessage() {}
 
 func (x *Inventory) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[95]
+	mi := &file_pamlogix_proto_msgTypes[95]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -7993,7 +7993,7 @@ func (x *Inventory) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Inventory.ProtoReflect.Descriptor instead.
 func (*Inventory) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{95}
+	return file_pamlogix_proto_rawDescGZIP(), []int{95}
 }
 
 func (x *Inventory) GetItems() map[string]*InventoryItem {
@@ -8018,7 +8018,7 @@ type InventoryConsumeRequest struct {
 
 func (x *InventoryConsumeRequest) Reset() {
 	*x = InventoryConsumeRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[96]
+	mi := &file_pamlogix_proto_msgTypes[96]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8030,7 +8030,7 @@ func (x *InventoryConsumeRequest) String() string {
 func (*InventoryConsumeRequest) ProtoMessage() {}
 
 func (x *InventoryConsumeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[96]
+	mi := &file_pamlogix_proto_msgTypes[96]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8043,7 +8043,7 @@ func (x *InventoryConsumeRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use InventoryConsumeRequest.ProtoReflect.Descriptor instead.
 func (*InventoryConsumeRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{96}
+	return file_pamlogix_proto_rawDescGZIP(), []int{96}
 }
 
 func (x *InventoryConsumeRequest) GetItems() map[string]int64 {
@@ -8082,7 +8082,7 @@ type InventoryConsumeRewards struct {
 
 func (x *InventoryConsumeRewards) Reset() {
 	*x = InventoryConsumeRewards{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[97]
+	mi := &file_pamlogix_proto_msgTypes[97]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8094,7 +8094,7 @@ func (x *InventoryConsumeRewards) String() string {
 func (*InventoryConsumeRewards) ProtoMessage() {}
 
 func (x *InventoryConsumeRewards) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[97]
+	mi := &file_pamlogix_proto_msgTypes[97]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8107,7 +8107,7 @@ func (x *InventoryConsumeRewards) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use InventoryConsumeRewards.ProtoReflect.Descriptor instead.
 func (*InventoryConsumeRewards) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{97}
+	return file_pamlogix_proto_rawDescGZIP(), []int{97}
 }
 
 func (x *InventoryConsumeRewards) GetInventory() *Inventory {
@@ -8142,7 +8142,7 @@ type InventoryUpdateAck struct {
 
 func (x *InventoryUpdateAck) Reset() {
 	*x = InventoryUpdateAck{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[98]
+	mi := &file_pamlogix_proto_msgTypes[98]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8154,7 +8154,7 @@ func (x *InventoryUpdateAck) String() string {
 func (*InventoryUpdateAck) ProtoMessage() {}
 
 func (x *InventoryUpdateAck) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[98]
+	mi := &file_pamlogix_proto_msgTypes[98]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8167,7 +8167,7 @@ func (x *InventoryUpdateAck) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use InventoryUpdateAck.ProtoReflect.Descriptor instead.
 func (*InventoryUpdateAck) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{98}
+	return file_pamlogix_proto_rawDescGZIP(), []int{98}
 }
 
 func (x *InventoryUpdateAck) GetInventory() *Inventory {
@@ -8188,7 +8188,7 @@ type InventoryList struct {
 
 func (x *InventoryList) Reset() {
 	*x = InventoryList{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[99]
+	mi := &file_pamlogix_proto_msgTypes[99]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8200,7 +8200,7 @@ func (x *InventoryList) String() string {
 func (*InventoryList) ProtoMessage() {}
 
 func (x *InventoryList) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[99]
+	mi := &file_pamlogix_proto_msgTypes[99]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8213,7 +8213,7 @@ func (x *InventoryList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use InventoryList.ProtoReflect.Descriptor instead.
 func (*InventoryList) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{99}
+	return file_pamlogix_proto_rawDescGZIP(), []int{99}
 }
 
 func (x *InventoryList) GetItems() map[string]*InventoryItem {
@@ -8234,7 +8234,7 @@ type AuctionBidAmount struct {
 
 func (x *AuctionBidAmount) Reset() {
 	*x = AuctionBidAmount{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[100]
+	mi := &file_pamlogix_proto_msgTypes[100]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8246,7 +8246,7 @@ func (x *AuctionBidAmount) String() string {
 func (*AuctionBidAmount) ProtoMessage() {}
 
 func (x *AuctionBidAmount) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[100]
+	mi := &file_pamlogix_proto_msgTypes[100]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8259,7 +8259,7 @@ func (x *AuctionBidAmount) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuctionBidAmount.ProtoReflect.Descriptor instead.
 func (*AuctionBidAmount) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{100}
+	return file_pamlogix_proto_rawDescGZIP(), []int{100}
 }
 
 func (x *AuctionBidAmount) GetCurrencies() map[string]int64 {
@@ -8282,7 +8282,7 @@ type AuctionFee struct {
 
 func (x *AuctionFee) Reset() {
 	*x = AuctionFee{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[101]
+	mi := &file_pamlogix_proto_msgTypes[101]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8294,7 +8294,7 @@ func (x *AuctionFee) String() string {
 func (*AuctionFee) ProtoMessage() {}
 
 func (x *AuctionFee) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[101]
+	mi := &file_pamlogix_proto_msgTypes[101]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8307,7 +8307,7 @@ func (x *AuctionFee) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuctionFee.ProtoReflect.Descriptor instead.
 func (*AuctionFee) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{101}
+	return file_pamlogix_proto_rawDescGZIP(), []int{101}
 }
 
 func (x *AuctionFee) GetPercentage() float64 {
@@ -8339,7 +8339,7 @@ type AuctionTemplateConditionListingCost struct {
 
 func (x *AuctionTemplateConditionListingCost) Reset() {
 	*x = AuctionTemplateConditionListingCost{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[102]
+	mi := &file_pamlogix_proto_msgTypes[102]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8351,7 +8351,7 @@ func (x *AuctionTemplateConditionListingCost) String() string {
 func (*AuctionTemplateConditionListingCost) ProtoMessage() {}
 
 func (x *AuctionTemplateConditionListingCost) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[102]
+	mi := &file_pamlogix_proto_msgTypes[102]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8364,7 +8364,7 @@ func (x *AuctionTemplateConditionListingCost) ProtoReflect() protoreflect.Messag
 
 // Deprecated: Use AuctionTemplateConditionListingCost.ProtoReflect.Descriptor instead.
 func (*AuctionTemplateConditionListingCost) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{102}
+	return file_pamlogix_proto_rawDescGZIP(), []int{102}
 }
 
 func (x *AuctionTemplateConditionListingCost) GetCurrencies() map[string]int64 {
@@ -8401,7 +8401,7 @@ type AuctionTemplateConditionBidIncrement struct {
 
 func (x *AuctionTemplateConditionBidIncrement) Reset() {
 	*x = AuctionTemplateConditionBidIncrement{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[103]
+	mi := &file_pamlogix_proto_msgTypes[103]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8413,7 +8413,7 @@ func (x *AuctionTemplateConditionBidIncrement) String() string {
 func (*AuctionTemplateConditionBidIncrement) ProtoMessage() {}
 
 func (x *AuctionTemplateConditionBidIncrement) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[103]
+	mi := &file_pamlogix_proto_msgTypes[103]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8426,7 +8426,7 @@ func (x *AuctionTemplateConditionBidIncrement) ProtoReflect() protoreflect.Messa
 
 // Deprecated: Use AuctionTemplateConditionBidIncrement.ProtoReflect.Descriptor instead.
 func (*AuctionTemplateConditionBidIncrement) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{103}
+	return file_pamlogix_proto_rawDescGZIP(), []int{103}
 }
 
 func (x *AuctionTemplateConditionBidIncrement) GetPercentage() float64 {
@@ -8468,7 +8468,7 @@ type AuctionTemplateCondition struct {
 
 func (x *AuctionTemplateCondition) Reset() {
 	*x = AuctionTemplateCondition{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[104]
+	mi := &file_pamlogix_proto_msgTypes[104]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8480,7 +8480,7 @@ func (x *AuctionTemplateCondition) String() string {
 func (*AuctionTemplateCondition) ProtoMessage() {}
 
 func (x *AuctionTemplateCondition) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[104]
+	mi := &file_pamlogix_proto_msgTypes[104]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8493,7 +8493,7 @@ func (x *AuctionTemplateCondition) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuctionTemplateCondition.ProtoReflect.Descriptor instead.
 func (*AuctionTemplateCondition) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{104}
+	return file_pamlogix_proto_rawDescGZIP(), []int{104}
 }
 
 func (x *AuctionTemplateCondition) GetDurationSec() int64 {
@@ -8569,7 +8569,7 @@ type AuctionTemplate struct {
 
 func (x *AuctionTemplate) Reset() {
 	*x = AuctionTemplate{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[105]
+	mi := &file_pamlogix_proto_msgTypes[105]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8581,7 +8581,7 @@ func (x *AuctionTemplate) String() string {
 func (*AuctionTemplate) ProtoMessage() {}
 
 func (x *AuctionTemplate) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[105]
+	mi := &file_pamlogix_proto_msgTypes[105]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8594,7 +8594,7 @@ func (x *AuctionTemplate) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuctionTemplate.ProtoReflect.Descriptor instead.
 func (*AuctionTemplate) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{105}
+	return file_pamlogix_proto_rawDescGZIP(), []int{105}
 }
 
 func (x *AuctionTemplate) GetItems() []string {
@@ -8636,7 +8636,7 @@ type AuctionTemplates struct {
 
 func (x *AuctionTemplates) Reset() {
 	*x = AuctionTemplates{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[106]
+	mi := &file_pamlogix_proto_msgTypes[106]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8648,7 +8648,7 @@ func (x *AuctionTemplates) String() string {
 func (*AuctionTemplates) ProtoMessage() {}
 
 func (x *AuctionTemplates) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[106]
+	mi := &file_pamlogix_proto_msgTypes[106]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8661,7 +8661,7 @@ func (x *AuctionTemplates) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuctionTemplates.ProtoReflect.Descriptor instead.
 func (*AuctionTemplates) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{106}
+	return file_pamlogix_proto_rawDescGZIP(), []int{106}
 }
 
 func (x *AuctionTemplates) GetTemplates() map[string]*AuctionTemplate {
@@ -8682,7 +8682,7 @@ type AuctionReward struct {
 
 func (x *AuctionReward) Reset() {
 	*x = AuctionReward{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[107]
+	mi := &file_pamlogix_proto_msgTypes[107]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8694,7 +8694,7 @@ func (x *AuctionReward) String() string {
 func (*AuctionReward) ProtoMessage() {}
 
 func (x *AuctionReward) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[107]
+	mi := &file_pamlogix_proto_msgTypes[107]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8707,7 +8707,7 @@ func (x *AuctionReward) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuctionReward.ProtoReflect.Descriptor instead.
 func (*AuctionReward) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{107}
+	return file_pamlogix_proto_rawDescGZIP(), []int{107}
 }
 
 func (x *AuctionReward) GetItems() []*InventoryItem {
@@ -8732,7 +8732,7 @@ type AuctionBid struct {
 
 func (x *AuctionBid) Reset() {
 	*x = AuctionBid{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[108]
+	mi := &file_pamlogix_proto_msgTypes[108]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8744,7 +8744,7 @@ func (x *AuctionBid) String() string {
 func (*AuctionBid) ProtoMessage() {}
 
 func (x *AuctionBid) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[108]
+	mi := &file_pamlogix_proto_msgTypes[108]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8757,7 +8757,7 @@ func (x *AuctionBid) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuctionBid.ProtoReflect.Descriptor instead.
 func (*AuctionBid) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{108}
+	return file_pamlogix_proto_rawDescGZIP(), []int{108}
 }
 
 func (x *AuctionBid) GetUserId() string {
@@ -8850,7 +8850,7 @@ type Auction struct {
 
 func (x *Auction) Reset() {
 	*x = Auction{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[109]
+	mi := &file_pamlogix_proto_msgTypes[109]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -8862,7 +8862,7 @@ func (x *Auction) String() string {
 func (*Auction) ProtoMessage() {}
 
 func (x *Auction) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[109]
+	mi := &file_pamlogix_proto_msgTypes[109]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -8875,7 +8875,7 @@ func (x *Auction) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Auction.ProtoReflect.Descriptor instead.
 func (*Auction) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{109}
+	return file_pamlogix_proto_rawDescGZIP(), []int{109}
 }
 
 func (x *Auction) GetId() string {
@@ -9115,7 +9115,7 @@ type AuctionNotificationBid struct {
 
 func (x *AuctionNotificationBid) Reset() {
 	*x = AuctionNotificationBid{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[110]
+	mi := &file_pamlogix_proto_msgTypes[110]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9127,7 +9127,7 @@ func (x *AuctionNotificationBid) String() string {
 func (*AuctionNotificationBid) ProtoMessage() {}
 
 func (x *AuctionNotificationBid) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[110]
+	mi := &file_pamlogix_proto_msgTypes[110]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9140,7 +9140,7 @@ func (x *AuctionNotificationBid) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuctionNotificationBid.ProtoReflect.Descriptor instead.
 func (*AuctionNotificationBid) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{110}
+	return file_pamlogix_proto_rawDescGZIP(), []int{110}
 }
 
 func (x *AuctionNotificationBid) GetId() string {
@@ -9219,7 +9219,7 @@ type StreamEnvelope struct {
 
 func (x *StreamEnvelope) Reset() {
 	*x = StreamEnvelope{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[111]
+	mi := &file_pamlogix_proto_msgTypes[111]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9231,7 +9231,7 @@ func (x *StreamEnvelope) String() string {
 func (*StreamEnvelope) ProtoMessage() {}
 
 func (x *StreamEnvelope) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[111]
+	mi := &file_pamlogix_proto_msgTypes[111]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9244,7 +9244,7 @@ func (x *StreamEnvelope) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StreamEnvelope.ProtoReflect.Descriptor instead.
 func (*StreamEnvelope) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{111}
+	return file_pamlogix_proto_rawDescGZIP(), []int{111}
 }
 
 func (x *StreamEnvelope) GetMessage() isStreamEnvelope_Message {
@@ -9286,7 +9286,7 @@ type AuctionClaimBid struct {
 
 func (x *AuctionClaimBid) Reset() {
 	*x = AuctionClaimBid{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[112]
+	mi := &file_pamlogix_proto_msgTypes[112]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9298,7 +9298,7 @@ func (x *AuctionClaimBid) String() string {
 func (*AuctionClaimBid) ProtoMessage() {}
 
 func (x *AuctionClaimBid) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[112]
+	mi := &file_pamlogix_proto_msgTypes[112]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9311,7 +9311,7 @@ func (x *AuctionClaimBid) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuctionClaimBid.ProtoReflect.Descriptor instead.
 func (*AuctionClaimBid) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{112}
+	return file_pamlogix_proto_rawDescGZIP(), []int{112}
 }
 
 func (x *AuctionClaimBid) GetAuction() *Auction {
@@ -9345,7 +9345,7 @@ type AuctionClaimCreated struct {
 
 func (x *AuctionClaimCreated) Reset() {
 	*x = AuctionClaimCreated{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[113]
+	mi := &file_pamlogix_proto_msgTypes[113]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9357,7 +9357,7 @@ func (x *AuctionClaimCreated) String() string {
 func (*AuctionClaimCreated) ProtoMessage() {}
 
 func (x *AuctionClaimCreated) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[113]
+	mi := &file_pamlogix_proto_msgTypes[113]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9370,7 +9370,7 @@ func (x *AuctionClaimCreated) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuctionClaimCreated.ProtoReflect.Descriptor instead.
 func (*AuctionClaimCreated) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{113}
+	return file_pamlogix_proto_rawDescGZIP(), []int{113}
 }
 
 func (x *AuctionClaimCreated) GetAuction() *Auction {
@@ -9414,7 +9414,7 @@ type AuctionCancel struct {
 
 func (x *AuctionCancel) Reset() {
 	*x = AuctionCancel{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[114]
+	mi := &file_pamlogix_proto_msgTypes[114]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9426,7 +9426,7 @@ func (x *AuctionCancel) String() string {
 func (*AuctionCancel) ProtoMessage() {}
 
 func (x *AuctionCancel) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[114]
+	mi := &file_pamlogix_proto_msgTypes[114]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9439,7 +9439,7 @@ func (x *AuctionCancel) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuctionCancel.ProtoReflect.Descriptor instead.
 func (*AuctionCancel) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{114}
+	return file_pamlogix_proto_rawDescGZIP(), []int{114}
 }
 
 func (x *AuctionCancel) GetAuction() *Auction {
@@ -9469,7 +9469,7 @@ type AuctionList struct {
 
 func (x *AuctionList) Reset() {
 	*x = AuctionList{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[115]
+	mi := &file_pamlogix_proto_msgTypes[115]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9481,7 +9481,7 @@ func (x *AuctionList) String() string {
 func (*AuctionList) ProtoMessage() {}
 
 func (x *AuctionList) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[115]
+	mi := &file_pamlogix_proto_msgTypes[115]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9494,7 +9494,7 @@ func (x *AuctionList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuctionList.ProtoReflect.Descriptor instead.
 func (*AuctionList) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{115}
+	return file_pamlogix_proto_rawDescGZIP(), []int{115}
 }
 
 func (x *AuctionList) GetAuctions() []*Auction {
@@ -9528,7 +9528,7 @@ type AuctionListRequest struct {
 
 func (x *AuctionListRequest) Reset() {
 	*x = AuctionListRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[116]
+	mi := &file_pamlogix_proto_msgTypes[116]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9540,7 +9540,7 @@ func (x *AuctionListRequest) String() string {
 func (*AuctionListRequest) ProtoMessage() {}
 
 func (x *AuctionListRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[116]
+	mi := &file_pamlogix_proto_msgTypes[116]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9553,7 +9553,7 @@ func (x *AuctionListRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuctionListRequest.ProtoReflect.Descriptor instead.
 func (*AuctionListRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{116}
+	return file_pamlogix_proto_rawDescGZIP(), []int{116}
 }
 
 func (x *AuctionListRequest) GetQuery() string {
@@ -9599,7 +9599,7 @@ type AuctionBidRequest struct {
 
 func (x *AuctionBidRequest) Reset() {
 	*x = AuctionBidRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[117]
+	mi := &file_pamlogix_proto_msgTypes[117]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9611,7 +9611,7 @@ func (x *AuctionBidRequest) String() string {
 func (*AuctionBidRequest) ProtoMessage() {}
 
 func (x *AuctionBidRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[117]
+	mi := &file_pamlogix_proto_msgTypes[117]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9624,7 +9624,7 @@ func (x *AuctionBidRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuctionBidRequest.ProtoReflect.Descriptor instead.
 func (*AuctionBidRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{117}
+	return file_pamlogix_proto_rawDescGZIP(), []int{117}
 }
 
 func (x *AuctionBidRequest) GetId() string {
@@ -9659,7 +9659,7 @@ type AuctionClaimBidRequest struct {
 
 func (x *AuctionClaimBidRequest) Reset() {
 	*x = AuctionClaimBidRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[118]
+	mi := &file_pamlogix_proto_msgTypes[118]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9671,7 +9671,7 @@ func (x *AuctionClaimBidRequest) String() string {
 func (*AuctionClaimBidRequest) ProtoMessage() {}
 
 func (x *AuctionClaimBidRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[118]
+	mi := &file_pamlogix_proto_msgTypes[118]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9684,7 +9684,7 @@ func (x *AuctionClaimBidRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuctionClaimBidRequest.ProtoReflect.Descriptor instead.
 func (*AuctionClaimBidRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{118}
+	return file_pamlogix_proto_rawDescGZIP(), []int{118}
 }
 
 func (x *AuctionClaimBidRequest) GetId() string {
@@ -9705,7 +9705,7 @@ type AuctionClaimCreatedRequest struct {
 
 func (x *AuctionClaimCreatedRequest) Reset() {
 	*x = AuctionClaimCreatedRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[119]
+	mi := &file_pamlogix_proto_msgTypes[119]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9717,7 +9717,7 @@ func (x *AuctionClaimCreatedRequest) String() string {
 func (*AuctionClaimCreatedRequest) ProtoMessage() {}
 
 func (x *AuctionClaimCreatedRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[119]
+	mi := &file_pamlogix_proto_msgTypes[119]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9730,7 +9730,7 @@ func (x *AuctionClaimCreatedRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuctionClaimCreatedRequest.ProtoReflect.Descriptor instead.
 func (*AuctionClaimCreatedRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{119}
+	return file_pamlogix_proto_rawDescGZIP(), []int{119}
 }
 
 func (x *AuctionClaimCreatedRequest) GetId() string {
@@ -9751,7 +9751,7 @@ type AuctionCancelRequest struct {
 
 func (x *AuctionCancelRequest) Reset() {
 	*x = AuctionCancelRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[120]
+	mi := &file_pamlogix_proto_msgTypes[120]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9763,7 +9763,7 @@ func (x *AuctionCancelRequest) String() string {
 func (*AuctionCancelRequest) ProtoMessage() {}
 
 func (x *AuctionCancelRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[120]
+	mi := &file_pamlogix_proto_msgTypes[120]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9776,7 +9776,7 @@ func (x *AuctionCancelRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuctionCancelRequest.ProtoReflect.Descriptor instead.
 func (*AuctionCancelRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{120}
+	return file_pamlogix_proto_rawDescGZIP(), []int{120}
 }
 
 func (x *AuctionCancelRequest) GetId() string {
@@ -9803,7 +9803,7 @@ type AuctionCreateRequest struct {
 
 func (x *AuctionCreateRequest) Reset() {
 	*x = AuctionCreateRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[121]
+	mi := &file_pamlogix_proto_msgTypes[121]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9815,7 +9815,7 @@ func (x *AuctionCreateRequest) String() string {
 func (*AuctionCreateRequest) ProtoMessage() {}
 
 func (x *AuctionCreateRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[121]
+	mi := &file_pamlogix_proto_msgTypes[121]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9828,7 +9828,7 @@ func (x *AuctionCreateRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuctionCreateRequest.ProtoReflect.Descriptor instead.
 func (*AuctionCreateRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{121}
+	return file_pamlogix_proto_rawDescGZIP(), []int{121}
 }
 
 func (x *AuctionCreateRequest) GetTemplateId() string {
@@ -9872,7 +9872,7 @@ type AuctionListBidsRequest struct {
 
 func (x *AuctionListBidsRequest) Reset() {
 	*x = AuctionListBidsRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[122]
+	mi := &file_pamlogix_proto_msgTypes[122]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9884,7 +9884,7 @@ func (x *AuctionListBidsRequest) String() string {
 func (*AuctionListBidsRequest) ProtoMessage() {}
 
 func (x *AuctionListBidsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[122]
+	mi := &file_pamlogix_proto_msgTypes[122]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9897,7 +9897,7 @@ func (x *AuctionListBidsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuctionListBidsRequest.ProtoReflect.Descriptor instead.
 func (*AuctionListBidsRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{122}
+	return file_pamlogix_proto_rawDescGZIP(), []int{122}
 }
 
 func (x *AuctionListBidsRequest) GetLimit() int64 {
@@ -9927,7 +9927,7 @@ type AuctionListCreatedRequest struct {
 
 func (x *AuctionListCreatedRequest) Reset() {
 	*x = AuctionListCreatedRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[123]
+	mi := &file_pamlogix_proto_msgTypes[123]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9939,7 +9939,7 @@ func (x *AuctionListCreatedRequest) String() string {
 func (*AuctionListCreatedRequest) ProtoMessage() {}
 
 func (x *AuctionListCreatedRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[123]
+	mi := &file_pamlogix_proto_msgTypes[123]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -9952,7 +9952,7 @@ func (x *AuctionListCreatedRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuctionListCreatedRequest.ProtoReflect.Descriptor instead.
 func (*AuctionListCreatedRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{123}
+	return file_pamlogix_proto_rawDescGZIP(), []int{123}
 }
 
 func (x *AuctionListCreatedRequest) GetLimit() int64 {
@@ -9980,7 +9980,7 @@ type AuctionsFollowRequest struct {
 
 func (x *AuctionsFollowRequest) Reset() {
 	*x = AuctionsFollowRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[124]
+	mi := &file_pamlogix_proto_msgTypes[124]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -9992,7 +9992,7 @@ func (x *AuctionsFollowRequest) String() string {
 func (*AuctionsFollowRequest) ProtoMessage() {}
 
 func (x *AuctionsFollowRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[124]
+	mi := &file_pamlogix_proto_msgTypes[124]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10005,7 +10005,7 @@ func (x *AuctionsFollowRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuctionsFollowRequest.ProtoReflect.Descriptor instead.
 func (*AuctionsFollowRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{124}
+	return file_pamlogix_proto_rawDescGZIP(), []int{124}
 }
 
 func (x *AuctionsFollowRequest) GetIds() []string {
@@ -10026,7 +10026,7 @@ type EconomyListRequest struct {
 
 func (x *EconomyListRequest) Reset() {
 	*x = EconomyListRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[125]
+	mi := &file_pamlogix_proto_msgTypes[125]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10038,7 +10038,7 @@ func (x *EconomyListRequest) String() string {
 func (*EconomyListRequest) ProtoMessage() {}
 
 func (x *EconomyListRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[125]
+	mi := &file_pamlogix_proto_msgTypes[125]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10051,7 +10051,7 @@ func (x *EconomyListRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EconomyListRequest.ProtoReflect.Descriptor instead.
 func (*EconomyListRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{125}
+	return file_pamlogix_proto_rawDescGZIP(), []int{125}
 }
 
 func (x *EconomyListRequest) GetStoreType() EconomyStoreType {
@@ -10076,7 +10076,7 @@ type EconomyGrantRequest struct {
 
 func (x *EconomyGrantRequest) Reset() {
 	*x = EconomyGrantRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[126]
+	mi := &file_pamlogix_proto_msgTypes[126]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10088,7 +10088,7 @@ func (x *EconomyGrantRequest) String() string {
 func (*EconomyGrantRequest) ProtoMessage() {}
 
 func (x *EconomyGrantRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[126]
+	mi := &file_pamlogix_proto_msgTypes[126]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10101,7 +10101,7 @@ func (x *EconomyGrantRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EconomyGrantRequest.ProtoReflect.Descriptor instead.
 func (*EconomyGrantRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{126}
+	return file_pamlogix_proto_rawDescGZIP(), []int{126}
 }
 
 func (x *EconomyGrantRequest) GetCurrencies() map[string]int64 {
@@ -10140,7 +10140,7 @@ type EconomyPurchaseIntentRequest struct {
 
 func (x *EconomyPurchaseIntentRequest) Reset() {
 	*x = EconomyPurchaseIntentRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[127]
+	mi := &file_pamlogix_proto_msgTypes[127]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10152,7 +10152,7 @@ func (x *EconomyPurchaseIntentRequest) String() string {
 func (*EconomyPurchaseIntentRequest) ProtoMessage() {}
 
 func (x *EconomyPurchaseIntentRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[127]
+	mi := &file_pamlogix_proto_msgTypes[127]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10165,7 +10165,7 @@ func (x *EconomyPurchaseIntentRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EconomyPurchaseIntentRequest.ProtoReflect.Descriptor instead.
 func (*EconomyPurchaseIntentRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{127}
+	return file_pamlogix_proto_rawDescGZIP(), []int{127}
 }
 
 func (x *EconomyPurchaseIntentRequest) GetItemId() string {
@@ -10204,7 +10204,7 @@ type EconomyPurchaseRequest struct {
 
 func (x *EconomyPurchaseRequest) Reset() {
 	*x = EconomyPurchaseRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[128]
+	mi := &file_pamlogix_proto_msgTypes[128]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10216,7 +10216,7 @@ func (x *EconomyPurchaseRequest) String() string {
 func (*EconomyPurchaseRequest) ProtoMessage() {}
 
 func (x *EconomyPurchaseRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[128]
+	mi := &file_pamlogix_proto_msgTypes[128]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10229,7 +10229,7 @@ func (x *EconomyPurchaseRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EconomyPurchaseRequest.ProtoReflect.Descriptor instead.
 func (*EconomyPurchaseRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{128}
+	return file_pamlogix_proto_rawDescGZIP(), []int{128}
 }
 
 func (x *EconomyPurchaseRequest) GetItemId() string {
@@ -10266,7 +10266,7 @@ type EconomyPurchaseRestoreRequest struct {
 
 func (x *EconomyPurchaseRestoreRequest) Reset() {
 	*x = EconomyPurchaseRestoreRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[129]
+	mi := &file_pamlogix_proto_msgTypes[129]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10278,7 +10278,7 @@ func (x *EconomyPurchaseRestoreRequest) String() string {
 func (*EconomyPurchaseRestoreRequest) ProtoMessage() {}
 
 func (x *EconomyPurchaseRestoreRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[129]
+	mi := &file_pamlogix_proto_msgTypes[129]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10291,7 +10291,7 @@ func (x *EconomyPurchaseRestoreRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EconomyPurchaseRestoreRequest.ProtoReflect.Descriptor instead.
 func (*EconomyPurchaseRestoreRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{129}
+	return file_pamlogix_proto_rawDescGZIP(), []int{129}
 }
 
 func (x *EconomyPurchaseRestoreRequest) GetStoreType() EconomyStoreType {
@@ -10323,7 +10323,7 @@ type EconomyPlacementStatusRequest struct {
 
 func (x *EconomyPlacementStatusRequest) Reset() {
 	*x = EconomyPlacementStatusRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[130]
+	mi := &file_pamlogix_proto_msgTypes[130]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10335,7 +10335,7 @@ func (x *EconomyPlacementStatusRequest) String() string {
 func (*EconomyPlacementStatusRequest) ProtoMessage() {}
 
 func (x *EconomyPlacementStatusRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[130]
+	mi := &file_pamlogix_proto_msgTypes[130]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10348,7 +10348,7 @@ func (x *EconomyPlacementStatusRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EconomyPlacementStatusRequest.ProtoReflect.Descriptor instead.
 func (*EconomyPlacementStatusRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{130}
+	return file_pamlogix_proto_rawDescGZIP(), []int{130}
 }
 
 func (x *EconomyPlacementStatusRequest) GetRewardId() string {
@@ -10385,7 +10385,7 @@ type EconomyPlacementStartRequest struct {
 
 func (x *EconomyPlacementStartRequest) Reset() {
 	*x = EconomyPlacementStartRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[131]
+	mi := &file_pamlogix_proto_msgTypes[131]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10397,7 +10397,7 @@ func (x *EconomyPlacementStartRequest) String() string {
 func (*EconomyPlacementStartRequest) ProtoMessage() {}
 
 func (x *EconomyPlacementStartRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[131]
+	mi := &file_pamlogix_proto_msgTypes[131]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10410,7 +10410,7 @@ func (x *EconomyPlacementStartRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EconomyPlacementStartRequest.ProtoReflect.Descriptor instead.
 func (*EconomyPlacementStartRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{131}
+	return file_pamlogix_proto_rawDescGZIP(), []int{131}
 }
 
 func (x *EconomyPlacementStartRequest) GetPlacementId() string {
@@ -10450,7 +10450,7 @@ type EconomyPlacementStatus struct {
 
 func (x *EconomyPlacementStatus) Reset() {
 	*x = EconomyPlacementStatus{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[132]
+	mi := &file_pamlogix_proto_msgTypes[132]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10462,7 +10462,7 @@ func (x *EconomyPlacementStatus) String() string {
 func (*EconomyPlacementStatus) ProtoMessage() {}
 
 func (x *EconomyPlacementStatus) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[132]
+	mi := &file_pamlogix_proto_msgTypes[132]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10475,7 +10475,7 @@ func (x *EconomyPlacementStatus) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EconomyPlacementStatus.ProtoReflect.Descriptor instead.
 func (*EconomyPlacementStatus) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{132}
+	return file_pamlogix_proto_rawDescGZIP(), []int{132}
 }
 
 func (x *EconomyPlacementStatus) GetRewardId() string {
@@ -10549,7 +10549,7 @@ type EconomyUpdateAck struct {
 
 func (x *EconomyUpdateAck) Reset() {
 	*x = EconomyUpdateAck{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[133]
+	mi := &file_pamlogix_proto_msgTypes[133]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10561,7 +10561,7 @@ func (x *EconomyUpdateAck) String() string {
 func (*EconomyUpdateAck) ProtoMessage() {}
 
 func (x *EconomyUpdateAck) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[133]
+	mi := &file_pamlogix_proto_msgTypes[133]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10574,7 +10574,7 @@ func (x *EconomyUpdateAck) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EconomyUpdateAck.ProtoReflect.Descriptor instead.
 func (*EconomyUpdateAck) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{133}
+	return file_pamlogix_proto_rawDescGZIP(), []int{133}
 }
 
 func (x *EconomyUpdateAck) GetWallet() map[string]int64 {
@@ -10632,7 +10632,7 @@ type EconomyPurchaseAck struct {
 
 func (x *EconomyPurchaseAck) Reset() {
 	*x = EconomyPurchaseAck{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[134]
+	mi := &file_pamlogix_proto_msgTypes[134]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10644,7 +10644,7 @@ func (x *EconomyPurchaseAck) String() string {
 func (*EconomyPurchaseAck) ProtoMessage() {}
 
 func (x *EconomyPurchaseAck) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[134]
+	mi := &file_pamlogix_proto_msgTypes[134]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10657,7 +10657,7 @@ func (x *EconomyPurchaseAck) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EconomyPurchaseAck.ProtoReflect.Descriptor instead.
 func (*EconomyPurchaseAck) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{134}
+	return file_pamlogix_proto_rawDescGZIP(), []int{134}
 }
 
 func (x *EconomyPurchaseAck) GetWallet() map[string]int64 {
@@ -10705,7 +10705,7 @@ type EnergyModifier struct {
 
 func (x *EnergyModifier) Reset() {
 	*x = EnergyModifier{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[135]
+	mi := &file_pamlogix_proto_msgTypes[135]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10717,7 +10717,7 @@ func (x *EnergyModifier) String() string {
 func (*EnergyModifier) ProtoMessage() {}
 
 func (x *EnergyModifier) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[135]
+	mi := &file_pamlogix_proto_msgTypes[135]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10730,7 +10730,7 @@ func (x *EnergyModifier) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EnergyModifier.ProtoReflect.Descriptor instead.
 func (*EnergyModifier) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{135}
+	return file_pamlogix_proto_rawDescGZIP(), []int{135}
 }
 
 func (x *EnergyModifier) GetOperator() string {
@@ -10794,7 +10794,7 @@ type Energy struct {
 
 func (x *Energy) Reset() {
 	*x = Energy{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[136]
+	mi := &file_pamlogix_proto_msgTypes[136]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10806,7 +10806,7 @@ func (x *Energy) String() string {
 func (*Energy) ProtoMessage() {}
 
 func (x *Energy) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[136]
+	mi := &file_pamlogix_proto_msgTypes[136]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10819,7 +10819,7 @@ func (x *Energy) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Energy.ProtoReflect.Descriptor instead.
 func (*Energy) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{136}
+	return file_pamlogix_proto_rawDescGZIP(), []int{136}
 }
 
 func (x *Energy) GetId() string {
@@ -10917,7 +10917,7 @@ type EnergyList struct {
 
 func (x *EnergyList) Reset() {
 	*x = EnergyList{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[137]
+	mi := &file_pamlogix_proto_msgTypes[137]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10929,7 +10929,7 @@ func (x *EnergyList) String() string {
 func (*EnergyList) ProtoMessage() {}
 
 func (x *EnergyList) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[137]
+	mi := &file_pamlogix_proto_msgTypes[137]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10942,7 +10942,7 @@ func (x *EnergyList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EnergyList.ProtoReflect.Descriptor instead.
 func (*EnergyList) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{137}
+	return file_pamlogix_proto_rawDescGZIP(), []int{137}
 }
 
 func (x *EnergyList) GetEnergies() map[string]*Energy {
@@ -10963,7 +10963,7 @@ type EnergySpendRequest struct {
 
 func (x *EnergySpendRequest) Reset() {
 	*x = EnergySpendRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[138]
+	mi := &file_pamlogix_proto_msgTypes[138]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -10975,7 +10975,7 @@ func (x *EnergySpendRequest) String() string {
 func (*EnergySpendRequest) ProtoMessage() {}
 
 func (x *EnergySpendRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[138]
+	mi := &file_pamlogix_proto_msgTypes[138]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -10988,7 +10988,7 @@ func (x *EnergySpendRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EnergySpendRequest.ProtoReflect.Descriptor instead.
 func (*EnergySpendRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{138}
+	return file_pamlogix_proto_rawDescGZIP(), []int{138}
 }
 
 func (x *EnergySpendRequest) GetAmounts() map[string]int32 {
@@ -11011,7 +11011,7 @@ type EnergySpendReward struct {
 
 func (x *EnergySpendReward) Reset() {
 	*x = EnergySpendReward{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[139]
+	mi := &file_pamlogix_proto_msgTypes[139]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11023,7 +11023,7 @@ func (x *EnergySpendReward) String() string {
 func (*EnergySpendReward) ProtoMessage() {}
 
 func (x *EnergySpendReward) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[139]
+	mi := &file_pamlogix_proto_msgTypes[139]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11036,7 +11036,7 @@ func (x *EnergySpendReward) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EnergySpendReward.ProtoReflect.Descriptor instead.
 func (*EnergySpendReward) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{139}
+	return file_pamlogix_proto_rawDescGZIP(), []int{139}
 }
 
 func (x *EnergySpendReward) GetEnergies() *EnergyList {
@@ -11057,14 +11057,16 @@ func (x *EnergySpendReward) GetReward() *Reward {
 type EnergyGrantRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Energy amounts to grant.
-	Amounts       map[string]int32 `protobuf:"bytes,1,rep,name=amounts,proto3" json:"amounts,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"varint,2,opt,name=value"`
+	Amounts map[string]int32 `protobuf:"bytes,1,rep,name=amounts,proto3" json:"amounts,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"varint,2,opt,name=value"`
+	// Energy modifiers to apply, if any.
+	Modifiers     []*RewardEnergyModifier `protobuf:"bytes,2,rep,name=modifiers,proto3" json:"modifiers,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *EnergyGrantRequest) Reset() {
 	*x = EnergyGrantRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[140]
+	mi := &file_pamlogix_proto_msgTypes[140]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11076,7 +11078,7 @@ func (x *EnergyGrantRequest) String() string {
 func (*EnergyGrantRequest) ProtoMessage() {}
 
 func (x *EnergyGrantRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[140]
+	mi := &file_pamlogix_proto_msgTypes[140]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11089,12 +11091,19 @@ func (x *EnergyGrantRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EnergyGrantRequest.ProtoReflect.Descriptor instead.
 func (*EnergyGrantRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{140}
+	return file_pamlogix_proto_rawDescGZIP(), []int{140}
 }
 
 func (x *EnergyGrantRequest) GetAmounts() map[string]int32 {
 	if x != nil {
 		return x.Amounts
+	}
+	return nil
+}
+
+func (x *EnergyGrantRequest) GetModifiers() []*RewardEnergyModifier {
+	if x != nil {
+		return x.Modifiers
 	}
 	return nil
 }
@@ -11120,7 +11129,7 @@ type LeaderboardConfig struct {
 
 func (x *LeaderboardConfig) Reset() {
 	*x = LeaderboardConfig{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[141]
+	mi := &file_pamlogix_proto_msgTypes[141]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11132,7 +11141,7 @@ func (x *LeaderboardConfig) String() string {
 func (*LeaderboardConfig) ProtoMessage() {}
 
 func (x *LeaderboardConfig) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[141]
+	mi := &file_pamlogix_proto_msgTypes[141]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11145,7 +11154,7 @@ func (x *LeaderboardConfig) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LeaderboardConfig.ProtoReflect.Descriptor instead.
 func (*LeaderboardConfig) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{141}
+	return file_pamlogix_proto_rawDescGZIP(), []int{141}
 }
 
 func (x *LeaderboardConfig) GetId() string {
@@ -11201,7 +11210,7 @@ type LeaderboardConfigList struct {
 
 func (x *LeaderboardConfigList) Reset() {
 	*x = LeaderboardConfigList{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[142]
+	mi := &file_pamlogix_proto_msgTypes[142]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11213,7 +11222,7 @@ func (x *LeaderboardConfigList) String() string {
 func (*LeaderboardConfigList) ProtoMessage() {}
 
 func (x *LeaderboardConfigList) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[142]
+	mi := &file_pamlogix_proto_msgTypes[142]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11226,7 +11235,7 @@ func (x *LeaderboardConfigList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use LeaderboardConfigList.ProtoReflect.Descriptor instead.
 func (*LeaderboardConfigList) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{142}
+	return file_pamlogix_proto_rawDescGZIP(), []int{142}
 }
 
 func (x *LeaderboardConfigList) GetLeaderboardConfigs() []*LeaderboardConfig {
@@ -11259,7 +11268,7 @@ type Tutorial struct {
 
 func (x *Tutorial) Reset() {
 	*x = Tutorial{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[143]
+	mi := &file_pamlogix_proto_msgTypes[143]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11271,7 +11280,7 @@ func (x *Tutorial) String() string {
 func (*Tutorial) ProtoMessage() {}
 
 func (x *Tutorial) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[143]
+	mi := &file_pamlogix_proto_msgTypes[143]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11284,7 +11293,7 @@ func (x *Tutorial) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Tutorial.ProtoReflect.Descriptor instead.
 func (*Tutorial) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{143}
+	return file_pamlogix_proto_rawDescGZIP(), []int{143}
 }
 
 func (x *Tutorial) GetId() string {
@@ -11347,7 +11356,7 @@ type TutorialList struct {
 
 func (x *TutorialList) Reset() {
 	*x = TutorialList{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[144]
+	mi := &file_pamlogix_proto_msgTypes[144]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11359,7 +11368,7 @@ func (x *TutorialList) String() string {
 func (*TutorialList) ProtoMessage() {}
 
 func (x *TutorialList) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[144]
+	mi := &file_pamlogix_proto_msgTypes[144]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11372,7 +11381,7 @@ func (x *TutorialList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TutorialList.ProtoReflect.Descriptor instead.
 func (*TutorialList) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{144}
+	return file_pamlogix_proto_rawDescGZIP(), []int{144}
 }
 
 func (x *TutorialList) GetTutorials() map[string]*Tutorial {
@@ -11393,7 +11402,7 @@ type TutorialAcceptRequest struct {
 
 func (x *TutorialAcceptRequest) Reset() {
 	*x = TutorialAcceptRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[145]
+	mi := &file_pamlogix_proto_msgTypes[145]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11405,7 +11414,7 @@ func (x *TutorialAcceptRequest) String() string {
 func (*TutorialAcceptRequest) ProtoMessage() {}
 
 func (x *TutorialAcceptRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[145]
+	mi := &file_pamlogix_proto_msgTypes[145]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11418,7 +11427,7 @@ func (x *TutorialAcceptRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TutorialAcceptRequest.ProtoReflect.Descriptor instead.
 func (*TutorialAcceptRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{145}
+	return file_pamlogix_proto_rawDescGZIP(), []int{145}
 }
 
 func (x *TutorialAcceptRequest) GetId() string {
@@ -11439,7 +11448,7 @@ type TutorialDeclineRequest struct {
 
 func (x *TutorialDeclineRequest) Reset() {
 	*x = TutorialDeclineRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[146]
+	mi := &file_pamlogix_proto_msgTypes[146]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11451,7 +11460,7 @@ func (x *TutorialDeclineRequest) String() string {
 func (*TutorialDeclineRequest) ProtoMessage() {}
 
 func (x *TutorialDeclineRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[146]
+	mi := &file_pamlogix_proto_msgTypes[146]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11464,7 +11473,7 @@ func (x *TutorialDeclineRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TutorialDeclineRequest.ProtoReflect.Descriptor instead.
 func (*TutorialDeclineRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{146}
+	return file_pamlogix_proto_rawDescGZIP(), []int{146}
 }
 
 func (x *TutorialDeclineRequest) GetId() string {
@@ -11485,7 +11494,7 @@ type TutorialAbandonRequest struct {
 
 func (x *TutorialAbandonRequest) Reset() {
 	*x = TutorialAbandonRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[147]
+	mi := &file_pamlogix_proto_msgTypes[147]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11497,7 +11506,7 @@ func (x *TutorialAbandonRequest) String() string {
 func (*TutorialAbandonRequest) ProtoMessage() {}
 
 func (x *TutorialAbandonRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[147]
+	mi := &file_pamlogix_proto_msgTypes[147]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11510,7 +11519,7 @@ func (x *TutorialAbandonRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TutorialAbandonRequest.ProtoReflect.Descriptor instead.
 func (*TutorialAbandonRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{147}
+	return file_pamlogix_proto_rawDescGZIP(), []int{147}
 }
 
 func (x *TutorialAbandonRequest) GetId() string {
@@ -11533,7 +11542,7 @@ type TutorialUpdateRequest struct {
 
 func (x *TutorialUpdateRequest) Reset() {
 	*x = TutorialUpdateRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[148]
+	mi := &file_pamlogix_proto_msgTypes[148]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11545,7 +11554,7 @@ func (x *TutorialUpdateRequest) String() string {
 func (*TutorialUpdateRequest) ProtoMessage() {}
 
 func (x *TutorialUpdateRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[148]
+	mi := &file_pamlogix_proto_msgTypes[148]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11558,7 +11567,7 @@ func (x *TutorialUpdateRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TutorialUpdateRequest.ProtoReflect.Descriptor instead.
 func (*TutorialUpdateRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{148}
+	return file_pamlogix_proto_rawDescGZIP(), []int{148}
 }
 
 func (x *TutorialUpdateRequest) GetId() string {
@@ -11586,7 +11595,7 @@ type TutorialResetRequest struct {
 
 func (x *TutorialResetRequest) Reset() {
 	*x = TutorialResetRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[149]
+	mi := &file_pamlogix_proto_msgTypes[149]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11598,7 +11607,7 @@ func (x *TutorialResetRequest) String() string {
 func (*TutorialResetRequest) ProtoMessage() {}
 
 func (x *TutorialResetRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[149]
+	mi := &file_pamlogix_proto_msgTypes[149]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11611,7 +11620,7 @@ func (x *TutorialResetRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TutorialResetRequest.ProtoReflect.Descriptor instead.
 func (*TutorialResetRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{149}
+	return file_pamlogix_proto_rawDescGZIP(), []int{149}
 }
 
 func (x *TutorialResetRequest) GetIds() []string {
@@ -11634,7 +11643,7 @@ type RateAppRequest struct {
 
 func (x *RateAppRequest) Reset() {
 	*x = RateAppRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[150]
+	mi := &file_pamlogix_proto_msgTypes[150]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11646,7 +11655,7 @@ func (x *RateAppRequest) String() string {
 func (*RateAppRequest) ProtoMessage() {}
 
 func (x *RateAppRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[150]
+	mi := &file_pamlogix_proto_msgTypes[150]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11659,7 +11668,7 @@ func (x *RateAppRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RateAppRequest.ProtoReflect.Descriptor instead.
 func (*RateAppRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{150}
+	return file_pamlogix_proto_rawDescGZIP(), []int{150}
 }
 
 func (x *RateAppRequest) GetScore() uint32 {
@@ -11711,7 +11720,7 @@ type Team struct {
 
 func (x *Team) Reset() {
 	*x = Team{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[151]
+	mi := &file_pamlogix_proto_msgTypes[151]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11723,7 +11732,7 @@ func (x *Team) String() string {
 func (*Team) ProtoMessage() {}
 
 func (x *Team) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[151]
+	mi := &file_pamlogix_proto_msgTypes[151]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11736,7 +11745,7 @@ func (x *Team) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Team.ProtoReflect.Descriptor instead.
 func (*Team) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{151}
+	return file_pamlogix_proto_rawDescGZIP(), []int{151}
 }
 
 func (x *Team) GetId() string {
@@ -11851,7 +11860,7 @@ type TeamCreateRequest struct {
 
 func (x *TeamCreateRequest) Reset() {
 	*x = TeamCreateRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[152]
+	mi := &file_pamlogix_proto_msgTypes[152]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11863,7 +11872,7 @@ func (x *TeamCreateRequest) String() string {
 func (*TeamCreateRequest) ProtoMessage() {}
 
 func (x *TeamCreateRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[152]
+	mi := &file_pamlogix_proto_msgTypes[152]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11876,7 +11885,7 @@ func (x *TeamCreateRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TeamCreateRequest.ProtoReflect.Descriptor instead.
 func (*TeamCreateRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{152}
+	return file_pamlogix_proto_rawDescGZIP(), []int{152}
 }
 
 func (x *TeamCreateRequest) GetName() string {
@@ -11936,7 +11945,7 @@ type TeamListRequest struct {
 
 func (x *TeamListRequest) Reset() {
 	*x = TeamListRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[153]
+	mi := &file_pamlogix_proto_msgTypes[153]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -11948,7 +11957,7 @@ func (x *TeamListRequest) String() string {
 func (*TeamListRequest) ProtoMessage() {}
 
 func (x *TeamListRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[153]
+	mi := &file_pamlogix_proto_msgTypes[153]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -11961,7 +11970,7 @@ func (x *TeamListRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TeamListRequest.ProtoReflect.Descriptor instead.
 func (*TeamListRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{153}
+	return file_pamlogix_proto_rawDescGZIP(), []int{153}
 }
 
 func (x *TeamListRequest) GetCursor() string {
@@ -11998,7 +12007,7 @@ type TeamList struct {
 
 func (x *TeamList) Reset() {
 	*x = TeamList{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[154]
+	mi := &file_pamlogix_proto_msgTypes[154]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -12010,7 +12019,7 @@ func (x *TeamList) String() string {
 func (*TeamList) ProtoMessage() {}
 
 func (x *TeamList) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[154]
+	mi := &file_pamlogix_proto_msgTypes[154]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -12023,7 +12032,7 @@ func (x *TeamList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TeamList.ProtoReflect.Descriptor instead.
 func (*TeamList) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{154}
+	return file_pamlogix_proto_rawDescGZIP(), []int{154}
 }
 
 func (x *TeamList) GetTeams() []*Team {
@@ -12055,7 +12064,7 @@ type TeamSearchRequest struct {
 
 func (x *TeamSearchRequest) Reset() {
 	*x = TeamSearchRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[155]
+	mi := &file_pamlogix_proto_msgTypes[155]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -12067,7 +12076,7 @@ func (x *TeamSearchRequest) String() string {
 func (*TeamSearchRequest) ProtoMessage() {}
 
 func (x *TeamSearchRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[155]
+	mi := &file_pamlogix_proto_msgTypes[155]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -12080,7 +12089,7 @@ func (x *TeamSearchRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TeamSearchRequest.ProtoReflect.Descriptor instead.
 func (*TeamSearchRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{155}
+	return file_pamlogix_proto_rawDescGZIP(), []int{155}
 }
 
 func (x *TeamSearchRequest) GetInput() string {
@@ -12117,7 +12126,7 @@ type TeamWriteChatMessageRequest struct {
 
 func (x *TeamWriteChatMessageRequest) Reset() {
 	*x = TeamWriteChatMessageRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[156]
+	mi := &file_pamlogix_proto_msgTypes[156]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -12129,7 +12138,7 @@ func (x *TeamWriteChatMessageRequest) String() string {
 func (*TeamWriteChatMessageRequest) ProtoMessage() {}
 
 func (x *TeamWriteChatMessageRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[156]
+	mi := &file_pamlogix_proto_msgTypes[156]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -12142,7 +12151,7 @@ func (x *TeamWriteChatMessageRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TeamWriteChatMessageRequest.ProtoReflect.Descriptor instead.
 func (*TeamWriteChatMessageRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{156}
+	return file_pamlogix_proto_rawDescGZIP(), []int{156}
 }
 
 func (x *TeamWriteChatMessageRequest) GetId() string {
@@ -12172,7 +12181,7 @@ type UnlockableCost struct {
 
 func (x *UnlockableCost) Reset() {
 	*x = UnlockableCost{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[157]
+	mi := &file_pamlogix_proto_msgTypes[157]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -12184,7 +12193,7 @@ func (x *UnlockableCost) String() string {
 func (*UnlockableCost) ProtoMessage() {}
 
 func (x *UnlockableCost) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[157]
+	mi := &file_pamlogix_proto_msgTypes[157]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -12197,7 +12206,7 @@ func (x *UnlockableCost) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UnlockableCost.ProtoReflect.Descriptor instead.
 func (*UnlockableCost) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{157}
+	return file_pamlogix_proto_rawDescGZIP(), []int{157}
 }
 
 func (x *UnlockableCost) GetItems() map[string]int64 {
@@ -12255,7 +12264,7 @@ type Unlockable struct {
 
 func (x *Unlockable) Reset() {
 	*x = Unlockable{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[158]
+	mi := &file_pamlogix_proto_msgTypes[158]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -12267,7 +12276,7 @@ func (x *Unlockable) String() string {
 func (*Unlockable) ProtoMessage() {}
 
 func (x *Unlockable) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[158]
+	mi := &file_pamlogix_proto_msgTypes[158]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -12280,7 +12289,7 @@ func (x *Unlockable) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Unlockable.ProtoReflect.Descriptor instead.
 func (*Unlockable) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{158}
+	return file_pamlogix_proto_rawDescGZIP(), []int{158}
 }
 
 func (x *Unlockable) GetId() string {
@@ -12408,7 +12417,7 @@ type UnlockableSlotCost struct {
 
 func (x *UnlockableSlotCost) Reset() {
 	*x = UnlockableSlotCost{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[159]
+	mi := &file_pamlogix_proto_msgTypes[159]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -12420,7 +12429,7 @@ func (x *UnlockableSlotCost) String() string {
 func (*UnlockableSlotCost) ProtoMessage() {}
 
 func (x *UnlockableSlotCost) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[159]
+	mi := &file_pamlogix_proto_msgTypes[159]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -12433,7 +12442,7 @@ func (x *UnlockableSlotCost) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UnlockableSlotCost.ProtoReflect.Descriptor instead.
 func (*UnlockableSlotCost) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{159}
+	return file_pamlogix_proto_rawDescGZIP(), []int{159}
 }
 
 func (x *UnlockableSlotCost) GetItems() map[string]int64 {
@@ -12477,7 +12486,7 @@ type UnlockablesList struct {
 
 func (x *UnlockablesList) Reset() {
 	*x = UnlockablesList{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[160]
+	mi := &file_pamlogix_proto_msgTypes[160]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -12489,7 +12498,7 @@ func (x *UnlockablesList) String() string {
 func (*UnlockablesList) ProtoMessage() {}
 
 func (x *UnlockablesList) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[160]
+	mi := &file_pamlogix_proto_msgTypes[160]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -12502,7 +12511,7 @@ func (x *UnlockablesList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UnlockablesList.ProtoReflect.Descriptor instead.
 func (*UnlockablesList) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{160}
+	return file_pamlogix_proto_rawDescGZIP(), []int{160}
 }
 
 func (x *UnlockablesList) GetUnlockables() []*Unlockable {
@@ -12583,7 +12592,7 @@ type UnlockablesReward struct {
 
 func (x *UnlockablesReward) Reset() {
 	*x = UnlockablesReward{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[161]
+	mi := &file_pamlogix_proto_msgTypes[161]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -12595,7 +12604,7 @@ func (x *UnlockablesReward) String() string {
 func (*UnlockablesReward) ProtoMessage() {}
 
 func (x *UnlockablesReward) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[161]
+	mi := &file_pamlogix_proto_msgTypes[161]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -12608,7 +12617,7 @@ func (x *UnlockablesReward) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UnlockablesReward.ProtoReflect.Descriptor instead.
 func (*UnlockablesReward) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{161}
+	return file_pamlogix_proto_rawDescGZIP(), []int{161}
 }
 
 func (x *UnlockablesReward) GetUnlockables() *UnlockablesList {
@@ -12643,7 +12652,7 @@ type UnlockablesRequest struct {
 
 func (x *UnlockablesRequest) Reset() {
 	*x = UnlockablesRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[162]
+	mi := &file_pamlogix_proto_msgTypes[162]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -12655,7 +12664,7 @@ func (x *UnlockablesRequest) String() string {
 func (*UnlockablesRequest) ProtoMessage() {}
 
 func (x *UnlockablesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[162]
+	mi := &file_pamlogix_proto_msgTypes[162]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -12668,7 +12677,7 @@ func (x *UnlockablesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UnlockablesRequest.ProtoReflect.Descriptor instead.
 func (*UnlockablesRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{162}
+	return file_pamlogix_proto_rawDescGZIP(), []int{162}
 }
 
 func (x *UnlockablesRequest) GetInstanceId() string {
@@ -12689,7 +12698,7 @@ type UnlockablesQueueAddRequest struct {
 
 func (x *UnlockablesQueueAddRequest) Reset() {
 	*x = UnlockablesQueueAddRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[163]
+	mi := &file_pamlogix_proto_msgTypes[163]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -12701,7 +12710,7 @@ func (x *UnlockablesQueueAddRequest) String() string {
 func (*UnlockablesQueueAddRequest) ProtoMessage() {}
 
 func (x *UnlockablesQueueAddRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[163]
+	mi := &file_pamlogix_proto_msgTypes[163]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -12714,7 +12723,7 @@ func (x *UnlockablesQueueAddRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UnlockablesQueueAddRequest.ProtoReflect.Descriptor instead.
 func (*UnlockablesQueueAddRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{163}
+	return file_pamlogix_proto_rawDescGZIP(), []int{163}
 }
 
 func (x *UnlockablesQueueAddRequest) GetInstanceIds() []string {
@@ -12735,7 +12744,7 @@ type UnlockablesQueueRemoveRequest struct {
 
 func (x *UnlockablesQueueRemoveRequest) Reset() {
 	*x = UnlockablesQueueRemoveRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[164]
+	mi := &file_pamlogix_proto_msgTypes[164]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -12747,7 +12756,7 @@ func (x *UnlockablesQueueRemoveRequest) String() string {
 func (*UnlockablesQueueRemoveRequest) ProtoMessage() {}
 
 func (x *UnlockablesQueueRemoveRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[164]
+	mi := &file_pamlogix_proto_msgTypes[164]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -12760,7 +12769,7 @@ func (x *UnlockablesQueueRemoveRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UnlockablesQueueRemoveRequest.ProtoReflect.Descriptor instead.
 func (*UnlockablesQueueRemoveRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{164}
+	return file_pamlogix_proto_rawDescGZIP(), []int{164}
 }
 
 func (x *UnlockablesQueueRemoveRequest) GetInstanceIds() []string {
@@ -12781,7 +12790,7 @@ type UnlockablesQueueSetRequest struct {
 
 func (x *UnlockablesQueueSetRequest) Reset() {
 	*x = UnlockablesQueueSetRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[165]
+	mi := &file_pamlogix_proto_msgTypes[165]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -12793,7 +12802,7 @@ func (x *UnlockablesQueueSetRequest) String() string {
 func (*UnlockablesQueueSetRequest) ProtoMessage() {}
 
 func (x *UnlockablesQueueSetRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[165]
+	mi := &file_pamlogix_proto_msgTypes[165]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -12806,7 +12815,7 @@ func (x *UnlockablesQueueSetRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UnlockablesQueueSetRequest.ProtoReflect.Descriptor instead.
 func (*UnlockablesQueueSetRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{165}
+	return file_pamlogix_proto_rawDescGZIP(), []int{165}
 }
 
 func (x *UnlockablesQueueSetRequest) GetInstanceIds() []string {
@@ -12857,7 +12866,7 @@ type SubAchievement struct {
 
 func (x *SubAchievement) Reset() {
 	*x = SubAchievement{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[166]
+	mi := &file_pamlogix_proto_msgTypes[166]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -12869,7 +12878,7 @@ func (x *SubAchievement) String() string {
 func (*SubAchievement) ProtoMessage() {}
 
 func (x *SubAchievement) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[166]
+	mi := &file_pamlogix_proto_msgTypes[166]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -12882,7 +12891,7 @@ func (x *SubAchievement) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SubAchievement.ProtoReflect.Descriptor instead.
 func (*SubAchievement) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{166}
+	return file_pamlogix_proto_rawDescGZIP(), []int{166}
 }
 
 func (x *SubAchievement) GetCategory() string {
@@ -13052,7 +13061,7 @@ type Achievement struct {
 
 func (x *Achievement) Reset() {
 	*x = Achievement{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[167]
+	mi := &file_pamlogix_proto_msgTypes[167]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -13064,7 +13073,7 @@ func (x *Achievement) String() string {
 func (*Achievement) ProtoMessage() {}
 
 func (x *Achievement) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[167]
+	mi := &file_pamlogix_proto_msgTypes[167]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -13077,7 +13086,7 @@ func (x *Achievement) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Achievement.ProtoReflect.Descriptor instead.
 func (*Achievement) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{167}
+	return file_pamlogix_proto_rawDescGZIP(), []int{167}
 }
 
 func (x *Achievement) GetCategory() string {
@@ -13254,7 +13263,7 @@ type AchievementList struct {
 
 func (x *AchievementList) Reset() {
 	*x = AchievementList{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[168]
+	mi := &file_pamlogix_proto_msgTypes[168]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -13266,7 +13275,7 @@ func (x *AchievementList) String() string {
 func (*AchievementList) ProtoMessage() {}
 
 func (x *AchievementList) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[168]
+	mi := &file_pamlogix_proto_msgTypes[168]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -13279,7 +13288,7 @@ func (x *AchievementList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AchievementList.ProtoReflect.Descriptor instead.
 func (*AchievementList) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{168}
+	return file_pamlogix_proto_rawDescGZIP(), []int{168}
 }
 
 func (x *AchievementList) GetAchievements() map[string]*Achievement {
@@ -13309,7 +13318,7 @@ type AchievementsClaimRequest struct {
 
 func (x *AchievementsClaimRequest) Reset() {
 	*x = AchievementsClaimRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[169]
+	mi := &file_pamlogix_proto_msgTypes[169]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -13321,7 +13330,7 @@ func (x *AchievementsClaimRequest) String() string {
 func (*AchievementsClaimRequest) ProtoMessage() {}
 
 func (x *AchievementsClaimRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[169]
+	mi := &file_pamlogix_proto_msgTypes[169]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -13334,7 +13343,7 @@ func (x *AchievementsClaimRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AchievementsClaimRequest.ProtoReflect.Descriptor instead.
 func (*AchievementsClaimRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{169}
+	return file_pamlogix_proto_rawDescGZIP(), []int{169}
 }
 
 func (x *AchievementsClaimRequest) GetIds() []string {
@@ -13360,7 +13369,7 @@ type AchievementsGetRequest struct {
 
 func (x *AchievementsGetRequest) Reset() {
 	*x = AchievementsGetRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[170]
+	mi := &file_pamlogix_proto_msgTypes[170]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -13372,7 +13381,7 @@ func (x *AchievementsGetRequest) String() string {
 func (*AchievementsGetRequest) ProtoMessage() {}
 
 func (x *AchievementsGetRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[170]
+	mi := &file_pamlogix_proto_msgTypes[170]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -13385,7 +13394,7 @@ func (x *AchievementsGetRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AchievementsGetRequest.ProtoReflect.Descriptor instead.
 func (*AchievementsGetRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{170}
+	return file_pamlogix_proto_rawDescGZIP(), []int{170}
 }
 
 // A response when an achievements update is acknowledged by the server.
@@ -13401,7 +13410,7 @@ type AchievementsUpdateAck struct {
 
 func (x *AchievementsUpdateAck) Reset() {
 	*x = AchievementsUpdateAck{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[171]
+	mi := &file_pamlogix_proto_msgTypes[171]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -13413,7 +13422,7 @@ func (x *AchievementsUpdateAck) String() string {
 func (*AchievementsUpdateAck) ProtoMessage() {}
 
 func (x *AchievementsUpdateAck) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[171]
+	mi := &file_pamlogix_proto_msgTypes[171]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -13426,7 +13435,7 @@ func (x *AchievementsUpdateAck) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AchievementsUpdateAck.ProtoReflect.Descriptor instead.
 func (*AchievementsUpdateAck) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{171}
+	return file_pamlogix_proto_rawDescGZIP(), []int{171}
 }
 
 func (x *AchievementsUpdateAck) GetAchievements() map[string]*Achievement {
@@ -13458,7 +13467,7 @@ type AchievementsUpdateRequest struct {
 
 func (x *AchievementsUpdateRequest) Reset() {
 	*x = AchievementsUpdateRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[172]
+	mi := &file_pamlogix_proto_msgTypes[172]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -13470,7 +13479,7 @@ func (x *AchievementsUpdateRequest) String() string {
 func (*AchievementsUpdateRequest) ProtoMessage() {}
 
 func (x *AchievementsUpdateRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[172]
+	mi := &file_pamlogix_proto_msgTypes[172]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -13483,7 +13492,7 @@ func (x *AchievementsUpdateRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AchievementsUpdateRequest.ProtoReflect.Descriptor instead.
 func (*AchievementsUpdateRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{172}
+	return file_pamlogix_proto_rawDescGZIP(), []int{172}
 }
 
 func (x *AchievementsUpdateRequest) GetIds() []string {
@@ -13522,7 +13531,7 @@ type StreakAvailableReward struct {
 
 func (x *StreakAvailableReward) Reset() {
 	*x = StreakAvailableReward{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[173]
+	mi := &file_pamlogix_proto_msgTypes[173]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -13534,7 +13543,7 @@ func (x *StreakAvailableReward) String() string {
 func (*StreakAvailableReward) ProtoMessage() {}
 
 func (x *StreakAvailableReward) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[173]
+	mi := &file_pamlogix_proto_msgTypes[173]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -13547,7 +13556,7 @@ func (x *StreakAvailableReward) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StreakAvailableReward.ProtoReflect.Descriptor instead.
 func (*StreakAvailableReward) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{173}
+	return file_pamlogix_proto_rawDescGZIP(), []int{173}
 }
 
 func (x *StreakAvailableReward) GetCountMin() int64 {
@@ -13588,7 +13597,7 @@ type StreakReward struct {
 
 func (x *StreakReward) Reset() {
 	*x = StreakReward{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[174]
+	mi := &file_pamlogix_proto_msgTypes[174]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -13600,7 +13609,7 @@ func (x *StreakReward) String() string {
 func (*StreakReward) ProtoMessage() {}
 
 func (x *StreakReward) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[174]
+	mi := &file_pamlogix_proto_msgTypes[174]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -13613,7 +13622,7 @@ func (x *StreakReward) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StreakReward.ProtoReflect.Descriptor instead.
 func (*StreakReward) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{174}
+	return file_pamlogix_proto_rawDescGZIP(), []int{174}
 }
 
 func (x *StreakReward) GetCountMin() int64 {
@@ -13699,7 +13708,7 @@ type Streak struct {
 
 func (x *Streak) Reset() {
 	*x = Streak{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[175]
+	mi := &file_pamlogix_proto_msgTypes[175]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -13711,7 +13720,7 @@ func (x *Streak) String() string {
 func (*Streak) ProtoMessage() {}
 
 func (x *Streak) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[175]
+	mi := &file_pamlogix_proto_msgTypes[175]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -13724,7 +13733,7 @@ func (x *Streak) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Streak.ProtoReflect.Descriptor instead.
 func (*Streak) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{175}
+	return file_pamlogix_proto_rawDescGZIP(), []int{175}
 }
 
 func (x *Streak) GetId() string {
@@ -13899,7 +13908,7 @@ type StreaksList struct {
 
 func (x *StreaksList) Reset() {
 	*x = StreaksList{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[176]
+	mi := &file_pamlogix_proto_msgTypes[176]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -13911,7 +13920,7 @@ func (x *StreaksList) String() string {
 func (*StreaksList) ProtoMessage() {}
 
 func (x *StreaksList) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[176]
+	mi := &file_pamlogix_proto_msgTypes[176]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -13924,7 +13933,7 @@ func (x *StreaksList) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StreaksList.ProtoReflect.Descriptor instead.
 func (*StreaksList) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{176}
+	return file_pamlogix_proto_rawDescGZIP(), []int{176}
 }
 
 func (x *StreaksList) GetStreaks() map[string]*Streak {
@@ -13945,7 +13954,7 @@ type StreaksUpdateRequest struct {
 
 func (x *StreaksUpdateRequest) Reset() {
 	*x = StreaksUpdateRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[177]
+	mi := &file_pamlogix_proto_msgTypes[177]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -13957,7 +13966,7 @@ func (x *StreaksUpdateRequest) String() string {
 func (*StreaksUpdateRequest) ProtoMessage() {}
 
 func (x *StreaksUpdateRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[177]
+	mi := &file_pamlogix_proto_msgTypes[177]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -13970,7 +13979,7 @@ func (x *StreaksUpdateRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StreaksUpdateRequest.ProtoReflect.Descriptor instead.
 func (*StreaksUpdateRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{177}
+	return file_pamlogix_proto_rawDescGZIP(), []int{177}
 }
 
 func (x *StreaksUpdateRequest) GetUpdates() map[string]int64 {
@@ -13991,7 +14000,7 @@ type StreaksClaimRequest struct {
 
 func (x *StreaksClaimRequest) Reset() {
 	*x = StreaksClaimRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[178]
+	mi := &file_pamlogix_proto_msgTypes[178]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -14003,7 +14012,7 @@ func (x *StreaksClaimRequest) String() string {
 func (*StreaksClaimRequest) ProtoMessage() {}
 
 func (x *StreaksClaimRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[178]
+	mi := &file_pamlogix_proto_msgTypes[178]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -14016,7 +14025,7 @@ func (x *StreaksClaimRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StreaksClaimRequest.ProtoReflect.Descriptor instead.
 func (*StreaksClaimRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{178}
+	return file_pamlogix_proto_rawDescGZIP(), []int{178}
 }
 
 func (x *StreaksClaimRequest) GetIds() []string {
@@ -14037,7 +14046,7 @@ type StreaksResetRequest struct {
 
 func (x *StreaksResetRequest) Reset() {
 	*x = StreaksResetRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[179]
+	mi := &file_pamlogix_proto_msgTypes[179]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -14049,7 +14058,7 @@ func (x *StreaksResetRequest) String() string {
 func (*StreaksResetRequest) ProtoMessage() {}
 
 func (x *StreaksResetRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[179]
+	mi := &file_pamlogix_proto_msgTypes[179]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -14062,7 +14071,7 @@ func (x *StreaksResetRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StreaksResetRequest.ProtoReflect.Descriptor instead.
 func (*StreaksResetRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{179}
+	return file_pamlogix_proto_rawDescGZIP(), []int{179}
 }
 
 func (x *StreaksResetRequest) GetIds() []string {
@@ -14089,7 +14098,7 @@ type SyncInventoryItem struct {
 
 func (x *SyncInventoryItem) Reset() {
 	*x = SyncInventoryItem{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[180]
+	mi := &file_pamlogix_proto_msgTypes[180]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -14101,7 +14110,7 @@ func (x *SyncInventoryItem) String() string {
 func (*SyncInventoryItem) ProtoMessage() {}
 
 func (x *SyncInventoryItem) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[180]
+	mi := &file_pamlogix_proto_msgTypes[180]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -14114,7 +14123,7 @@ func (x *SyncInventoryItem) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SyncInventoryItem.ProtoReflect.Descriptor instead.
 func (*SyncInventoryItem) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{180}
+	return file_pamlogix_proto_rawDescGZIP(), []int{180}
 }
 
 func (x *SyncInventoryItem) GetItemId() string {
@@ -14156,7 +14165,7 @@ type SyncInventory struct {
 
 func (x *SyncInventory) Reset() {
 	*x = SyncInventory{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[181]
+	mi := &file_pamlogix_proto_msgTypes[181]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -14168,7 +14177,7 @@ func (x *SyncInventory) String() string {
 func (*SyncInventory) ProtoMessage() {}
 
 func (x *SyncInventory) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[181]
+	mi := &file_pamlogix_proto_msgTypes[181]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -14181,7 +14190,7 @@ func (x *SyncInventory) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SyncInventory.ProtoReflect.Descriptor instead.
 func (*SyncInventory) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{181}
+	return file_pamlogix_proto_rawDescGZIP(), []int{181}
 }
 
 func (x *SyncInventory) GetItems() map[string]*SyncInventoryItem {
@@ -14204,7 +14213,7 @@ type SyncEconomy struct {
 
 func (x *SyncEconomy) Reset() {
 	*x = SyncEconomy{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[182]
+	mi := &file_pamlogix_proto_msgTypes[182]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -14216,7 +14225,7 @@ func (x *SyncEconomy) String() string {
 func (*SyncEconomy) ProtoMessage() {}
 
 func (x *SyncEconomy) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[182]
+	mi := &file_pamlogix_proto_msgTypes[182]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -14229,7 +14238,7 @@ func (x *SyncEconomy) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SyncEconomy.ProtoReflect.Descriptor instead.
 func (*SyncEconomy) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{182}
+	return file_pamlogix_proto_rawDescGZIP(), []int{182}
 }
 
 func (x *SyncEconomy) GetCurrencies() map[string]int64 {
@@ -14265,7 +14274,7 @@ type SyncAchievementsUpdate struct {
 
 func (x *SyncAchievementsUpdate) Reset() {
 	*x = SyncAchievementsUpdate{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[183]
+	mi := &file_pamlogix_proto_msgTypes[183]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -14277,7 +14286,7 @@ func (x *SyncAchievementsUpdate) String() string {
 func (*SyncAchievementsUpdate) ProtoMessage() {}
 
 func (x *SyncAchievementsUpdate) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[183]
+	mi := &file_pamlogix_proto_msgTypes[183]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -14290,7 +14299,7 @@ func (x *SyncAchievementsUpdate) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SyncAchievementsUpdate.ProtoReflect.Descriptor instead.
 func (*SyncAchievementsUpdate) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{183}
+	return file_pamlogix_proto_rawDescGZIP(), []int{183}
 }
 
 func (x *SyncAchievementsUpdate) GetCount() int64 {
@@ -14339,7 +14348,7 @@ type SyncAchievements struct {
 
 func (x *SyncAchievements) Reset() {
 	*x = SyncAchievements{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[184]
+	mi := &file_pamlogix_proto_msgTypes[184]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -14351,7 +14360,7 @@ func (x *SyncAchievements) String() string {
 func (*SyncAchievements) ProtoMessage() {}
 
 func (x *SyncAchievements) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[184]
+	mi := &file_pamlogix_proto_msgTypes[184]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -14364,7 +14373,7 @@ func (x *SyncAchievements) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SyncAchievements.ProtoReflect.Descriptor instead.
 func (*SyncAchievements) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{184}
+	return file_pamlogix_proto_rawDescGZIP(), []int{184}
 }
 
 func (x *SyncAchievements) GetAchievements() map[string]*SyncAchievementsUpdate {
@@ -14387,7 +14396,7 @@ type SyncEnergyState struct {
 
 func (x *SyncEnergyState) Reset() {
 	*x = SyncEnergyState{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[185]
+	mi := &file_pamlogix_proto_msgTypes[185]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -14399,7 +14408,7 @@ func (x *SyncEnergyState) String() string {
 func (*SyncEnergyState) ProtoMessage() {}
 
 func (x *SyncEnergyState) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[185]
+	mi := &file_pamlogix_proto_msgTypes[185]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -14412,7 +14421,7 @@ func (x *SyncEnergyState) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SyncEnergyState.ProtoReflect.Descriptor instead.
 func (*SyncEnergyState) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{185}
+	return file_pamlogix_proto_rawDescGZIP(), []int{185}
 }
 
 func (x *SyncEnergyState) GetCount() int64 {
@@ -14442,7 +14451,7 @@ type SyncEnergy struct {
 
 func (x *SyncEnergy) Reset() {
 	*x = SyncEnergy{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[186]
+	mi := &file_pamlogix_proto_msgTypes[186]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -14454,7 +14463,7 @@ func (x *SyncEnergy) String() string {
 func (*SyncEnergy) ProtoMessage() {}
 
 func (x *SyncEnergy) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[186]
+	mi := &file_pamlogix_proto_msgTypes[186]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -14467,7 +14476,7 @@ func (x *SyncEnergy) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SyncEnergy.ProtoReflect.Descriptor instead.
 func (*SyncEnergy) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{186}
+	return file_pamlogix_proto_rawDescGZIP(), []int{186}
 }
 
 func (x *SyncEnergy) GetEnergies() map[string]*SyncEnergyState {
@@ -14499,7 +14508,7 @@ type SyncEventLeaderboardUpdate struct {
 
 func (x *SyncEventLeaderboardUpdate) Reset() {
 	*x = SyncEventLeaderboardUpdate{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[187]
+	mi := &file_pamlogix_proto_msgTypes[187]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -14511,7 +14520,7 @@ func (x *SyncEventLeaderboardUpdate) String() string {
 func (*SyncEventLeaderboardUpdate) ProtoMessage() {}
 
 func (x *SyncEventLeaderboardUpdate) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[187]
+	mi := &file_pamlogix_proto_msgTypes[187]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -14524,7 +14533,7 @@ func (x *SyncEventLeaderboardUpdate) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SyncEventLeaderboardUpdate.ProtoReflect.Descriptor instead.
 func (*SyncEventLeaderboardUpdate) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{187}
+	return file_pamlogix_proto_rawDescGZIP(), []int{187}
 }
 
 func (x *SyncEventLeaderboardUpdate) GetScore() int64 {
@@ -14559,7 +14568,7 @@ type SyncEventLeaderboards struct {
 
 func (x *SyncEventLeaderboards) Reset() {
 	*x = SyncEventLeaderboards{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[188]
+	mi := &file_pamlogix_proto_msgTypes[188]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -14571,7 +14580,7 @@ func (x *SyncEventLeaderboards) String() string {
 func (*SyncEventLeaderboards) ProtoMessage() {}
 
 func (x *SyncEventLeaderboards) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[188]
+	mi := &file_pamlogix_proto_msgTypes[188]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -14584,7 +14593,7 @@ func (x *SyncEventLeaderboards) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SyncEventLeaderboards.ProtoReflect.Descriptor instead.
 func (*SyncEventLeaderboards) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{188}
+	return file_pamlogix_proto_rawDescGZIP(), []int{188}
 }
 
 func (x *SyncEventLeaderboards) GetEventLeaderboards() map[string]*SyncEventLeaderboardUpdate {
@@ -14611,7 +14620,7 @@ type SyncProgressionUpdate struct {
 
 func (x *SyncProgressionUpdate) Reset() {
 	*x = SyncProgressionUpdate{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[189]
+	mi := &file_pamlogix_proto_msgTypes[189]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -14623,7 +14632,7 @@ func (x *SyncProgressionUpdate) String() string {
 func (*SyncProgressionUpdate) ProtoMessage() {}
 
 func (x *SyncProgressionUpdate) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[189]
+	mi := &file_pamlogix_proto_msgTypes[189]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -14636,7 +14645,7 @@ func (x *SyncProgressionUpdate) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SyncProgressionUpdate.ProtoReflect.Descriptor instead.
 func (*SyncProgressionUpdate) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{189}
+	return file_pamlogix_proto_rawDescGZIP(), []int{189}
 }
 
 func (x *SyncProgressionUpdate) GetCounts() map[string]int64 {
@@ -14678,7 +14687,7 @@ type SyncProgressions struct {
 
 func (x *SyncProgressions) Reset() {
 	*x = SyncProgressions{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[190]
+	mi := &file_pamlogix_proto_msgTypes[190]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -14690,7 +14699,7 @@ func (x *SyncProgressions) String() string {
 func (*SyncProgressions) ProtoMessage() {}
 
 func (x *SyncProgressions) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[190]
+	mi := &file_pamlogix_proto_msgTypes[190]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -14703,7 +14712,7 @@ func (x *SyncProgressions) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SyncProgressions.ProtoReflect.Descriptor instead.
 func (*SyncProgressions) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{190}
+	return file_pamlogix_proto_rawDescGZIP(), []int{190}
 }
 
 func (x *SyncProgressions) GetProgressions() map[string]*SyncProgressionUpdate {
@@ -14730,7 +14739,7 @@ type SyncTutorials struct {
 
 func (x *SyncTutorials) Reset() {
 	*x = SyncTutorials{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[191]
+	mi := &file_pamlogix_proto_msgTypes[191]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -14742,7 +14751,7 @@ func (x *SyncTutorials) String() string {
 func (*SyncTutorials) ProtoMessage() {}
 
 func (x *SyncTutorials) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[191]
+	mi := &file_pamlogix_proto_msgTypes[191]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -14755,7 +14764,7 @@ func (x *SyncTutorials) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SyncTutorials.ProtoReflect.Descriptor instead.
 func (*SyncTutorials) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{191}
+	return file_pamlogix_proto_rawDescGZIP(), []int{191}
 }
 
 func (x *SyncTutorials) GetAccepts() []string {
@@ -14803,7 +14812,7 @@ type SyncUnlockableUpdate struct {
 
 func (x *SyncUnlockableUpdate) Reset() {
 	*x = SyncUnlockableUpdate{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[192]
+	mi := &file_pamlogix_proto_msgTypes[192]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -14815,7 +14824,7 @@ func (x *SyncUnlockableUpdate) String() string {
 func (*SyncUnlockableUpdate) ProtoMessage() {}
 
 func (x *SyncUnlockableUpdate) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[192]
+	mi := &file_pamlogix_proto_msgTypes[192]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -14828,7 +14837,7 @@ func (x *SyncUnlockableUpdate) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SyncUnlockableUpdate.ProtoReflect.Descriptor instead.
 func (*SyncUnlockableUpdate) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{192}
+	return file_pamlogix_proto_rawDescGZIP(), []int{192}
 }
 
 func (x *SyncUnlockableUpdate) GetUnlockableId() string {
@@ -14872,7 +14881,7 @@ type SyncUnlockables struct {
 
 func (x *SyncUnlockables) Reset() {
 	*x = SyncUnlockables{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[193]
+	mi := &file_pamlogix_proto_msgTypes[193]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -14884,7 +14893,7 @@ func (x *SyncUnlockables) String() string {
 func (*SyncUnlockables) ProtoMessage() {}
 
 func (x *SyncUnlockables) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[193]
+	mi := &file_pamlogix_proto_msgTypes[193]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -14897,7 +14906,7 @@ func (x *SyncUnlockables) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SyncUnlockables.ProtoReflect.Descriptor instead.
 func (*SyncUnlockables) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{193}
+	return file_pamlogix_proto_rawDescGZIP(), []int{193}
 }
 
 func (x *SyncUnlockables) GetRemoves() []string {
@@ -14937,7 +14946,7 @@ type SyncStreakUpdate struct {
 
 func (x *SyncStreakUpdate) Reset() {
 	*x = SyncStreakUpdate{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[194]
+	mi := &file_pamlogix_proto_msgTypes[194]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -14949,7 +14958,7 @@ func (x *SyncStreakUpdate) String() string {
 func (*SyncStreakUpdate) ProtoMessage() {}
 
 func (x *SyncStreakUpdate) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[194]
+	mi := &file_pamlogix_proto_msgTypes[194]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -14962,7 +14971,7 @@ func (x *SyncStreakUpdate) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SyncStreakUpdate.ProtoReflect.Descriptor instead.
 func (*SyncStreakUpdate) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{194}
+	return file_pamlogix_proto_rawDescGZIP(), []int{194}
 }
 
 func (x *SyncStreakUpdate) GetCount() int64 {
@@ -15027,7 +15036,7 @@ type SyncStreaks struct {
 
 func (x *SyncStreaks) Reset() {
 	*x = SyncStreaks{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[195]
+	mi := &file_pamlogix_proto_msgTypes[195]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -15039,7 +15048,7 @@ func (x *SyncStreaks) String() string {
 func (*SyncStreaks) ProtoMessage() {}
 
 func (x *SyncStreaks) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[195]
+	mi := &file_pamlogix_proto_msgTypes[195]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -15052,7 +15061,7 @@ func (x *SyncStreaks) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SyncStreaks.ProtoReflect.Descriptor instead.
 func (*SyncStreaks) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{195}
+	return file_pamlogix_proto_rawDescGZIP(), []int{195}
 }
 
 func (x *SyncStreaks) GetResets() []string {
@@ -15098,7 +15107,7 @@ type SyncRequest struct {
 
 func (x *SyncRequest) Reset() {
 	*x = SyncRequest{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[196]
+	mi := &file_pamlogix_proto_msgTypes[196]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -15110,7 +15119,7 @@ func (x *SyncRequest) String() string {
 func (*SyncRequest) ProtoMessage() {}
 
 func (x *SyncRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[196]
+	mi := &file_pamlogix_proto_msgTypes[196]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -15123,7 +15132,7 @@ func (x *SyncRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SyncRequest.ProtoReflect.Descriptor instead.
 func (*SyncRequest) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{196}
+	return file_pamlogix_proto_rawDescGZIP(), []int{196}
 }
 
 func (x *SyncRequest) GetInventory() *SyncInventory {
@@ -15230,7 +15239,7 @@ type SyncResponse struct {
 
 func (x *SyncResponse) Reset() {
 	*x = SyncResponse{}
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[197]
+	mi := &file_pamlogix_proto_msgTypes[197]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -15242,7 +15251,7 @@ func (x *SyncResponse) String() string {
 func (*SyncResponse) ProtoMessage() {}
 
 func (x *SyncResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_pamlogix_pamlogix_proto_msgTypes[197]
+	mi := &file_pamlogix_proto_msgTypes[197]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -15255,7 +15264,7 @@ func (x *SyncResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SyncResponse.ProtoReflect.Descriptor instead.
 func (*SyncResponse) Descriptor() ([]byte, []int) {
-	return file_pamlogix_pamlogix_proto_rawDescGZIP(), []int{197}
+	return file_pamlogix_proto_rawDescGZIP(), []int{197}
 }
 
 func (x *SyncResponse) GetWallet() map[string]int64 {
@@ -15342,14 +15351,14 @@ func (x *SyncResponse) GetStreaks() *StreaksList {
 	return nil
 }
 
-var file_pamlogix_pamlogix_proto_extTypes = []protoimpl.ExtensionInfo{
+var file_pamlogix_proto_extTypes = []protoimpl.ExtensionInfo{
 	{
 		ExtendedType:  (*descriptorpb.EnumValueOptions)(nil),
 		ExtensionType: (*string)(nil),
 		Field:         1000,
 		Name:          "pamlogix.input",
 		Tag:           "bytes,1000,opt,name=input",
-		Filename:      "pamlogix/pamlogix.proto",
+		Filename:      "pamlogix.proto",
 	},
 	{
 		ExtendedType:  (*descriptorpb.EnumValueOptions)(nil),
@@ -15357,7 +15366,7 @@ var file_pamlogix_pamlogix_proto_extTypes = []protoimpl.ExtensionInfo{
 		Field:         1001,
 		Name:          "pamlogix.output",
 		Tag:           "bytes,1001,opt,name=output",
-		Filename:      "pamlogix/pamlogix.proto",
+		Filename:      "pamlogix.proto",
 	},
 }
 
@@ -15366,18 +15375,18 @@ var (
 	// The input proto message to the Nakama RPC.
 	//
 	// optional string input = 1000;
-	E_Input = &file_pamlogix_pamlogix_proto_extTypes[0]
+	E_Input = &file_pamlogix_proto_extTypes[0]
 	// The output proto message of the Nakama RPC.
 	//
 	// optional string output = 1001;
-	E_Output = &file_pamlogix_pamlogix_proto_extTypes[1]
+	E_Output = &file_pamlogix_proto_extTypes[1]
 )
 
-var File_pamlogix_pamlogix_proto protoreflect.FileDescriptor
+var File_pamlogix_proto protoreflect.FileDescriptor
 
-const file_pamlogix_pamlogix_proto_rawDesc = "" +
+const file_pamlogix_proto_rawDesc = "" +
 	"\n" +
-	"\x17pamlogix/pamlogix.proto\x12\bpamlogix\x1a google/protobuf/descriptor.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1egoogle/protobuf/wrappers.proto\"\x91\x02\n" +
+	"\x0epamlogix.proto\x12\bpamlogix\x1a google/protobuf/descriptor.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1egoogle/protobuf/wrappers.proto\"\x91\x02\n" +
 	"\x0fProgressionCost\x12:\n" +
 	"\x05items\x18\x01 \x03(\v2$.pamlogix.ProgressionCost.ItemsEntryR\x05items\x12I\n" +
 	"\n" +
@@ -16403,9 +16412,10 @@ const file_pamlogix_pamlogix_proto_rawDesc = "" +
 	"\x05value\x18\x02 \x01(\x05R\x05value:\x028\x01\"o\n" +
 	"\x11EnergySpendReward\x120\n" +
 	"\benergies\x18\x01 \x01(\v2\x14.pamlogix.EnergyListR\benergies\x12(\n" +
-	"\x06reward\x18\x02 \x01(\v2\x10.pamlogix.RewardR\x06reward\"\x95\x01\n" +
+	"\x06reward\x18\x02 \x01(\v2\x10.pamlogix.RewardR\x06reward\"\xd3\x01\n" +
 	"\x12EnergyGrantRequest\x12C\n" +
-	"\aamounts\x18\x01 \x03(\v2).pamlogix.EnergyGrantRequest.AmountsEntryR\aamounts\x1a:\n" +
+	"\aamounts\x18\x01 \x03(\v2).pamlogix.EnergyGrantRequest.AmountsEntryR\aamounts\x12<\n" +
+	"\tmodifiers\x18\x02 \x03(\v2\x1e.pamlogix.RewardEnergyModifierR\tmodifiers\x1a:\n" +
 	"\fAmountsEntry\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\x05R\x05value:\x028\x01\"\xc5\x01\n" +
@@ -16971,20 +16981,20 @@ const file_pamlogix_pamlogix_proto_rawDesc = "" +
 	"\x06output\x12!.google.protobuf.EnumValueOptions\x18\xe9\a \x01(\tR\x06output\x88\x01\x01B\x16Z\x14voidexforge/pamlogixb\x06proto3"
 
 var (
-	file_pamlogix_pamlogix_proto_rawDescOnce sync.Once
-	file_pamlogix_pamlogix_proto_rawDescData []byte
+	file_pamlogix_proto_rawDescOnce sync.Once
+	file_pamlogix_proto_rawDescData []byte
 )
 
-func file_pamlogix_pamlogix_proto_rawDescGZIP() []byte {
-	file_pamlogix_pamlogix_proto_rawDescOnce.Do(func() {
-		file_pamlogix_pamlogix_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_pamlogix_pamlogix_proto_rawDesc), len(file_pamlogix_pamlogix_proto_rawDesc)))
+func file_pamlogix_proto_rawDescGZIP() []byte {
+	file_pamlogix_proto_rawDescOnce.Do(func() {
+		file_pamlogix_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_pamlogix_proto_rawDesc), len(file_pamlogix_proto_rawDesc)))
 	})
-	return file_pamlogix_pamlogix_proto_rawDescData
+	return file_pamlogix_proto_rawDescData
 }
 
-var file_pamlogix_pamlogix_proto_enumTypes = make([]protoimpl.EnumInfo, 9)
-var file_pamlogix_pamlogix_proto_msgTypes = make([]protoimpl.MessageInfo, 305)
-var file_pamlogix_pamlogix_proto_goTypes = []any{
+var file_pamlogix_proto_enumTypes = make([]protoimpl.EnumInfo, 9)
+var file_pamlogix_proto_msgTypes = make([]protoimpl.MessageInfo, 305)
+var file_pamlogix_proto_goTypes = []any{
 	(RpcId)(0),                                       // 0: pamlogix.RpcId
 	(RpcSocketId)(0),                                 // 1: pamlogix.RpcSocketId
 	(ProgressionPreconditionsOperator)(0),            // 2: pamlogix.ProgressionPreconditionsOperator
@@ -17303,7 +17313,7 @@ var file_pamlogix_pamlogix_proto_goTypes = []any{
 	(*wrapperspb.Int32Value)(nil),                    // 315: google.protobuf.Int32Value
 	(*descriptorpb.EnumValueOptions)(nil),            // 316: google.protobuf.EnumValueOptions
 }
-var file_pamlogix_pamlogix_proto_depIdxs = []int32{
+var file_pamlogix_proto_depIdxs = []int32{
 	207, // 0: pamlogix.ProgressionCost.items:type_name -> pamlogix.ProgressionCost.ItemsEntry
 	208, // 1: pamlogix.ProgressionCost.currencies:type_name -> pamlogix.ProgressionCost.CurrenciesEntry
 	209, // 2: pamlogix.ProgressionPreconditions.counts:type_name -> pamlogix.ProgressionPreconditions.CountsEntry
@@ -17497,160 +17507,161 @@ var file_pamlogix_pamlogix_proto_depIdxs = []int32{
 	146, // 190: pamlogix.EnergySpendReward.energies:type_name -> pamlogix.EnergyList
 	29,  // 191: pamlogix.EnergySpendReward.reward:type_name -> pamlogix.Reward
 	283, // 192: pamlogix.EnergyGrantRequest.amounts:type_name -> pamlogix.EnergyGrantRequest.AmountsEntry
-	150, // 193: pamlogix.LeaderboardConfigList.leaderboard_configs:type_name -> pamlogix.LeaderboardConfig
-	8,   // 194: pamlogix.Tutorial.state:type_name -> pamlogix.TutorialState
-	284, // 195: pamlogix.Tutorial.additional_properties:type_name -> pamlogix.Tutorial.AdditionalPropertiesEntry
-	285, // 196: pamlogix.TutorialList.tutorials:type_name -> pamlogix.TutorialList.TutorialsEntry
-	160, // 197: pamlogix.TeamList.teams:type_name -> pamlogix.Team
-	286, // 198: pamlogix.UnlockableCost.items:type_name -> pamlogix.UnlockableCost.ItemsEntry
-	287, // 199: pamlogix.UnlockableCost.currencies:type_name -> pamlogix.UnlockableCost.CurrenciesEntry
-	166, // 200: pamlogix.Unlockable.start_cost:type_name -> pamlogix.UnlockableCost
-	166, // 201: pamlogix.Unlockable.cost:type_name -> pamlogix.UnlockableCost
-	29,  // 202: pamlogix.Unlockable.reward:type_name -> pamlogix.Reward
-	44,  // 203: pamlogix.Unlockable.available_rewards:type_name -> pamlogix.AvailableRewards
-	288, // 204: pamlogix.Unlockable.additional_properties:type_name -> pamlogix.Unlockable.AdditionalPropertiesEntry
-	289, // 205: pamlogix.UnlockableSlotCost.items:type_name -> pamlogix.UnlockableSlotCost.ItemsEntry
-	290, // 206: pamlogix.UnlockableSlotCost.currencies:type_name -> pamlogix.UnlockableSlotCost.CurrenciesEntry
-	167, // 207: pamlogix.UnlockablesList.unlockables:type_name -> pamlogix.Unlockable
-	167, // 208: pamlogix.UnlockablesList.overflow:type_name -> pamlogix.Unlockable
-	168, // 209: pamlogix.UnlockablesList.slot_cost:type_name -> pamlogix.UnlockableSlotCost
-	169, // 210: pamlogix.UnlockablesReward.unlockables:type_name -> pamlogix.UnlockablesList
-	29,  // 211: pamlogix.UnlockablesReward.reward:type_name -> pamlogix.Reward
-	44,  // 212: pamlogix.UnlockablesReward.available_rewards:type_name -> pamlogix.AvailableRewards
-	29,  // 213: pamlogix.SubAchievement.reward:type_name -> pamlogix.Reward
-	44,  // 214: pamlogix.SubAchievement.available_rewards:type_name -> pamlogix.AvailableRewards
-	291, // 215: pamlogix.SubAchievement.additional_properties:type_name -> pamlogix.SubAchievement.AdditionalPropertiesEntry
-	44,  // 216: pamlogix.Achievement.available_rewards:type_name -> pamlogix.AvailableRewards
-	29,  // 217: pamlogix.Achievement.reward:type_name -> pamlogix.Reward
-	44,  // 218: pamlogix.Achievement.available_total_reward:type_name -> pamlogix.AvailableRewards
-	29,  // 219: pamlogix.Achievement.total_reward:type_name -> pamlogix.Reward
-	292, // 220: pamlogix.Achievement.sub_achievements:type_name -> pamlogix.Achievement.SubAchievementsEntry
-	293, // 221: pamlogix.Achievement.additional_properties:type_name -> pamlogix.Achievement.AdditionalPropertiesEntry
-	294, // 222: pamlogix.AchievementList.achievements:type_name -> pamlogix.AchievementList.AchievementsEntry
-	295, // 223: pamlogix.AchievementList.repeat_achievements:type_name -> pamlogix.AchievementList.RepeatAchievementsEntry
-	296, // 224: pamlogix.AchievementsUpdateAck.achievements:type_name -> pamlogix.AchievementsUpdateAck.AchievementsEntry
-	297, // 225: pamlogix.AchievementsUpdateAck.repeat_achievements:type_name -> pamlogix.AchievementsUpdateAck.RepeatAchievementsEntry
-	298, // 226: pamlogix.AchievementsUpdateRequest.achievements:type_name -> pamlogix.AchievementsUpdateRequest.AchievementsEntry
-	44,  // 227: pamlogix.StreakAvailableReward.reward:type_name -> pamlogix.AvailableRewards
-	29,  // 228: pamlogix.StreakReward.reward:type_name -> pamlogix.Reward
-	182, // 229: pamlogix.Streak.rewards:type_name -> pamlogix.StreakAvailableReward
-	182, // 230: pamlogix.Streak.available_rewards:type_name -> pamlogix.StreakAvailableReward
-	183, // 231: pamlogix.Streak.claimed_rewards:type_name -> pamlogix.StreakReward
-	299, // 232: pamlogix.StreaksList.streaks:type_name -> pamlogix.StreaksList.StreaksEntry
-	300, // 233: pamlogix.StreaksUpdateRequest.updates:type_name -> pamlogix.StreaksUpdateRequest.UpdatesEntry
-	301, // 234: pamlogix.SyncInventoryItem.string_properties:type_name -> pamlogix.SyncInventoryItem.StringPropertiesEntry
-	302, // 235: pamlogix.SyncInventoryItem.numeric_properties:type_name -> pamlogix.SyncInventoryItem.NumericPropertiesEntry
-	303, // 236: pamlogix.SyncInventory.items:type_name -> pamlogix.SyncInventory.ItemsEntry
-	304, // 237: pamlogix.SyncEconomy.currencies:type_name -> pamlogix.SyncEconomy.CurrenciesEntry
-	28,  // 238: pamlogix.SyncEconomy.modifiers:type_name -> pamlogix.ActiveRewardModifier
-	305, // 239: pamlogix.SyncAchievements.achievements:type_name -> pamlogix.SyncAchievements.AchievementsEntry
-	306, // 240: pamlogix.SyncEnergy.energies:type_name -> pamlogix.SyncEnergy.EnergiesEntry
-	144, // 241: pamlogix.SyncEnergy.modifiers:type_name -> pamlogix.EnergyModifier
-	307, // 242: pamlogix.SyncEventLeaderboards.event_leaderboards:type_name -> pamlogix.SyncEventLeaderboards.EventLeaderboardsEntry
-	308, // 243: pamlogix.SyncProgressionUpdate.counts:type_name -> pamlogix.SyncProgressionUpdate.CountsEntry
-	9,   // 244: pamlogix.SyncProgressionUpdate.cost:type_name -> pamlogix.ProgressionCost
-	309, // 245: pamlogix.SyncProgressions.progressions:type_name -> pamlogix.SyncProgressions.ProgressionsEntry
-	310, // 246: pamlogix.SyncTutorials.updates:type_name -> pamlogix.SyncTutorials.UpdatesEntry
-	311, // 247: pamlogix.SyncUnlockables.updates:type_name -> pamlogix.SyncUnlockables.UpdatesEntry
-	183, // 248: pamlogix.SyncStreakUpdate.claimed_rewards:type_name -> pamlogix.StreakReward
-	312, // 249: pamlogix.SyncStreaks.updates:type_name -> pamlogix.SyncStreaks.UpdatesEntry
-	190, // 250: pamlogix.SyncRequest.inventory:type_name -> pamlogix.SyncInventory
-	191, // 251: pamlogix.SyncRequest.economy:type_name -> pamlogix.SyncEconomy
-	193, // 252: pamlogix.SyncRequest.achievements:type_name -> pamlogix.SyncAchievements
-	195, // 253: pamlogix.SyncRequest.energy:type_name -> pamlogix.SyncEnergy
-	197, // 254: pamlogix.SyncRequest.event_leaderboards:type_name -> pamlogix.SyncEventLeaderboards
-	199, // 255: pamlogix.SyncRequest.progressions:type_name -> pamlogix.SyncProgressions
-	20,  // 256: pamlogix.SyncRequest.stats:type_name -> pamlogix.StatUpdateRequest
-	200, // 257: pamlogix.SyncRequest.tutorials:type_name -> pamlogix.SyncTutorials
-	202, // 258: pamlogix.SyncRequest.unlockables:type_name -> pamlogix.SyncUnlockables
-	204, // 259: pamlogix.SyncRequest.streaks:type_name -> pamlogix.SyncStreaks
-	313, // 260: pamlogix.SyncResponse.wallet:type_name -> pamlogix.SyncResponse.WalletEntry
-	104, // 261: pamlogix.SyncResponse.inventory:type_name -> pamlogix.Inventory
-	177, // 262: pamlogix.SyncResponse.achievements:type_name -> pamlogix.AchievementList
-	146, // 263: pamlogix.SyncResponse.energy:type_name -> pamlogix.EnergyList
-	80,  // 264: pamlogix.SyncResponse.event_leaderboards:type_name -> pamlogix.EventLeaderboard
-	14,  // 265: pamlogix.SyncResponse.progressions:type_name -> pamlogix.ProgressionList
-	22,  // 266: pamlogix.SyncResponse.stats:type_name -> pamlogix.StatList
-	153, // 267: pamlogix.SyncResponse.tutorials:type_name -> pamlogix.TutorialList
-	169, // 268: pamlogix.SyncResponse.unlockables:type_name -> pamlogix.UnlockablesList
-	28,  // 269: pamlogix.SyncResponse.active_reward_modifiers:type_name -> pamlogix.ActiveRewardModifier
-	185, // 270: pamlogix.SyncResponse.streaks:type_name -> pamlogix.StreaksList
-	12,  // 271: pamlogix.ProgressionList.ProgressionsEntry.value:type_name -> pamlogix.Progression
-	13,  // 272: pamlogix.ProgressionList.DeltasEntry.value:type_name -> pamlogix.ProgressionDelta
-	12,  // 273: pamlogix.ProgressionGetRequest.ProgressionsEntry.value:type_name -> pamlogix.Progression
-	21,  // 274: pamlogix.StatList.PublicEntry.value:type_name -> pamlogix.Stat
-	21,  // 275: pamlogix.StatList.PrivateEntry.value:type_name -> pamlogix.Stat
-	25,  // 276: pamlogix.Reward.ItemInstancesEntry.value:type_name -> pamlogix.RewardInventoryItem
-	35,  // 277: pamlogix.AvailableRewardsStringProperty.OptionsEntry.value:type_name -> pamlogix.AvailableRewardsStringPropertyOption
-	34,  // 278: pamlogix.AvailableRewardsItem.NumericPropertiesEntry.value:type_name -> pamlogix.RewardRangeDouble
-	36,  // 279: pamlogix.AvailableRewardsItem.StringPropertiesEntry.value:type_name -> pamlogix.AvailableRewardsStringProperty
-	37,  // 280: pamlogix.AvailableRewardsContents.ItemsEntry.value:type_name -> pamlogix.AvailableRewardsItem
-	39,  // 281: pamlogix.AvailableRewardsContents.CurrenciesEntry.value:type_name -> pamlogix.AvailableRewardsCurrency
-	40,  // 282: pamlogix.AvailableRewardsContents.EnergiesEntry.value:type_name -> pamlogix.AvailableRewardsEnergy
-	45,  // 283: pamlogix.Incentive.ClaimsEntry.value:type_name -> pamlogix.IncentiveClaim
-	69,  // 284: pamlogix.ChallengeTemplates.TemplatesEntry.value:type_name -> pamlogix.ChallengeTemplate
-	78,  // 285: pamlogix.EventLeaderboard.RewardTiersEntry.value:type_name -> pamlogix.EventLeaderboardRewardTiers
-	79,  // 286: pamlogix.EventLeaderboard.ChangeZonesEntry.value:type_name -> pamlogix.EventLeaderboardChangeZone
-	88,  // 287: pamlogix.EconomyDonationClaimRequest.DonationsEntry.value:type_name -> pamlogix.EconomyDonationClaimRequestDetails
-	30,  // 288: pamlogix.EconomyDonationClaimRewards.ClaimedRewardsEntry.value:type_name -> pamlogix.RewardList
-	87,  // 289: pamlogix.EconomyDonationsByUserList.UserDonationsEntry.value:type_name -> pamlogix.EconomyDonationsList
-	85,  // 290: pamlogix.EconomyList.DonationsEntry.value:type_name -> pamlogix.EconomyDonation
-	102, // 291: pamlogix.InventoryUpdateItemsRequest.ItemUpdatesEntry.value:type_name -> pamlogix.InventoryUpdateItemProperties
-	99,  // 292: pamlogix.Inventory.ItemsEntry.value:type_name -> pamlogix.InventoryItem
-	30,  // 293: pamlogix.InventoryConsumeRewards.RewardsEntry.value:type_name -> pamlogix.RewardList
-	30,  // 294: pamlogix.InventoryConsumeRewards.InstanceRewardsEntry.value:type_name -> pamlogix.RewardList
-	99,  // 295: pamlogix.InventoryList.ItemsEntry.value:type_name -> pamlogix.InventoryItem
-	113, // 296: pamlogix.AuctionTemplate.ConditionsEntry.value:type_name -> pamlogix.AuctionTemplateCondition
-	114, // 297: pamlogix.AuctionTemplates.TemplatesEntry.value:type_name -> pamlogix.AuctionTemplate
-	145, // 298: pamlogix.EnergyList.EnergiesEntry.value:type_name -> pamlogix.Energy
-	152, // 299: pamlogix.TutorialList.TutorialsEntry.value:type_name -> pamlogix.Tutorial
-	175, // 300: pamlogix.Achievement.SubAchievementsEntry.value:type_name -> pamlogix.SubAchievement
-	176, // 301: pamlogix.AchievementList.AchievementsEntry.value:type_name -> pamlogix.Achievement
-	176, // 302: pamlogix.AchievementList.RepeatAchievementsEntry.value:type_name -> pamlogix.Achievement
-	176, // 303: pamlogix.AchievementsUpdateAck.AchievementsEntry.value:type_name -> pamlogix.Achievement
-	176, // 304: pamlogix.AchievementsUpdateAck.RepeatAchievementsEntry.value:type_name -> pamlogix.Achievement
-	184, // 305: pamlogix.StreaksList.StreaksEntry.value:type_name -> pamlogix.Streak
-	189, // 306: pamlogix.SyncInventory.ItemsEntry.value:type_name -> pamlogix.SyncInventoryItem
-	192, // 307: pamlogix.SyncAchievements.AchievementsEntry.value:type_name -> pamlogix.SyncAchievementsUpdate
-	194, // 308: pamlogix.SyncEnergy.EnergiesEntry.value:type_name -> pamlogix.SyncEnergyState
-	196, // 309: pamlogix.SyncEventLeaderboards.EventLeaderboardsEntry.value:type_name -> pamlogix.SyncEventLeaderboardUpdate
-	198, // 310: pamlogix.SyncProgressions.ProgressionsEntry.value:type_name -> pamlogix.SyncProgressionUpdate
-	201, // 311: pamlogix.SyncUnlockables.UpdatesEntry.value:type_name -> pamlogix.SyncUnlockableUpdate
-	203, // 312: pamlogix.SyncStreaks.UpdatesEntry.value:type_name -> pamlogix.SyncStreakUpdate
-	316, // 313: pamlogix.input:extendee -> google.protobuf.EnumValueOptions
-	316, // 314: pamlogix.output:extendee -> google.protobuf.EnumValueOptions
-	315, // [315:315] is the sub-list for method output_type
-	315, // [315:315] is the sub-list for method input_type
-	315, // [315:315] is the sub-list for extension type_name
-	313, // [313:315] is the sub-list for extension extendee
-	0,   // [0:313] is the sub-list for field type_name
+	26,  // 193: pamlogix.EnergyGrantRequest.modifiers:type_name -> pamlogix.RewardEnergyModifier
+	150, // 194: pamlogix.LeaderboardConfigList.leaderboard_configs:type_name -> pamlogix.LeaderboardConfig
+	8,   // 195: pamlogix.Tutorial.state:type_name -> pamlogix.TutorialState
+	284, // 196: pamlogix.Tutorial.additional_properties:type_name -> pamlogix.Tutorial.AdditionalPropertiesEntry
+	285, // 197: pamlogix.TutorialList.tutorials:type_name -> pamlogix.TutorialList.TutorialsEntry
+	160, // 198: pamlogix.TeamList.teams:type_name -> pamlogix.Team
+	286, // 199: pamlogix.UnlockableCost.items:type_name -> pamlogix.UnlockableCost.ItemsEntry
+	287, // 200: pamlogix.UnlockableCost.currencies:type_name -> pamlogix.UnlockableCost.CurrenciesEntry
+	166, // 201: pamlogix.Unlockable.start_cost:type_name -> pamlogix.UnlockableCost
+	166, // 202: pamlogix.Unlockable.cost:type_name -> pamlogix.UnlockableCost
+	29,  // 203: pamlogix.Unlockable.reward:type_name -> pamlogix.Reward
+	44,  // 204: pamlogix.Unlockable.available_rewards:type_name -> pamlogix.AvailableRewards
+	288, // 205: pamlogix.Unlockable.additional_properties:type_name -> pamlogix.Unlockable.AdditionalPropertiesEntry
+	289, // 206: pamlogix.UnlockableSlotCost.items:type_name -> pamlogix.UnlockableSlotCost.ItemsEntry
+	290, // 207: pamlogix.UnlockableSlotCost.currencies:type_name -> pamlogix.UnlockableSlotCost.CurrenciesEntry
+	167, // 208: pamlogix.UnlockablesList.unlockables:type_name -> pamlogix.Unlockable
+	167, // 209: pamlogix.UnlockablesList.overflow:type_name -> pamlogix.Unlockable
+	168, // 210: pamlogix.UnlockablesList.slot_cost:type_name -> pamlogix.UnlockableSlotCost
+	169, // 211: pamlogix.UnlockablesReward.unlockables:type_name -> pamlogix.UnlockablesList
+	29,  // 212: pamlogix.UnlockablesReward.reward:type_name -> pamlogix.Reward
+	44,  // 213: pamlogix.UnlockablesReward.available_rewards:type_name -> pamlogix.AvailableRewards
+	29,  // 214: pamlogix.SubAchievement.reward:type_name -> pamlogix.Reward
+	44,  // 215: pamlogix.SubAchievement.available_rewards:type_name -> pamlogix.AvailableRewards
+	291, // 216: pamlogix.SubAchievement.additional_properties:type_name -> pamlogix.SubAchievement.AdditionalPropertiesEntry
+	44,  // 217: pamlogix.Achievement.available_rewards:type_name -> pamlogix.AvailableRewards
+	29,  // 218: pamlogix.Achievement.reward:type_name -> pamlogix.Reward
+	44,  // 219: pamlogix.Achievement.available_total_reward:type_name -> pamlogix.AvailableRewards
+	29,  // 220: pamlogix.Achievement.total_reward:type_name -> pamlogix.Reward
+	292, // 221: pamlogix.Achievement.sub_achievements:type_name -> pamlogix.Achievement.SubAchievementsEntry
+	293, // 222: pamlogix.Achievement.additional_properties:type_name -> pamlogix.Achievement.AdditionalPropertiesEntry
+	294, // 223: pamlogix.AchievementList.achievements:type_name -> pamlogix.AchievementList.AchievementsEntry
+	295, // 224: pamlogix.AchievementList.repeat_achievements:type_name -> pamlogix.AchievementList.RepeatAchievementsEntry
+	296, // 225: pamlogix.AchievementsUpdateAck.achievements:type_name -> pamlogix.AchievementsUpdateAck.AchievementsEntry
+	297, // 226: pamlogix.AchievementsUpdateAck.repeat_achievements:type_name -> pamlogix.AchievementsUpdateAck.RepeatAchievementsEntry
+	298, // 227: pamlogix.AchievementsUpdateRequest.achievements:type_name -> pamlogix.AchievementsUpdateRequest.AchievementsEntry
+	44,  // 228: pamlogix.StreakAvailableReward.reward:type_name -> pamlogix.AvailableRewards
+	29,  // 229: pamlogix.StreakReward.reward:type_name -> pamlogix.Reward
+	182, // 230: pamlogix.Streak.rewards:type_name -> pamlogix.StreakAvailableReward
+	182, // 231: pamlogix.Streak.available_rewards:type_name -> pamlogix.StreakAvailableReward
+	183, // 232: pamlogix.Streak.claimed_rewards:type_name -> pamlogix.StreakReward
+	299, // 233: pamlogix.StreaksList.streaks:type_name -> pamlogix.StreaksList.StreaksEntry
+	300, // 234: pamlogix.StreaksUpdateRequest.updates:type_name -> pamlogix.StreaksUpdateRequest.UpdatesEntry
+	301, // 235: pamlogix.SyncInventoryItem.string_properties:type_name -> pamlogix.SyncInventoryItem.StringPropertiesEntry
+	302, // 236: pamlogix.SyncInventoryItem.numeric_properties:type_name -> pamlogix.SyncInventoryItem.NumericPropertiesEntry
+	303, // 237: pamlogix.SyncInventory.items:type_name -> pamlogix.SyncInventory.ItemsEntry
+	304, // 238: pamlogix.SyncEconomy.currencies:type_name -> pamlogix.SyncEconomy.CurrenciesEntry
+	28,  // 239: pamlogix.SyncEconomy.modifiers:type_name -> pamlogix.ActiveRewardModifier
+	305, // 240: pamlogix.SyncAchievements.achievements:type_name -> pamlogix.SyncAchievements.AchievementsEntry
+	306, // 241: pamlogix.SyncEnergy.energies:type_name -> pamlogix.SyncEnergy.EnergiesEntry
+	144, // 242: pamlogix.SyncEnergy.modifiers:type_name -> pamlogix.EnergyModifier
+	307, // 243: pamlogix.SyncEventLeaderboards.event_leaderboards:type_name -> pamlogix.SyncEventLeaderboards.EventLeaderboardsEntry
+	308, // 244: pamlogix.SyncProgressionUpdate.counts:type_name -> pamlogix.SyncProgressionUpdate.CountsEntry
+	9,   // 245: pamlogix.SyncProgressionUpdate.cost:type_name -> pamlogix.ProgressionCost
+	309, // 246: pamlogix.SyncProgressions.progressions:type_name -> pamlogix.SyncProgressions.ProgressionsEntry
+	310, // 247: pamlogix.SyncTutorials.updates:type_name -> pamlogix.SyncTutorials.UpdatesEntry
+	311, // 248: pamlogix.SyncUnlockables.updates:type_name -> pamlogix.SyncUnlockables.UpdatesEntry
+	183, // 249: pamlogix.SyncStreakUpdate.claimed_rewards:type_name -> pamlogix.StreakReward
+	312, // 250: pamlogix.SyncStreaks.updates:type_name -> pamlogix.SyncStreaks.UpdatesEntry
+	190, // 251: pamlogix.SyncRequest.inventory:type_name -> pamlogix.SyncInventory
+	191, // 252: pamlogix.SyncRequest.economy:type_name -> pamlogix.SyncEconomy
+	193, // 253: pamlogix.SyncRequest.achievements:type_name -> pamlogix.SyncAchievements
+	195, // 254: pamlogix.SyncRequest.energy:type_name -> pamlogix.SyncEnergy
+	197, // 255: pamlogix.SyncRequest.event_leaderboards:type_name -> pamlogix.SyncEventLeaderboards
+	199, // 256: pamlogix.SyncRequest.progressions:type_name -> pamlogix.SyncProgressions
+	20,  // 257: pamlogix.SyncRequest.stats:type_name -> pamlogix.StatUpdateRequest
+	200, // 258: pamlogix.SyncRequest.tutorials:type_name -> pamlogix.SyncTutorials
+	202, // 259: pamlogix.SyncRequest.unlockables:type_name -> pamlogix.SyncUnlockables
+	204, // 260: pamlogix.SyncRequest.streaks:type_name -> pamlogix.SyncStreaks
+	313, // 261: pamlogix.SyncResponse.wallet:type_name -> pamlogix.SyncResponse.WalletEntry
+	104, // 262: pamlogix.SyncResponse.inventory:type_name -> pamlogix.Inventory
+	177, // 263: pamlogix.SyncResponse.achievements:type_name -> pamlogix.AchievementList
+	146, // 264: pamlogix.SyncResponse.energy:type_name -> pamlogix.EnergyList
+	80,  // 265: pamlogix.SyncResponse.event_leaderboards:type_name -> pamlogix.EventLeaderboard
+	14,  // 266: pamlogix.SyncResponse.progressions:type_name -> pamlogix.ProgressionList
+	22,  // 267: pamlogix.SyncResponse.stats:type_name -> pamlogix.StatList
+	153, // 268: pamlogix.SyncResponse.tutorials:type_name -> pamlogix.TutorialList
+	169, // 269: pamlogix.SyncResponse.unlockables:type_name -> pamlogix.UnlockablesList
+	28,  // 270: pamlogix.SyncResponse.active_reward_modifiers:type_name -> pamlogix.ActiveRewardModifier
+	185, // 271: pamlogix.SyncResponse.streaks:type_name -> pamlogix.StreaksList
+	12,  // 272: pamlogix.ProgressionList.ProgressionsEntry.value:type_name -> pamlogix.Progression
+	13,  // 273: pamlogix.ProgressionList.DeltasEntry.value:type_name -> pamlogix.ProgressionDelta
+	12,  // 274: pamlogix.ProgressionGetRequest.ProgressionsEntry.value:type_name -> pamlogix.Progression
+	21,  // 275: pamlogix.StatList.PublicEntry.value:type_name -> pamlogix.Stat
+	21,  // 276: pamlogix.StatList.PrivateEntry.value:type_name -> pamlogix.Stat
+	25,  // 277: pamlogix.Reward.ItemInstancesEntry.value:type_name -> pamlogix.RewardInventoryItem
+	35,  // 278: pamlogix.AvailableRewardsStringProperty.OptionsEntry.value:type_name -> pamlogix.AvailableRewardsStringPropertyOption
+	34,  // 279: pamlogix.AvailableRewardsItem.NumericPropertiesEntry.value:type_name -> pamlogix.RewardRangeDouble
+	36,  // 280: pamlogix.AvailableRewardsItem.StringPropertiesEntry.value:type_name -> pamlogix.AvailableRewardsStringProperty
+	37,  // 281: pamlogix.AvailableRewardsContents.ItemsEntry.value:type_name -> pamlogix.AvailableRewardsItem
+	39,  // 282: pamlogix.AvailableRewardsContents.CurrenciesEntry.value:type_name -> pamlogix.AvailableRewardsCurrency
+	40,  // 283: pamlogix.AvailableRewardsContents.EnergiesEntry.value:type_name -> pamlogix.AvailableRewardsEnergy
+	45,  // 284: pamlogix.Incentive.ClaimsEntry.value:type_name -> pamlogix.IncentiveClaim
+	69,  // 285: pamlogix.ChallengeTemplates.TemplatesEntry.value:type_name -> pamlogix.ChallengeTemplate
+	78,  // 286: pamlogix.EventLeaderboard.RewardTiersEntry.value:type_name -> pamlogix.EventLeaderboardRewardTiers
+	79,  // 287: pamlogix.EventLeaderboard.ChangeZonesEntry.value:type_name -> pamlogix.EventLeaderboardChangeZone
+	88,  // 288: pamlogix.EconomyDonationClaimRequest.DonationsEntry.value:type_name -> pamlogix.EconomyDonationClaimRequestDetails
+	30,  // 289: pamlogix.EconomyDonationClaimRewards.ClaimedRewardsEntry.value:type_name -> pamlogix.RewardList
+	87,  // 290: pamlogix.EconomyDonationsByUserList.UserDonationsEntry.value:type_name -> pamlogix.EconomyDonationsList
+	85,  // 291: pamlogix.EconomyList.DonationsEntry.value:type_name -> pamlogix.EconomyDonation
+	102, // 292: pamlogix.InventoryUpdateItemsRequest.ItemUpdatesEntry.value:type_name -> pamlogix.InventoryUpdateItemProperties
+	99,  // 293: pamlogix.Inventory.ItemsEntry.value:type_name -> pamlogix.InventoryItem
+	30,  // 294: pamlogix.InventoryConsumeRewards.RewardsEntry.value:type_name -> pamlogix.RewardList
+	30,  // 295: pamlogix.InventoryConsumeRewards.InstanceRewardsEntry.value:type_name -> pamlogix.RewardList
+	99,  // 296: pamlogix.InventoryList.ItemsEntry.value:type_name -> pamlogix.InventoryItem
+	113, // 297: pamlogix.AuctionTemplate.ConditionsEntry.value:type_name -> pamlogix.AuctionTemplateCondition
+	114, // 298: pamlogix.AuctionTemplates.TemplatesEntry.value:type_name -> pamlogix.AuctionTemplate
+	145, // 299: pamlogix.EnergyList.EnergiesEntry.value:type_name -> pamlogix.Energy
+	152, // 300: pamlogix.TutorialList.TutorialsEntry.value:type_name -> pamlogix.Tutorial
+	175, // 301: pamlogix.Achievement.SubAchievementsEntry.value:type_name -> pamlogix.SubAchievement
+	176, // 302: pamlogix.AchievementList.AchievementsEntry.value:type_name -> pamlogix.Achievement
+	176, // 303: pamlogix.AchievementList.RepeatAchievementsEntry.value:type_name -> pamlogix.Achievement
+	176, // 304: pamlogix.AchievementsUpdateAck.AchievementsEntry.value:type_name -> pamlogix.Achievement
+	176, // 305: pamlogix.AchievementsUpdateAck.RepeatAchievementsEntry.value:type_name -> pamlogix.Achievement
+	184, // 306: pamlogix.StreaksList.StreaksEntry.value:type_name -> pamlogix.Streak
+	189, // 307: pamlogix.SyncInventory.ItemsEntry.value:type_name -> pamlogix.SyncInventoryItem
+	192, // 308: pamlogix.SyncAchievements.AchievementsEntry.value:type_name -> pamlogix.SyncAchievementsUpdate
+	194, // 309: pamlogix.SyncEnergy.EnergiesEntry.value:type_name -> pamlogix.SyncEnergyState
+	196, // 310: pamlogix.SyncEventLeaderboards.EventLeaderboardsEntry.value:type_name -> pamlogix.SyncEventLeaderboardUpdate
+	198, // 311: pamlogix.SyncProgressions.ProgressionsEntry.value:type_name -> pamlogix.SyncProgressionUpdate
+	201, // 312: pamlogix.SyncUnlockables.UpdatesEntry.value:type_name -> pamlogix.SyncUnlockableUpdate
+	203, // 313: pamlogix.SyncStreaks.UpdatesEntry.value:type_name -> pamlogix.SyncStreakUpdate
+	316, // 314: pamlogix.input:extendee -> google.protobuf.EnumValueOptions
+	316, // 315: pamlogix.output:extendee -> google.protobuf.EnumValueOptions
+	316, // [316:316] is the sub-list for method output_type
+	316, // [316:316] is the sub-list for method input_type
+	316, // [316:316] is the sub-list for extension type_name
+	314, // [314:316] is the sub-list for extension extendee
+	0,   // [0:314] is the sub-list for field type_name
 }
 
-func init() { file_pamlogix_pamlogix_proto_init() }
-func file_pamlogix_pamlogix_proto_init() {
-	if File_pamlogix_pamlogix_proto != nil {
+func init() { file_pamlogix_proto_init() }
+func file_pamlogix_proto_init() {
+	if File_pamlogix_proto != nil {
 		return
 	}
-	file_pamlogix_pamlogix_proto_msgTypes[111].OneofWrappers = []any{
+	file_pamlogix_proto_msgTypes[111].OneofWrappers = []any{
 		(*StreamEnvelope_AuctionBid)(nil),
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_pamlogix_pamlogix_proto_rawDesc), len(file_pamlogix_pamlogix_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_pamlogix_proto_rawDesc), len(file_pamlogix_proto_rawDesc)),
 			NumEnums:      9,
 			NumMessages:   305,
 			NumExtensions: 2,
 			NumServices:   0,
 		},
-		GoTypes:           file_pamlogix_pamlogix_proto_goTypes,
-		DependencyIndexes: file_pamlogix_pamlogix_proto_depIdxs,
-		EnumInfos:         file_pamlogix_pamlogix_proto_enumTypes,
-		MessageInfos:      file_pamlogix_pamlogix_proto_msgTypes,
-		ExtensionInfos:    file_pamlogix_pamlogix_proto_extTypes,
+		GoTypes:           file_pamlogix_proto_goTypes,
+		DependencyIndexes: file_pamlogix_proto_depIdxs,
+		EnumInfos:         file_pamlogix_proto_enumTypes,
+		MessageInfos:      file_pamlogix_proto_msgTypes,
+		ExtensionInfos:    file_pamlogix_proto_extTypes,
 	}.Build()
-	File_pamlogix_pamlogix_proto = out.File
-	file_pamlogix_pamlogix_proto_goTypes = nil
-	file_pamlogix_pamlogix_proto_depIdxs = nil
+	File_pamlogix_proto = out.File
+	file_pamlogix_proto_goTypes = nil
+	file_pamlogix_proto_depIdxs = nil
 }
