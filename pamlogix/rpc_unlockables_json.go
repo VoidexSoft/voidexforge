@@ -307,9 +307,7 @@ func rpcUnlockablesQueueSetJson(p *pamlogixImpl) func(ctx context.Context, logge
 			return "", runtime.NewError("user id not found in context", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
 		}
 
-		var request struct {
-			InstanceIds []string `json:"instanceIds"`
-		}
+		var request UnlockablesQueueSetRequest
 		if err := json.Unmarshal([]byte(payload), &request); err != nil {
 			logger.Error("Failed to unmarshal UnlockablesQueueSetRequest from JSON: %v", err)
 			return "", runtime.NewError("failed to unmarshal unlockables queue set request", INVALID_ARGUMENT_ERROR_CODE) // INVALID_ARGUMENT
