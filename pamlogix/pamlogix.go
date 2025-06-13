@@ -281,9 +281,9 @@ func (p *pamlogixImpl) initSystem(ctx context.Context, logger runtime.Logger, nk
 
 	// 4. Register RPCs if requested
 	if config.GetRegister() {
-		if err := p.registerSystemRpcs(initializer, config.GetType()); err != nil {
-			return err
-		}
+		//if err := p.registerSystemRpcs(initializer, config.GetType()); err != nil {
+		//	return err
+		//}
 		if err := p.registerSystemRpcs_Json(initializer, config.GetType()); err != nil {
 			return err
 		}
@@ -745,261 +745,261 @@ func (p *pamlogixImpl) registerSystemRpcs_Json(initializer runtime.Initializer, 
 	switch systemType {
 	case SystemTypeAchievements:
 		// Register Achievements system JSON RPCs
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_ACHIEVEMENTS_CLAIM.String()+"_Json", rpcAchievementsClaim_Json(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_ACHIEVEMENTS_CLAIM.String(), rpcAchievementsClaim_Json(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_ACHIEVEMENTS_GET.String()+"_Json", rpcAchievementsGet_Json(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_ACHIEVEMENTS_GET.String(), rpcAchievementsGet_Json(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_ACHIEVEMENTS_UPDATE.String()+"_Json", rpcAchievementsUpdate_Json(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_ACHIEVEMENTS_UPDATE.String(), rpcAchievementsUpdate_Json(p)); err != nil {
 			return err
 		}
 
 	case SystemTypeBase:
 		// Register Base system JSON RPCs
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_BASE_RATE_APP.String()+"_Json", rpcBaseRateApp(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_BASE_RATE_APP.String(), rpcBaseRateApp(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_BASE_SET_DEVICE_PREFS.String()+"_Json", rpcBaseSetDevicePrefs(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_BASE_SET_DEVICE_PREFS.String(), rpcBaseSetDevicePrefs(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_BASE_SYNC.String()+"_Json", rpcBaseSync(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_BASE_SYNC.String(), rpcBaseSync(p)); err != nil {
 			return err
 		}
 
 	case SystemTypeEconomy:
 		// Register Economy system JSON RPCs
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_ECONOMY_DONATION_CLAIM.String()+"_Json", rpcEconomyDonationClaim_Json(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_ECONOMY_DONATION_CLAIM.String(), rpcEconomyDonationClaim_Json(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_ECONOMY_DONATION_GIVE.String()+"_Json", rpcEconomyDonationGive_Json(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_ECONOMY_DONATION_GIVE.String(), rpcEconomyDonationGive_Json(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_ECONOMY_DONATION_GET.String()+"_Json", rpcEconomyDonationGet_Json(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_ECONOMY_DONATION_GET.String(), rpcEconomyDonationGet_Json(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_ECONOMY_DONATION_REQUEST.String()+"_Json", rpcEconomyDonationRequest_Json(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_ECONOMY_DONATION_REQUEST.String(), rpcEconomyDonationRequest_Json(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_ECONOMY_STORE_GET.String()+"_Json", rpcEconomyStoreGet_Json(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_ECONOMY_STORE_GET.String(), rpcEconomyStoreGet_Json(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_ECONOMY_GRANT.String()+"_Json", rpcEconomyGrant_Json(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_ECONOMY_GRANT.String(), rpcEconomyGrant_Json(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_ECONOMY_PURCHASE_INTENT.String()+"_Json", rpcEconomyPurchaseIntent_Json(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_ECONOMY_PURCHASE_INTENT.String(), rpcEconomyPurchaseIntent_Json(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_ECONOMY_PURCHASE_ITEM.String()+"_Json", rpcEconomyPurchaseItem_Json(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_ECONOMY_PURCHASE_ITEM.String(), rpcEconomyPurchaseItem_Json(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_ECONOMY_PURCHASE_RESTORE.String()+"_Json", rpcEconomyPurchaseRestore_Json(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_ECONOMY_PURCHASE_RESTORE.String(), rpcEconomyPurchaseRestore_Json(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_ECONOMY_PLACEMENT_STATUS.String()+"_Json", rpcEconomyPlacementStatus_Json(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_ECONOMY_PLACEMENT_STATUS.String(), rpcEconomyPlacementStatus_Json(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_ECONOMY_PLACEMENT_START.String()+"_Json", rpcEconomyPlacementStart_Json(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_ECONOMY_PLACEMENT_START.String(), rpcEconomyPlacementStart_Json(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_ECONOMY_PLACEMENT_SUCCESS.String()+"_Json", rpcEconomyPlacementSuccess_Json(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_ECONOMY_PLACEMENT_SUCCESS.String(), rpcEconomyPlacementSuccess_Json(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_ECONOMY_PLACEMENT_FAIL.String()+"_Json", rpcEconomyPlacementFail_Json(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_ECONOMY_PLACEMENT_FAIL.String(), rpcEconomyPlacementFail_Json(p)); err != nil {
 			return err
 		}
 
 	case SystemTypeEventLeaderboards:
 		// Register EventLeaderboards system JSON RPCs
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_EVENT_LEADERBOARD_LIST.String()+"_Json", rpcEventLeaderboardsList(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_EVENT_LEADERBOARD_LIST.String(), rpcEventLeaderboardsList(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_EVENT_LEADERBOARD_GET.String()+"_Json", rpcEventLeaderboardsGet(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_EVENT_LEADERBOARD_GET.String(), rpcEventLeaderboardsGet(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_EVENT_LEADERBOARD_UPDATE.String()+"_Json", rpcEventLeaderboardsUpdate(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_EVENT_LEADERBOARD_UPDATE.String(), rpcEventLeaderboardsUpdate(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_EVENT_LEADERBOARD_CLAIM.String()+"_Json", rpcEventLeaderboardsClaim(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_EVENT_LEADERBOARD_CLAIM.String(), rpcEventLeaderboardsClaim(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_EVENT_LEADERBOARD_ROLL.String()+"_Json", rpcEventLeaderboardsRoll(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_EVENT_LEADERBOARD_ROLL.String(), rpcEventLeaderboardsRoll(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_EVENT_LEADERBOARD_DEBUG_FILL.String()+"_Json", rpcEventLeaderboardsDebugFill(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_EVENT_LEADERBOARD_DEBUG_FILL.String(), rpcEventLeaderboardsDebugFill(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_EVENT_LEADERBOARD_DEBUG_RANDOM_SCORES.String()+"_Json", rpcEventLeaderboardsDebugRandomScores(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_EVENT_LEADERBOARD_DEBUG_RANDOM_SCORES.String(), rpcEventLeaderboardsDebugRandomScores(p)); err != nil {
 			return err
 		}
 
 	case SystemTypeEnergy:
 		// Register Energy system JSON RPCs
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_ENERGY_GET.String()+"_Json", rpcEnergyGet_Json(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_ENERGY_GET.String(), rpcEnergyGet_Json(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_ENERGY_SPEND.String()+"_Json", rpcEnergySpend_Json(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_ENERGY_SPEND.String(), rpcEnergySpend_Json(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_ENERGY_GRANT.String()+"_Json", rpcEnergyGrant_Json(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_ENERGY_GRANT.String(), rpcEnergyGrant_Json(p)); err != nil {
 			return err
 		}
 
 	case SystemTypeInventory:
 		// Register Inventory system JSON RPCs
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_INVENTORY_LIST.String()+"_Json", rpcInventoryList_Json(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_INVENTORY_LIST.String(), rpcInventoryList_Json(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_INVENTORY_LIST_INVENTORY.String()+"_Json", rpcInventoryListInventory_Json(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_INVENTORY_LIST_INVENTORY.String(), rpcInventoryListInventory_Json(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_INVENTORY_CONSUME.String()+"_Json", rpcInventoryConsume_Json(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_INVENTORY_CONSUME.String(), rpcInventoryConsume_Json(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_INVENTORY_GRANT.String()+"_Json", rpcInventoryGrant_Json(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_INVENTORY_GRANT.String(), rpcInventoryGrant_Json(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_INVENTORY_UPDATE.String()+"_Json", rpcInventoryUpdate_Json(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_INVENTORY_UPDATE.String(), rpcInventoryUpdate_Json(p)); err != nil {
 			return err
 		}
 
 	case SystemTypeStats:
 		// Register Stats system JSON RPCs
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_STATS_GET.String()+"_Json", rpcStatsGet_Json(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_STATS_GET.String(), rpcStatsGet_Json(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_STATS_UPDATE.String()+"_Json", rpcStatsUpdate_Json(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_STATS_UPDATE.String(), rpcStatsUpdate_Json(p)); err != nil {
 			return err
 		}
 
 	case SystemTypeTutorials:
 		// Register Tutorials system JSON RPCs
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_TUTORIALS_GET.String()+"_Json", rpcTutorialsGetJson(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_TUTORIALS_GET.String(), rpcTutorialsGetJson(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_TUTORIALS_ACCEPT.String()+"_Json", rpcTutorialsAcceptJson(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_TUTORIALS_ACCEPT.String(), rpcTutorialsAcceptJson(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_TUTORIALS_DECLINE.String()+"_Json", rpcTutorialsDeclineJson(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_TUTORIALS_DECLINE.String(), rpcTutorialsDeclineJson(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_TUTORIALS_ABANDON.String()+"_Json", rpcTutorialsAbandonJson(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_TUTORIALS_ABANDON.String(), rpcTutorialsAbandonJson(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_TUTORIALS_UPDATE.String()+"_Json", rpcTutorialsUpdateJson(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_TUTORIALS_UPDATE.String(), rpcTutorialsUpdateJson(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_TUTORIALS_RESET.String()+"_Json", rpcTutorialsResetJson(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_TUTORIALS_RESET.String(), rpcTutorialsResetJson(p)); err != nil {
 			return err
 		}
 
 	case SystemTypeUnlockables:
 		// Register Unlockables system JSON RPCs
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_UNLOCKABLES_CREATE.String()+"_Json", rpcUnlockablesCreateJson(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_UNLOCKABLES_CREATE.String(), rpcUnlockablesCreateJson(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_UNLOCKABLES_GET.String()+"_Json", rpcUnlockablesGetJson(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_UNLOCKABLES_GET.String(), rpcUnlockablesGetJson(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_UNLOCKABLES_UNLOCK_START.String()+"_Json", rpcUnlockablesUnlockStartJson(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_UNLOCKABLES_UNLOCK_START.String(), rpcUnlockablesUnlockStartJson(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_UNLOCKABLES_PURCHASE_UNLOCK.String()+"_Json", rpcUnlockablesPurchaseUnlockJson(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_UNLOCKABLES_PURCHASE_UNLOCK.String(), rpcUnlockablesPurchaseUnlockJson(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_UNLOCKABLES_PURCHASE_SLOT.String()+"_Json", rpcUnlockablesPurchaseSlotJson(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_UNLOCKABLES_PURCHASE_SLOT.String(), rpcUnlockablesPurchaseSlotJson(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_UNLOCKABLES_CLAIM.String()+"_Json", rpcUnlockablesClaimJson(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_UNLOCKABLES_CLAIM.String(), rpcUnlockablesClaimJson(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_UNLOCKABLES_QUEUE_ADD.String()+"_Json", rpcUnlockablesQueueAddJson(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_UNLOCKABLES_QUEUE_ADD.String(), rpcUnlockablesQueueAddJson(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_UNLOCKABLES_QUEUE_REMOVE.String()+"_Json", rpcUnlockablesQueueRemoveJson(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_UNLOCKABLES_QUEUE_REMOVE.String(), rpcUnlockablesQueueRemoveJson(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_UNLOCKABLES_QUEUE_SET.String()+"_Json", rpcUnlockablesQueueSetJson(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_UNLOCKABLES_QUEUE_SET.String(), rpcUnlockablesQueueSetJson(p)); err != nil {
 			return err
 		}
 
 	case SystemTypeAuctions:
 		// Register Auctions system JSON RPCs
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_AUCTIONS_GET_TEMPLATES.String()+"_Json", rpcAuctionsGetTemplates_Json(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_AUCTIONS_GET_TEMPLATES.String(), rpcAuctionsGetTemplates_Json(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_AUCTIONS_LIST.String()+"_Json", rpcAuctionsList_Json(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_AUCTIONS_LIST.String(), rpcAuctionsList_Json(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_AUCTIONS_BID.String()+"_Json", rpcAuctionsBid_Json(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_AUCTIONS_BID.String(), rpcAuctionsBid_Json(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_AUCTIONS_CLAIM_BID.String()+"_Json", rpcAuctionsClaimBid_Json(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_AUCTIONS_CLAIM_BID.String(), rpcAuctionsClaimBid_Json(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_AUCTIONS_CLAIM_CREATED.String()+"_Json", rpcAuctionsClaimCreated_Json(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_AUCTIONS_CLAIM_CREATED.String(), rpcAuctionsClaimCreated_Json(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_AUCTIONS_CANCEL.String()+"_Json", rpcAuctionsCancel_Json(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_AUCTIONS_CANCEL.String(), rpcAuctionsCancel_Json(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_AUCTIONS_CREATE.String()+"_Json", rpcAuctionsCreate_Json(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_AUCTIONS_CREATE.String(), rpcAuctionsCreate_Json(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_AUCTIONS_LIST_BIDS.String()+"_Json", rpcAuctionsListBids_Json(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_AUCTIONS_LIST_BIDS.String(), rpcAuctionsListBids_Json(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_AUCTIONS_LIST_CREATED.String()+"_Json", rpcAuctionsListCreated_Json(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_AUCTIONS_LIST_CREATED.String(), rpcAuctionsListCreated_Json(p)); err != nil {
 			return err
 		}
 
 		// Register socket RPC with JSON suffix
-		if err := initializer.RegisterRpc(RpcSocketId_RPC_SOCKET_ID_AUCTIONS_FOLLOW.String()+"_Json", rpcAuctionsFollow_Json(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcSocketId_RPC_SOCKET_ID_AUCTIONS_FOLLOW.String(), rpcAuctionsFollow_Json(p)); err != nil {
 			return err
 		}
 
 	case SystemTypeStreaks:
 		// Register Streaks system JSON RPCs
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_STREAKS_LIST.String()+"_Json", rpcStreaksList_Json(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_STREAKS_LIST.String(), rpcStreaksList_Json(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_STREAKS_UPDATE.String()+"_Json", rpcStreaksUpdate_Json(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_STREAKS_UPDATE.String(), rpcStreaksUpdate_Json(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_STREAKS_CLAIM.String()+"_Json", rpcStreaksClaim_Json(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_STREAKS_CLAIM.String(), rpcStreaksClaim_Json(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_STREAKS_RESET.String()+"_Json", rpcStreaksReset_Json(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_STREAKS_RESET.String(), rpcStreaksReset_Json(p)); err != nil {
 			return err
 		}
 
 	case SystemTypeProgression:
 		// Register Progression system JSON RPCs
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_PROGRESSIONS_GET.String()+"_Json", rpcProgressionsGet_Json(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_PROGRESSIONS_GET.String(), rpcProgressionsGet_Json(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_PROGRESSIONS_PURCHASE.String()+"_Json", rpcProgressionsPurchase_Json(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_PROGRESSIONS_PURCHASE.String(), rpcProgressionsPurchase_Json(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_PROGRESSIONS_UPDATE.String()+"_Json", rpcProgressionsUpdate_Json(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_PROGRESSIONS_UPDATE.String(), rpcProgressionsUpdate_Json(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_PROGRESSIONS_RESET.String()+"_Json", rpcProgressionsReset_Json(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_PROGRESSIONS_RESET.String(), rpcProgressionsReset_Json(p)); err != nil {
 			return err
 		}
 
 	case SystemTypeTeams:
 		// Register Teams system JSON RPCs
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_TEAMS_CREATE.String()+"_Json", rpcTeamsCreate_Json(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_TEAMS_CREATE.String(), rpcTeamsCreate_Json(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_TEAMS_LIST.String()+"_Json", rpcTeamsList_Json(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_TEAMS_LIST.String(), rpcTeamsList_Json(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_TEAMS_SEARCH.String()+"_Json", rpcTeamsSearch_Json(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_TEAMS_SEARCH.String(), rpcTeamsSearch_Json(p)); err != nil {
 			return err
 		}
-		if err := initializer.RegisterRpc(RpcId_RPC_ID_TEAMS_WRITE_CHAT_MESSAGE.String()+"_Json", rpcTeamsWriteChatMessage_Json(p)); err != nil {
+		if err := initializer.RegisterRpc(RpcId_RPC_ID_TEAMS_WRITE_CHAT_MESSAGE.String(), rpcTeamsWriteChatMessage_Json(p)); err != nil {
 			return err
 		}
 
