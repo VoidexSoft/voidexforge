@@ -1,0 +1,48 @@
+meta {
+  name: Grant inventory items
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/v2/rpc/RPC_ID_INVENTORY_GRANT
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "user_id": "81b5bde4-e6ef-4daa-90f5-f0a7f3da3e60",
+    "currencies": {
+      "coins": 1000,
+      "gems": 50,
+      "energy": 25
+    },
+    "items": {
+      "health_potion": 5,
+      "magic_scroll": 2,
+      "rare_gem": 1
+    },
+    "modifiers": [
+      {
+        "id": "coins",
+        "type": "currency",
+        "operator": "multiplier",
+        "value": 2,
+        "duration_sec": 3600
+      },
+      {
+        "id": "experience",
+        "type": "currency", 
+        "operator": "addition",
+        "value": 100,
+        "duration_sec": 7200
+      }
+    ],
+    "wallet_metadata": {
+      "source": "daily_login",
+      "campaign": "new_player_bonus",
+      "timestamp": "2024-01-15T10:30:00Z"
+    }
+  }
+}

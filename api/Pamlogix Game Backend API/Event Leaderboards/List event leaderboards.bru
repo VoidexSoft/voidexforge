@@ -1,0 +1,16 @@
+meta {
+  name: List event leaderboards
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{baseUrl}}/v2/rpc/RPC_ID_EVENT_LEADERBOARD_LIST
+  body: none
+  auth: none
+}
+
+params:query {
+  ~withScores: 
+  ~categories: 
+}

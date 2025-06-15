@@ -1,0 +1,44 @@
+meta {
+  name: Get energy status
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/v2/rpc/RPC_ID_ENERGY_GET
+  body: none
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{session_token}}
+}
+
+script:post-response {
+  // Bruno Post Response Script
+  // Formats the JSON string in the 'payload' field for better readability
+  
+  try {
+    // Get the response body
+    const responseBody = res.getBody();
+    
+    // Check if response has a payload field
+    if (responseBody && responseBody.payload) {
+      // Parse the JSON string in the payload field
+      const parsedPayload = JSON.parse(responseBody.payload);
+      
+      // Set only the parsed payload content as the response body
+      res.setBody(parsedPayload);
+      
+      console.log("✅ Payload JSON formatted successfully");
+      console.log("📋 Formatted payload:", JSON.stringify(parsedPayload, null, 2));
+      
+    } else {
+      console.log("⚠️ No payload field found in response");
+    }
+    
+  } catch (error) {
+    console.error("❌ Error formatting payload JSON:", error.message);
+    console.log("📄 Original response:", JSON.stringify(res.getBody(), null, 2));
+  }
+}

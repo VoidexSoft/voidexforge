@@ -1,0 +1,30 @@
+meta {
+  name: Login
+  type: http
+  seq: 20
+}
+
+post {
+  url: http://127.0.0.1:7350/v2/account/authenticate/custom
+  body: json
+  auth: none
+}
+
+headers {
+  Content-Type: application/json
+  Authorization: Basic ZGVmYXVsdGtleTo=
+}
+
+body:json {
+  {
+    "id": "81b5bde4-e6ef-4daa-90f5-f0a7f3da3e60"
+  }
+}
+
+script:post-response {
+  function onResponse(res) {
+    const data = res.getBody();
+    bru.setEnvVar("session_token", data.token);
+  }
+  onResponse(res);
+}

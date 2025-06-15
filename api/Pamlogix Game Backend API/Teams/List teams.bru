@@ -1,0 +1,17 @@
+meta {
+  name: List teams
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/v2/rpc/RPC_ID_TEAMS_LIST
+  body: none
+  auth: none
+}
+
+params:query {
+  ~cursor: 
+  ~location: 
+  ~limit: 
+}
