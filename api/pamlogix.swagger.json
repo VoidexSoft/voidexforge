@@ -2746,11 +2746,11 @@
         "parameters": [
           {
             "name": "body",
+            "description": "Request body for interacting with a specific unlockable.",
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {}
+              "$ref": "#/definitions/UnlockablesRequest"
             }
           }
         ],
@@ -2805,11 +2805,11 @@
         "parameters": [
           {
             "name": "body",
+            "description": "Request body for interacting with a specific unlockable.",
             "in": "body",
             "required": true,
             "schema": {
-              "type": "object",
-              "properties": {}
+              "$ref": "#/definitions/UnlockablesRequest"
             }
           }
         ],
