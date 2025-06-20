@@ -12,7 +12,7 @@ services:
       - "-ecx"
       - >
         /nakama/nakama migrate up --database.address postgres://root:Ondi2025@128.199.91.28:26257/test &&
-        exec /nakama/nakama --config /nakama/data/local.yml --database.address postgres://root:Ondi2025@128.199.91.28:26257/test
+        exec /nakama/nakama --config /nakama/data/production.yml --database.address postgres://root:Ondi2025@128.199.91.28:26257/test
     expose:
       - "7349"
       - "7350"

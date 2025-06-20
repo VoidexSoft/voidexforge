@@ -2,11 +2,11 @@ console:
   password: "Ondi@2025"
   max_message_size_bytes: 409600
 logger:
-  level: "DEBUG"
+  level: "INFO"  # Use INFO level for production
 session:
   token_expiry_sec: 7200 # 2 hours
 socket:
   max_message_size_bytes: 4096 # reserved buffer
   max_request_size_bytes: 131072
-database:
-  address: "postgres://root:Ondi2025@128.199.91.28:26257/test"
+# Database configuration will be provided via command line arguments or environment variables
+# This allows for more flexible deployment configurations 
