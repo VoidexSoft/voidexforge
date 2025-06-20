@@ -8,5 +8,5 @@ session:
 socket:
   max_message_size_bytes: 4096 # reserved buffer
   max_request_size_bytes: 131072
-# Database configuration will be provided via command line arguments or environment variables
-# This allows for more flexible deployment configurations 
+database:
+  address: "${DATABASE_URL:postgres://root:Ondi2025@128.199.91.28:26257/test}" 
