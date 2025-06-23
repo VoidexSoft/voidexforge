@@ -9,4 +9,5 @@ socket:
   max_message_size_bytes: 4096 # reserved buffer
   max_request_size_bytes: 131072
 database:
-  address: "postgres://root:Ondi2025@128.199.91.28:26257/test"
+  address:
+    - "postgres://root:Ondi2025@128.199.91.28:26257/test"
