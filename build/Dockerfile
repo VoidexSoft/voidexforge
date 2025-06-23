@@ -19,6 +19,15 @@ COPY --from=builder /backend/local.yml /nakama/data/
 COPY --from=builder /backend/production.yml /nakama/data/
 COPY --from=builder /backend/configs.yaml /nakama/
 
+# Add entrypoint script
+RUN echo '#!/bin/sh\n\
+set -e\n\
+/nakama/nakama migrate up --database.address postgres://root:Ondi2025@128.199.91.28:26257/test\n\
+exec /nakama/nakama --config /nakama/data/production.yml --database.address postgres://root:Ondi2025@128.199.91.28:26257/test "$@"' > /entrypoint.sh && \
+    chmod +x /entrypoint.sh
+
 # Add a healthcheck that doesn't require database connection during build
 HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
   CMD curl -f http://localhost:7350/ || exit 1
+
+ENTRYPOINT ["/entrypoint.sh"]
