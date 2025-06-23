@@ -16,6 +16,7 @@ FROM 680994843819.dkr.ecr.ap-southeast-2.amazonaws.com/nakama:3.27.0
 COPY --from=builder /backend/backend.so /nakama/data/modules
 COPY --from=builder /backend/configs /nakama/data/modules/configs
 COPY --from=builder /backend/local.yml /nakama/data/
+COPY --from=builder /backend/production.yml /nakama/data/
 COPY --from=builder /backend/configs.yaml /nakama/
 
 # Add a healthcheck that doesn't require database connection during build
