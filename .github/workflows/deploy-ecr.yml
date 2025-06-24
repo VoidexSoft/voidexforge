@@ -62,6 +62,7 @@ jobs:
                -X POST \
                -d '{
                  "content": "<@817267030926295040>",
+                 "avatar_url": "https://i.pinimg.com/originals/ce/0d/ad/ce0dad9725a0453793427c6cb14e351e.jpg",
                  "embeds": [{
                    "title": "✅ VoidexForge Tests Passed",
                    "description": "All tests passed successfully for version `${{ github.event.inputs.version }}`",
@@ -84,6 +85,7 @@ jobs:
                -X POST \
                -d '{
                  "content": "<@817267030926295040>",
+                 "avatar_url": "https://i.pinimg.com/originals/ce/0d/ad/ce0dad9725a0453793427c6cb14e351e.jpg",
                  "embeds": [{
                    "title": "❌ VoidexForge Tests Failed",
                    "description": "Tests failed for version `${{ github.event.inputs.version }}`",
@@ -294,6 +296,7 @@ jobs:
                -X POST \
                -d '{
                  "content": "<@817267030926295040>",
+                 "avatar_url": "https://i.pinimg.com/originals/ce/0d/ad/ce0dad9725a0453793427c6cb14e351e.jpg",
                  "embeds": [{
                    "title": "✅ VoidexForge Server Updated",
                    "description": "Server successfully updated with new Docker image",
@@ -303,7 +306,7 @@ jobs:
                      {"name": "Commit", "value": "`${{ env.ARG_COMMIT }}`", "inline": true},
                      {"name": "ECR Image", "value": "`${{ env.ECR_REPOSITORY }}:${{ github.event.inputs.version }}`", "inline": false},
                      {"name": "Server Status", "value": "🟢 Online & Healthy", "inline": true},
-                     {"name": "Deployment Time", "value": "`$(date -u +%Y-%m-%d %H:%M:%S UTC)`", "inline": true}
+                     {"name": "Deployment Time", "value": "'"$(date -u +%Y-%m-%d\ %H:%M:%S\ UTC)"'", "inline": true}
                    ],
                    "footer": {"text": "GitHub Actions • ${{ github.actor }}"},
                    "timestamp": "'$(date -u +%Y-%m-%dT%H:%M:%S.000Z)'"
@@ -319,6 +322,7 @@ jobs:
                -X POST \
                -d '{
                  "content": "<@817267030926295040>",
+                 "avatar_url": "https://i.pinimg.com/originals/ce/0d/ad/ce0dad9725a0453793427c6cb14e351e.jpg",
                  "embeds": [{
                    "title": "❌ VoidexForge Server Deployment Failed",
                    "description": "Failed to update server with new Docker image",
@@ -327,56 +331,6 @@ jobs:
                      {"name": "Version", "value": "`${{ github.event.inputs.version }}`", "inline": true},
                      {"name": "Commit", "value": "`${{ env.ARG_COMMIT }}`", "inline": true},
                      {"name": "Error", "value": "Check workflow logs for details", "inline": false},
-                     {"name": "Workflow", "value": "[View Run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})", "inline": false}
-                   ],
-                   "footer": {"text": "GitHub Actions • ${{ github.actor }}"},
-                   "timestamp": "'$(date -u +%Y-%m-%dT%H:%M:%S.000Z)'"
-                 }]
-               }' \
-               ${{ env.DISCORD_WEBHOOK }}
-
-      # ------- notify Discord on ECR success (moved here) -------
-      - name: Notify Discord - ECR Deployment Success
-        if: success()
-        run: |
-          curl -H "Content-Type: application/json" \
-               -X POST \
-               -d '{
-                 "content": "<@817267030926295040>",
-                 "embeds": [{
-                   "title": "🚀 VoidexForge Built & Deployed",
-                   "description": "Docker image built, pushed to ECR, and server updated successfully",
-                   "color": 3066993,
-                   "fields": [
-                     {"name": "Version", "value": "`${{ github.event.inputs.version }}`", "inline": true},
-                     {"name": "Commit", "value": "`${{ env.ARG_COMMIT }}`", "inline": true},
-                     {"name": "ECR Repository", "value": "`${{ env.ECR_REPOSITORY }}`", "inline": false},
-                     {"name": "Image Tags", "value": "```\n${{ steps.meta.outputs.tags }}\n```", "inline": false},
-                     {"name": "Platforms", "value": "`linux/amd64`, `linux/arm64`", "inline": true},
-                     {"name": "Tests Skipped", "value": "`${{ github.event.inputs.skip_tests }}`", "inline": true}
-                   ],
-                   "footer": {"text": "GitHub Actions • ${{ github.actor }}"},
-                   "timestamp": "'$(date -u +%Y-%m-%dT%H:%M:%S.000Z)'"
-                 }]
-               }' \
-               ${{ env.DISCORD_WEBHOOK }}
-
-      # ------- notify Discord on failure -------
-      - name: Notify Discord - Deployment Failed
-        if: failure()
-        run: |
-          curl -H "Content-Type: application/json" \
-               -X POST \
-               -d '{
-                 "content": "<@817267030926295040>",
-                 "embeds": [{
-                   "title": "❌ VoidexForge ECR Deployment Failed",
-                   "description": "Failed to build or push Docker image to ECR",
-                   "color": 15158332,
-                   "fields": [
-                     {"name": "Version", "value": "`${{ github.event.inputs.version }}`", "inline": true},
-                     {"name": "Commit", "value": "`${{ env.ARG_COMMIT }}`", "inline": true},
-                     {"name": "Error", "value": "Check the workflow logs for details", "inline": false},
                      {"name": "Workflow", "value": "[View Run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})", "inline": false}
                    ],
                    "footer": {"text": "GitHub Actions • ${{ github.actor }}"},
@@ -428,6 +382,7 @@ jobs:
                -X POST \
                -d '{
                  "content": "'"$MENTION"'",
+                 "avatar_url": "https://i.pinimg.com/originals/ce/0d/ad/ce0dad9725a0453793427c6cb14e351e.jpg",
                  "embeds": [{
                    "title": "'"$STATUS_EMOJI"' VoidexForge Full Deployment '"$STATUS_TEXT"'",
                    "description": "Complete CI/CD workflow for version `${{ github.event.inputs.version }}` has finished",
