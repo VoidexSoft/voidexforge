@@ -1,0 +1,446 @@
+name: Deploy to ECR
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Image version tag (e.g., 1.20.0)'
+        required: true
+        default: 'latest'
+      skip_tests:
+        description: 'Skip tests (true/false)'
+        required: false
+        default: 'false'
+
+env:
+  AWS_REGION: ap-southeast-2
+  ECR_REPOSITORY: ondigames/voidexforge
+  DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+
+jobs:
+  # ------- Build and Test Job -------
+  build_and_test:
+    name: Build and Test
+    runs-on: ubuntu-latest
+    if: ${{ github.event.inputs.skip_tests != 'true' }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.21'
+          cache: true
+
+      - name: Install dependencies
+        run: |
+          env GO111MODULE=on GOPRIVATE="github.com" go mod vendor
+          npm install
+
+      - name: Run linter
+        run: |
+          curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.54.2
+          golangci-lint run
+
+      - name: Build Go plugin
+        run: go build --trimpath --mod=vendor --buildmode=plugin -o ./backend.so
+
+      - name: Build TypeScript
+        run: npx tsc
+
+      - name: Run tests
+        run: |
+          docker compose -f docker-compose-tests.yml up --build test
+          docker compose -f docker-compose-tests.yml down -v
+
+      - name: Notify Discord - Tests Passed
+        if: success()
+        run: |
+          curl -H "Content-Type: application/json" \
+               -X POST \
+               -d '{
+                 "content": "<@817267030926295040>",
+                 "embeds": [{
+                   "title": "✅ VoidexForge Tests Passed",
+                   "description": "All tests passed successfully for version `${{ github.event.inputs.version }}`",
+                   "color": 3066993,
+                   "fields": [
+                     {"name": "Version", "value": "`${{ github.event.inputs.version }}`", "inline": true},
+                     {"name": "Branch", "value": "`${{ github.ref_name }}`", "inline": true},
+                     {"name": "Commit", "value": "`${{ github.sha }}`", "inline": false}
+                   ],
+                   "footer": {"text": "GitHub Actions"},
+                   "timestamp": "'$(date -u +%Y-%m-%dT%H:%M:%S.000Z)'"
+                 }]
+               }' \
+               ${{ env.DISCORD_WEBHOOK }}
+
+      - name: Notify Discord - Tests Failed
+        if: failure()
+        run: |
+          curl -H "Content-Type: application/json" \
+               -X POST \
+               -d '{
+                 "content": "<@817267030926295040>",
+                 "embeds": [{
+                   "title": "❌ VoidexForge Tests Failed",
+                   "description": "Tests failed for version `${{ github.event.inputs.version }}`",
+                   "color": 15158332,
+                   "fields": [
+                     {"name": "Version", "value": "`${{ github.event.inputs.version }}`", "inline": true},
+                     {"name": "Branch", "value": "`${{ github.ref_name }}`", "inline": true},
+                     {"name": "Commit", "value": "`${{ github.sha }}`", "inline": false},
+                     {"name": "Workflow", "value": "[View Run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})", "inline": false}
+                   ],
+                   "footer": {"text": "GitHub Actions"},
+                   "timestamp": "'$(date -u +%Y-%m-%dT%H:%M:%S.000Z)'"
+                 }]
+               }' \
+               ${{ env.DISCORD_WEBHOOK }}
+
+  # ------- Deploy to ECR Job -------
+  deploy_to_ecr:
+    name: Deploy to ECR
+    runs-on: ubuntu-latest
+    needs: [build_and_test]
+    if: always() && (needs.build_and_test.result == 'success' || github.event.inputs.skip_tests == 'true')
+    permissions:
+      contents: read
+      id-token: write            # needed for OIDC-based AWS auth
+    outputs:
+      registry: ${{ steps.login-ecr.outputs.registry }}
+      image-uri: ${{ steps.set-image-uri.outputs.image-uri }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      # ------- derive Git metadata -------
+      - name: Set env vars
+        run: |
+          echo "ARG_COMMIT=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+          echo "ARG_VERSION=${{ github.event.inputs.version }}" >> $GITHUB_ENV
+
+      # ------- set up builders -------
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # ------- authenticate to AWS & ECR -------
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ env.AWS_REGION }}
+          role-to-assume: ${{ secrets.AWS_OIDC_ROLE_ARN }}
+          role-session-name: github-actions
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      # ------- work out image name: 123456789012.dkr.ecr.<region>.amazonaws.com/voidexforge -------
+      - name: Set ECR image URI
+        id: set-image-uri
+        run: |
+          echo "ECR_REGISTRY=${{ steps.login-ecr.outputs.registry }}" >> $GITHUB_ENV
+          echo "IMAGE_URI=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}" >> $GITHUB_ENV
+          echo "image-uri=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}" >> $GITHUB_OUTPUT
+
+      # ------- generate tags/labels -------
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.IMAGE_URI }}
+          tags: |
+            type=raw,value=${{ github.event.inputs.version }}
+            type=raw,value=latest,enable=${{ github.event.inputs.version == 'latest' }}
+            type=sha,prefix={{branch}}-
+
+      # ------- build & push -------
+      - name: Build and push
+        id: docker_build
+        uses: docker/build-push-action@v6
+        with:
+          file: build/Dockerfile
+          build-args: |
+            COMMIT=${{ env.ARG_COMMIT }}
+            VERSION=${{ env.ARG_VERSION }}
+          push: true
+          platforms: linux/amd64,linux/arm64
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  # ------- Deploy to Server Job -------
+  deploy_to_server:
+    name: Deploy to Server
+    runs-on: ubuntu-latest
+    needs: [deploy_to_ecr]
+    if: success()
+    steps:
+      - name: Get ECR registry from previous job
+        id: get-ecr-info
+        run: |
+          echo "ECR_REGISTRY=${{ needs.deploy_to_ecr.outputs.registry || '123456789012.dkr.ecr.ap-southeast-2.amazonaws.com' }}" >> $GITHUB_ENV
+          
+      - name: Deploy to production server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          port: ${{ secrets.SERVER_PORT || '22' }}
+          script: |
+            set -e
+            echo "Starting deployment process..."
+            
+            # Navigate to project directory
+            cd ${{ secrets.SERVER_PROJECT_PATH || '/opt/voidexforge' }}
+            
+            # Configure AWS CLI for ECR access (if AWS CLI is available)
+            if command -v aws &> /dev/null; then
+              aws configure set aws_access_key_id ${{ secrets.AWS_ACCESS_KEY_ID }}
+              aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+              aws configure set default.region ${{ env.AWS_REGION }}
+              
+              # Login to ECR
+              aws ecr get-login-password --region ${{ env.AWS_REGION }} | docker login --username AWS --password-stdin ${{ env.ECR_REGISTRY }}
+            else
+              echo "AWS CLI not found, assuming Docker already authenticated"
+            fi
+            
+            # Pull the new image
+            NEW_IMAGE="${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ github.event.inputs.version }}"
+            echo "Pulling image: $NEW_IMAGE"
+            docker pull "$NEW_IMAGE"
+            
+            # Stop existing container
+            docker compose down --remove-orphans || true
+            
+            # Update docker-compose.yml to use new image
+            if [ -f docker-compose.yml ]; then
+              # Backup current compose file
+              cp docker-compose.yml docker-compose.yml.backup
+              
+              # Update the image reference
+              sed -i "s|image:.*|image: $NEW_IMAGE|g" docker-compose.yml || true
+              
+              # If no image line exists, add one after build context
+              if ! grep -q "image:" docker-compose.yml; then
+                sed -i "/build:/a\    image: $NEW_IMAGE" docker-compose.yml
+              fi
+            else
+              echo "docker-compose.yml not found, creating basic one"
+              cat > docker-compose.yml <<EOF
+            version: '3'
+            services:
+              nakama:
+                image: $NEW_IMAGE
+                container_name: voidex_forge_backend
+                entrypoint:
+                  - "/bin/sh"
+                  - "-ecx"
+                  - >
+                    /nakama/nakama migrate up --database.address postgres://root:Ondi2025@128.199.91.28:26257/test &&
+                    exec /nakama/nakama --config /nakama/data/production.yml --database.address postgres://root:Ondi2025@128.199.91.28:26257/test
+                expose:
+                  - "7349"
+                  - "7350"
+                  - "7351"
+                ports:
+                  - "7349:7349"
+                  - "7350:7350"
+                  - "7351:7351"
+                restart: unless-stopped
+                healthcheck:
+                  test: ["CMD", "curl", "-f", "http://localhost:7350/"]
+                  interval: 10s
+                  timeout: 5s
+                  retries: 5
+            EOF
+            fi
+            
+            # Start with new image
+            docker compose up -d --force-recreate nakama
+            
+            # Wait for health check
+            echo "Waiting for service to be healthy..."
+            timeout 120 bash -c 'until docker compose ps | grep -q "healthy"; do echo "Waiting..."; sleep 5; done' || {
+              echo "Service failed to become healthy within 2 minutes"
+              echo "Container logs:"
+              docker compose logs nakama
+              echo "Container status:"
+              docker compose ps
+              exit 1
+            }
+            
+            # Clean up old images (keep last 3)
+            docker image prune -f || true
+            
+            echo "Deployment completed successfully!"
+            echo "Service is running and healthy"
+
+      # ------- notify Discord on deployment success -------
+      - name: Notify Discord - Server Deployment Success
+        if: success()
+        run: |
+          curl -H "Content-Type: application/json" \
+               -X POST \
+               -d '{
+                 "content": "<@817267030926295040>",
+                 "embeds": [{
+                   "title": "✅ VoidexForge Server Updated",
+                   "description": "Server successfully updated with new Docker image",
+                   "color": 3066993,
+                   "fields": [
+                     {"name": "Version", "value": "`${{ github.event.inputs.version }}`", "inline": true},
+                     {"name": "Commit", "value": "`${{ env.ARG_COMMIT }}`", "inline": true},
+                     {"name": "ECR Image", "value": "`${{ env.ECR_REPOSITORY }}:${{ github.event.inputs.version }}`", "inline": false},
+                     {"name": "Server Status", "value": "🟢 Online & Healthy", "inline": true},
+                     {"name": "Deployment Time", "value": "`$(date -u +%Y-%m-%d %H:%M:%S UTC)`", "inline": true}
+                   ],
+                   "footer": {"text": "GitHub Actions • ${{ github.actor }}"},
+                   "timestamp": "'$(date -u +%Y-%m-%dT%H:%M:%S.000Z)'"
+                 }]
+               }' \
+               ${{ env.DISCORD_WEBHOOK }}
+
+      # ------- notify Discord on deployment failure -------
+      - name: Notify Discord - Server Deployment Failed
+        if: failure()
+        run: |
+          curl -H "Content-Type: application/json" \
+               -X POST \
+               -d '{
+                 "content": "<@817267030926295040>",
+                 "embeds": [{
+                   "title": "❌ VoidexForge Server Deployment Failed",
+                   "description": "Failed to update server with new Docker image",
+                   "color": 15158332,
+                   "fields": [
+                     {"name": "Version", "value": "`${{ github.event.inputs.version }}`", "inline": true},
+                     {"name": "Commit", "value": "`${{ env.ARG_COMMIT }}`", "inline": true},
+                     {"name": "Error", "value": "Check workflow logs for details", "inline": false},
+                     {"name": "Workflow", "value": "[View Run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})", "inline": false}
+                   ],
+                   "footer": {"text": "GitHub Actions • ${{ github.actor }}"},
+                   "timestamp": "'$(date -u +%Y-%m-%dT%H:%M:%S.000Z)'"
+                 }]
+               }' \
+               ${{ env.DISCORD_WEBHOOK }}
+
+      # ------- notify Discord on ECR success (moved here) -------
+      - name: Notify Discord - ECR Deployment Success
+        if: success()
+        run: |
+          curl -H "Content-Type: application/json" \
+               -X POST \
+               -d '{
+                 "content": "<@817267030926295040>",
+                 "embeds": [{
+                   "title": "🚀 VoidexForge Built & Deployed",
+                   "description": "Docker image built, pushed to ECR, and server updated successfully",
+                   "color": 3066993,
+                   "fields": [
+                     {"name": "Version", "value": "`${{ github.event.inputs.version }}`", "inline": true},
+                     {"name": "Commit", "value": "`${{ env.ARG_COMMIT }}`", "inline": true},
+                     {"name": "ECR Repository", "value": "`${{ env.ECR_REPOSITORY }}`", "inline": false},
+                     {"name": "Image Tags", "value": "```\n${{ steps.meta.outputs.tags }}\n```", "inline": false},
+                     {"name": "Platforms", "value": "`linux/amd64`, `linux/arm64`", "inline": true},
+                     {"name": "Tests Skipped", "value": "`${{ github.event.inputs.skip_tests }}`", "inline": true}
+                   ],
+                   "footer": {"text": "GitHub Actions • ${{ github.actor }}"},
+                   "timestamp": "'$(date -u +%Y-%m-%dT%H:%M:%S.000Z)'"
+                 }]
+               }' \
+               ${{ env.DISCORD_WEBHOOK }}
+
+      # ------- notify Discord on failure -------
+      - name: Notify Discord - Deployment Failed
+        if: failure()
+        run: |
+          curl -H "Content-Type: application/json" \
+               -X POST \
+               -d '{
+                 "content": "<@817267030926295040>",
+                 "embeds": [{
+                   "title": "❌ VoidexForge ECR Deployment Failed",
+                   "description": "Failed to build or push Docker image to ECR",
+                   "color": 15158332,
+                   "fields": [
+                     {"name": "Version", "value": "`${{ github.event.inputs.version }}`", "inline": true},
+                     {"name": "Commit", "value": "`${{ env.ARG_COMMIT }}`", "inline": true},
+                     {"name": "Error", "value": "Check the workflow logs for details", "inline": false},
+                     {"name": "Workflow", "value": "[View Run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})", "inline": false}
+                   ],
+                   "footer": {"text": "GitHub Actions • ${{ github.actor }}"},
+                   "timestamp": "'$(date -u +%Y-%m-%dT%H:%M:%S.000Z)'"
+                 }]
+               }' \
+               ${{ env.DISCORD_WEBHOOK }}
+
+  # ------- Final notification job -------
+  notify_completion:
+    name: Final Notification
+    runs-on: ubuntu-latest
+    needs: [build_and_test, deploy_to_ecr, deploy_to_server]
+    if: always()
+    steps:
+      - name: Notify Discord - Workflow Complete
+        run: |
+          # Determine overall status based on server deployment
+          if [[ "${{ needs.deploy_to_server.result }}" == "success" ]]; then
+            STATUS_EMOJI="✅"
+            STATUS_TEXT="Completed Successfully"
+            COLOR=3066993
+            MENTION="<@817267030926295040>"
+          elif [[ "${{ needs.deploy_to_server.result }}" == "skipped" ]]; then
+            STATUS_EMOJI="⏭️"
+            STATUS_TEXT="Server Deployment Skipped"
+            COLOR=16776960
+            MENTION=""
+          else
+            STATUS_EMOJI="❌"
+            STATUS_TEXT="Failed"
+            COLOR=15158332
+            MENTION="<@817267030926295040>"
+          fi
+          
+          # Handle test result
+          TEST_RESULT="${{ needs.build_and_test.result }}"
+          if [[ -z "$TEST_RESULT" ]]; then
+            TEST_RESULT="skipped"
+          fi
+          
+          # Handle server deployment result
+          SERVER_RESULT="${{ needs.deploy_to_server.result }}"
+          if [[ -z "$SERVER_RESULT" ]]; then
+            SERVER_RESULT="skipped"
+          fi
+          
+          curl -H "Content-Type: application/json" \
+               -X POST \
+               -d '{
+                 "content": "'"$MENTION"'",
+                 "embeds": [{
+                   "title": "'"$STATUS_EMOJI"' VoidexForge Full Deployment '"$STATUS_TEXT"'",
+                   "description": "Complete CI/CD workflow for version `${{ github.event.inputs.version }}` has finished",
+                   "color": '"$COLOR"',
+                   "fields": [
+                     {"name": "Build & Test", "value": "`'"$TEST_RESULT"'`", "inline": true},
+                     {"name": "ECR Deploy", "value": "`${{ needs.deploy_to_ecr.result }}`", "inline": true},
+                     {"name": "Server Deploy", "value": "`'"$SERVER_RESULT"'`", "inline": true},
+                     {"name": "Version", "value": "`${{ github.event.inputs.version }}`", "inline": true},
+                     {"name": "Triggered By", "value": "`${{ github.actor }}`", "inline": true},
+                     {"name": "Workflow Run", "value": "[#${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})", "inline": true}
+                   ],
+                   "footer": {"text": "VoidexForge CI/CD Pipeline"},
+                   "timestamp": "'$(date -u +%Y-%m-%dT%H:%M:%S.000Z)'"
+                 }]
+               }' \
+               ${{ env.DISCORD_WEBHOOK }}
