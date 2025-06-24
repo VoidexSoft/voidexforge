@@ -181,7 +181,7 @@ jobs:
     name: Deploy to Server
     runs-on: ubuntu-latest
     needs: [deploy_to_ecr]
-    if: success() && needs.deploy_to_ecr.result == 'success'
+    if: always() && needs.deploy_to_ecr.result == 'success'
     steps:
       - name: Get ECR registry from previous job
         id: get-ecr-info
