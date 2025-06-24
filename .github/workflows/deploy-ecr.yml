@@ -10,7 +10,7 @@ on:
       skip_tests:
         description: 'Skip tests (true/false)'
         required: false
-        default: 'false'
+        default: 'true'
 
 env:
   AWS_REGION: ap-southeast-2
@@ -181,7 +181,7 @@ jobs:
     name: Deploy to Server
     runs-on: ubuntu-latest
     needs: [deploy_to_ecr]
-    if: success()
+    if: needs.deploy_to_ecr.result == 'success'
     steps:
       - name: Get ECR registry from previous job
         id: get-ecr-info
