@@ -219,7 +219,8 @@ jobs:
             echo "Pulling image: $NEW_IMAGE"
             docker pull "$NEW_IMAGE"
             
-            # Stop existing container
+            # Stop all containers to free up ports
+            docker stop $(docker ps -q) || true
             docker compose down --remove-orphans || true
             
             # Update docker-compose.yml to use new image
@@ -237,7 +238,7 @@ jobs:
             else
               echo "docker-compose.yml not found, creating basic one"
               cat > docker-compose.yml <<EOF
-            version: '3'
+            # version: '3'  # Removed obsolete version field
             services:
               nakama:
                 image: $NEW_IMAGE
