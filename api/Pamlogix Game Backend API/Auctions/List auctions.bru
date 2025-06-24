@@ -6,6 +6,15 @@ meta {
 
 post {
   url: {{baseUrl}}/v2/rpc/RPC_ID_AUCTIONS_LIST
-  body: none
-  auth: none
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "query": "status:active",
+    "sort": ["end_time_sec", "created_time_sec"],
+    "limit": 20,
+    "cursor": ""
+  }
 }

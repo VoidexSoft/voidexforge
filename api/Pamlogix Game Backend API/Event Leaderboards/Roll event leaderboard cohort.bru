@@ -6,6 +6,12 @@ meta {
 
 post {
   url: {{baseUrl}}/v2/rpc/RPC_ID_EVENT_LEADERBOARD_ROLL
-  body: none
-  auth: none
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "id": "weekly_tournament_01"
+  }
 }

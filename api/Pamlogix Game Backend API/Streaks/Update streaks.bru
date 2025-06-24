@@ -6,6 +6,16 @@ meta {
 
 post {
   url: {{baseUrl}}/v2/rpc/RPC_ID_STREAKS_UPDATE
-  body: none
-  auth: none
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "updates": {
+      "daily_login": 1,
+      "consecutive_wins": 3,
+      "weekly_challenge": 1
+    }
+  }
 }

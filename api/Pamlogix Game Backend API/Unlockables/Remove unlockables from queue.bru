@@ -6,6 +6,12 @@ meta {
 
 post {
   url: {{baseUrl}}/v2/rpc/RPC_ID_UNLOCKABLES_QUEUE_REMOVE
-  body: none
-  auth: none
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "instance_ids": ["unlock_instance_123", "unlock_instance_456"]
+  }
 }

@@ -6,6 +6,20 @@ meta {
 
 post {
   url: {{baseUrl}}/v2/rpc/RPC_ID_ECONOMY_DONATION_CLAIM
-  body: none
-  auth: none
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "donation_ids": ["donation_coins_small", "donation_gems_medium"],
+    "donations": {
+      "donation_coins_large": {
+        "donors": {
+          "00000000-0000-0000-0000-000000000000": 100,
+          "11111111-1111-1111-1111-111111111111": 50
+        }
+      }
+    }
+  }
 }

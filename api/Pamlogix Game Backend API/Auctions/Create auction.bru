@@ -6,6 +6,15 @@ meta {
 
 post {
   url: {{baseUrl}}/v2/rpc/RPC_ID_AUCTIONS_CREATE
-  body: none
-  auth: none
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "template_id": "auction_template_standard",
+    "condition_id": "auction_condition_default",
+    "instance_ids": ["item_instance_001", "item_instance_002"],
+    "start_time_sec": 0
+  }
 }

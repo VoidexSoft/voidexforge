@@ -6,6 +6,10 @@ meta {
 
 post {
   url: {{baseUrl}}/v2/rpc/RPC_ID_UNLOCKABLES_CREATE
-  body: none
-  auth: none
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {}
 }

@@ -6,6 +6,12 @@ meta {
 
 post {
   url: {{baseUrl}}/v2/rpc/RPC_ID_AUCTIONS_CLAIM_CREATED
-  body: none
-  auth: none
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "id": "auction_123"
+  }
 }

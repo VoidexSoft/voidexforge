@@ -6,6 +6,13 @@ meta {
 
 post {
   url: {{baseUrl}}/v2/rpc/RPC_ID_CHALLENGE_LIST
-  body: none
-  auth: none
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "categories": ["daily", "weekly", "monthly"],
+    "with_scores": true
+  }
 }

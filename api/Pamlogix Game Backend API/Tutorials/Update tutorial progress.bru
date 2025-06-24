@@ -6,6 +6,13 @@ meta {
 
 post {
   url: {{baseUrl}}/v2/rpc/RPC_ID_TUTORIALS_UPDATE
-  body: none
-  auth: none
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "id": "basic_gameplay",
+    "step": 3
+  }
 }

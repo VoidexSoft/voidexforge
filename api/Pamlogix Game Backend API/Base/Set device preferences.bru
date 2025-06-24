@@ -6,6 +6,20 @@ meta {
 
 post {
   url: {{baseUrl}}/v2/rpc/RPC_ID_BASE_SET_DEVICE_PREFS
-  body: none
-  auth: none
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "device_id": "device-123456",
+    "push_token_android": "ExampleAndroidPushToken123456789",
+    "push_token_ios": "",
+    "preferences": {
+      "daily_rewards": true,
+      "battle_notifications": true,
+      "friend_requests": false,
+      "maintenance_alerts": true
+    }
+  }
 }

@@ -6,6 +6,53 @@ meta {
 
 post {
   url: {{baseUrl}}/v2/rpc/RPC_ID_BASE_SYNC
-  body: none
-  auth: none
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "inventory": {
+      "items": {
+        "item_instance_123": {
+          "item_id": "sword_01",
+          "delta": 1,
+          "string_properties": {
+            "rarity": "epic"
+          },
+          "numeric_properties": {
+            "damage": 150.5
+          }
+        }
+      }
+    },
+    "economy": {
+      "currencies": {
+        "coins": 1000,
+        "gems": 50
+      },
+      "modifiers": []
+    },
+    "achievements": {
+      "achievements": {
+        "first_victory": {
+          "count": 1,
+          "create_time_sec": 1640995200,
+          "update_time_sec": 1640995300,
+          "claim_time_sec": 0,
+          "total_claim_time_sec": 0
+        }
+      }
+    },
+    "stats": {
+      "public": [
+        {
+          "name": "games_played",
+          "value": 1,
+          "operator": 1
+        }
+      ],
+      "private": []
+    }
+  }
 }

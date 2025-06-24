@@ -6,6 +6,30 @@ meta {
 
 post {
   url: {{baseUrl}}/v2/rpc/RPC_ID_STATS_UPDATE
-  body: none
-  auth: none
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "public": [
+      {
+        "name": "games_played",
+        "value": 5,
+        "operator": 1
+      },
+      {
+        "name": "total_score",
+        "value": 1250,
+        "operator": 1
+      }
+    ],
+    "private": [
+      {
+        "name": "session_time",
+        "value": 300,
+        "operator": 1
+      }
+    ]
+  }
 }

@@ -6,6 +6,31 @@ meta {
 
 post {
   url: {{baseUrl}}/v2/rpc/RPC_ID_INVENTORY_UPDATE
-  body: none
-  auth: none
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "item_updates": {
+      "instance_id_12345": {
+        "string_properties": {
+          "enchantment": "fire_damage",
+          "rarity": "legendary"
+        },
+        "numeric_properties": {
+          "damage_bonus": 15.5,
+          "durability": 100.0
+        }
+      },
+      "instance_id_67890": {
+        "string_properties": {
+          "color": "blue"
+        },
+        "numeric_properties": {
+          "level": 10.0
+        }
+      }
+    }
+  }
 }

@@ -4,8 +4,12 @@ meta {
   seq: 2
 }
 
-get {
+post {
   url: {{baseUrl}}/v2/rpc/RPC_ID_STREAKS_LIST
-  body: none
-  auth: none
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {}
 }

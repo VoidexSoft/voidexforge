@@ -4,14 +4,16 @@ meta {
   seq: 2
 }
 
-get {
+post {
   url: {{baseUrl}}/v2/rpc/RPC_ID_TEAMS_LIST
-  body: none
-  auth: none
+  body: json
+  auth: inherit
 }
 
-params:query {
-  ~cursor: 
-  ~location: 
-  ~limit: 
+body:json {
+  {
+    "cursor": "",
+    "location": "US",
+    "limit": 20
+  }
 }

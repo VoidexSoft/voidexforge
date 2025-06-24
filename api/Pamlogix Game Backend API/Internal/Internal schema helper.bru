@@ -6,6 +6,10 @@ meta {
 
 post {
   url: {{baseUrl}}/v2/rpc/_internal/force_inventory_list_request_schema
-  body: none
-  auth: none
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {}
 }

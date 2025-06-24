@@ -4,13 +4,15 @@ meta {
   seq: 5
 }
 
-get {
+post {
   url: {{baseUrl}}/v2/rpc/RPC_ID_EVENT_LEADERBOARD_LIST
-  body: none
-  auth: none
+  body: json
+  auth: inherit
 }
 
-params:query {
-  ~withScores: 
-  ~categories: 
+body:json {
+  {
+    "with_scores": true,
+    "categories": ["tournament", "daily_challenge"]
+  }
 }

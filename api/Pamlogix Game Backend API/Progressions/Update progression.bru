@@ -6,6 +6,16 @@ meta {
 
 post {
   url: {{baseUrl}}/v2/rpc/RPC_ID_PROGRESSIONS_UPDATE
-  body: none
-  auth: none
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "id": "player_level",
+    "counts": {
+      "xp": 100,
+      "matches_played": 1
+    }
+  }
 }

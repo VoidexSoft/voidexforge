@@ -6,6 +6,13 @@ meta {
 
 post {
   url: {{baseUrl}}/v2/rpc/RPC_ID_AUCTIONS_LIST_CREATED
-  body: none
-  auth: none
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "limit": 20,
+    "cursor": ""
+  }
 }

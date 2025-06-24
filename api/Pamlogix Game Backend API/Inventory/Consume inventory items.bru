@@ -6,6 +6,19 @@ meta {
 
 post {
   url: {{baseUrl}}/v2/rpc/RPC_ID_INVENTORY_CONSUME
-  body: none
-  auth: none
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "items": {
+      "health_potion": 2,
+      "mana_potion": 1
+    },
+    "instances": {
+      "instance_id_12345": 1
+    },
+    "overconsume": false
+  }
 }

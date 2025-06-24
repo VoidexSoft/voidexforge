@@ -6,6 +6,12 @@ meta {
 
 post {
   url: {{baseUrl}}/v2/rpc/RPC_ID_TUTORIALS_RESET
-  body: none
-  auth: none
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "ids": ["basic_gameplay", "advanced_combat", "resource_management"]
+  }
 }

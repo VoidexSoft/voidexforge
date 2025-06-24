@@ -6,6 +6,13 @@ meta {
 
 post {
   url: {{baseUrl}}/v2/rpc/RPC_ID_TEAMS_WRITE_CHAT_MESSAGE
-  body: none
-  auth: none
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "id": "team_12345",
+    "content": "{\"message\": \"Great game everyone! Let's keep up the momentum.\", \"type\": \"text\"}"
+  }
 }

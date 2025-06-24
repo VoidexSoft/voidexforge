@@ -6,6 +6,25 @@ meta {
 
 post {
   url: {{baseUrl}}/v2/rpc/RPC_ID_PROGRESSIONS_GET
-  body: none
-  auth: none
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "progressions": {
+      "player_level": {
+        "id": "player_level",
+        "counts": {
+          "xp": 1500
+        }
+      },
+      "battle_pass": {
+        "id": "battle_pass",
+        "counts": {
+          "tier": 10
+        }
+      }
+    }
+  }
 }

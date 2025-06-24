@@ -6,6 +6,15 @@ meta {
 
 post {
   url: {{baseUrl}}/v2/rpc/RPC_ID_ENERGY_SPEND
-  body: none
-  auth: none
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "amounts": {
+      "energy_main": 10,
+      "energy_special": 5
+    }
+  }
 }

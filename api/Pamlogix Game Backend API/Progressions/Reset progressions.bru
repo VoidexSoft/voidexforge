@@ -6,6 +6,12 @@ meta {
 
 post {
   url: {{baseUrl}}/v2/rpc/RPC_ID_PROGRESSIONS_RESET
-  body: none
-  auth: none
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "ids": ["daily_quest", "weekly_challenge", "seasonal_event"]
+  }
 }

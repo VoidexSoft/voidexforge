@@ -4,14 +4,16 @@ meta {
   seq: 3
 }
 
-get {
+post {
   url: {{baseUrl}}/v2/rpc/RPC_ID_TEAMS_SEARCH
-  body: none
-  auth: none
+  body: json
+  auth: inherit
 }
 
-params:query {
-  ~input: 
-  ~limit: 
-  ~langTag: 
+body:json {
+  {
+    "input": "gaming",
+    "limit": 10,
+    "lang_tag": "en"
+  }
 }

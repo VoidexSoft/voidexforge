@@ -6,6 +6,16 @@ meta {
 
 post {
   url: {{baseUrl}}/v2/rpc/RPC_ID_EVENT_LEADERBOARD_UPDATE
-  body: none
-  auth: none
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "id": "weekly_tournament_01",
+    "score": 1500,
+    "subscore": 25,
+    "metadata": "{\"level\": 10, \"combo\": 3}",
+    "conditional_metadata_update": true
+  }
 }

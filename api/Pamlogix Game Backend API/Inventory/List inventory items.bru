@@ -4,12 +4,14 @@ meta {
   seq: 3
 }
 
-get {
+post {
   url: {{baseUrl}}/v2/rpc/RPC_ID_INVENTORY_LIST
-  body: none
+  body: json
   auth: inherit
 }
 
-params:query {
-  ~itemCategory: 
+body:json {
+  {
+    "item_category": "weapons"
+  }
 }

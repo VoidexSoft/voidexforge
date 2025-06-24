@@ -6,6 +6,16 @@ meta {
 
 post {
   url: {{baseUrl}}/v2/rpc/RPC_ID_ECONOMY_PLACEMENT_START
-  body: none
-  auth: none
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "placement_id": "banner_ad_001",
+    "metadata": {
+      "campaign_id": "summer_2024",
+      "source": "main_menu"
+    }
+  }
 }

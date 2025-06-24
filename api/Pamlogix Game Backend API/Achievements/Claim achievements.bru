@@ -6,6 +6,13 @@ meta {
 
 post {
   url: {{baseUrl}}/v2/rpc/RPC_ID_ACHIEVEMENTS_CLAIM
-  body: none
-  auth: none
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "ids": ["first_win", "collect_100_coins", "play_5_matches"],
+    "claim_total_reward": true
+  }
 }

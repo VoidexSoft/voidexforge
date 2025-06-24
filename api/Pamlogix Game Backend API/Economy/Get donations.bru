@@ -6,6 +6,12 @@ meta {
 
 post {
   url: {{baseUrl}}/v2/rpc/RPC_ID_ECONOMY_DONATION_GET
-  body: none
-  auth: none
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "ids": ["00000000-0000-0000-0000-000000000000", "11111111-1111-1111-1111-111111111111"]
+  }
 }

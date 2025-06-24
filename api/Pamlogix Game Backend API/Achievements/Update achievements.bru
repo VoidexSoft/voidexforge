@@ -6,6 +6,16 @@ meta {
 
 post {
   url: {{baseUrl}}/v2/rpc/RPC_ID_ACHIEVEMENTS_UPDATE
-  body: none
-  auth: none
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "achievements": {
+      "first_win": 1,
+      "collect_100_coins": 50,
+      "play_5_matches": 1
+    }
+  }
 }

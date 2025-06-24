@@ -6,6 +6,12 @@ meta {
 
 post {
   url: {{baseUrl}}/v2/rpc/RPC_ID_STREAKS_RESET
-  body: none
-  auth: none
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "ids": ["daily_login", "consecutive_wins", "weekly_challenge"]
+  }
 }

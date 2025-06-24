@@ -4,8 +4,12 @@ meta {
   seq: 1
 }
 
-get {
+post {
   url: {{baseUrl}}/v2/rpc/RPC_ID_CHALLENGES_GET_TEMPLATES
-  body: none
-  auth: none
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {}
 }

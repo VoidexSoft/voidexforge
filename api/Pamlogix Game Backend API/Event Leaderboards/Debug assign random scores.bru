@@ -6,6 +6,17 @@ meta {
 
 post {
   url: {{baseUrl}}/v2/rpc/RPC_ID_EVENT_LEADERBOARD_DEBUG_RANDOM_SCORES
-  body: none
-  auth: none
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "id": "weekly_tournament_01",
+    "min": 100,
+    "max": 2000,
+    "operator": 1,
+    "subscore_min": 0,
+    "subscore_max": 50
+  }
 }

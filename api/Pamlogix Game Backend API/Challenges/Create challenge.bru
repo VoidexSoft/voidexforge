@@ -6,6 +6,16 @@ meta {
 
 post {
   url: {{baseUrl}}/v2/rpc/RPC_ID_CHALLENGE_CREATE
-  body: none
-  auth: none
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "template_id": "challenge_template_001",
+    "name": "Weekly Challenge",
+    "description": "Complete this challenge to earn rewards",
+    "invitees": ["user_001", "user_002"],
+    "open": true
+  }
 }
