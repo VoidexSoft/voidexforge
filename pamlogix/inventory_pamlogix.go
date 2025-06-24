@@ -423,6 +423,22 @@ func (i *NakamaInventorySystem) GrantItems(ctx context.Context, logger runtime.L
 	updatedItems = make(map[string]*InventoryItem)
 	notGrantedItemIDs = make(map[string]int64)
 
+	// Pre-validate all items exist in configuration before loading inventory
+	validItemIDs := make(map[string]int64)
+	for itemID, count := range itemIDs {
+		if _, exists := i.config.Items[itemID]; !exists {
+			logger.Warn("Attempted to grant non-existent item: %s", itemID)
+			notGrantedItemIDs[itemID] = count
+			continue
+		}
+		validItemIDs[itemID] = count
+	}
+
+	// If no valid items, return early without loading inventory
+	if len(validItemIDs) == 0 {
+		return &Inventory{Items: make(map[string]*InventoryItem)}, newItems, updatedItems, notGrantedItemIDs, nil
+	}
+
 	loadOptions := &InventoryLoadOptions{
 		PageSize:     defaultInventoryPageSize,
 		LoadAllPages: true,
@@ -434,18 +450,13 @@ func (i *NakamaInventorySystem) GrantItems(ctx context.Context, logger runtime.L
 		return nil, nil, nil, nil, ErrInternal
 	}
 
-	// Process each item to grant
+	// Process each valid item to grant
 	var storageOps []*runtime.StorageWrite
 	now := time.Now().Unix()
 
-	for itemID, count := range itemIDs {
-		// Check if item exists in configuration
-		configItem, exists := i.config.Items[itemID]
-		if !exists {
-			logger.Warn("Attempted to grant non-existent item: %s", itemID)
-			notGrantedItemIDs[itemID] = count
-			continue
-		}
+	for itemID, count := range validItemIDs {
+		// Get item configuration (we know it exists from pre-validation)
+		configItem := i.config.Items[itemID]
 
 		// Check limits if not ignoring them
 		if !ignoreLimits {
