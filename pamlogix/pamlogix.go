@@ -277,6 +277,12 @@ func (p *pamlogixImpl) initSystem(ctx context.Context, logger runtime.Logger, nk
 			eventLeaderboardsSystem.SetPamlogix(p)
 			logger.Info("Set Pamlogix reference in event leaderboards system for cross-system communication")
 		}
+
+		// For economy system, set the Pamlogix reference to enable cross-system communication
+		if economySystem, ok := system.(*NakamaEconomySystem); ok {
+			economySystem.SetPamlogix(p)
+			logger.Info("Set Pamlogix reference in economy system for cross-system communication")
+		}
 	}
 
 	// 4. Register RPCs if requested

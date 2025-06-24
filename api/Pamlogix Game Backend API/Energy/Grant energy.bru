@@ -6,6 +6,37 @@ meta {
 
 post {
   url: {{baseUrl}}/v2/rpc/RPC_ID_ENERGY_GRANT
-  body: none
-  auth: none
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{session_token}}
+}
+
+body:json {
+  {
+    "amounts": {
+      "energy_main": 5,
+      "tower_key": 2
+    },
+    "modifiers": [
+      {
+        "id": "energy_main",
+        "operator": "max_energy",
+        "value": 10,
+        "duration_sec": 3600
+      }
+    ]
+  }
+}
+
+body:text {
+  {
+    "amounts": {
+      "energy_main": 100
+    },
+    "modifiers": [
+    ]
+  }
 }

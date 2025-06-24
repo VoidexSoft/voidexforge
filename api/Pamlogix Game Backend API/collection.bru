@@ -1,7 +1,24 @@
 headers {
-  : 
+  Authorization: Bearer {{session_token}}
+  Content-Type: application/json
 }
 
 auth {
-  mode: none
+  mode: bearer
+}
+
+auth:bearer {
+  token: {{session_token}}
+}
+
+script:pre-request {
+  // Get current URL
+  let url = req.getUrl();
+  
+  // Check if unwrap parameter already exists
+  if (!url.includes('unwrap=')) {
+    // Add unwrap parameter
+    const separator = url.includes('?') ? '&' : '?';
+    req.setUrl(url + separator + 'unwrap');
+  }
 }

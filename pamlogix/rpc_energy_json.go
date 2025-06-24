@@ -107,6 +107,7 @@ func rpcEnergyGrant_Json(p *pamlogixImpl) func(ctx context.Context, logger runti
 		// Call the energy system to grant the energy
 		energies, err := energySystem.Grant(ctx, logger, nk, userId, request.Amounts, request.Modifiers)
 		if err != nil {
+			logger.Error("Failed to grant energy: %v", err)
 			return "", err
 		}
 

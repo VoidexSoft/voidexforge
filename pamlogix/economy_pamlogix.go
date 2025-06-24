@@ -44,6 +44,10 @@ func (e *NakamaEconomySystem) GetConfig() any {
 	return e.config
 }
 
+func (e *NakamaEconomySystem) SetPamlogix(p interface{}) {
+	e.pamlogix = p
+}
+
 func (e *NakamaEconomySystem) RewardCreate() (rewardConfig *EconomyConfigReward) {
 	// Returns a new, empty reward config for further customization.
 	return &EconomyConfigReward{}
